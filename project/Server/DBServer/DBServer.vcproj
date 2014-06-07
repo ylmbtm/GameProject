@@ -139,6 +139,7 @@
 				Name="VCLinkerTool"
 				OutputFile="D:\project\Server\Release\$(ProjectName).exe"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\Release"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"

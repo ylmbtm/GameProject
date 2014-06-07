@@ -1,15 +1,13 @@
 #include "stdafx.h"
 #include <errmsg.h>
 #include "DBConnection.h"
-#include "sql_result.h"
+#include "DBStoredProc.h"
 
-namespace CommonSql
-{
 CDBConnection::CDBConnection( void )
-    : m_mysql_( NULL ),
-      m_port_( 3306 ),
-      m_errno_( 0 ),
-      m_error_( "" )
+    : m_pMySql( NULL ),
+      m_nPort( 3306 ),
+      m_nErrno( 0 ),
+      m_strError( "" )
 {
 }
 
@@ -30,11 +28,11 @@ bool CDBConnection::Connect(char const *szHost, char const *szUser,char const *s
         mysql_options( m_pMySql, MYSQL_SET_CHARSET_NAME, "utf8" );
         if ( NULL != mysql_real_connect( m_pMySql, szHost,szUser,szPwd, szDb, nPort,NULL,0 ) )
         {
-            m_host_.assign( szHost );
-            m_user_.assign( szUser );
-            m_pwd_.assign( szPwd );
-            m_db_.assign( szDb );
-            m_port_ = nPort;
+            m_strHost.assign( szHost );
+            m_strUser.assign( szUser );
+            m_strPwd.assign( szPwd );
+            m_strDB.assign( szDb );
+            m_nPort = nPort;
 
             // set autocommit.
             mysql_autocommit( m_pMySql, 1 );
@@ -45,8 +43,8 @@ bool CDBConnection::Connect(char const *szHost, char const *szUser,char const *s
         }
         else
         {
-            m_errno_ = mysql_errno( m_pMySql );
-            m_error_ = mysql_error( m_pMySql );
+            m_nErrno = mysql_errno( m_pMySql );
+            m_strError = mysql_error( m_pMySql );
         }
     }
     else
@@ -81,18 +79,18 @@ int CDBConnection::Execute(CDBStoredProcedure *pDBStoredProcedure)
     MYSQL_STMT *pMySqlStmt = mysql_stmt_init(m_pMySql);
 	if(pMySqlStmt == NULL)
 	{
-		m_errno_ = mysql_errno( m_pMySql );
+		m_nErrno = mysql_errno( m_pMySql );
 
-		m_error_ = mysql_error( m_pMySql );
+		m_strError = mysql_error( m_pMySql );
 		
 		return nAffectedCount;
 	}
 
-	if(0 != mysql_stmt_prepare(m_pMySql, pDBStoredProcedure->m_strSql.c_str(), pDBStoredProcedure->m_strSql.size()))
+	if(0 != mysql_stmt_prepare(pMySqlStmt, pDBStoredProcedure->m_strSql.c_str(), pDBStoredProcedure->m_strSql.size()))
 	{
-		m_errno_ = mysql_errno( m_pMySql );
+		m_nErrno = mysql_errno( m_pMySql );
 
-		m_error_ = mysql_error( m_pMySql );
+		m_strError = mysql_error( m_pMySql );
 
 		mysql_stmt_close( pMySqlStmt );
 		pMySqlStmt = NULL;
@@ -106,8 +104,8 @@ int CDBConnection::Execute(CDBStoredProcedure *pDBStoredProcedure)
 	//
 	if(mysql_stmt_param_count( pMySqlStmt ) != pDBStoredProcedure->m_nCount)
 	{
-		m_errno_ = mysql_errno( m_pMySql );
-		m_error_ = mysql_error( m_pMySql );
+		m_nErrno = mysql_errno( m_pMySql );
+		m_strError = mysql_error( m_pMySql );
 
 		mysql_stmt_close( pMySqlStmt );
 		pMySqlStmt = NULL;
@@ -119,8 +117,8 @@ int CDBConnection::Execute(CDBStoredProcedure *pDBStoredProcedure)
 	{
 		if ( 0 != mysql_stmt_bind_param( pMySqlStmt, pDBStoredProcedure->m_pMybind ) )
 		{
-			m_errno_ = mysql_errno( m_pMySql );
-			m_error_ = mysql_error( m_pMySql );
+			m_nErrno = mysql_errno( m_pMySql );
+			m_strError = mysql_error( m_pMySql );
 			mysql_stmt_close( pMySqlStmt );
 			pMySqlStmt = NULL;
 			return nAffectedCount;
@@ -129,15 +127,15 @@ int CDBConnection::Execute(CDBStoredProcedure *pDBStoredProcedure)
 
 	if(pMySqlStmt == NULL)
 	{
-		m_errno_ = mysql_errno( m_pMySql );
-		m_error_ = mysql_error( m_pMySql );
+		m_nErrno = mysql_errno( m_pMySql );
+		m_strError = mysql_error( m_pMySql );
 		return nAffectedCount;
 	}
 
 	 if (0 != mysql_stmt_execute( pMySqlStmt ))
 	 {
-		 m_errno_ = mysql_errno( m_pMySql );
-		 m_error_ = mysql_error( m_pMySql );
+		 m_nErrno = mysql_errno( m_pMySql );
+		 m_strError = mysql_error( m_pMySql );
 		 mysql_stmt_close( pMySqlStmt );
 		 pMySqlStmt = NULL;
 		 return nAffectedCount;
@@ -176,7 +174,7 @@ int CDBConnection::Execute(CDBStoredProcedure *pDBStoredProcedure)
             pMySqlResult = mysql_stmt_result_metadata( pMySqlStmt );
             if ( NULL != pMySqlResult )
             {
-                server_status = m_mysql_->server_status;
+                server_status = m_pMySql->server_status;
                 mysql_stmt_store_result( pMySqlStmt );
                 mysql_free_result( pMySqlResult );
                 mysql_stmt_free_result( pMySqlStmt );
@@ -187,7 +185,7 @@ int CDBConnection::Execute(CDBStoredProcedure *pDBStoredProcedure)
                 }
                 else
                 {
-                   // write_log( "执行查询操作不应该返回任何结果集，请检查sql语句和存储过程实现!\n" );
+                   // //write_log( "执行查询操作不应该返回任何结果集，请检查sql语句和存储过程实现!\n" );
                 }
             }
         }
@@ -197,205 +195,136 @@ int CDBConnection::Execute(CDBStoredProcedure *pDBStoredProcedure)
 }
 
 // query.
-int CDBConnection::Query( CDBStoredProcedure *pDBStoredProcedure, sql_result **result_ )
+int CDBConnection::Query(CDBStoredProcedure *pDBStoredProcedure)
 {
-    int _ret = -1;
+    int nAffectedCount = -1;
 
-    if ( NULL != m_mysql_ && NULL != stmt_ && NULL != result_ )
-    {
-        MYSQL_STMT *_stmt = mysql_stmt_init( m_mysql_ );
+    if ( NULL == m_pMySql || NULL == pDBStoredProcedure)
+	{
+		return nAffectedCount;
+	}
+    
+    MYSQL_STMT *pMySqlStmt = mysql_stmt_init( m_pMySql );
+	if(NULL == pMySqlStmt)
+	{
+		m_nErrno = mysql_errno( m_pMySql );
 
-        *result_ = NULL;
-        if ( NULL != _stmt )
-        {
-            if ( 0 == mysql_stmt_prepare( _stmt, stmt_->m_sql_.c_str(), stmt_->m_sql_.size() ) )
-            {
-                my_bool _bl = 1;
+		m_strError = mysql_error( m_pMySql );
 
-                mysql_stmt_attr_set( _stmt, STMT_ATTR_UPDATE_MAX_LENGTH, &_bl );
-                stmt_->_bind( mysql_stmt_param_count( _stmt ) );
+		return nAffectedCount;
+	}
 
-                if ( NULL != stmt_->m_bind_ )
-                {
-                    if ( 0 != mysql_stmt_bind_param( _stmt, stmt_->m_bind_ ) )
-                    {
-                        m_errno_ = mysql_errno( m_mysql_ );
-                        m_error_ = mysql_error( m_mysql_ );
-                        mysql_stmt_close( _stmt );
-                        _stmt = NULL;
-                        if ( _procerror( stmt_->m_sql_.c_str(), "mysql_stmt_bind_param" ) )
-                        {
-                            _ret = query( stmt_, result_ );
-                        }
-                    }
-                }
+	if(0 != mysql_stmt_prepare(pMySqlStmt, pDBStoredProcedure->m_strSql.c_str(), pDBStoredProcedure->m_strSql.size()))
+	{
+		m_nErrno = mysql_errno( m_pMySql );
 
-                if ( NULL != _stmt )
-                {
-                    if ( 0 == mysql_stmt_execute( _stmt ) )
-                    {
-                        _ret = (int)mysql_stmt_affected_rows( _stmt );
-                        MYSQL_RES *_res = mysql_stmt_result_metadata( _stmt );
-                        if ( NULL != _res )
-                        {
-                            unsigned int server_status = m_mysql_->server_status;
+		m_strError = mysql_error( m_pMySql );
 
-                            if ( 0 == mysql_stmt_store_result( _stmt ) )
-                            {
-                                sql_result *_result = NULL;
+		mysql_stmt_close( pMySqlStmt );
+		pMySqlStmt = NULL;
 
-                                _result = object_pool<sql_result>::malloc();
-                                *result_ = _result;
-                                if ( server_status & SERVER_PS_OUT_PARAMS )
-                                {
-                                    _ret = 0;
-                                    _result->_retval( _stmt, _res );
-                                    mysql_free_result( _res );
-                                    mysql_stmt_free_result( _stmt );
-                                }
-                                else
-                                {
-                                    _ret = (int)mysql_stmt_num_rows( _stmt );
-                                    _result->_init( _stmt, _res );
-                                    mysql_free_result( _res );
-                                    mysql_stmt_free_result( _stmt );
+		return nAffectedCount;
+	}
 
-                                    // 检查是否还有结果集
-                                    while ( 0 == mysql_stmt_next_result( _stmt ) )
-                                    {
-                                        _res = mysql_stmt_result_metadata( _stmt );
-                                        if ( NULL != _res )
-                                        {
-                                            server_status = m_mysql_->server_status;
-                                            if ( 0 == mysql_stmt_store_result( _stmt ) )
-                                            {
-                                                if ( server_status & SERVER_PS_OUT_PARAMS )
-                                                {
-                                                    _result->_retval( _stmt, _res );
-                                                    mysql_free_result( _res );
-                                                    mysql_stmt_free_result( _stmt );
-                                                    break;
-                                                }
-                                                else
-                                                {
-                                                    write_log( "执行查询操作不应该返回任何结果集，请检查sql语句和存储过程实现!\n" );
-                                                    mysql_stmt_store_result( _stmt );
-                                                    mysql_free_result( _res );
-                                                    mysql_stmt_free_result( _stmt );
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                mysql_stmt_close( _stmt );
-                                _stmt = NULL;
-                            }
-                            else
-                            {
-                                m_errno_ = mysql_errno( m_mysql_ );
-                                m_error_ = mysql_error( m_mysql_ );
-                                mysql_stmt_close( _stmt );
-                                _stmt = NULL;
-                                if ( _procerror( stmt_->m_sql_.c_str(), "mysql_stmt_store_result" ) )
-                                {
-                                    _ret = query( stmt_, result_ );
-                                }
-                                else
-                                {
-                                    _ret = -1;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            mysql_stmt_close( _stmt );
-                            _stmt = NULL;
-                        }
-                    }
-                    else
-                    {
-                        m_errno_ = mysql_errno( m_mysql_ );
-                        m_error_ = mysql_error( m_mysql_ );
-                        mysql_stmt_close( _stmt );
-                        _stmt = NULL;
-                        if ( _procerror( stmt_->m_sql_.c_str(), "mysql_stmt_execute" ) )
-                        {
-                            _ret = query( stmt_, result_ );
-                        }
-                    }
-                }
-            }
-            else
-            {
-                m_errno_ = mysql_errno( m_mysql_ );
-                m_error_ = mysql_error( m_mysql_ );
-                mysql_stmt_close( _stmt );
-                _stmt = NULL;
-                if ( _procerror( stmt_->m_sql_.c_str(), "mysql_stmt_prepare" ) )
-                {
-                    _ret = query( stmt_, result_ );
-                }
-            }
-        }
-        else
-        {
-            m_errno_ = mysql_errno( m_mysql_ );
-            m_error_ = mysql_error( m_mysql_ );
-            if ( _procerror( stmt_->m_sql_.c_str(), "mysql_stmt_init" ) )
-            {
-                _ret = query( stmt_, result_ );
-            }
-        }
-    }
+    my_bool _bl = 1;
+    mysql_stmt_attr_set( pMySqlStmt, STMT_ATTR_UPDATE_MAX_LENGTH, &_bl );
 
-    return _ret;
+	if(pDBStoredProcedure->m_pMybind != NULL)
+	{
+		if ( 0 != mysql_stmt_bind_param( pMySqlStmt, pDBStoredProcedure->m_pMybind ) )
+		{
+			m_nErrno = mysql_errno( m_pMySql );
+			m_strError = mysql_error( m_pMySql );
+			mysql_stmt_close( pMySqlStmt );
+			pMySqlStmt = NULL;
+			return nAffectedCount;
+		}
+	}
+
+	if(pMySqlStmt == NULL)
+	{
+		m_nErrno = mysql_errno( m_pMySql );
+		m_strError = mysql_error( m_pMySql );
+
+		return nAffectedCount;
+	}
+
+	if (0 != mysql_stmt_execute( pMySqlStmt ))
+	{
+		m_nErrno = mysql_errno( m_pMySql );
+		m_strError = mysql_error( m_pMySql );
+		mysql_stmt_close( pMySqlStmt );
+		pMySqlStmt = NULL;
+		return nAffectedCount;
+	}
+
+
+    nAffectedCount = (int)mysql_stmt_affected_rows( pMySqlStmt );
+
+	// 检查是否有结果集
+	MYSQL_RES *pMySqlResult = mysql_stmt_result_metadata( pMySqlStmt );
+	if(pMySqlResult == NULL)
+	{
+		pMySqlResult  = NULL;
+		mysql_stmt_close( pMySqlStmt );
+		pMySqlStmt = NULL;
+		return nAffectedCount;
+	}
+
+    unsigned int server_status = m_pMySql->server_status;
+
+	if(0 != mysql_stmt_store_result( pMySqlStmt ))
+	{
+		m_nErrno = mysql_errno( m_pMySql );
+		m_strError = mysql_error( m_pMySql );
+		mysql_stmt_close( pMySqlStmt );
+		pMySqlStmt = NULL;
+		return nAffectedCount;
+	}
+
+	 nAffectedCount = (int)mysql_stmt_num_rows(pMySqlStmt);
+
+	 pDBStoredProcedure->m_DBRecordSet.InitRecordSet(pMySqlStmt, pMySqlResult);
+
+    return nAffectedCount;
 }
 
 // reconnect.
 bool CDBConnection::Reconnect( void )
 {
-    if ( NULL != m_mysql_ && 0 == mysql_ping( m_mysql_ ) )
+    if ( NULL != m_pMySql && 0 == mysql_ping( m_pMySql ) )
     {
         return true;
     }
     else
     {
-        write_log( "try to reconnect mysql server...\n" );
-
-        close();
-        m_mysql_ = mysql_init( NULL );
-        if ( NULL != m_mysql_ )
+        Close();
+        m_pMySql = mysql_init( NULL );
+        if ( NULL != m_pMySql )
         {
             // set character.
-            mysql_options( m_mysql_, MYSQL_SET_CHARSET_NAME, "utf8" );
-            if ( NULL != mysql_real_connect( m_mysql_,
-                                             m_host_,
-                                             m_user_,
-                                             m_pwd_,
-                                             m_db_,
-                                             m_port_,
-                                             NULL,
-                                             0 ) )
+            mysql_options( m_pMySql, MYSQL_SET_CHARSET_NAME, "utf8" );
+            if ( NULL != mysql_real_connect( m_pMySql, m_strHost.c_str(), m_strUser.c_str(), m_strPwd.c_str(), m_strDB.c_str(), m_nPort, NULL, 0 ) )
             {
                 // set autocommit.
-                mysql_autocommit( m_mysql_, 1 );
+                mysql_autocommit( m_pMySql, 1 );
                 // set character set.
-                mysql_set_character_set( m_mysql_, "utf8" );
+                mysql_set_character_set( m_pMySql, "utf8" );
 
-                write_log( "reconnect mysql server succeed!\n" );
-                write_log( "mysql client library: %s.\n", mysql_get_client_info() );
-                write_log( "mysql server version: %s.\n", mysql_get_server_info( m_mysql_ ) );
+                //write_log( "reconnect mysql server succeed!\n" );
+                //write_log( "mysql client library: %s.\n", mysql_get_client_info() );
+                //write_log( "mysql server version: %s.\n", mysql_get_server_info( m_pMySql ) );
 
                 return true;
             }
             else
             {
-                write_log( "reconnect mysql server failed, errno = %d!\n", mysql_errno( m_mysql_ ) );
+                //write_log( "reconnect mysql server failed, errno = %d!\n", mysql_errno( m_pMySql ) );
             }
         }
         else
         {
-            write_log( "reconnect mysql server failed!" );
+            //write_log( "reconnect mysql server failed!" );
         }
 
     }
@@ -410,31 +339,31 @@ bool CDBConnection::ProcError( char const *op_/* = NULL*/, char const *func_/* =
 
     if ( NULL != op_ && NULL != func_ )
     {
-        write_log( "op = %s, func = %s.\n", op_, func_ );
+   //     //write_log( "op = %s, func = %s.\n", op_, func_ );
     }
     else if ( NULL != op_ )
     {
-        write_log( "op = %s.\n", op_ );
+   //     //write_log( "op = %s.\n", op_ );
     }
 
-    switch ( m_errno_ )
+    switch ( m_nErrno )
     {
     case CR_SERVER_GONE_ERROR:
         {
-            write_log( "mysql server has gone away, errno = %d!\n", m_errno_ );
+      //      //write_log( "mysql server has gone away, errno = %d!\n", m_errno_ );
 
-            if ( _reconnect() )
+            if ( Reconnect() )
             {
                 _ret = true;
             }
             else
             {
-                if ( NULL != m_mysql_ )
+                if ( NULL != m_pMySql )
                 {
-                    m_errno_ = mysql_errno( m_mysql_ );
-                    m_error_ = mysql_error( m_mysql_ );
+                    m_nErrno = mysql_errno( m_pMySql );
+                    m_strError = mysql_error( m_pMySql );
 					::Sleep( ERROR_SLEEP_TIME );
-                    _ret = _procerror( op_, __FUNCTION__ );
+                    _ret = ProcError( op_, __FUNCTION__ );
                 }
             }
         }
@@ -442,20 +371,20 @@ bool CDBConnection::ProcError( char const *op_/* = NULL*/, char const *func_/* =
 
     case CR_SERVER_LOST:
         {
-            write_log( "lost the connection to mysql server, errno = %d!\n", m_errno_ );
+            //write_log( "lost the connection to mysql server, errno = %d!\n", m_errno_ );
 
-            if ( _reconnect() )
+            if ( Reconnect() )
             {
                 _ret = true;
             }
             else
             {
-                if ( NULL != m_mysql_ )
+                if ( NULL != m_pMySql )
                 {
-                    m_errno_ = mysql_errno( m_mysql_ );
-                    m_error_ = mysql_error( m_mysql_ );
+                    m_nErrno = mysql_errno( m_pMySql );
+                    m_strError = mysql_error( m_pMySql );
                     Sleep( ERROR_SLEEP_TIME );
-                    _ret = _procerror( op_, __FUNCTION__ );
+                    _ret = ProcError( op_, __FUNCTION__ );
                 }
             }
         }
@@ -463,20 +392,20 @@ bool CDBConnection::ProcError( char const *op_/* = NULL*/, char const *func_/* =
 
     case CR_INVALID_CONN_HANDLE:
         {
-            write_log( "invalid connection handle, errno = %d!\n", m_errno_ );
+            //write_log( "invalid connection handle, errno = %d!\n", m_errno_ );
 
-            if ( _reconnect() )
+            if ( Reconnect() )
             {
                 _ret = true;
             }
             else
             {
-                if ( NULL != m_mysql_ )
+                if ( NULL != m_pMySql )
                 {
-                    m_errno_ = mysql_errno( m_mysql_ );
-                    m_error_ = mysql_error( m_mysql_ );
+                    m_nErrno = mysql_errno( m_pMySql );
+                    m_strError = mysql_error( m_pMySql );
                     Sleep( ERROR_SLEEP_TIME );
-                    _ret = _procerror( op_, __FUNCTION__ );
+                    _ret = ProcError( op_, __FUNCTION__ );
                 }
             }
         }
@@ -484,20 +413,20 @@ bool CDBConnection::ProcError( char const *op_/* = NULL*/, char const *func_/* =
 
     case CR_SERVER_LOST_EXTENDED:
         {
-            write_log( "lost the connection to mysql server, errno = %d!\n", m_errno_ );
+            //write_log( "lost the connection to mysql server, errno = %d!\n", m_errno_ );
 
-            if ( _reconnect() )
+            if ( Reconnect() )
             {
                 _ret = true;
             }
             else
             {
-                if ( NULL != m_mysql_ )
+                if ( NULL != m_pMySql )
                 {
-                    m_errno_ = mysql_errno( m_mysql_ );
-                    m_error_ = mysql_error( m_mysql_ );
+                    m_nErrno = mysql_errno( m_pMySql );
+                    m_strError = mysql_error( m_pMySql );
                     Sleep( ERROR_SLEEP_TIME );
-                    _ret = _procerror( op_, __FUNCTION__ );
+                    _ret = ProcError( op_, __FUNCTION__ );
                 }
             }
         }
@@ -505,7 +434,7 @@ bool CDBConnection::ProcError( char const *op_/* = NULL*/, char const *func_/* =
 
     default:
         {
-            write_log( "%s, errno = %d!\n", m_error_.c_str(), m_errno_ );
+            //write_log( "%s, errno = %d!\n", m_error_.c_str(), m_errno_ );
         }
         break;
     }
@@ -516,7 +445,5 @@ bool CDBConnection::ProcError( char const *op_/* = NULL*/, char const *func_/* =
 // errno.
 int CDBConnection::GetError( void ) const
 {
-    return m_errno_;
+    return m_nErrno;
 }
-
-} // namespace ex

@@ -3,6 +3,7 @@
 
 #include <my_global.h>
 #include <mysql.h>
+#include "DBRecordSet.h"
 
 class CDBStoredProcedure
 {
@@ -26,10 +27,13 @@ public:
     void set_blob( size_t idx_, void const *ptr_, size_t sz_ );
 	void set_medium_blob( size_t idx_, void const *ptr_, size_t sz_ );
 
-private:
+	CDBRecordSet		  m_DBRecordSet;
+
     MYSQL_BIND           *m_pMybind;
     size_t                m_nCount;   // count of MYSQL_BIND
 	std::string           m_strSql;
+
+	
 };
 
 #endif // __DB_STORED_PROCEDURE__

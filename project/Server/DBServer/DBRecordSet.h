@@ -4,7 +4,6 @@
 
 #include <my_global.h>
 #include <mysql.h>
-#include <utility>
 
 class CDBRecordSet
 {
@@ -13,11 +12,53 @@ public:
 	~CDBRecordSet( void );
 
 public:
+	bool SetFieldNum(int nNum)
+	{
+		m_nFieldNum = nNum;
+		if(nNum > 0)
+		{
+			m_pBinds = new MYSQL_BIND[nNum];
+
+			memset(m_pBinds, 0, sizeof(MYSQL_BIND)*nNum);
+		}
+
+		return true;
+	}
+
+	void SetFieldType(int nIndex, enum_field_types fdType)
+	{
+		MYSQL_BIND *pTemp = &m_pBinds[nIndex];
+
+		int BufferSize = 0;
+
+		switch ( fdType )
+		{
+		case MYSQL_TYPE_TINY:	BufferSize = 1;	break;
+		case MYSQL_TYPE_SHORT:	BufferSize = 2;	break;
+		case MYSQL_TYPE_INT24:	BufferSize = 4;	break;
+		case MYSQL_TYPE_LONG:	BufferSize = 4;	break;
+		case MYSQL_TYPE_LONGLONG:BufferSize = 8;break;
+		case MYSQL_TYPE_FLOAT:	BufferSize = 4;	break;
+		case MYSQL_TYPE_DOUBLE:	BufferSize = 8;	break;
+		case MYSQL_TYPE_STRING: BufferSize = 255;break;
+		case MYSQL_TYPE_VAR_STRING:BufferSize = 65535;break;
+		case MYSQL_TYPE_BLOB:	BufferSize = 256;break;
+		case MYSQL_TYPE_TINY_BLOB:BufferSize = 65535;break;
+		case MYSQL_TYPE_MEDIUM_BLOB:BufferSize = 16777215;break;
+		case MYSQL_TYPE_LONG_BLOB:BufferSize = 4026531840;break;
+		}
+
+		pTemp->buffer			= malloc(BufferSize);
+		pTemp->buffer_length	= BufferSize;
+		pTemp->buffer_type      = fdType;
+	}
+
+public:
     // next.
     bool MoveNext( void );
 
     // count.
-    size_t GetCount( void ) const;
+    size_t GetCount( void );
 
     // get bool value.
     my_bool get_bool( size_t idx_ );
@@ -53,7 +94,7 @@ public:
     double get_double( size_t idx_ );
 
     // get string.
-    std::pair<size_t, char const*> get_string( size_t idx_ );
+    char* get_string( size_t idx_ );
 
     // get blob.
     std::pair<size_t, void const*> get_blob( size_t idx_ );
@@ -61,71 +102,18 @@ public:
 	// get medium blob.
 	std::pair<size_t, void const*> get_medium_blob( size_t idx_ );
 
-    // get returned bool value of out parameter.
-    my_bool getr_bool( size_t idx_ );
-
-    // get returned int8 value of out parameter.
-    int8 getr_int8( size_t idx_ );
-
-    // get returned uint8 value of out parameter.
-    uint8 getr_uint8( size_t idx_ );
-
-    // get returned int16 value of out parameter.
-    int16 getr_int16( size_t idx_ );
-
-    // get returned uint16 value of out parameter.
-    uint16 getr_uint16( size_t idx_ );
-
-    // get returned int32 value of out parameter.
-    int32 getr_int32( size_t idx_ );
-
-    // get returned uint32 value of out parameter.
-    uint32 getr_uint32( size_t idx_ );
-
-    // get returned int64 value of out parameter.
-    int64 getr_int64( size_t idx_ );
-
-    // get returned uint64 value of out parameter.
-    uint64 getr_uint64( size_t idx_ );
-
-    // get returned float value of out parameter.
-    float getr_float( size_t idx_ );
-
-    // get returned double value of out parameter.
-    double getr_double( size_t idx_ );
-
-    // get returned string of out parameter.
-    std::pair<size_t, char const*> getr_string( size_t idx_ );
-
-    // get returned blob of out parameter.
-    std::pair<size_t, void const*> getr_blob( size_t idx_ );
-
-
-    typedef struct _result
-    {
-		std::string      buf;
-        unsigned long    size;
-        enum_field_types type;
-        my_bool          is_null;
-
-        _result( void )
-            : size( 0 ),
-              type( MYSQL_TYPE_NULL ),
-              is_null( 0 )
-        {}
-    } result_t;
-
     // initialize.
-    bool _init( MYSQL_STMT *stmt_, MYSQL_RES *res_ );
+    bool InitRecordSet(MYSQL_STMT *pMySqlStmt, MYSQL_RES *pResult);
 
-    // returned output parameters.
-    bool _retval( MYSQL_STMT *stmt_, MYSQL_RES *res_ );
 
 private:
-	list<std::map<size_t, _result> >           m_res_; // results.
-    list<std::map<size_t, _result> >::iterator m_cur_; // current result.
-    size_t                                m_row_;
-    std::map<size_t, _result>                  m_ret_; // out parameters.
+    size_t                       m_RowCount;
+	MYSQL_STMT					*m_pMySqlStmt;
+	MYSQL_RES					*m_pResult;
+
+
+	int							 m_nFieldNum;
+	MYSQL_BIND					*m_pBinds;
 };
 
 #endif // _SQL_RESULT_H_
