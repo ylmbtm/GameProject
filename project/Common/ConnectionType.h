@@ -1,0 +1,24 @@
+﻿#ifndef __CMD_CONNECTION_TYPE_H__
+#define __CMD_CONNECTION_TYPE_H__
+
+enum ConnectionType
+{
+	TYPE_UNKNOW = 0,
+	TYPE_SVR_CENTER, //
+	TYPE_SVR_GAME, //
+	TYPE_SVR_PROXY,
+	TYPE_SVR_LOGIN,
+	TYPE_SVR_DATABASE,
+	TYPE_CLT_PLAYER
+		
+};
+
+
+
+
+
+
+
+
+
+#endif /* __CMD_CONNECTION_TYPE_H__ */

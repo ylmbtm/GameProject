@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServerEngine", "ServerEngine\ServerEngine.vcproj", "{639FA6BE-9921-4385-9210-BD6CAC868D58}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameServer", "GameServer\GameServer.vcproj", "{E3CDD8B0-B811-476B-91FF-44911DB7A3B6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{639FA6BE-9921-4385-9210-BD6CAC868D58} = {639FA6BE-9921-4385-9210-BD6CAC868D58}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProxyServer", "ProxyServer\ProxyServer.vcproj", "{95964317-9DD8-439B-A03A-DBBF2AE6E5BD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{639FA6BE-9921-4385-9210-BD6CAC868D58} = {639FA6BE-9921-4385-9210-BD6CAC868D58}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LoginServer", "LoginServer\LoginServer.vcproj", "{95964317-9DD8-439B-A03A-DBBF2AE6E51D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{639FA6BE-9921-4385-9210-BD6CAC868D58} = {639FA6BE-9921-4385-9210-BD6CAC868D58}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CenterServer", "CenterServer\CenterServer.vcproj", "{95964317-9DD8-439B-A03A-DBBF2AE6E512}"
+	ProjectSection(ProjectDependencies) = postProject
+		{639FA6BE-9921-4385-9210-BD6CAC868D58} = {639FA6BE-9921-4385-9210-BD6CAC868D58}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBServer", "DBServer\DBServer.vcproj", "{95964317-9DD8-439B-A03A-DBBF2AE6E53D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{639FA6BE-9921-4385-9210-BD6CAC868D58}.Debug|Win32.ActiveCfg = Debug|Win32
+		{639FA6BE-9921-4385-9210-BD6CAC868D58}.Debug|Win32.Build.0 = Debug|Win32
+		{639FA6BE-9921-4385-9210-BD6CAC868D58}.Release|Win32.ActiveCfg = Release|Win32
+		{639FA6BE-9921-4385-9210-BD6CAC868D58}.Release|Win32.Build.0 = Release|Win32
+		{E3CDD8B0-B811-476B-91FF-44911DB7A3B6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E3CDD8B0-B811-476B-91FF-44911DB7A3B6}.Debug|Win32.Build.0 = Debug|Win32
+		{E3CDD8B0-B811-476B-91FF-44911DB7A3B6}.Release|Win32.ActiveCfg = Release|Win32
+		{E3CDD8B0-B811-476B-91FF-44911DB7A3B6}.Release|Win32.Build.0 = Release|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E5BD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E5BD}.Debug|Win32.Build.0 = Debug|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E5BD}.Release|Win32.ActiveCfg = Release|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E5BD}.Release|Win32.Build.0 = Release|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E51D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E51D}.Debug|Win32.Build.0 = Debug|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E51D}.Release|Win32.ActiveCfg = Release|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E51D}.Release|Win32.Build.0 = Release|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E512}.Debug|Win32.ActiveCfg = Debug|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E512}.Debug|Win32.Build.0 = Debug|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E512}.Release|Win32.ActiveCfg = Release|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E512}.Release|Win32.Build.0 = Release|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E53D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E53D}.Debug|Win32.Build.0 = Debug|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E53D}.Release|Win32.ActiveCfg = Release|Win32
+		{95964317-9DD8-439B-A03A-DBBF2AE6E53D}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

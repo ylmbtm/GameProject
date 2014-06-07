@@ -1,0 +1,44 @@
+CC=g++
+CCLIB=ar
+CC_INCLUDE=-I/usr/include
+	 
+MY_INCLUDE=-I$(PWD) \
+		-I$../../Common \
+		-I$../../Common/Utility \
+		-I$../../PacketDef
+					 
+CC_LIB=-L/usr/lib \
+	-L/lib \
+	-lpthread
+			 
+MY_LIB=
+
+TARGET=libServerEngine.a
+
+OBJPATH=./Debug/
+
+SRCS= 
+SRCS:=$(SRCS) $(wildcard ./Common/*.cpp)
+SRCS:=$(SRCS) $(wildcard ./CmdPacket/*.cpp)
+SRCS:=$(SRCS) $(wildcard ./IniFile/*.cpp)
+SRCS:=$(SRCS) $(wildcard ./Log/*.cpp)
+
+#SRCS=$(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.cpp))
+
+OBJS=$(SRCS:.cpp=.o)
+
+#OBJS:=$(notdir $(OBJS))
+
+#OBJS:=$(addprefix $(OBJPATH),$(OBJS))
+
+#$(TARGET):$(OBJS)
+#	$(CC) -g -o $(TARGET) $(OBJS) $(CC_LIB) $(MY_LIB)
+
+$(TARGET):$(OBJS)
+	$(CCLIB) -rs -o $(TARGET) $(OBJS)
+
+$(OBJS):%.o:%.cpp
+	$(CC) -g -w -c $< -o $@ $(CC_INCLUDE) $(MY_INCLUDE)
+	
+clean:
+	rm $(OBJS) $(TARGET)

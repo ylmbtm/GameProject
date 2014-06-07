@@ -1,0 +1,55 @@
+﻿#include "stdafx.h"
+#include "CommonCmdHandler.h"
+#include "Utility/CommonFunc.h"
+#include "Utility/CommonEvent.h"
+#include "ConnectionType.h"
+
+CCommonCmdHandler::CCommonCmdHandler()
+{
+	m_WorkThread.SetCommandHandler(this);
+}
+
+CCommonCmdHandler::~CCommonCmdHandler()
+{
+
+}
+
+BOOL CCommonCmdHandler::Init(UINT32 dwReserved)
+{
+	m_WorkThread.Start();
+
+	return TRUE;
+}
+
+BOOL CCommonCmdHandler::Uninit()
+{
+	m_WorkThread.Stop();
+
+	return TRUE;
+}
+
+BOOL CCommonCmdHandler::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	OnCmdDefaultHandle(wCommandID, u64ConnID, pBufferHelper);
+	return TRUE;
+}
+
+BOOL CCommonCmdHandler::AddMessage( UINT64 u64ConnID, IDataBuffer *pDataBuffer )
+{
+	return m_WorkThread.AddMessage(u64ConnID, pDataBuffer);
+}
+
+
+
+UINT32 CCommonCmdHandler::OnCmdDefaultHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+{
+
+	return 0;
+}
+
+BOOL CCommonCmdHandler::OnUpdate( UINT32 dwTick )
+{
+
+	return TRUE;
+}
+
