@@ -32,7 +32,6 @@ public:
 	//*********************消息处理定义结束******************************
 
 	std::map<UINT64, StRegisterToCenterSvr> m_vtActiveSvrList;
-
 	BOOL m_bConnectToCenter;
 	UINT32 m_dwLastTry;
 };

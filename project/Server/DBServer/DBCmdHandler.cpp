@@ -46,7 +46,6 @@ BOOL CDBCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuffer
 	switch(wCommandID)
 	{
 		PROCESS_COMMAND_ITEM(CMD_CHAR_LOGIN_REQ,		OnCmdLoginReq);
-
 	default:
 		{
 

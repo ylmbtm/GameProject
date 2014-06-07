@@ -7,7 +7,7 @@
 #include <cstdio>
 
 #ifdef _DEBUG
-	#pragma comment(lib, "libmysqld.lib")
+	#pragma comment(lib, "libmysql.lib")
 #else
 	#pragma comment(lib, "libmysql.lib")
 #endif
@@ -55,35 +55,5 @@ private:
     int          m_nErrno;
     std::string  m_strError;
 };
-
-#define INSERT_QUERY "INSERT INTO bintest(id, data) VALUES(4, ?)"
-
-bool ExeProcedure(MYSQL *sql, int nProcedureID, ...)
-{
-	
-}
-
-bool insertBlob(MYSQL* sql, char * blobData, unsigned long size)
-{
-	do
-	{
-		MYSQL_BIND bind[1] = {0};
-		MYSQL_STMT *stmt = mysql_stmt_init(sql);  
-		if (NULL == stmt)
-			break;  
-		if (mysql_stmt_prepare(stmt, INSERT_QUERY, strlen(INSERT_QUERY)))
-			break;
-		bind[0].buffer      = blobData;
-		bind[0].buffer_type = MYSQL_TYPE_BLOB;
-		bind[0].length      = &size;
-		bind[0].is_null     = 0;
-		if (mysql_stmt_bind_param(stmt, bind))
-			break;
-		if (mysql_stmt_execute(stmt))
-			break;
-		return true ;
-	} while(0);
-	return false ;
-}
 
 #endif // _SQL_CONN_H_
