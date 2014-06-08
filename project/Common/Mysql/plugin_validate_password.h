@@ -1,5 +1,5 @@
-/*
-   Copyright © 2012, Oracle and/or its affiliates. All rights reserved.
+﻿/*
+   Copyright 漏 2012, Oracle and/or its affiliates. All rights reserved.
 
 
 

@@ -1,4 +1,4 @@
-
+﻿
 #include "sql_string.h"
 #include "Allocator.h"
 

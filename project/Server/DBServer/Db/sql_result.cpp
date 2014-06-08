@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 **  copyright (c) 2012 - all rights reserved.
 **
 **  proj:   mysql
@@ -1174,7 +1174,7 @@ bool sql_result::_retval( MYSQL_STMT *stmt_, MYSQL_RES *res_ )
         size_t _row = 0;
 
         _row = mysql_stmt_num_rows( stmt_ );
-        if ( 1 == _row )    // Êä³ö²ÎÊı·µ»ØµÄ½á¹û¼¯Ö»ÓĞÒ»ĞĞ
+        if ( 1 == _row )    // è¾“å‡ºå‚æ•°è¿”å›çš„ç»“æœé›†åªæœ‰ä¸€è¡Œ
         {
             size_t _count = 0;
             MYSQL_BIND *_bind = NULL;

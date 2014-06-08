@@ -1,4 +1,4 @@
-#include "stdAfx.h"
+﻿#include "stdAfx.h"
 #include "Grid.h"
 
 CGrid::CGrid(void)

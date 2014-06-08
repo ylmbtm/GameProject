@@ -1,4 +1,4 @@
-
+ï»¿
 #include <errmsg.h>
 #include "sql_conn.h"
 #include "sql_stmt.h"
@@ -187,7 +187,7 @@ int sql_conn::execute( sql_stmt *stmt_ )
                     {
                         _ret = (int)mysql_stmt_affected_rows( _stmt );
 
-                        // ¼ì²éÊÇ·ñÓĞ½á¹û¼¯
+                        // æ£€æŸ¥æ˜¯å¦æœ‰ç»“æœé›†
                         MYSQL_RES *_res = mysql_stmt_result_metadata( _stmt );
                         if ( NULL != _res )
                         {
@@ -195,14 +195,14 @@ int sql_conn::execute( sql_stmt *stmt_ )
 
                             if ( server_status & SERVER_PS_OUT_PARAMS )
                             {
-                                write_log( "´Ëµ÷ÓÃ´æ´¢´æÔÚ·µ»Ø²ÎÊıÖµ£¬Çë¼ì²ésqlÓï¾äºÍ´æ´¢¹ı³ÌÊµÏÖ!\n" );
+                                write_log( "æ­¤è°ƒç”¨å­˜å‚¨å­˜åœ¨è¿”å›å‚æ•°å€¼ï¼Œè¯·æ£€æŸ¥sqlè¯­å¥å’Œå­˜å‚¨è¿‡ç¨‹å®ç°!\n" );
                                 mysql_stmt_store_result( _stmt );
                                 mysql_free_result( _res );
                                 mysql_stmt_free_result( _stmt );
                             }
                             else
                             {
-                                write_log( "Ö´ĞĞ²éÑ¯²Ù×÷²»Ó¦¸Ã·µ»ØÈÎºÎ½á¹û¼¯£¬Çë¼ì²ésqlÓï¾äºÍ´æ´¢¹ı³ÌÊµÏÖ!\n" );
+                                write_log( "æ‰§è¡ŒæŸ¥è¯¢æ“ä½œä¸åº”è¯¥è¿”å›ä»»ä½•ç»“æœé›†ï¼Œè¯·æ£€æŸ¥sqlè¯­å¥å’Œå­˜å‚¨è¿‡ç¨‹å®ç°!\n" );
                                 mysql_stmt_store_result( _stmt );
                                 mysql_free_result( _res );
                                 mysql_stmt_free_result( _stmt );
@@ -218,12 +218,12 @@ int sql_conn::execute( sql_stmt *stmt_ )
                                         mysql_stmt_free_result( _stmt );
                                         if ( server_status & SERVER_PS_OUT_PARAMS )
                                         {
-                                            write_log( "´Ëµ÷ÓÃ´æ´¢´æÔÚ·µ»Ø²ÎÊıÖµ£¬Çë¼ì²ésqlÓï¾äºÍ´æ´¢¹ı³ÌÊµÏÖ!\n" );
+                                            write_log( "æ­¤è°ƒç”¨å­˜å‚¨å­˜åœ¨è¿”å›å‚æ•°å€¼ï¼Œè¯·æ£€æŸ¥sqlè¯­å¥å’Œå­˜å‚¨è¿‡ç¨‹å®ç°!\n" );
                                             break;
                                         }
                                         else
                                         {
-                                            write_log( "Ö´ĞĞ²éÑ¯²Ù×÷²»Ó¦¸Ã·µ»ØÈÎºÎ½á¹û¼¯£¬Çë¼ì²ésqlÓï¾äºÍ´æ´¢¹ı³ÌÊµÏÖ!\n" );
+                                            write_log( "æ‰§è¡ŒæŸ¥è¯¢æ“ä½œä¸åº”è¯¥è¿”å›ä»»ä½•ç»“æœé›†ï¼Œè¯·æ£€æŸ¥sqlè¯­å¥å’Œå­˜å‚¨è¿‡ç¨‹å®ç°!\n" );
                                         }
                                     }
                                 }
@@ -336,7 +336,7 @@ int sql_conn::query( sql_stmt *stmt_, sql_result **result_ )
                                     mysql_free_result( _res );
                                     mysql_stmt_free_result( _stmt );
 
-                                    // ¼ì²éÊÇ·ñ»¹ÓĞ½á¹û¼¯
+                                    // æ£€æŸ¥æ˜¯å¦è¿˜æœ‰ç»“æœé›†
                                     while ( 0 == mysql_stmt_next_result( _stmt ) )
                                     {
                                         _res = mysql_stmt_result_metadata( _stmt );
@@ -354,7 +354,7 @@ int sql_conn::query( sql_stmt *stmt_, sql_result **result_ )
                                                 }
                                                 else
                                                 {
-                                                    write_log( "Ö´ĞĞ²éÑ¯²Ù×÷²»Ó¦¸Ã·µ»ØÈÎºÎ½á¹û¼¯£¬Çë¼ì²ésqlÓï¾äºÍ´æ´¢¹ı³ÌÊµÏÖ!\n" );
+                                                    write_log( "æ‰§è¡ŒæŸ¥è¯¢æ“ä½œä¸åº”è¯¥è¿”å›ä»»ä½•ç»“æœé›†ï¼Œè¯·æ£€æŸ¥sqlè¯­å¥å’Œå­˜å‚¨è¿‡ç¨‹å®ç°!\n" );
                                                     mysql_stmt_store_result( _stmt );
                                                     mysql_free_result( _res );
                                                     mysql_stmt_free_result( _stmt );

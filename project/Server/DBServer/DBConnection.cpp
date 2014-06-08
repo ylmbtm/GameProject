@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include <errmsg.h>
 #include "DBConnection.h"
 #include "DBStoredProc.h"
@@ -143,7 +143,7 @@ int CDBConnection::Execute(CDBStoredProcedure *pDBStoredProcedure)
 
     nAffectedCount = (int)mysql_stmt_affected_rows( pMySqlStmt );
 
-    // ¼ì²éÊÇ·ñÓĞ½á¹û¼¯
+    // æ£€æŸ¥æ˜¯å¦æœ‰ç»“æœé›†
     MYSQL_RES *pMySqlResult = mysql_stmt_result_metadata( pMySqlStmt );
 	if(pMySqlResult == NULL)
 	{
@@ -157,14 +157,14 @@ int CDBConnection::Execute(CDBStoredProcedure *pDBStoredProcedure)
 
     if ( server_status & SERVER_PS_OUT_PARAMS )
     {
-        //write_log( "´Ëµ÷ÓÃ´æ´¢´æÔÚ·µ»Ø²ÎÊıÖµ£¬Çë¼ì²ésqlÓï¾äºÍ´æ´¢¹ı³ÌÊµÏÖ!\n" );
+        //write_log( "æ­¤è°ƒç”¨å­˜å‚¨å­˜åœ¨è¿”å›å‚æ•°å€¼ï¼Œè¯·æ£€æŸ¥sqlè¯­å¥å’Œå­˜å‚¨è¿‡ç¨‹å®ç°!\n" );
         mysql_stmt_store_result( pMySqlStmt );
         mysql_free_result( pMySqlResult );
         mysql_stmt_free_result( pMySqlStmt );
     }
     else
     {
-        //write_log( "Ö´ĞĞ²éÑ¯²Ù×÷²»Ó¦¸Ã·µ»ØÈÎºÎ½á¹û¼¯£¬Çë¼ì²ésqlÓï¾äºÍ´æ´¢¹ı³ÌÊµÏÖ!\n" );
+        //write_log( "æ‰§è¡ŒæŸ¥è¯¢æ“ä½œä¸åº”è¯¥è¿”å›ä»»ä½•ç»“æœé›†ï¼Œè¯·æ£€æŸ¥sqlè¯­å¥å’Œå­˜å‚¨è¿‡ç¨‹å®ç°!\n" );
         mysql_stmt_store_result( pMySqlStmt );
         mysql_free_result( pMySqlResult );
         mysql_stmt_free_result( pMySqlStmt );
@@ -180,12 +180,12 @@ int CDBConnection::Execute(CDBStoredProcedure *pDBStoredProcedure)
                 mysql_stmt_free_result( pMySqlStmt );
                 if ( server_status & SERVER_PS_OUT_PARAMS )
                 {
-                    //write_log( "´Ëµ÷ÓÃ´æ´¢´æÔÚ·µ»Ø²ÎÊıÖµ£¬Çë¼ì²ésqlÓï¾äºÍ´æ´¢¹ı³ÌÊµÏÖ!\n" );
+                    //write_log( "æ­¤è°ƒç”¨å­˜å‚¨å­˜åœ¨è¿”å›å‚æ•°å€¼ï¼Œè¯·æ£€æŸ¥sqlè¯­å¥å’Œå­˜å‚¨è¿‡ç¨‹å®ç°!\n" );
                     break;
                 }
                 else
                 {
-                   // //write_log( "Ö´ĞĞ²éÑ¯²Ù×÷²»Ó¦¸Ã·µ»ØÈÎºÎ½á¹û¼¯£¬Çë¼ì²ésqlÓï¾äºÍ´æ´¢¹ı³ÌÊµÏÖ!\n" );
+                   // //write_log( "æ‰§è¡ŒæŸ¥è¯¢æ“ä½œä¸åº”è¯¥è¿”å›ä»»ä½•ç»“æœé›†ï¼Œè¯·æ£€æŸ¥sqlè¯­å¥å’Œå­˜å‚¨è¿‡ç¨‹å®ç°!\n" );
                 }
             }
         }
@@ -261,7 +261,7 @@ int CDBConnection::Query(CDBStoredProcedure *pDBStoredProcedure)
 
     nAffectedCount = (int)mysql_stmt_affected_rows( pMySqlStmt );
 
-	// ¼ì²éÊÇ·ñÓĞ½á¹û¼¯
+	// æ£€æŸ¥æ˜¯å¦æœ‰ç»“æœé›†
 	MYSQL_RES *pMySqlResult = mysql_stmt_result_metadata( pMySqlStmt );
 	if(pMySqlResult == NULL)
 	{

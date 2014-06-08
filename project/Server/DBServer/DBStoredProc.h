@@ -1,4 +1,4 @@
-#ifndef __DB_STORED_PROCEDURE__
+﻿#ifndef __DB_STORED_PROCEDURE__
 #define __DB_STORED_PROCEDURE__
 
 #include <my_global.h>

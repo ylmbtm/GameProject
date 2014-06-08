@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "NetworkMgr.h"
 #include "Utility/CommonSocket.h"
 #include "resource.h"
@@ -47,7 +47,7 @@ BOOL CNetworkMgr::InitNetSystem()
 {
 	if(!CommonSocket::InitNetwork())
 	{
-		MessageBox(NULL, "ÍøÂç³õÊ¼»¯Ê§°Ü!", "´íÎóÌáÊ¾", MB_OK);
+		MessageBox(NULL, "ç½‘ç»œåˆå§‹åŒ–å¤±è´¥!", "é”™è¯¯æç¤º", MB_OK);
 		return FALSE;
 	}
 
@@ -68,7 +68,7 @@ BOOL CNetworkMgr::ConnectToServer(std::string strIpAddr, UINT16 sPort)
 	m_hSocket = CommonSocket::CreateSocket(AF_INET, SOCK_STREAM, 0);
 	if((m_hSocket == INVALID_SOCKET)||(m_hSocket == NULL))
 	{
-		MessageBox(NULL, "´´½¨Ì×½Ó×ÖÊ§°Ü!", "´íÎóÌáÊ¾", MB_OK);
+		MessageBox(NULL, "åˆ›å»ºå¥—æŽ¥å­—å¤±è´¥!", "é”™è¯¯æç¤º", MB_OK);
 		return FALSE;
 	}
 
@@ -76,7 +76,7 @@ BOOL CNetworkMgr::ConnectToServer(std::string strIpAddr, UINT16 sPort)
 
 	if(!CommonSocket::ConnectSocket(m_hSocket, strIpAddr.c_str(), sPort))
 	{
-		MessageBox(NULL, "Á¬½Ó·þÎñÆ÷Ê§°Ü!", "´íÎóÌáÊ¾", MB_OK);
+		MessageBox(NULL, "è¿žæŽ¥æœåŠ¡å™¨å¤±è´¥!", "é”™è¯¯æç¤º", MB_OK);
 		return FALSE;
 	}
 
@@ -100,18 +100,18 @@ BOOL CNetworkMgr::RecvData()
 		DWORD nError = CommonSocket::GetSocketLastError();
 		if(nError == WSAEWOULDBLOCK)
 		{
-			//Èç¹ûÃ»ÓÐÁ¬½Ó£¬±íÃ÷Á¬½Ó³É¹¦
+			//å¦‚æžœæ²¡æœ‰è¿žæŽ¥ï¼Œè¡¨æ˜Žè¿žæŽ¥æˆåŠŸ
 			if(!m_bConnected)
 			{
 				m_bConnected = TRUE;
 
-				((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString("Á¬½Ó³É¹¦1!");
+				((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString("è¿žæŽ¥æˆåŠŸ1!");
 			}
 
 			if(nError != m_nLastError)
 			{
 				CString strText;
-				strText.Format("½ÓÊÕÊý¾Ý·¢Éú´íÎó:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
+				strText.Format("æŽ¥æ”¶æ•°æ®å‘ç”Ÿé”™è¯¯:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
 				((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 
 				m_nLastError = nError;
@@ -122,7 +122,7 @@ BOOL CNetworkMgr::RecvData()
 			if(nError != m_nLastError)
 			{
 				CString strText;
-				strText.Format("½ÓÊÕÊý¾Ý·¢Éú´íÎó:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
+				strText.Format("æŽ¥æ”¶æ•°æ®å‘ç”Ÿé”™è¯¯:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
 				((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 
 				m_nLastError = nError;
@@ -137,7 +137,7 @@ BOOL CNetworkMgr::RecvData()
 	else if(nReadLen == 0)
 	{
 		CString strText;
-		strText.Format("¶Ô·½¹Ø±ÕÁËÁ¬½Ó!");
+		strText.Format("å¯¹æ–¹å…³é—­äº†è¿žæŽ¥!");
 		((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 
 		if(m_bConnected)
@@ -152,7 +152,7 @@ BOOL CNetworkMgr::RecvData()
 			m_bConnected = TRUE;
 
 			CString strText;
-			strText.Format("Á¬½Ó³É¹¦2!£¬ ÊÕµ½%d×Ö½ÚÊý¾Ý", nReadLen);
+			strText.Format("è¿žæŽ¥æˆåŠŸ2!ï¼Œ æ”¶åˆ°%då­—èŠ‚æ•°æ®", nReadLen);
 
 			((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 		}
@@ -178,7 +178,7 @@ BOOL CNetworkMgr::SendData( char *pData, UINT32 dwLen )
 		if(nError != m_nLastError)
 		{
 			CString strText;
-			strText.Format("½ÓÊÕÊý¾Ý·¢Éú´íÎó:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
+			strText.Format("æŽ¥æ”¶æ•°æ®å‘ç”Ÿé”™è¯¯:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
 
 			((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 

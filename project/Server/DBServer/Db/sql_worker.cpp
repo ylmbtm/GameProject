@@ -1,4 +1,4 @@
-
+﻿
 #include "sql_worker.h"
 
 namespace ex

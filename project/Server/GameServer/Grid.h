@@ -1,4 +1,4 @@
-#ifndef __GRID_H__
+ï»¿#ifndef __GRID_H__
 #define __GRID_H__
 
 #include "WorldObject.h"
@@ -17,7 +17,7 @@ public:
 
 	BOOL IsObjectExist(CWorldObject *pObject);
 
-	//ÒÔÏÂÊÇÐÂµÄ°æ±¾
+	//ä»¥ä¸‹æ˜¯æ–°çš„ç‰ˆæœ¬
 	CWorldObject *m_pHead;
 };
 

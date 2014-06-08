@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "CommandHandler.h"
 #include "PacketDef/ServerPacket.h"
 #include "PacketDef/TransferPacket.h"
@@ -105,12 +105,12 @@ UINT32 CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID
 	CString strText;
 	if(MsgLoginAck.byteCode == 0)
 	{
-		strText.Format("µÇÂ¼Ê§°Ü!");
+		strText.Format("ç™»å½•å¤±è´¥!");
 		((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 	}
 	else
 	{
-		strText.Format("µÇÂ¼³É¹¦!");
+		strText.Format("ç™»å½•æˆåŠŸ!");
 		((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 		CNetworkMgr::GetInstancePtr()->DisConnect();
 		m_HostPlayer.SetObjectID(MsgLoginAck.u64CharID);
@@ -126,7 +126,7 @@ UINT32 CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, C
 	UINT32 dwCount = 0;
 	pBufferHelper->Read(dwCount);
 	CString strText;
-	strText.Format("BEGIN---Ìí¼Ó½ÇÉ«ÏûÏ¢£¬Ìí¼ÓÈËÊý:%d", dwCount);
+	strText.Format("BEGIN---æ·»åŠ è§’è‰²æ¶ˆæ¯ï¼Œæ·»åŠ äººæ•°:%d", dwCount);
 	((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 
 	for(UINT32 i = 0; i < dwCount; i++)
@@ -148,12 +148,12 @@ UINT32 CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, C
 
 		m_PlayerObjMgr.insert(std::make_pair(pObject->GetObjectID(), pObject));
 
-		strText.Format("Ìí¼Ó½ÇÉ«:%d, ×ø±êx = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
+		strText.Format("æ·»åŠ è§’è‰²:%d, åæ ‡x = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
 
 		((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 	}
 
-	strText.Format("END---Ìí¼Ó½ÇÉ«ÏûÏ¢");
+	strText.Format("END---æ·»åŠ è§’è‰²æ¶ˆæ¯");
 	((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
@@ -178,7 +178,7 @@ UINT32 CClientCmdHandler::OnCmdNearByUpdate( UINT16 wCommandID, UINT64 u64ConnID
 			pObject->ReadFromBuffer(pBufferHelper);
 
 			//CString strText;
-			//strText.Format("¸üÐÂ½ÇÉ«:%d, ×ø±êx = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
+			//strText.Format("æ›´æ–°è§’è‰²:%d, åæ ‡x = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
 
 			//((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 		}
@@ -199,7 +199,7 @@ UINT32 CClientCmdHandler::OnCmdNearByRemove( UINT16 wCommandID, UINT64 u64ConnID
 	pBufferHelper->Read(dwCount);
 
 	CString strText;
-	strText.Format("BEGIN---É¾³ý½ÇÉ«ÏûÏ¢£¬Ô¤¼ÆÉ¾³ýÈËÊý:%d, ÏÖÔÚÈËÊý:%d", dwCount, m_PlayerObjMgr.size());
+	strText.Format("BEGIN---åˆ é™¤è§’è‰²æ¶ˆæ¯ï¼Œé¢„è®¡åˆ é™¤äººæ•°:%d, çŽ°åœ¨äººæ•°:%d", dwCount, m_PlayerObjMgr.size());
 	((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 
 	for(UINT32 i = 0; i < dwCount; i++)
@@ -220,12 +220,12 @@ UINT32 CClientCmdHandler::OnCmdNearByRemove( UINT16 wCommandID, UINT64 u64ConnID
 		delete pObj;
 
 		CString strText;
-		strText.Format("É¾³ý½ÇÉ«:%d³É¹¦", (UINT32)u64CharID);
+		strText.Format("åˆ é™¤è§’è‰²:%dæˆåŠŸ", (UINT32)u64CharID);
 
 		((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 	}
 
-	strText.Format("END---É¾³ý½ÇÉ«ÏûÏ¢");
+	strText.Format("END---åˆ é™¤è§’è‰²æ¶ˆæ¯");
 	((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
@@ -241,7 +241,7 @@ UINT32 CClientCmdHandler::OnCmdEnterGameAck( UINT16 wCommandID, UINT64 u64ConnID
 
 	m_HostPlayer.ReadFromBuffer(pBufferHelper);
 
-	((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString("µÇÂ¼³É¹¦!");
+	((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString("ç™»å½•æˆåŠŸ!");
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
 

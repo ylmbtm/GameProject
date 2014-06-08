@@ -1,21 +1,21 @@
-#pragma once
+ï»¿#pragma once
 
 
-// CDlgLogin ¶Ô»°¿ò
+// CDlgLogin å¯¹è¯æ¡†
 
 class CDlgLogin : public CDialog
 {
 	DECLARE_DYNAMIC(CDlgLogin)
 
 public:
-	CDlgLogin(CWnd* pParent = NULL);   // ±ê×¼¹¹Ôìº¯Êı
+	CDlgLogin(CWnd* pParent = NULL);   // æ ‡å‡†æ„é€ å‡½æ•°
 	virtual ~CDlgLogin();
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 	enum { IDD = IDD_Dlg_Login };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
 
 	DECLARE_MESSAGE_MAP()
 public:

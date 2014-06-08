@@ -1,4 +1,4 @@
-
+﻿
 #ifndef _SQL_RESULT_H_
 #define _SQL_RESULT_H_
 

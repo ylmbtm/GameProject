@@ -1,4 +1,4 @@
-#ifndef CLIENT_AUTHENTICATION_H
+﻿#ifndef CLIENT_AUTHENTICATION_H
 #define CLIENT_AUTHENTICATION_H
 #include <my_global.h>
 #include "mysql.h"

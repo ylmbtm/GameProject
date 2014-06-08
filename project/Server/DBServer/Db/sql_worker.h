@@ -1,4 +1,4 @@
-
+﻿
 #ifndef _SQL_WORKER_H_
 #define _SQL_WORKER_H_
 

@@ -1,4 +1,4 @@
-/* Copyright (c) 1996, 1999-2004, 2007 MySQL AB
+﻿/* Copyright (c) 1996, 1999-2004, 2007 MySQL AB
    Use is subject to license terms
    This file is public domain and comes with NO WARRANTY of any kind */
 

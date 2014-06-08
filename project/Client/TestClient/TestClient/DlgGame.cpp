@@ -1,4 +1,4 @@
-// DlgGame.cpp : ÊµÏÖÎÄ¼ş
+ï»¿// DlgGame.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -7,7 +7,7 @@
 #include "CommandHandler.h"
 
 
-// CDlgGame ¶Ô»°¿ò
+// CDlgGame å¯¹è¯æ¡†
 
 IMPLEMENT_DYNAMIC(CDlgGame, CDialog)
 
@@ -33,7 +33,7 @@ BEGIN_MESSAGE_MAP(CDlgGame, CDialog)
 END_MESSAGE_MAP()
 
 
-// CDlgGame ÏûÏ¢´¦Àí³ÌĞò
+// CDlgGame æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 void CDlgGame::OnPaint()
 {
@@ -65,7 +65,7 @@ void CDlgGame::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
 
-	// TODO: ÔÚ´Ë´¦Ìí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤å¤„æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç 
 }
 
 VOID CDlgGame::DrawPlayer( HDC hDC, int nX, int nY )

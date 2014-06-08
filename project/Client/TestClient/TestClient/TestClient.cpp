@@ -1,5 +1,5 @@
-
-// TestClient.cpp : ¶¨ÒåÓ¦ÓÃ³ÌÐòµÄÀàÐÐÎª¡£
+ï»¿
+// TestClient.cpp : å®šä¹‰åº”ç”¨ç¨‹åºçš„ç±»è¡Œä¸ºã€‚
 //
 
 #include "stdafx.h"
@@ -23,31 +23,31 @@ BEGIN_MESSAGE_MAP(CTestClientApp, CWinAppEx)
 END_MESSAGE_MAP()
 
 
-// CTestClientApp ¹¹Ôì
+// CTestClientApp æž„é€ 
 
 CTestClientApp::CTestClientApp()
 {
-	// TODO: ÔÚ´Ë´¦Ìí¼Ó¹¹Ôì´úÂë£¬
-	// ½«ËùÓÐÖØÒªµÄ³õÊ¼»¯·ÅÖÃÔÚ InitInstance ÖÐ
+	// TODO: åœ¨æ­¤å¤„æ·»åŠ æž„é€ ä»£ç ï¼Œ
+	// å°†æ‰€æœ‰é‡è¦çš„åˆå§‹åŒ–æ”¾ç½®åœ¨ InitInstance ä¸­
 }
 
 
-// Î¨Ò»µÄÒ»¸ö CTestClientApp ¶ÔÏó
+// å”¯ä¸€çš„ä¸€ä¸ª CTestClientApp å¯¹è±¡
 
 CTestClientApp theApp;
 
 
-// CTestClientApp ³õÊ¼»¯
+// CTestClientApp åˆå§‹åŒ–
 
 BOOL CTestClientApp::InitInstance()
 {
-	// Èç¹ûÒ»¸öÔËÐÐÔÚ Windows XP ÉÏµÄÓ¦ÓÃ³ÌÐòÇåµ¥Ö¸¶¨Òª
-	// Ê¹ÓÃ ComCtl32.dll °æ±¾ 6 »ò¸ü¸ß°æ±¾À´ÆôÓÃ¿ÉÊÓ»¯·½Ê½£¬
-	//ÔòÐèÒª InitCommonControlsEx()¡£·ñÔò£¬½«ÎÞ·¨´´½¨´°¿Ú¡£
+	// å¦‚æžœä¸€ä¸ªè¿è¡Œåœ¨ Windows XP ä¸Šçš„åº”ç”¨ç¨‹åºæ¸…å•æŒ‡å®šè¦
+	// ä½¿ç”¨ ComCtl32.dll ç‰ˆæœ¬ 6 æˆ–æ›´é«˜ç‰ˆæœ¬æ¥å¯ç”¨å¯è§†åŒ–æ–¹å¼ï¼Œ
+	//åˆ™éœ€è¦ InitCommonControlsEx()ã€‚å¦åˆ™ï¼Œå°†æ— æ³•åˆ›å»ºçª—å£ã€‚
 	INITCOMMONCONTROLSEX InitCtrls;
 	InitCtrls.dwSize = sizeof(InitCtrls);
-	// ½«ËüÉèÖÃÎª°üÀ¨ËùÓÐÒªÔÚÓ¦ÓÃ³ÌÐòÖÐÊ¹ÓÃµÄ
-	// ¹«¹²¿Ø¼þÀà¡£
+	// å°†å®ƒè®¾ç½®ä¸ºåŒ…æ‹¬æ‰€æœ‰è¦åœ¨åº”ç”¨ç¨‹åºä¸­ä½¿ç”¨çš„
+	// å…¬å…±æŽ§ä»¶ç±»ã€‚
 	InitCtrls.dwICC = ICC_WIN95_CLASSES;
 	InitCommonControlsEx(&InitCtrls);
 
@@ -55,37 +55,37 @@ BOOL CTestClientApp::InitInstance()
 
 	AfxEnableControlContainer();
 
-	// ±ê×¼³õÊ¼»¯
-	// Èç¹ûÎ´Ê¹ÓÃÕâÐ©¹¦ÄÜ²¢Ï£Íû¼õÐ¡
-	// ×îÖÕ¿ÉÖ´ÐÐÎÄ¼þµÄ´óÐ¡£¬ÔòÓ¦ÒÆ³ýÏÂÁÐ
-	// ²»ÐèÒªµÄÌØ¶¨³õÊ¼»¯Àý³Ì
-	// ¸ü¸ÄÓÃÓÚ´æ´¢ÉèÖÃµÄ×¢²á±íÏî
-	// TODO: Ó¦ÊÊµ±ÐÞ¸Ä¸Ã×Ö·û´®£¬
-	// ÀýÈçÐÞ¸ÄÎª¹«Ë¾»ò×éÖ¯Ãû
-	SetRegistryKey(_T("Ó¦ÓÃ³ÌÐòÏòµ¼Éú³ÉµÄ±¾µØÓ¦ÓÃ³ÌÐò"));
+	// æ ‡å‡†åˆå§‹åŒ–
+	// å¦‚æžœæœªä½¿ç”¨è¿™äº›åŠŸèƒ½å¹¶å¸Œæœ›å‡å°
+	// æœ€ç»ˆå¯æ‰§è¡Œæ–‡ä»¶çš„å¤§å°ï¼Œåˆ™åº”ç§»é™¤ä¸‹åˆ—
+	// ä¸éœ€è¦çš„ç‰¹å®šåˆå§‹åŒ–ä¾‹ç¨‹
+	// æ›´æ”¹ç”¨äºŽå­˜å‚¨è®¾ç½®çš„æ³¨å†Œè¡¨é¡¹
+	// TODO: åº”é€‚å½“ä¿®æ”¹è¯¥å­—ç¬¦ä¸²ï¼Œ
+	// ä¾‹å¦‚ä¿®æ”¹ä¸ºå…¬å¸æˆ–ç»„ç»‡å
+	SetRegistryKey(_T("åº”ç”¨ç¨‹åºå‘å¯¼ç”Ÿæˆçš„æœ¬åœ°åº”ç”¨ç¨‹åº"));
 
 	CTestClientDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
-		// TODO: ÔÚ´Ë·ÅÖÃ´¦ÀíºÎÊ±ÓÃ
-		//  ¡°È·¶¨¡±À´¹Ø±Õ¶Ô»°¿òµÄ´úÂë
+		// TODO: åœ¨æ­¤æ”¾ç½®å¤„ç†ä½•æ—¶ç”¨
+		//  â€œç¡®å®šâ€æ¥å…³é—­å¯¹è¯æ¡†çš„ä»£ç 
 	}
 	else if (nResponse == IDCANCEL)
 	{
-		// TODO: ÔÚ´Ë·ÅÖÃ´¦ÀíºÎÊ±ÓÃ
-		//  ¡°È¡Ïû¡±À´¹Ø±Õ¶Ô»°¿òµÄ´úÂë
+		// TODO: åœ¨æ­¤æ”¾ç½®å¤„ç†ä½•æ—¶ç”¨
+		//  â€œå–æ¶ˆâ€æ¥å…³é—­å¯¹è¯æ¡†çš„ä»£ç 
 	}
 
-	// ÓÉÓÚ¶Ô»°¿òÒÑ¹Ø±Õ£¬ËùÒÔ½«·µ»Ø FALSE ÒÔ±ãÍË³öÓ¦ÓÃ³ÌÐò£¬
-	//  ¶ø²»ÊÇÆô¶¯Ó¦ÓÃ³ÌÐòµÄÏûÏ¢±Ã¡£
+	// ç”±äºŽå¯¹è¯æ¡†å·²å…³é—­ï¼Œæ‰€ä»¥å°†è¿”å›ž FALSE ä»¥ä¾¿é€€å‡ºåº”ç”¨ç¨‹åºï¼Œ
+	//  è€Œä¸æ˜¯å¯åŠ¨åº”ç”¨ç¨‹åºçš„æ¶ˆæ¯æ³µã€‚
 	return FALSE;
 }
 
 BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 {
-	// TODO: ÔÚ´ËÌí¼Ó×¨ÓÃ´úÂëºÍ/»òµ÷ÓÃ»ùÀà
+	// TODO: åœ¨æ­¤æ·»åŠ ä¸“ç”¨ä»£ç å’Œ/æˆ–è°ƒç”¨åŸºç±»
 
 	if(pMsg->message == WM_KEYUP)
 	{
@@ -128,7 +128,7 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 		CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
 
 		//CString strText;
-		//strText.Format("µ±Ç°½ÇÉ«:%d, ×ø±êx = %f, z= %f", (UINT32)CClientCmdHandler::GetInstancePtr()->m_HostPlayer.GetObjectID(),
+		//strText.Format("å½“å‰è§’è‰²:%d, åæ ‡x = %f, z= %f", (UINT32)CClientCmdHandler::GetInstancePtr()->m_HostPlayer.GetObjectID(),
 		//	CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.x,CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.z);
 
 		//((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);

@@ -1,4 +1,4 @@
-
+﻿
 #ifndef _SQL_STRING_H_
 #define _SQL_STRING_H_
 

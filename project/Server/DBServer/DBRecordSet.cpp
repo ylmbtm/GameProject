@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 **  copyright (c) 2012 - all rights reserved.
 **
 **  proj:   mysql
@@ -24,13 +24,13 @@ bool CDBRecordSet::MoveNext( void )
 {
 	int nRet = mysql_stmt_fetch(m_pMySqlStmt);
 		
-	//»ñÈ¡Êı¾İ³É¹¦
+	//è·å–æ•°æ®æˆåŠŸ
 	if(0 == nRet)
 	{
 		return true;
 	}
 
-	//ÏÂÃæµÄÖµµÃ»³ÒÉ
+	//ä¸‹é¢çš„å€¼å¾—æ€€ç–‘
 	if(MYSQL_DATA_TRUNCATED == nRet)
 	{
 		return true;

@@ -1,5 +1,5 @@
-#ifndef __DB_STORED£ßPROCEDURE__
-#define __DB_STORED£ßPROCEDURE__
+ï»¿#ifndef __DB_STOREDï¼¿PROCEDURE__
+#define __DB_STOREDï¼¿PROCEDURE__
 
 #include "DBStoredProc.h"
 

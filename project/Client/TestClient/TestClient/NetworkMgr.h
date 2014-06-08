@@ -1,4 +1,4 @@
-#ifndef __NETWORK_MANAGER_H__
+﻿#ifndef __NETWORK_MANAGER_H__
 #define __NETWORK_MANAGER_H__
 
 

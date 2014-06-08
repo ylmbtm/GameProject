@@ -1,4 +1,4 @@
-#ifndef SQL_COMMON_INCLUDED
+﻿#ifndef SQL_COMMON_INCLUDED
 #define SQL_COMMON_INCLUDED
 
 /*

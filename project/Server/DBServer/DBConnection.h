@@ -1,4 +1,4 @@
-
+ï»¿
 #ifndef _SQL_CONN_H_
 #define _SQL_CONN_H_
 
@@ -12,7 +12,7 @@
 	#pragma comment(lib, "libmysql.lib")
 #endif
 
-#define ERROR_SLEEP_TIME 3000 // Ö´ĞĞSQLÓï¾äÊ±³ö´í£¬ÔÙ´Î³¢ÊÔÖ´ĞĞ¼ä¸ôÊ±¼ä£¨ºÁÃë£©
+#define ERROR_SLEEP_TIME 3000 // æ‰§è¡ŒSQLè¯­å¥æ—¶å‡ºé”™ï¼Œå†æ¬¡å°è¯•æ‰§è¡Œé—´éš”æ—¶é—´ï¼ˆæ¯«ç§’ï¼‰
 
 class CDBStoredProcedure;
 class sql_result;

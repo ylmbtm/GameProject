@@ -1,5 +1,5 @@
-
-// TestClientDlg.h : Í·ÎÄ¼ş
+ï»¿
+// TestClientDlg.h : å¤´æ–‡ä»¶
 //
 
 #pragma once
@@ -7,25 +7,25 @@
 #include "DlgGame.h"
 #include "afxwin.h"
 
-// CTestClientDlg ¶Ô»°¿ò
+// CTestClientDlg å¯¹è¯æ¡†
 class CTestClientDlg : public CDialog
 {
-// ¹¹Ôì
+// æ„é€ 
 public:
-	CTestClientDlg(CWnd* pParent = NULL);	// ±ê×¼¹¹Ôìº¯Êı
+	CTestClientDlg(CWnd* pParent = NULL);	// æ ‡å‡†æ„é€ å‡½æ•°
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 	enum { IDD = IDD_TESTCLIENT_DIALOG };
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV æ”¯æŒ
 
 
-// ÊµÏÖ
+// å®ç°
 protected:
 	HICON m_hIcon;
 
-	// Éú³ÉµÄÏûÏ¢Ó³Éäº¯Êı
+	// ç”Ÿæˆçš„æ¶ˆæ¯æ˜ å°„å‡½æ•°
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();

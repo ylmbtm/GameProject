@@ -1,4 +1,4 @@
-#ifndef __CLIENT_CMD_HANDLER_H__
+ï»¿#ifndef __CLIENT_CMD_HANDLER_H__
 #define __CLIENT_CMD_HANDLER_H__
 
 #include "IBufferHandler.h"
@@ -20,7 +20,7 @@ public:
 	BOOL OnUpdate(UINT32 dwTick);
 
 
-	//*********************ÏûÏ¢´¦Àí¶¨Òå¿ªÊ¼******************************
+	//*********************æ¶ˆæ¯å¤„ç†å®šä¹‰å¼€å§‹******************************
 public:
 	UINT32 OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
@@ -29,15 +29,15 @@ public:
 	UINT32 OnCmdEnterGameAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
 
-	//CMD_CHAR_NEARBY_ADD,			//Ìí¼ÓÖÜÎ§µÄ¶ÔÏó
-	//CMD_CHAR_NEARBY_UPDATE,		//¸üĞÂÖÜÎ§µÄ¶ÔÏó
-	//CMD_CHAR_NEARBY_REMOVE,		//É¾³ıÖÜÎ§µÄ¶ÔÏó
+	//CMD_CHAR_NEARBY_ADD,			//æ·»åŠ å‘¨å›´çš„å¯¹è±¡
+	//CMD_CHAR_NEARBY_UPDATE,		//æ›´æ–°å‘¨å›´çš„å¯¹è±¡
+	//CMD_CHAR_NEARBY_REMOVE,		//åˆ é™¤å‘¨å›´çš„å¯¹è±¡
 
 	UINT32 OnCmdNearByAdd(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	UINT32 OnCmdNearByUpdate(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	UINT32 OnCmdNearByRemove(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
-	//*********************ÏûÏ¢´¦Àí¶¨Òå½áÊø******************************
+	//*********************æ¶ˆæ¯å¤„ç†å®šä¹‰ç»“æŸ******************************
 
 	CPlayerObject m_HostPlayer;
 
