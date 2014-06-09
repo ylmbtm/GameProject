@@ -8,7 +8,7 @@
 #include "PacketDef/TransferPacket.h"
 #include "DataBuffer/BufferHelper.h"
 #include "StaticPlayerMgr.h"
-#include "PacketDef/RolePacket.h"
+#include "PacketDef/ClientPacket.h"
 
 CGameService::CGameService(void)
 {

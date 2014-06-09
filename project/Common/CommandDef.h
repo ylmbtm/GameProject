@@ -17,11 +17,21 @@ enum Command_ID
 	CMD_REGISTER_TO_CENTER,		//注册自己到中心服务器
 	CMD_ACTIVE_SERVER_LIST,		//中心服务器来的数据
 
+	//玩家版本验证命令
+	CMD_CHAR_VERIFY_VERSION,	//玩家发版本请求验证
+
 	//玩家登录命令
-	CMD_CHAR_REGISTER_REQ,		//玩家注册账号的命令
-	CMD_CHAR_REGISTER_ACK,      //玩家注册账号命令的回包
+	CMD_CHAR_NEW_ACCOUNT_REQ,	//玩家注册账号的命令
+	CMD_CHAR_NEW_ACCOUNT_ACK,   //玩家注册账号命令的回包
+
+	CMD_CHAR_NEW_CHAR_REQ,		//新建一个角色
+	CMD_CHAR_NEW_CHAR_ACK,		//新建一个角色的回包
+
 	CMD_CHAR_LOGIN_REQ,			//玩家登录
 	CMD_CHAR_LOGIN_ACK,			//登录返回包
+
+	CMD_CHAR_PICK_CHAR_REQ,		//选择角色请求
+	CMD_CHAR_PICK_CHAR_ACK,		//选择角色回复
 
 	//玩家进入游戏命令
 	CMD_CHAR_ENTER_GAME_REQ,	//玩家进入游戏请求

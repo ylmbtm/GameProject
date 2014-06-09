@@ -12,6 +12,24 @@ public:
 	~CDBRecordSet( void );
 
 public:
+	bool SetFielsInfo(int nNum, ...)
+	{
+		va_list argList;
+		va_start( argList, nNum );
+
+		SetFieldNum(nNum);
+
+		for (int i=0; i < nNum; i++)
+		{
+			enum_field_types fdType = va_arg(argList, enum_field_types);
+			SetFieldType(i, fdType);
+		}
+		
+		va_end( argList );
+
+		return true;
+	}
+
 	bool SetFieldNum(int nNum)
 	{
 		m_nFieldNum = nNum;

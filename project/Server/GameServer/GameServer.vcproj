@@ -276,6 +276,10 @@
 			Name="CmdDef"
 			>
 			<File
+				RelativePath="..\..\Common\PacketDef\ClientPacket.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Common\CommandDef.h"
 				>
 			</File>
@@ -289,10 +293,6 @@
 			</File>
 			<File
 				RelativePath="..\..\Common\PacketHeader.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Common\PacketDef\RolePacket.h"
 				>
 			</File>
 			<File

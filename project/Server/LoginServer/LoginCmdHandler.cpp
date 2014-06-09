@@ -14,6 +14,7 @@
 #include "DataBuffer/DataBuffer.h"
 #include "PacketDef/LoginPacket.h"
 #include "CommonDef.h"
+#include "PacketDef/ClientPacket.h"
 
 
 
