@@ -9,7 +9,7 @@
 #include "NetworkMgr.h"
 #include "DataBuffer\BufferHelper.h"
 #include "PacketDef\CommonPacket.h"
-#include "PacketDef\RolePacket.h"
+#include "PacketDef\ClientPacket.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

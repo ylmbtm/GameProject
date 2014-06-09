@@ -1,4 +1,4 @@
-// DlgLogin.cpp : ÊµÏÖÎÄ¼þ
+ï»¿// DlgLogin.cpp : å®žçŽ°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -11,10 +11,10 @@
 #include "CommandHandler.h"
 #include "DataBuffer/BufferHelper.h"
 #include "CommonDef.h"
-#include "PacketDef/RolePacket.h"
+#include "PacketDef/ClientPacket.h"
 #include "PacketDef/LoginPacket.h"
 
-// CDlgLogin ¶Ô»°¿ò
+// CDlgLogin å¯¹è¯æ¡†
 
 IMPLEMENT_DYNAMIC(CDlgLogin, CDialog)
 
@@ -45,13 +45,13 @@ BEGIN_MESSAGE_MAP(CDlgLogin, CDialog)
 END_MESSAGE_MAP()
 
 
-// CDlgLogin ÏûÏ¢´¦Àí³ÌÐò
+// CDlgLogin æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 void CDlgLogin::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
 
-	// TODO: ÔÚ´Ë´¦Ìí¼ÓÏûÏ¢´¦Àí³ÌÐò´úÂë
+	// TODO: åœ¨æ­¤å¤„æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç 
 }
 
 //void CDlgLogin::OnBnClickedOk()
@@ -103,9 +103,5 @@ void CDlgLogin::OnBnClickedOk()
 
 void CDlgLogin::OnBnClickedBtnConnect()
 {
-	//UpdateData(TRUE);
-
-	// CClientCmdHandler::GetInstancePtr()->m_HostPlayer.SetObjectID(MAKE_PLAYRE_ID(m_dwCharID));
-
 	CNetworkMgr::GetInstancePtr()->ConnectToServer("127.0.0.1", 7994);
 }

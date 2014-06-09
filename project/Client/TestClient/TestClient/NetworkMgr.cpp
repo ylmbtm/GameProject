@@ -72,13 +72,14 @@ BOOL CNetworkMgr::ConnectToServer(std::string strIpAddr, UINT16 sPort)
 		return FALSE;
 	}
 
-	CommonSocket::SetSocketUnblock(m_hSocket);
 
 	if(!CommonSocket::ConnectSocket(m_hSocket, strIpAddr.c_str(), sPort))
 	{
 		MessageBox(NULL, "连接服务器失败!", "错误提示", MB_OK);
 		return FALSE;
 	}
+	
+	CommonSocket::SetSocketUnblock(m_hSocket);
 
 	return TRUE;
 }

@@ -5,7 +5,7 @@
 #include "DataBuffer/BufferHelper.h"
 #include "ConnectionType.h"
 #include "NetworkMgr.h"
-#include "PacketDef/RolePacket.h"
+#include "PacketDef/ClientPacket.h"
 #include "resource.h"
 #include "TestClientDlg.h"
 #include "DataBuffer/BufferHelper.h"
@@ -252,4 +252,36 @@ BOOL CClientCmdHandler::OnUpdate( UINT32 dwTick )
 {
 
 	return TRUE;
+}
+
+BOOL CClientCmdHandler::SendLoginReq( char *szAccountName, char *szPassword )
+{
+	return TRUE;
+}
+
+BOOL CClientCmdHandler::SendNewAccountReq( char *szAccountName, char *szPassword )
+{
+	return TRUE;
+}
+
+BOOL CClientCmdHandler::SendPickCharReq( UINT64 u64CharID )
+{
+	return TRUE;
+}
+
+UINT32 CClientCmdHandler::OnCmdNewAccountAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	return 0;
+}
+
+UINT32 CClientCmdHandler::OnCmdNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	return 0;
+}
+
+UINT32 CClientCmdHandler::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+
+
+	return 0;
 }

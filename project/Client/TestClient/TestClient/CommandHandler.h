@@ -20,13 +20,20 @@ public:
 	BOOL OnUpdate(UINT32 dwTick);
 
 
+	BOOL SendLoginReq(char *szAccountName, char *szPassword);
+	BOOL SendNewAccountReq(char *szAccountName, char *szPassword);
+	BOOL SendPickCharReq(UINT64 u64CharID);
+
+
 	//*********************消息处理定义开始******************************
 public:
 	UINT32 OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
-
 	UINT32 OnCmdLoginGameAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
-
 	UINT32 OnCmdEnterGameAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+
+	UINT32 OnCmdNewAccountAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	UINT32 OnCmdNewCharAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	UINT32 OnCmdPickCharAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
 
 	//CMD_CHAR_NEARBY_ADD,			//添加周围的对象

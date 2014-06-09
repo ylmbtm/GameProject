@@ -1,4 +1,4 @@
-// Microsoft Visual C++ generated resource script.
+Ôªø// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 
@@ -16,13 +16,11 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// ÷–Œƒ(÷–ª™»À√Òπ≤∫Õπ˙) resources
+// ‰∏≠Êñá(ÁÆÄ‰ΩìÔºå‰∏≠ÂõΩ) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
-#ifdef _WIN32
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
 #pragma code_page(936)
-#endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -54,8 +52,8 @@ BEGIN
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
     "LANGUAGE 4, 2\r\n"
     "#pragma code_page(936)\r\n"
-    "#include ""res\\TestClient.rc2""  // ∑« Microsoft Visual C++ ±‡º≠µƒ◊ ‘¥\r\n"
-    "#include ""l.CHS\\afxres.rc""      // ±Í◊º◊Èº˛\r\n"
+    "#include ""res\\TestClient.rc2""  // Èùû Microsoft Visual C++ ÁºñËæëÁöÑËµÑÊ∫ê\r\n"
+    "#include ""l.CHS\\afxres.rc""      // Ê†áÂáÜÁªÑ‰ª∂\r\n"
     "#endif\r\n"
     "\0"
 END
@@ -79,13 +77,13 @@ IDR_MAINFRAME           ICON                    "res\\TestClient.ico"
 
 IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "πÿ”⁄ TestClient"
+CAPTION "ÂÖ≥‰∫é TestClient"
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,14,14,21,20
-    LTEXT           "TestClient£¨1.0 ∞Ê",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "TestClientÔºå1.0 Áâà",IDC_STATIC,42,14,114,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2014",IDC_STATIC,42,26,114,8
-    DEFPUSHBUTTON   "»∑∂®",IDOK,113,41,50,14,WS_GROUP
+    DEFPUSHBUTTON   "Á°ÆÂÆö",IDOK,113,41,50,14,WS_GROUP
 END
 
 IDD_TESTCLIENT_DIALOG DIALOGEX 0, 0, 531, 243
@@ -98,18 +96,18 @@ BEGIN
     LISTBOX         IDC_LST_LOG,261,7,263,229,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
 END
 
-IDD_Dlg_Login DIALOGEX 0, 0, 316, 182
+IDD_Dlg_Login DIALOGEX 0, 0, 288, 157
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
-CAPTION "Dialog"
+CAPTION "ÁôªÂΩïÁïåÈù¢"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "»∑∂®",IDOK,122,100,50,14
-    PUSHBUTTON      "»°œ˚",IDCANCEL,173,100,50,14
-    EDITTEXT        IDC_EDT_ACCOUNT,86,40,114,15,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDT_PASSWORD,86,62,113,15,ES_AUTOHSCROLL
-    LTEXT           "√‹    ¬Î£∫",IDC_STATIC,51,66,33,8
-    LTEXT           "”√ªß√˚£∫",IDC_STATIC,51,41,33,8
-    PUSHBUTTON      "¡¨Ω”",IDC_BTN_CONNECT,69,100,50,14
+    DEFPUSHBUTTON   "Á°ÆÂÆö",IDOK,122,100,50,14
+    PUSHBUTTON      "ÂèñÊ∂à",IDCANCEL,173,100,50,14
+    EDITTEXT        IDC_EDT_ACCOUNT,86,40,144,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDT_PASSWORD,86,62,144,15,ES_AUTOHSCROLL
+    LTEXT           "ÂØÜ    Á†ÅÔºö",IDC_STATIC,51,66,33,8
+    LTEXT           "Áî®Êà∑ÂêçÔºö",IDC_STATIC,51,41,33,8
+    PUSHBUTTON      "ËøûÊé•",IDC_BTN_CONNECT,69,100,50,14
 END
 
 IDD_Dlg_Game DIALOGEX 0, 0, 316, 182
@@ -141,13 +139,13 @@ BEGIN
     BEGIN
         BLOCK "080403a8"
         BEGIN
-            VALUE "CompanyName", "TODO: <π´Àæ√˚>"
-            VALUE "FileDescription", "TODO: <Œƒº˛Àµ√˜>"
+            VALUE "CompanyName", "TODO: <ÂÖ¨Âè∏Âêç>"
+            VALUE "FileDescription", "TODO: <Êñá‰ª∂ËØ¥Êòé>"
             VALUE "FileVersion", "1.0.0.1"
             VALUE "InternalName", "TestClient.exe"
-            VALUE "LegalCopyright", "TODO: (C) <π´Àæ√˚>°£±£¡ÙÀ˘”–»®¿˚°£"
+            VALUE "LegalCopyright", "TODO: (C) <ÂÖ¨Âè∏Âêç>„ÄÇ‰øùÁïôÊâÄÊúâÊùÉÂà©„ÄÇ"
             VALUE "OriginalFilename", "TestClient.exe"
-            VALUE "ProductName", "TODO: <≤˙∆∑√˚>"
+            VALUE "ProductName", "TODO: <‰∫ßÂìÅÂêç>"
             VALUE "ProductVersion", "1.0.0.1"
         END
     END
@@ -164,7 +162,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO 
+GUIDELINES DESIGNINFO
 BEGIN
     IDD_ABOUTBOX, DIALOG
     BEGIN
@@ -185,9 +183,9 @@ BEGIN
     IDD_Dlg_Login, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 309
+        RIGHTMARGIN, 281
         TOPMARGIN, 7
-        BOTTOMMARGIN, 175
+        BOTTOMMARGIN, 150
     END
 
     IDD_Dlg_Game, DIALOG
@@ -206,14 +204,17 @@ END
 // Menu
 //
 
-IDR_MAINMENU MENU 
+IDR_MAINMENU MENU
 BEGIN
-    POPUP "π¶ƒ‹"
+    POPUP "ÂäüËÉΩ"
     BEGIN
-        MENUITEM "µ«¬º",                          ID_Login
-        MENUITEM "¡¨Ω”∑˛ŒÒ∆˜",                       ID_CONNECT
-        MENUITEM "∂œø™¡¨Ω”∑˛ŒÒ∆˜",                     ID_DISCONNECT
-        MENUITEM "ÕÀ≥ˆ”Œœ∑",                        ID_LEAVE_GAME
+        MENUITEM "ÁôªÂΩï",                          ID_Login
+        MENUITEM "ÈÄÄÂá∫",                          ID_LEAVE_GAME
+    END
+    POPUP "ÊµãËØï"
+    BEGIN
+        MENUITEM "ËøûÊé•ÊúçÂä°Âô®",                       ID_CONNECT
+        MENUITEM "Êñ≠ÂºÄÊúçÂä°Âô®",                       ID_DISCONNECT
     END
 END
 
@@ -223,12 +224,12 @@ END
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
-    IDS_ABOUTBOX            "πÿ”⁄ TestClient(&A)..."
+    IDS_ABOUTBOX            "ÂÖ≥‰∫é TestClient(&A)..."
 END
 
-#endif    // ÷–Œƒ(÷–ª™»À√Òπ≤∫Õπ˙) resources
+#endif    // ‰∏≠Êñá(ÁÆÄ‰ΩìÔºå‰∏≠ÂõΩ) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -246,8 +247,8 @@ END
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE 4, 2
 #pragma code_page(936)
-#include "res\TestClient.rc2"  // ∑« Microsoft Visual C++ ±‡º≠µƒ◊ ‘¥
-#include "l.CHS\afxres.rc"      // ±Í◊º◊Èº˛
+#include "res\TestClient.rc2"  // Èùû Microsoft Visual C++ ÁºñËæëÁöÑËµÑÊ∫ê
+#include "l.CHS\afxres.rc"      // Ê†áÂáÜÁªÑ‰ª∂
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
