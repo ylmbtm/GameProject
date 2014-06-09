@@ -50,6 +50,9 @@ BOOL CLoginCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 {
 	switch(wCommandID)
 	{
+		PROCESS_COMMAND_ITEM(CMD_CHAR_NEW_ACCOUNT_REQ,	OnCmdNewAccountReq);
+		PROCESS_COMMAND_ITEM(CMD_CHAR_NEW_CHAR_REQ,		OnCmdNewCharReq);
+		PROCESS_COMMAND_ITEM(CMD_CHAR_PICK_CHAR_REQ,	OnCmdPickCharReq);
 		PROCESS_COMMAND_ITEM(CMD_CHAR_LOGIN_REQ,		OnCmdLoginReq);
 
 	default:
@@ -106,5 +109,40 @@ UINT32 CLoginCmdHandler::OnCmdLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 
 	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID,  &m_WriteBuffer);
 	
+	return 0;
+}
+
+UINT32 CLoginCmdHandler::OnCmdNewAccountReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StCharNewAccountReq CharNewAccountReq;
+	pBufferHelper->Read(CharNewAccountReq);
+
+
+
+
+	StCharNewAccountAck CharNewAccountAck;
+
+	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+
+	WriteHelper.BeginWrite(CMD_CHAR_NEW_ACCOUNT_ACK, 0, 0, 0);
+
+	WriteHelper.Write(CharNewAccountAck);
+
+	WriteHelper.EndWrite();
+
+	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID,  &m_WriteBuffer);
+
+	return 0;
+}
+
+UINT32 CLoginCmdHandler::OnCmdNewCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+
+	return 0;
+}
+
+UINT32 CLoginCmdHandler::OnCmdPickCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+
 	return 0;
 }

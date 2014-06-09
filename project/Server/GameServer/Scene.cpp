@@ -5,7 +5,7 @@
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
 
-#include "PacketDef/RolePacket.h"
+#include "PacketDef/ClientPacket.h"
 #include "PacketDef/CommonPacket.h"
 
 #include "DataBuffer/DataBuffer.h"
