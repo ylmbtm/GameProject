@@ -28,7 +28,7 @@ BOOL CPlayerObjectMgr::AddPlayer( CPlayerObject *pObject )
 
 	CString strText;
 	strText.Format("-------周围队列的人数:%d------AddPlayer---", size());
-	((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+	//((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 
 	return TRUE;
 }
@@ -50,7 +50,7 @@ BOOL CPlayerObjectMgr::RemovePlayer( UINT64 ObjectID )
 
 	CString strText;
 	strText.Format("-------周围队列的人数:%d-----RemovePlayer----", size());
-	((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+	//((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 
 	return TRUE;
 }

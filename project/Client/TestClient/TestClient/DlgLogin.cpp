@@ -81,6 +81,8 @@ void CDlgLogin::OnBnClickedOk()
 {
 	UpdateData(TRUE);
 
+	CClientCmdHandler::GetInstancePtr()->SendNewAccountReq((LPCTSTR)m_strAccountName, (LPCTSTR)m_strPassword);
+/*
 	StCharLoginReq CharLoginReq;
 
 	strncpy(CharLoginReq.szAccountName, (LPCTSTR)m_strAccountName, 32);
@@ -96,7 +98,7 @@ void CDlgLogin::OnBnClickedOk()
 	WriteHelper.EndWrite();
 
 	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
-
+*/
 	OnOK();
 } 
 

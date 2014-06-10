@@ -106,14 +106,12 @@ BOOL CNetworkMgr::RecvData()
 			{
 				m_bConnected = TRUE;
 
-				((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString("连接成功1!");
+				printf("连接成功1!");
 			}
 
 			if(nError != m_nLastError)
 			{
-				CString strText;
-				strText.Format("接收数据发生错误:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
-				((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+				printf("接收数据发生错误:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
 
 				m_nLastError = nError;
 			}
@@ -122,9 +120,7 @@ BOOL CNetworkMgr::RecvData()
 		{
 			if(nError != m_nLastError)
 			{
-				CString strText;
-				strText.Format("接收数据发生错误:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
-				((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+				printf("接收数据发生错误:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
 
 				m_nLastError = nError;
 			}
@@ -137,9 +133,7 @@ BOOL CNetworkMgr::RecvData()
 	}
 	else if(nReadLen == 0)
 	{
-		CString strText;
-		strText.Format("对方关闭了连接!");
-		((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+		printf("对方关闭了连接!");
 
 		if(m_bConnected)
 		{
@@ -152,10 +146,7 @@ BOOL CNetworkMgr::RecvData()
 		{
 			m_bConnected = TRUE;
 
-			CString strText;
-			strText.Format("连接成功2!， 收到%d字节数据", nReadLen);
-
-			((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+			printf("连接成功2!， 收到%d字节数据", nReadLen);
 		}
 
 		m_nDataLen += nReadLen;
@@ -178,10 +169,7 @@ BOOL CNetworkMgr::SendData( char *pData, UINT32 dwLen )
 		DWORD nError = CommonSocket::GetSocketLastError();
 		if(nError != m_nLastError)
 		{
-			CString strText;
-			strText.Format("接收数据发生错误:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
-
-			((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+			printf("发送数据发生错误:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
 
 			m_nLastError = nError;
 		}

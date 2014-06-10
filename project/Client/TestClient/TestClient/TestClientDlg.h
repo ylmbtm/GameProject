@@ -41,7 +41,6 @@ public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnLogin();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	CListBox m_LogList;
 	afx_msg void OnDisconnect();
 	afx_msg void OnConnect();
 	afx_msg void OnLeaveGame();

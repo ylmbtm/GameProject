@@ -44,6 +44,11 @@ void CDlgGame::OnPaint()
 	{
 		return ;
 	}
+
+	CRect rc;
+	GetClientRect(&rc);
+
+	dc.FillSolidRect(&rc, RGB(255,255,255));
 	
 	DrawPlayer(dc.GetSafeHdc(), pClientCmdHandler->m_HostPlayer.m_ObjectPos.x, pClientCmdHandler->m_HostPlayer.m_ObjectPos.z);
 

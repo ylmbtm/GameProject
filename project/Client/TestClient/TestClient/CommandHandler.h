@@ -20,8 +20,8 @@ public:
 	BOOL OnUpdate(UINT32 dwTick);
 
 
-	BOOL SendLoginReq(char *szAccountName, char *szPassword);
-	BOOL SendNewAccountReq(char *szAccountName, char *szPassword);
+	BOOL SendLoginReq(LPCTSTR szAccountName, LPCTSTR szPassword);
+	BOOL SendNewAccountReq(LPCTSTR szAccountName, LPCTSTR szPassword);
 	BOOL SendPickCharReq(UINT64 u64CharID);
 
 

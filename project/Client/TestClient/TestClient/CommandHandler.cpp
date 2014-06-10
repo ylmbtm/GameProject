@@ -102,16 +102,13 @@ UINT32 CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID
 
 	pBufferHelper->Read(MsgLoginAck);
 
-	CString strText;
 	if(MsgLoginAck.byteCode == 0)
 	{
-		strText.Format("登录失败!");
-		((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+		printf("登录失败!");
 	}
 	else
 	{
-		strText.Format("登录成功!");
-		((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+		printf("登录成功!");
 		CNetworkMgr::GetInstancePtr()->DisConnect();
 		m_HostPlayer.SetObjectID(MsgLoginAck.u64CharID);
 		CNetworkMgr::GetInstancePtr()->ConnectToServer("127.0.0.1", 7998);
@@ -125,9 +122,9 @@ UINT32 CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, C
 {
 	UINT32 dwCount = 0;
 	pBufferHelper->Read(dwCount);
-	CString strText;
-	strText.Format("BEGIN---添加角色消息，添加人数:%d", dwCount);
-	((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+
+	printf("BEGIN---添加角色消息，添加人数:%d", dwCount);
+	
 
 	for(UINT32 i = 0; i < dwCount; i++)
 	{
@@ -148,13 +145,12 @@ UINT32 CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, C
 
 		m_PlayerObjMgr.insert(std::make_pair(pObject->GetObjectID(), pObject));
 
-		strText.Format("添加角色:%d, 坐标x = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
+		printf("添加角色:%d, 坐标x = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
 
-		((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 	}
 
-	strText.Format("END---添加角色消息");
-	((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+	printf("END---添加角色消息");
+
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
 
@@ -177,10 +173,7 @@ UINT32 CClientCmdHandler::OnCmdNearByUpdate( UINT16 wCommandID, UINT64 u64ConnID
 		{
 			pObject->ReadFromBuffer(pBufferHelper);
 
-			//CString strText;
-			//strText.Format("更新角色:%d, 坐标x = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
-
-			//((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+			printf("更新角色:%d, 坐标x = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
 		}
 		else
 		{
@@ -198,9 +191,7 @@ UINT32 CClientCmdHandler::OnCmdNearByRemove( UINT16 wCommandID, UINT64 u64ConnID
 	UINT32 dwCount = 0;
 	pBufferHelper->Read(dwCount);
 
-	CString strText;
-	strText.Format("BEGIN---删除角色消息，预计删除人数:%d, 现在人数:%d", dwCount, m_PlayerObjMgr.size());
-	((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+	printf("BEGIN---删除角色消息，预计删除人数:%d, 现在人数:%d", dwCount, m_PlayerObjMgr.size());
 
 	for(UINT32 i = 0; i < dwCount; i++)
 	{
@@ -219,14 +210,12 @@ UINT32 CClientCmdHandler::OnCmdNearByRemove( UINT16 wCommandID, UINT64 u64ConnID
 
 		delete pObj;
 
-		CString strText;
-		strText.Format("删除角色:%d成功", (UINT32)u64CharID);
+		printf("删除角色:%d成功", (UINT32)u64CharID);
 
-		((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 	}
 
-	strText.Format("END---删除角色消息");
-	((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
+	printf("END---删除角色消息");
+
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
 
@@ -241,7 +230,7 @@ UINT32 CClientCmdHandler::OnCmdEnterGameAck( UINT16 wCommandID, UINT64 u64ConnID
 
 	m_HostPlayer.ReadFromBuffer(pBufferHelper);
 
-	((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString("登录成功!");
+	printf("登录成功!");
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
 
@@ -254,13 +243,28 @@ BOOL CClientCmdHandler::OnUpdate( UINT32 dwTick )
 	return TRUE;
 }
 
-BOOL CClientCmdHandler::SendLoginReq( char *szAccountName, char *szPassword )
+BOOL CClientCmdHandler::SendLoginReq( LPCTSTR szAccountName, LPCTSTR szPassword )
 {
 	return TRUE;
 }
 
-BOOL CClientCmdHandler::SendNewAccountReq( char *szAccountName, char *szPassword )
+BOOL CClientCmdHandler::SendNewAccountReq( LPCTSTR szAccountName, LPCTSTR szPassword )
 {
+	StCharNewAccountReq CharNewAccountReq;
+	strncpy(CharNewAccountReq.szAccountName, szAccountName, 32);
+	strncpy(CharNewAccountReq.szPassword, szPassword, 32);
+
+	CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
+
+	WriteHelper.BeginWrite(CMD_CHAR_NEW_ACCOUNT_REQ, 0, 0, 0);
+
+	WriteHelper.Write(CharNewAccountReq);
+
+	WriteHelper.EndWrite();
+
+	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
+
+
 	return TRUE;
 }
 

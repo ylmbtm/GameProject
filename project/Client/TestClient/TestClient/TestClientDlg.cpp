@@ -61,7 +61,7 @@ CTestClientDlg::CTestClientDlg(CWnd* pParent /*=NULL*/)
 void CTestClientDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_LST_LOG, m_LogList);
+	//DDX_Control(pDX, IDC_LST_LOG, m_LogList);
 }
 
 BEGIN_MESSAGE_MAP(CTestClientDlg, CDialog)
@@ -111,12 +111,20 @@ BOOL CTestClientDlg::OnInitDialog()
 
 	CRect rcClient;
 	GetClientRect(rcClient);
-	rcClient.right -= 500;
+	rcClient.left += 200;
+	rcClient.right -= 2;
+	rcClient.bottom -=2;
 	m_DlgGame.MoveWindow(rcClient);
 
 	CNetworkMgr::GetInstancePtr()->InitNetSystem();
 
 	SetTimer(1, 25, NULL);
+
+	AllocConsole();
+
+	freopen("CONOUT$","w+t",stdout);   
+
+	
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -179,7 +187,9 @@ void CTestClientDlg::OnSize(UINT nType, int cx, int cy)
 	{
 		CRect rcClient;
 		GetClientRect(rcClient);
-		rcClient.right -= 500;
+		rcClient.left += 200;
+		rcClient.right -= 2;
+		rcClient.bottom -=2;
 		m_DlgGame.MoveWindow(rcClient);
 		m_DlgGame.Invalidate();
 	}
@@ -199,6 +209,12 @@ void CTestClientDlg::OnTimer(UINT_PTR nIDEvent)
 	CNetworkMgr::GetInstancePtr()->OnTime();
 
 	CDialog::OnTimer(nIDEvent);
+
+	//HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE); //本例以输出为例
+
+	//WriteConsole(hCon, "afdsfsd", 10, NULL,NULL);
+
+	//printf("afdsfdsfsdfsa");
 }
 
 void CTestClientDlg::OnDisconnect()
