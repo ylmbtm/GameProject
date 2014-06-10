@@ -92,6 +92,11 @@ UINT32 CClientCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID
 
 		CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
 	}
+	else if(ConType == TYPE_SVR_LOGIN)
+	{
+		CDlgLogin DlgLogin;
+		DlgLogin.DoModal();
+	}
 
 	return 0;
 }
@@ -308,7 +313,7 @@ UINT32 CClientCmdHandler::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID,
 	{
 		CNetworkMgr::GetInstancePtr()->DisConnect();
 		m_HostPlayer.SetObjectID(CharPickCharAck.u64CharID);
-		CNetworkMgr::GetInstancePtr()->ConnectToServer("127.0.0.1", 7998);
+		CNetworkMgr::GetInstancePtr()->ConnectToServer("127.0.0.1", 7100);
 	}
 
 	return 0;

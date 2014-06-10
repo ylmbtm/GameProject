@@ -197,9 +197,11 @@ void CTestClientDlg::OnSize(UINT nType, int cx, int cy)
 
 void CTestClientDlg::OnLogin()
 {
-	CDlgLogin DlgLogin;
+	//CDlgLogin DlgLogin;
 
-	DlgLogin.DoModal();
+	//DlgLogin.DoModal();
+
+	CNetworkMgr::GetInstancePtr()->ConnectToServer("127.0.0.1", 7994);
 }
 
 void CTestClientDlg::OnTimer(UINT_PTR nIDEvent)
