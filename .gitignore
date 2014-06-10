@@ -82,6 +82,7 @@ build/
 *.dep
 *.manifest
 *.exe
+*.manifest.res
 
 # Visual C++ cache files
 ipch/
