@@ -96,27 +96,7 @@ UINT32 CClientCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID
 	return 0;
 }
 
-UINT32 CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
-{
-	StCharLoginAck MsgLoginAck;
 
-	pBufferHelper->Read(MsgLoginAck);
-
-	if(MsgLoginAck.byteCode == 0)
-	{
-		printf("登录失败!");
-	}
-	else
-	{
-		printf("登录成功!");
-		CNetworkMgr::GetInstancePtr()->DisConnect();
-		m_HostPlayer.SetObjectID(MsgLoginAck.u64CharID);
-		CNetworkMgr::GetInstancePtr()->ConnectToServer("127.0.0.1", 7998);
-	}
-	
-
-	return TRUE;
-}
 
 UINT32 CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
@@ -125,7 +105,6 @@ UINT32 CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, C
 
 	printf("BEGIN---添加角色消息，添加人数:%d", dwCount);
 	
-
 	for(UINT32 i = 0; i < dwCount; i++)
 	{
 		CString strText;
@@ -243,10 +222,6 @@ BOOL CClientCmdHandler::OnUpdate( UINT32 dwTick )
 	return TRUE;
 }
 
-BOOL CClientCmdHandler::SendLoginReq( LPCTSTR szAccountName, LPCTSTR szPassword )
-{
-	return TRUE;
-}
 
 BOOL CClientCmdHandler::SendNewAccountReq( LPCTSTR szAccountName, LPCTSTR szPassword )
 {
@@ -264,28 +239,116 @@ BOOL CClientCmdHandler::SendNewAccountReq( LPCTSTR szAccountName, LPCTSTR szPass
 
 	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
 
+	return TRUE;
+}
+
+BOOL CClientCmdHandler::SendLoginReq( LPCTSTR szAccountName, LPCTSTR szPassword )
+{
+	StCharLoginReq CharLoginReq;
+	strncpy(CharLoginReq.szAccountName, szAccountName, 32);
+	strncpy(CharLoginReq.szPassword, szPassword, 32);
+
+	CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
+
+	WriteHelper.BeginWrite(CMD_CHAR_LOGIN_REQ, 0, 0, 0);
+
+	WriteHelper.Write(CharLoginReq);
+
+	WriteHelper.EndWrite();
+
+	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
 
 	return TRUE;
 }
+
+
+UINT32 CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StCharLoginAck MsgLoginAck;
+
+	pBufferHelper->Read(MsgLoginAck);
+
+	if(MsgLoginAck.byteCode == 0)
+	{
+		printf("登录失败!");
+	}
+	else
+	{
+		
+	}
+
+	return TRUE;
+}
+
 
 BOOL CClientCmdHandler::SendPickCharReq( UINT64 u64CharID )
 {
+	StCharPickCharReq CharPickCharReq;
+	CharPickCharReq.u64CharID = u64CharID;
+
+	CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
+
+	WriteHelper.BeginWrite(CMD_CHAR_PICK_CHAR_REQ, 0, 0, 0);
+
+	WriteHelper.Write(CharPickCharReq);
+
+	WriteHelper.EndWrite();
+
+	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
+
 	return TRUE;
-}
-
-UINT32 CClientCmdHandler::OnCmdNewAccountAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
-{
-	return 0;
-}
-
-UINT32 CClientCmdHandler::OnCmdNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
-{
-	return 0;
 }
 
 UINT32 CClientCmdHandler::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
+	StCharPickCharAck CharPickCharAck;
+	pBufferHelper->Read(CharPickCharAck);
 
+	if(CharPickCharAck.byteCode == 1)
+	{
+		CNetworkMgr::GetInstancePtr()->DisConnect();
+		m_HostPlayer.SetObjectID(CharPickCharAck.u64CharID);
+		CNetworkMgr::GetInstancePtr()->ConnectToServer("127.0.0.1", 7998);
+	}
 
 	return 0;
 }
+
+
+UINT32 CClientCmdHandler::OnCmdNewAccountAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StCharNewAccountAck CharNewAccountAck;
+	pBufferHelper->Read(CharNewAccountAck);
+	if(CharNewAccountAck.dwRetCode == 1)
+	{
+		MessageBox(NULL,"注册账号成功!", "提示", MB_OK);
+	}
+	else
+	{
+		MessageBox(NULL,"注册账号失败!", "提示", MB_OK);
+	}
+
+	return 0;
+}
+
+BOOL CClientCmdHandler::SendNewCharReq( UINT32 dwAccountID , UINT32 dwFeature)
+{
+	StCharNewCharReq CharNewCharReq;
+	CharNewCharReq.dwFeature = dwFeature;
+	CharNewCharReq.dwAccountID = dwAccountID;
+
+	return TRUE;
+}
+
+
+UINT32 CClientCmdHandler::OnCmdNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StCharNewCharAck CharNewCharAck;
+	pBufferHelper->Read(CharNewCharAck);
+
+	return 0;
+}
+
+
+
+

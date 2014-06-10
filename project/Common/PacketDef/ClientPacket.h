@@ -27,11 +27,14 @@ struct StCharNewAccountAck
 
 struct StCharNewCharReq
 {
+	UINT32 dwAccountID;	//账号ID
 	UINT32 dwFeature;	// sex, face type, hair color, face color, and job
 };
 
 struct StCharNewCharAck
 {
+	UINT8  RetCode;
+	UINT32 dwFeature;
 	//need to be implement
 };
 
@@ -41,10 +44,17 @@ struct StCharLoginReq	//登录请求消息
 	CHAR szPassword[32];	//密码
 };
 
+struct StCharPickInfo
+{
+
+};
+
 struct StCharLoginAck	//登录请求消息
 {
 	UINT8	byteCode;
-	UINT64  u64CharID;
+	UINT8   nCount;
+	StCharPickInfo CharPickInfo[4];
+	//StCharPickInfo;
 	//need to be implement
 	// this will return all the char belong to this char;
 };

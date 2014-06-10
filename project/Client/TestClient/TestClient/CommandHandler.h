@@ -22,6 +22,7 @@ public:
 
 	BOOL SendLoginReq(LPCTSTR szAccountName, LPCTSTR szPassword);
 	BOOL SendNewAccountReq(LPCTSTR szAccountName, LPCTSTR szPassword);
+	BOOL SendNewCharReq(UINT32 dwAccountID, UINT32 dwFeature);
 	BOOL SendPickCharReq(UINT64 u64CharID);
 
 

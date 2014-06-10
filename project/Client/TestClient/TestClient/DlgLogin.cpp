@@ -50,55 +50,15 @@ END_MESSAGE_MAP()
 void CDlgLogin::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
-
 	// TODO: 在此处添加消息处理程序代码
 }
-
-//void CDlgLogin::OnBnClickedOk()
-//{
-//	UpdateData(TRUE);
-//
-//	StCharEnterGameReq CharEnterGameReq;
-//
-//	CharEnterGameReq.u64CharID = MAKE_PLAYRE_ID(m_dwCharID);
-//
-//	CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
-//
-//	WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_REQ, CMDH_SENCE, 12, CharEnterGameReq.u64CharID);
-//
-//	WriteHelper.Write(CharEnterGameReq);
-//
-//	WriteHelper.EndWrite();
-//
-//	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
-//
-//	CClientCmdHandler::GetInstancePtr()->m_HostPlayer.SetObjectID(MAKE_PLAYRE_ID(m_dwCharID));
-//
-//	OnOK();
-//} 
 
 void CDlgLogin::OnBnClickedOk()
 {
 	UpdateData(TRUE);
 
 	CClientCmdHandler::GetInstancePtr()->SendNewAccountReq((LPCTSTR)m_strAccountName, (LPCTSTR)m_strPassword);
-/*
-	StCharLoginReq CharLoginReq;
 
-	strncpy(CharLoginReq.szAccountName, (LPCTSTR)m_strAccountName, 32);
-
-	strncpy(CharLoginReq.szPassword, (LPCTSTR)m_strPassword, 32);
-
-	CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
-
-	WriteHelper.BeginWrite(CMD_CHAR_LOGIN_REQ, 0, 0, 0);
-
-	WriteHelper.Write(CharLoginReq);
-
-	WriteHelper.EndWrite();
-
-	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
-*/
 	OnOK();
 } 
 
