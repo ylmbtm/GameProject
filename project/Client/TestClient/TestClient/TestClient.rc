@@ -1,4 +1,4 @@
-ï»¿// Microsoft Visual C++ generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 
@@ -16,7 +16,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// ä¸­æ–‡(ç®€ä½“ï¼Œä¸­å›½) resources
+// ÖĞÎÄ(¼òÌå£¬ÖĞ¹ú) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
@@ -52,8 +52,8 @@ BEGIN
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
     "LANGUAGE 4, 2\r\n"
     "#pragma code_page(936)\r\n"
-    "#include ""res\\TestClient.rc2""  // é Microsoft Visual C++ ç¼–è¾‘çš„èµ„æº\r\n"
-    "#include ""l.CHS\\afxres.rc""      // æ ‡å‡†ç»„ä»¶\r\n"
+    "#include ""res\\TestClient.rc2""  // ·Ç Microsoft Visual C++ ±à¼­µÄ×ÊÔ´\r\n"
+    "#include ""l.CHS\\afxres.rc""      // ±ê×¼×é¼ş\r\n"
     "#endif\r\n"
     "\0"
 END
@@ -77,13 +77,13 @@ IDR_MAINFRAME           ICON                    "res\\TestClient.ico"
 
 IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "å…³äº TestClient"
+CAPTION "¹ØÓÚ TestClient"
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,14,14,21,20
-    LTEXT           "TestClientï¼Œ1.0 ç‰ˆ",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "TestClient£¬1.0 °æ",IDC_STATIC,42,14,114,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2014",IDC_STATIC,42,26,114,8
-    DEFPUSHBUTTON   "ç¡®å®š",IDOK,113,41,50,14,WS_GROUP
+    DEFPUSHBUTTON   "È·¶¨",IDOK,113,41,50,14,WS_GROUP
 END
 
 IDD_TESTCLIENT_DIALOG DIALOGEX 0, 0, 531, 243
@@ -98,16 +98,16 @@ END
 
 IDD_Dlg_Login DIALOGEX 0, 0, 288, 157
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
-CAPTION "ç™»å½•ç•Œé¢"
+CAPTION "µÇÂ¼½çÃæ"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "ç¡®å®š",IDOK,122,100,50,14
-    PUSHBUTTON      "å–æ¶ˆ",IDCANCEL,173,100,50,14
+    DEFPUSHBUTTON   "È·¶¨",IDOK,122,100,50,14
+    PUSHBUTTON      "È¡Ïû",IDCANCEL,173,100,50,14
     EDITTEXT        IDC_EDT_ACCOUNT,86,40,144,15,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDT_PASSWORD,86,62,144,15,ES_AUTOHSCROLL
-    LTEXT           "å¯†    ç ï¼š",IDC_STATIC,51,66,33,8
-    LTEXT           "ç”¨æˆ·åï¼š",IDC_STATIC,51,41,33,8
-    PUSHBUTTON      "è¿æ¥",IDC_BTN_CONNECT,69,100,50,14
+    LTEXT           "ÃÜ    Âë£º",IDC_STATIC,51,66,33,8
+    LTEXT           "ÓÃ»§Ãû£º",IDC_STATIC,51,41,33,8
+    PUSHBUTTON      "Á¬½Ó",IDC_BTN_CONNECT,69,100,50,14
 END
 
 IDD_Dlg_Game DIALOGEX 0, 0, 316, 182
@@ -139,13 +139,13 @@ BEGIN
     BEGIN
         BLOCK "080403a8"
         BEGIN
-            VALUE "CompanyName", "TODO: <å…¬å¸å>"
-            VALUE "FileDescription", "TODO: <æ–‡ä»¶è¯´æ˜>"
+            VALUE "CompanyName", "TODO: <¹«Ë¾Ãû>"
+            VALUE "FileDescription", "TODO: <ÎÄ¼şËµÃ÷>"
             VALUE "FileVersion", "1.0.0.1"
             VALUE "InternalName", "TestClient.exe"
-            VALUE "LegalCopyright", "TODO: (C) <å…¬å¸å>ã€‚ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚"
+            VALUE "LegalCopyright", "TODO: (C) <¹«Ë¾Ãû>¡£±£ÁôËùÓĞÈ¨Àû¡£"
             VALUE "OriginalFilename", "TestClient.exe"
-            VALUE "ProductName", "TODO: <äº§å“å>"
+            VALUE "ProductName", "TODO: <²úÆ·Ãû>"
             VALUE "ProductVersion", "1.0.0.1"
         END
     END
@@ -206,15 +206,15 @@ END
 
 IDR_MAINMENU MENU
 BEGIN
-    POPUP "åŠŸèƒ½"
+    POPUP "¹¦ÄÜ"
     BEGIN
-        MENUITEM "ç™»å½•",                          ID_Login
-        MENUITEM "é€€å‡º",                          ID_LEAVE_GAME
+        MENUITEM "µÇÂ¼",                          ID_Login
+        MENUITEM "ÍË³ö",                          ID_LEAVE_GAME
     END
-    POPUP "æµ‹è¯•"
+    POPUP "²âÊÔ"
     BEGIN
-        MENUITEM "è¿æ¥æœåŠ¡å™¨",                       ID_CONNECT
-        MENUITEM "æ–­å¼€æœåŠ¡å™¨",                       ID_DISCONNECT
+        MENUITEM "Á¬½Ó·şÎñÆ÷",                       ID_CONNECT
+        MENUITEM "¶Ï¿ª·şÎñÆ÷",                       ID_DISCONNECT
     END
 END
 
@@ -226,10 +226,10 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_ABOUTBOX            "å…³äº TestClient(&A)..."
+    IDS_ABOUTBOX            "¹ØÓÚ TestClient(&A)..."
 END
 
-#endif    // ä¸­æ–‡(ç®€ä½“ï¼Œä¸­å›½) resources
+#endif    // ÖĞÎÄ(¼òÌå£¬ÖĞ¹ú) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -247,8 +247,8 @@ END
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE 4, 2
 #pragma code_page(936)
-#include "res\TestClient.rc2"  // é Microsoft Visual C++ ç¼–è¾‘çš„èµ„æº
-#include "l.CHS\afxres.rc"      // æ ‡å‡†ç»„ä»¶
+#include "res\TestClient.rc2"  // ·Ç Microsoft Visual C++ ±à¼­µÄ×ÊÔ´
+#include "l.CHS\afxres.rc"      // ±ê×¼×é¼ş
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

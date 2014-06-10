@@ -47,12 +47,7 @@
 #include <ws2tcpip.h>
 #include <mswsock.h>
 
-
-#define ASSERT_FAIELD (assert(false))
-#define ASSERT(x)     (assert(x))
-
-
-
+#define ASSERT_FAIELD (ASSERT(false))
 
 
 #ifdef _UNICODE
