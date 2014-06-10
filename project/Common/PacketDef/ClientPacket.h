@@ -1,5 +1,5 @@
-﻿#ifndef __ROLE_PACKET__
-#define __ROLE_PACKET__
+﻿#ifndef __CLIENT_PACKET__
+#define __CLIENT_PACKET__
 
 #pragma  pack(push)
 #pragma  pack(1)
@@ -16,7 +16,7 @@ struct StCharVerifyVersionAck
 
 struct StCharNewAccountReq
 {
-	CHAR szAccountName[32];	//账号名
+	CHAR szAccountName[32];		//账号名
 	CHAR szPassword[32];		//密码
 };
 
@@ -98,4 +98,4 @@ struct StCharMoveReq
 
 
 
-#endif /* __TRANSFER_PACKET__ */
+#endif /* __CLIENT_PACKET__ */

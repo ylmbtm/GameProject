@@ -81,6 +81,7 @@ build/
 *.deb
 *.dep
 *.manifest
+*.exe
 
 # Visual C++ cache files
 ipch/
@@ -217,3 +218,5 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+*.exe
+

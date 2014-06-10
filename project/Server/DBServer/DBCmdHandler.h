@@ -2,6 +2,7 @@
 #define _DB_CMD_HANDLER_H_
 #include "CmdHandler/CommonCmdHandler.h"
 #include "PacketDef/ServerPacket.h"
+#include "Sqlite/CppSQLite3.h"
 
 
 class CDBCmdHandler : public CCommonCmdHandler
@@ -21,10 +22,16 @@ public:
 
 	//*********************消息处理定义开始******************************
 public:
-	UINT32 OnCmdLoginReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
-
+	UINT32 OnCmdDBNewAccountReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	UINT32 OnCmdDBNewCharReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	UINT32 OnCmdDBPickCharReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	UINT32 OnCmdDBLoginReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	
 	//*********************消息处理定义结束******************************
+
+
+	//数据库定义
+	CppSQLite3DB  m_DBConnection;
 };
 
 #endif //_DB_CMD_HANDLER_H_

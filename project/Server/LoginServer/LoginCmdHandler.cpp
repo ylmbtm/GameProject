@@ -15,6 +15,7 @@
 #include "PacketDef/LoginPacket.h"
 #include "CommonDef.h"
 #include "PacketDef/ClientPacket.h"
+#include "PacketDef/DBPacket.h"
 
 
 
@@ -31,10 +32,6 @@ CLoginCmdHandler::~CLoginCmdHandler()
 BOOL CLoginCmdHandler::Init(UINT32 dwReserved)
 {
 	CCommonCmdHandler::Init(dwReserved);
-
-	m_mapAccount.insert(std::make_pair("zhangming", CharInfo("zhangming", "123", MAKE_PLAYRE_ID(1))));
-	m_mapAccount.insert(std::make_pair("test1",		CharInfo("test1", "123", MAKE_PLAYRE_ID(2))));
-	m_mapAccount.insert(std::make_pair("test2",		CharInfo("test2", "123", MAKE_PLAYRE_ID(3))));
 
 	return TRUE;
 }
@@ -79,35 +76,19 @@ UINT32 CLoginCmdHandler::OnCmdLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 
 	pBufferHelper->Read(MsgLoginReq);
 
-	stdext::hash_map<std::string, CharInfo>::iterator itor = m_mapAccount.find(MsgLoginReq.szAccountName);
-
-	StCharLoginAck MsgLoginAck;
-
-	MsgLoginAck.byteCode = 1;
-
-	if(itor == m_mapAccount.end())
-	{
-		MsgLoginAck.byteCode = 0;
-	}
-	else if(MsgLoginReq.szPassword != itor->second.strPassword)
-	{
-		MsgLoginAck.byteCode = 0;
-	}
-	else
-	{
-		MsgLoginAck.byteCode = 1;
-		MsgLoginAck.u64CharID = itor->second.dwCharID;
-	}
+	StDBCharLoginReq DBCharLoginReq;
+	DBCharLoginReq.u64ConnID = u64ConnID;
+	DBCharLoginReq.CharLoginReq = MsgLoginReq;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 
-	WriteHelper.BeginWrite(CMD_CHAR_LOGIN_ACK, 0, 0, 0);
+	WriteHelper.BeginWrite(CMD_DB_LOGIN_ACK, 0, 0, 0);
 
-	WriteHelper.Write(MsgLoginAck);
+	WriteHelper.Write(DBCharLoginReq);
 
 	WriteHelper.EndWrite();
 
-	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID,  &m_WriteBuffer);
+	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 	
 	return 0;
 }
@@ -117,20 +98,20 @@ UINT32 CLoginCmdHandler::OnCmdNewAccountReq( UINT16 wCommandID, UINT64 u64ConnID
 	StCharNewAccountReq CharNewAccountReq;
 	pBufferHelper->Read(CharNewAccountReq);
 
-
-
-
-	StCharNewAccountAck CharNewAccountAck;
+	StDBNewAccountReq DBNewAccountReq;
+	DBNewAccountReq.u64ConnID = u64ConnID;
+	DBNewAccountReq.CharNewAccountReq = CharNewAccountReq;
+	
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 
-	WriteHelper.BeginWrite(CMD_CHAR_NEW_ACCOUNT_ACK, 0, 0, 0);
+	WriteHelper.BeginWrite(CMD_DB_NEW_ACCOUNT_ACK, 0, 0, 0);
 
-	WriteHelper.Write(CharNewAccountAck);
+	WriteHelper.Write(DBNewAccountReq);
 
 	WriteHelper.EndWrite();
 
-	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID,  &m_WriteBuffer);
+	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 
 	return 0;
 }

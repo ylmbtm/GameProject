@@ -62,6 +62,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				OutputFile="..\Debug\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -125,6 +126,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				OutputFile="..\Release\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
