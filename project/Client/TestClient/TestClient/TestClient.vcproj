@@ -204,6 +204,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DlgRegister.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DlgSelect.cpp"
 				>
 			</File>
@@ -275,6 +279,10 @@
 			</File>
 			<File
 				RelativePath=".\DlgLogin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DlgRegister.h"
 				>
 			</File>
 			<File

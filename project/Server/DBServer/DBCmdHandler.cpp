@@ -111,6 +111,8 @@ UINT32 CDBCmdHandler::OnCmdDBNewCharReq( UINT16 wCommandID, UINT64 u64ConnID, CB
 	StDBCharNewCharAck DBCharNewCharAck;
 	DBCharNewCharAck.u64ConnID = DBNewCharReq.u64ConnID;
 
+	m_DBProcManager.CreateNewChar(DBNewCharReq.CharNewCharReq, DBCharNewCharAck.CharNewCharAck);
+
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_DB_NEW_CHAR_ACK, 0, 0, 0);
 	WriteHelper.Write(DBCharNewCharAck);
@@ -129,7 +131,6 @@ UINT32 CDBCmdHandler::OnCmdDBPickCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 	DBCharPickCharAck.u64ConnID = DBCharPickCharReq.u64ConnID;
 
 
-
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_DB_PICK_CHAR_ACK, 0, 0, 0);
 	WriteHelper.Write(DBCharPickCharAck);
@@ -144,13 +145,18 @@ UINT32 CDBCmdHandler::OnCmdDBLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	StDBCharLoginReq DBCharLoginReq;
 	pBufferHelper->Read(DBCharLoginReq);
 
-
 	StDBCharLoginAck DBCharLoginAck;
 	DBCharLoginAck.u64ConnID = DBCharLoginReq.u64ConnID;
 
-	DBCharLoginAck.CharLoginAck.byteCode = 0;
-
-
+	UINT32 dwAccountID = m_DBProcManager.VerifyAccount(DBCharLoginReq.CharLoginReq.szAccountName, DBCharLoginReq.CharLoginReq.szPassword);
+	if(dwAccountID == 0)
+	{
+		DBCharLoginAck.CharLoginAck.byteCode = 0;
+	}
+	else
+	{
+		m_DBProcManager.LoadAccountCharInfo(dwAccountID, DBCharLoginAck.CharLoginAck);
+	}
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_DB_LOGIN_ACK, 0, 0, 0);

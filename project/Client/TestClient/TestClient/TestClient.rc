@@ -128,6 +128,21 @@ BEGIN
     CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,302,148
 END
 
+IDD_DLG_REGISTER DIALOGEX 0, 0, 252, 166
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "×¢²á"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "×¢²á",IDOK,64,115,50,14
+    PUSHBUTTON      "È¡Ïû",IDCANCEL,138,115,50,14
+    LTEXT           "ÕËºÅÃû£º",IDC_STATIC,50,31,33,8
+    LTEXT           "ÃÜÂë£º",IDC_STATIC,50,58,25,8
+    EDITTEXT        IDC_EDT_ACCOUNTNAME,80,29,132,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDT_PASSWORD,80,54,130,14,ES_AUTOHSCROLL
+    LTEXT           "ÃÜÂë£º",IDC_STATIC,50,85,25,8
+    EDITTEXT        IDC_EDT_PASSWORD2,80,79,130,14,ES_AUTOHSCROLL
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -215,6 +230,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 175
     END
+
+    IDD_DLG_REGISTER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 245
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 159
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -230,6 +253,7 @@ BEGIN
     BEGIN
         MENUITEM "µÇÂ¼",                          ID_Login
         MENUITEM "ÍË³ö",                          ID_LEAVE_GAME
+        MENUITEM " ×¢²áÕËºÅ",                       ID_NEW_ACCOUNT
     END
     POPUP "²âÊÔ"
     BEGIN

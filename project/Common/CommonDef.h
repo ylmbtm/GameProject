@@ -26,6 +26,8 @@
 #define UPDATE_DEST_MYSELF			3
 
 
+#define MAX_NAME_LEN				32
+
 
 ////////////////////////////////////////////
 

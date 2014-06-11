@@ -44,4 +44,5 @@ public:
 	afx_msg void OnDisconnect();
 	afx_msg void OnConnect();
 	afx_msg void OnLeaveGame();
+	afx_msg void OnNewAccount();
 };

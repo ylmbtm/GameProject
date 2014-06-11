@@ -10,6 +10,7 @@
 #include "DataBuffer/BufferHelper.h"
 #include "CommandDef.h"
 #include "CommandHandler.h"
+#include "DlgRegister.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -75,6 +76,7 @@ BEGIN_MESSAGE_MAP(CTestClientDlg, CDialog)
 	ON_COMMAND(ID_DISCONNECT, &CTestClientDlg::OnDisconnect)
 	ON_COMMAND(ID_CONNECT, &CTestClientDlg::OnConnect)
 	ON_COMMAND(ID_LEAVE_GAME, &CTestClientDlg::OnLeaveGame)
+	ON_COMMAND(ID_NEW_ACCOUNT, &CTestClientDlg::OnNewAccount)
 END_MESSAGE_MAP()
 
 // CTestClientDlg 消息处理程序
@@ -197,11 +199,9 @@ void CTestClientDlg::OnSize(UINT nType, int cx, int cy)
 
 void CTestClientDlg::OnLogin()
 {
-	//CDlgLogin DlgLogin;
+	CDlgLogin DlgLogin;
 
-	//DlgLogin.DoModal();
-
-	CNetworkMgr::GetInstancePtr()->ConnectToServer("127.0.0.1", 7994);
+	DlgLogin.DoModal();
 }
 
 void CTestClientDlg::OnTimer(UINT_PTR nIDEvent)
@@ -227,7 +227,7 @@ void CTestClientDlg::OnDisconnect()
 
 void CTestClientDlg::OnConnect()
 {
-	//CNetworkMgr::GetInstancePtr()->Start();
+	CNetworkMgr::GetInstancePtr()->ConnectToServer("127.0.0.1", 7994);
 }
 
 void CTestClientDlg::OnLeaveGame()
@@ -245,4 +245,11 @@ void CTestClientDlg::OnLeaveGame()
 	WriteHelper.EndWrite();
 
 	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
+}
+
+void CTestClientDlg::OnNewAccount()
+{
+	CDlgRegister DlgRegister;
+
+	DlgRegister.DoModal();
 }

@@ -31,17 +31,20 @@ BOOL CClientCmdHandler::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CB
 {
 	switch(wCommandID)
 	{
-		PROCESS_COMMAND_ITEM(CMD_CONNECT_NOTIFY,		OnCmdConnectNotify);
+		PROCESS_COMMAND_ITEM_T(CMD_CONNECT_NOTIFY,		OnCmdConnectNotify);
 
-		PROCESS_COMMAND_ITEM(CMD_CHAR_LOGIN_ACK,		OnCmdLoginGameAck);
+		PROCESS_COMMAND_ITEM_T(CMD_CHAR_LOGIN_ACK,		OnCmdLoginGameAck);
+		PROCESS_COMMAND_ITEM_T(CMD_CHAR_PICK_CHAR_ACK,	OnCmdPickCharAck);
+		PROCESS_COMMAND_ITEM_T(CMD_CHAR_NEW_CHAR_ACK,	OnCmdNewCharAck);
+		PROCESS_COMMAND_ITEM_T(CMD_CHAR_NEW_ACCOUNT_ACK,OnCmdNewAccountAck);
 
-		PROCESS_COMMAND_ITEM(CMD_CHAR_NEARBY_ADD,		OnCmdNearByAdd);
+		PROCESS_COMMAND_ITEM_T(CMD_CHAR_NEARBY_ADD,		OnCmdNearByAdd);
 
-		PROCESS_COMMAND_ITEM(CMD_CHAR_NEARBY_UPDATE,	OnCmdNearByUpdate);
+		PROCESS_COMMAND_ITEM_T(CMD_CHAR_NEARBY_UPDATE,	OnCmdNearByUpdate);
 
-		PROCESS_COMMAND_ITEM(CMD_CHAR_NEARBY_REMOVE,	OnCmdNearByRemove);
+		PROCESS_COMMAND_ITEM_T(CMD_CHAR_NEARBY_REMOVE,	OnCmdNearByRemove);
 
-		PROCESS_COMMAND_ITEM(CMD_CHAR_ENTER_GAME_ACK,	OnCmdEnterGameAck);
+		PROCESS_COMMAND_ITEM_T(CMD_CHAR_ENTER_GAME_ACK,	OnCmdEnterGameAck);
 
 	default:
 		{
@@ -276,7 +279,7 @@ UINT32 CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID
 
 	if(MsgLoginAck.byteCode == 0)
 	{
-		printf("登录失败!");
+		MessageBox(NULL, "登录失败! 密码或账号不对!!","提示", MB_OK);
 	}
 	else
 	{
@@ -326,7 +329,7 @@ UINT32 CClientCmdHandler::OnCmdNewAccountAck( UINT16 wCommandID, UINT64 u64ConnI
 {
 	StCharNewAccountAck CharNewAccountAck;
 	pBufferHelper->Read(CharNewAccountAck);
-	if(CharNewAccountAck.dwRetCode == 1)
+	if(CharNewAccountAck.nRetCode == 1)
 	{
 		MessageBox(NULL,"注册账号成功!", "提示", MB_OK);
 	}

@@ -102,7 +102,6 @@ UINT32 CLoginCmdHandler::OnCmdNewAccountReq( UINT16 wCommandID, UINT64 u64ConnID
 	DBNewAccountReq.u64ConnID = u64ConnID;
 	DBNewAccountReq.CharNewAccountReq = CharNewAccountReq;
 	
-
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_DB_NEW_ACCOUNT_REQ, 0, 0, 0);
 	WriteHelper.Write(DBNewAccountReq);

@@ -2,7 +2,6 @@
 #define _DB_CMD_HANDLER_H_
 #include "CmdHandler/CommonCmdHandler.h"
 #include "PacketDef/ServerPacket.h"
-#include "Sqlite/CppSQLite3.h"
 #include "DBProcManager.h"
 
 
