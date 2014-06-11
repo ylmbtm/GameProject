@@ -10,6 +10,8 @@
 #define IDD_Dlg_Login                   129
 #define IDD_Dlg_Game                    130
 #define IDR_MAINMENU                    131
+#define IDD_DIALOG1                     132
+#define IDD_DLG_SELECT                  132
 #define IDC_EDIT1                       1000
 #define IDC_EDT_ACCOUNT                 1000
 #define IDC_EDIT2                       1001
@@ -21,6 +23,7 @@
 #define IDC_EDT_CHARID                  1004
 #define IDC_BUTTON1                     1005
 #define IDC_BTN_CONNECT                 1005
+#define IDC_LIST1                       1006
 #define ID_32771                        32771
 #define ID_Login                        32772
 #define ID_32773                        32773
@@ -34,9 +37,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
+#define _APS_NEXT_RESOURCE_VALUE        133
 #define _APS_NEXT_COMMAND_VALUE         32779
-#define _APS_NEXT_CONTROL_VALUE         1006
+#define _APS_NEXT_CONTROL_VALUE         1007
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

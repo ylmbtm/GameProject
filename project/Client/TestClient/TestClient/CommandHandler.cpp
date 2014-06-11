@@ -1,4 +1,4 @@
-﻿#include "StdAfx.h"
+﻿#include "stdafx.h"
 #include "CommandHandler.h"
 #include "PacketDef/ServerPacket.h"
 #include "PacketDef/TransferPacket.h"
@@ -10,6 +10,7 @@
 #include "TestClientDlg.h"
 #include "DataBuffer/BufferHelper.h"
 #include "PacketDef/LoginPacket.h"
+#include "DlgSelect.h"
 
 CClientCmdHandler::CClientCmdHandler(void)
 {
@@ -279,7 +280,8 @@ UINT32 CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID
 	}
 	else
 	{
-		
+		CDlgSelect DlgSelect;
+		DlgSelect.DoModal();
 	}
 
 	return TRUE;

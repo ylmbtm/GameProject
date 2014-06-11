@@ -80,8 +80,12 @@ BOOL ClassName##::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHe
 	switch(wCommandID) \
 	{ 
 
-#define PROCESS_COMMAND_ITEM(wCommandID, Func) case wCommandID:{Func(wCommandID, u64ConnID, pBufferHelper);}break;
+//#define PROCESS_COMMAND_ITEM(wCommandID, Func) case wCommandID:{Func(wCommandID, u64ConnID, pBufferHelper);}break;
 
+#define PROCESS_COMMAND_ITEM(wCommandID, Func) \
+		case wCommandID:{\
+		CLog::GetInstancePtr()->AddLog("---Receive Message:[%s]----", #wCommandID);\
+		Func(wCommandID, u64ConnID, pBufferHelper);}break;
 
 #define END_PROCESS_COMMAND \
 		default: \

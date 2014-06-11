@@ -22,7 +22,7 @@ struct StCharNewAccountReq
 
 struct StCharNewAccountAck
 {
-	UINT32 dwRetCode;
+	UINT8 nRetCode;
 };
 
 struct StCharNewCharReq

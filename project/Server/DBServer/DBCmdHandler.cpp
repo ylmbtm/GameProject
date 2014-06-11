@@ -30,12 +30,15 @@ CDBCmdHandler::~CDBCmdHandler()
 
 BOOL CDBCmdHandler::Init(UINT32 dwReserved)
 {
-	CCommonCmdHandler::Init(dwReserved);
+	if(!CCommonCmdHandler::Init(dwReserved))
+	{
+		return FALSE;
+	}
 
-	std::string strPath = CommonFunc::GetCurrentDir();
-	strPath += "\\Game.DB";
-
-	m_DBConnection.open(strPath.c_str());
+	if(!m_DBProcManager.InitManager())
+	{
+		return FALSE;
+	}
 
 	return TRUE;
 }
@@ -78,9 +81,17 @@ UINT32 CDBCmdHandler::OnCmdDBNewAccountReq( UINT16 wCommandID, UINT64 u64ConnID,
 	StDBNewAccountReq DBNewAccountReq;
 	pBufferHelper->Read(DBNewAccountReq);
 
-
 	StDBNewAccountAck DBNewAccountAck;
-	DBNewAccountAck.CharNewAccountAck.dwRetCode = 1;
+
+	if(m_DBProcManager.CreateAccount(DBNewAccountReq.CharNewAccountReq.szAccountName, DBNewAccountReq.CharNewAccountReq.szPassword))
+	{
+		DBNewAccountAck.CharNewAccountAck.nRetCode = 1;
+	}
+	else
+	{
+		DBNewAccountAck.CharNewAccountAck.nRetCode = 0;
+	}
+
 	DBNewAccountAck.u64ConnID = DBNewAccountReq.u64ConnID;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
@@ -100,14 +111,11 @@ UINT32 CDBCmdHandler::OnCmdDBNewCharReq( UINT16 wCommandID, UINT64 u64ConnID, CB
 	StDBCharNewCharAck DBCharNewCharAck;
 	DBCharNewCharAck.u64ConnID = DBNewCharReq.u64ConnID;
 
-
-
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_DB_NEW_CHAR_ACK, 0, 0, 0);
 	WriteHelper.Write(DBCharNewCharAck);
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
-
 
 	return 0;
 }

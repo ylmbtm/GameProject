@@ -3,6 +3,7 @@
 #include "CmdHandler/CommonCmdHandler.h"
 #include "PacketDef/ServerPacket.h"
 #include "Sqlite/CppSQLite3.h"
+#include "DBProcManager.h"
 
 
 class CDBCmdHandler : public CCommonCmdHandler
@@ -31,7 +32,7 @@ public:
 
 
 	//数据库定义
-	CppSQLite3DB  m_DBConnection;
+	CDBProcManager   m_DBProcManager;
 };
 
 #endif //_DB_CMD_HANDLER_H_

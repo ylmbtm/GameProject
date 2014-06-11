@@ -118,6 +118,16 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
 END
 
+IDD_DLG_SELECT DIALOGEX 0, 0, 316, 182
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "角色选择"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,205,161,50,14
+    PUSHBUTTON      "取消",IDCANCEL,259,161,50,14
+    CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,302,148
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -191,6 +201,14 @@ BEGIN
     END
 
     IDD_Dlg_Game, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 309
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 175
+    END
+
+    IDD_DLG_SELECT, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 309

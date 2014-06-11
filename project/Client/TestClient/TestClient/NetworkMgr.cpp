@@ -1,4 +1,4 @@
-﻿#include "StdAfx.h"
+﻿#include "stdafx.h"
 #include "NetworkMgr.h"
 #include "Utility/CommonSocket.h"
 #include "resource.h"
