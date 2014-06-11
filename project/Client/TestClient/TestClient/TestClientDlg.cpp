@@ -11,6 +11,7 @@
 #include "CommandDef.h"
 #include "CommandHandler.h"
 #include "DlgRegister.h"
+#include "DlgSelect.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -221,8 +222,10 @@ void CTestClientDlg::OnTimer(UINT_PTR nIDEvent)
 
 void CTestClientDlg::OnDisconnect()
 { 
+	CDlgSelect DlgSelect;
+	DlgSelect.DoModal();
 	// TODO: 在此添加命令处理程序代码
-	CNetworkMgr::GetInstancePtr()->DisConnect();
+	//CNetworkMgr::GetInstancePtr()->DisConnect();
 }
 
 void CTestClientDlg::OnConnect()

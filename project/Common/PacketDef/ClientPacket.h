@@ -34,6 +34,7 @@ struct StCharNewCharReq
 
 struct StCharPickInfo
 {
+	UINT64  u64CharID;
 	CHAR	szCharName[32];
 	UINT32	dwLevel;
 	UINT32  dwFeature;

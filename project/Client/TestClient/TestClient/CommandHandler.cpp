@@ -284,6 +284,12 @@ UINT32 CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID
 	else
 	{
 		CDlgSelect DlgSelect;
+		DlgSelect.m_nCount = MsgLoginAck.nCount;
+		for(int i = 0; i < MsgLoginAck.nCount; i++)
+		{
+			DlgSelect.m_CharInfoList[i] = MsgLoginAck.CharPickInfo[i];
+		}
+		
 		DlgSelect.DoModal();
 	}
 

@@ -1,4 +1,6 @@
 #pragma once
+#include "afxcmn.h"
+#include "PacketDef\ClientPacket.h"
 
 
 // CDlgSelect 对话框
@@ -18,4 +20,12 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
+public:
+
+	int				m_nCount;
+	StCharPickInfo  m_CharInfoList[4];
+
+	CListCtrl m_CharList;
+	virtual BOOL OnInitDialog();
+	afx_msg void OnBnClickedOk();
 };
