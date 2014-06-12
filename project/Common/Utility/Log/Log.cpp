@@ -59,6 +59,8 @@ CLog* CLog::GetInstancePtr()
 
 BOOL CLog::StartLog(std::string strPrefix, std::string strLogDir)
 {
+	SetConsoleTitle(strPrefix.c_str());
+
 	std::string strPath = CommonFunc::GetCurrentDir();
 
 	strPath += ("/Log");

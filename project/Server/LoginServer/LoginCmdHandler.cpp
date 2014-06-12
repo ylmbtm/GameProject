@@ -198,7 +198,7 @@ UINT32 CLoginCmdHandler::OnCmdDBPickCharAck( UINT16 wCommandID, UINT64 u64ConnID
 	WriteHelper.BeginWrite(CMD_SVR_CHAR_WILL_ENTER, 0, 0, 0);
 	WriteHelper.Write(CharWillEnterGame);
 	WriteHelper.EndWrite();
-	CGameService::GetInstancePtr()->SendCmdToConnection(DBCharPickCharAck.u64ConnID, &m_WriteBuffer);
+	CGameService::GetInstancePtr()->SendCmdToConnection(201, &m_WriteBuffer);
 
 	WriteHelper.BeginWrite(CMD_CHAR_PICK_CHAR_ACK, 0, 0, 0);
 	WriteHelper.Write(DBCharPickCharAck.CharPickCharAck);

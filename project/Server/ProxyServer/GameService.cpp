@@ -62,7 +62,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 				pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->CreateStaicPlayer(pBufferHelper->GetCommandHeader()->u64CharID);
 				if(pStaticPlayer != NULL)
 				{
-					pStaticPlayer->SetGameSvrConnID(301);
+					pStaticPlayer->SetGameSvrConnID(pWillEnterNode->m_GameSvrConnID);
 				}
 			}
 
