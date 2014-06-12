@@ -382,7 +382,11 @@
 			Name="CmdDefine"
 			>
 			<File
-				RelativePath="..\..\Common\CommonDef.h"
+				RelativePath="..\..\Common\Error.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Common\GameDef.h"
 				>
 			</File>
 			<File

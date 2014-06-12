@@ -10,7 +10,7 @@
 #include "DataBuffer/BufferHelper.h"
 #include "CommandHandler.h"
 #include "DataBuffer/BufferHelper.h"
-#include "CommonDef.h"
+#include "GameDef.h"
 #include "PacketDef/ClientPacket.h"
 #include "PacketDef/LoginPacket.h"
 

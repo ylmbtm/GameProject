@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "CommandDef.h"
+#include "GameDef.h"
 #include "PacketHeader.h"
 #include "Utility/Log/Log.h"
 #include "Utility/CommonFunc.h"
@@ -12,7 +13,7 @@
 #include "DataBuffer/BufferHelper.h"
 #include "GameService.h"
 #include "Scene.h"
-#include "CommonDef.h"
+
 
 
 CScene::CScene()

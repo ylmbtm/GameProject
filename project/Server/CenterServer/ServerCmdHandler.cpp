@@ -47,9 +47,9 @@ BOOL CServerCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBu
 
 		PROCESS_COMMAND_ITEM(CMD_DISCONNECT_NOTIFY,		OnCmdDisConnectNotify);
 
-		PROCESS_COMMAND_ITEM(CMD_REGISTER_TO_CENTER,	OnCmdRegisterToCenter);//注册自己到中心服务器
+		PROCESS_COMMAND_ITEM(CMD_SVR_REGISTER_TO_CENTER,OnCmdRegisterToCenter);//注册自己到中心服务器
 
-		PROCESS_COMMAND_ITEM(CMD_ACTIVE_SERVER_LIST,	OnCmdActiveSvrList);//中心服务器来的数据
+		PROCESS_COMMAND_ITEM(CMD_SVR_ACTIVE_SERVER_LIST,OnCmdActiveSvrList);//中心服务器来的数据
 
 	default:
 		{
@@ -82,7 +82,7 @@ UINT32 CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID
 
 		CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 
-		WriteHelper.BeginWrite(CMD_REGISTER_TO_CENTER, CMDH_SVR_CON, 0, 0);
+		WriteHelper.BeginWrite(CMD_SVR_REGISTER_TO_CENTER, CMDH_SVR_CON, 0, 0);
 
 		WriteHelper.Write(RegisterToCenterSvr);
 
@@ -97,7 +97,7 @@ UINT32 CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID
 UINT32 CServerCmdHandler::OnCmdRegisterToCenter(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_ACTIVE_SERVER_LIST, CMDH_SVR_CON, 0, 0);
+	WriteHelper.BeginWrite(CMD_SVR_ACTIVE_SERVER_LIST, CMDH_SVR_CON, 0, 0);
 
 	int nCount = m_vtActiveSvrList.size()>10?10:m_vtActiveSvrList.size();
 

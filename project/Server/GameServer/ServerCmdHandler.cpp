@@ -45,7 +45,7 @@ BOOL CServerCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBu
 	{
 		PROCESS_COMMAND_ITEM(CMD_CONNECT_NOTIFY,		OnCmdConnectNotify);
 
-		PROCESS_COMMAND_ITEM(CMD_ACTIVE_SERVER_LIST,	OnCmdActiveSvrList);//中心服务器来的数据
+		PROCESS_COMMAND_ITEM(CMD_SVR_ACTIVE_SERVER_LIST,	OnCmdActiveSvrList);//中心服务器来的数据
 
 	default:
 		{
@@ -77,7 +77,7 @@ UINT32 CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID
 
 		CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 
-		WriteHelper.BeginWrite(CMD_REGISTER_TO_CENTER, CMDH_SVR_CON, 0,  0);
+		WriteHelper.BeginWrite(CMD_SVR_REGISTER_TO_CENTER, CMDH_SVR_CON, 0,  0);
 
 		WriteHelper.Write(RegisterToCenterSvr);
 

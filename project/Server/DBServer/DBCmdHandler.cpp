@@ -1,6 +1,8 @@
 ﻿#include "stdafx.h"
-#include "DBCmdHandler.h"
 #include "CommandDef.h"
+#include "GameDef.h"
+#include "Error.h"
+#include "DBCmdHandler.h"
 #include "Utility/Log/Log.h"
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
@@ -13,8 +15,8 @@
 #include "DataBuffer/BufferHelper.h"
 #include "DataBuffer/DataBuffer.h"
 #include "PacketDef/LoginPacket.h"
-#include "CommonDef.h"
 #include "PacketDef/DBPacket.h"
+
 
 
 
@@ -85,11 +87,11 @@ UINT32 CDBCmdHandler::OnCmdDBNewAccountReq( UINT16 wCommandID, UINT64 u64ConnID,
 
 	if(m_DBProcManager.CreateAccount(DBNewAccountReq.CharNewAccountReq.szAccountName, DBNewAccountReq.CharNewAccountReq.szPassword))
 	{
-		DBNewAccountAck.CharNewAccountAck.nRetCode = 1;
+		DBNewAccountAck.CharNewAccountAck.nRetCode = E_SUCCESSED;
 	}
 	else
 	{
-		DBNewAccountAck.CharNewAccountAck.nRetCode = 0;
+		DBNewAccountAck.CharNewAccountAck.nRetCode = E_FAILED;
 	}
 
 	DBNewAccountAck.u64ConnID = DBNewAccountReq.u64ConnID;
@@ -111,7 +113,14 @@ UINT32 CDBCmdHandler::OnCmdDBNewCharReq( UINT16 wCommandID, UINT64 u64ConnID, CB
 	StDBCharNewCharAck DBCharNewCharAck;
 	DBCharNewCharAck.u64ConnID = DBNewCharReq.u64ConnID;
 
-	m_DBProcManager.CreateNewChar(DBNewCharReq.CharNewCharReq, DBCharNewCharAck.CharNewCharAck);
+	if(!m_DBProcManager.CreateNewChar(DBNewCharReq.CharNewCharReq, DBCharNewCharAck.CharNewCharAck))
+	{
+		DBCharNewCharAck.CharNewCharAck.nRetCode = E_FAILED;
+	}
+	else
+	{
+		DBCharNewCharAck.CharNewCharAck.nRetCode = E_SUCCESSED;
+	}
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_DB_NEW_CHAR_ACK, 0, 0, 0);
@@ -129,6 +138,7 @@ UINT32 CDBCmdHandler::OnCmdDBPickCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 
 	StDBCharPickCharAck DBCharPickCharAck;
 	DBCharPickCharAck.u64ConnID = DBCharPickCharReq.u64ConnID;
+	DBCharPickCharAck.CharPickCharAck.nRetCode = E_SUCCESSED;
 
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
@@ -151,11 +161,12 @@ UINT32 CDBCmdHandler::OnCmdDBLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	UINT32 dwAccountID = m_DBProcManager.VerifyAccount(DBCharLoginReq.CharLoginReq.szAccountName, DBCharLoginReq.CharLoginReq.szPassword);
 	if(dwAccountID == 0)
 	{
-		DBCharLoginAck.CharLoginAck.byteCode = 0;
+		DBCharLoginAck.CharLoginAck.nRetCode = E_FAILED;
 	}
 	else
 	{
 		m_DBProcManager.LoadAccountCharInfo(dwAccountID, DBCharLoginAck.CharLoginAck);
+		DBCharLoginAck.CharLoginAck.nRetCode = E_SUCCESSED;
 	}
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);

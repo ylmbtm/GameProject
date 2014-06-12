@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
-#include "LoginCmdHandler.h"
 #include "CommandDef.h"
+#include "GameDef.h"
+#include "LoginCmdHandler.h"
 #include "Utility/Log/Log.h"
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
@@ -13,7 +14,6 @@
 #include "DataBuffer/BufferHelper.h"
 #include "DataBuffer/DataBuffer.h"
 #include "PacketDef/LoginPacket.h"
-#include "CommonDef.h"
 #include "PacketDef/ClientPacket.h"
 #include "PacketDef/DBPacket.h"
 
@@ -179,11 +179,30 @@ UINT32 CLoginCmdHandler::OnCmdDBPickCharAck( UINT16 wCommandID, UINT64 u64ConnID
 	StDBCharPickCharAck DBCharPickCharAck;
 	pBufferHelper->Read(DBCharPickCharAck);
 
+	//选人这里需要做以下几件事。
+	//1。将可用的proxyver地址和端口，ID发给客户端。
+	//2。将登录的识别码和ID发给代理服
+
+	DBCharPickCharAck.CharPickCharAck.dwIdentifyCode = rand()%10000;
+	DBCharPickCharAck.CharPickCharAck.nRetCode  = 0;
+	strncpy(DBCharPickCharAck.CharPickCharAck.szIpAddr, "127.0.0.1", 32);
+	DBCharPickCharAck.CharPickCharAck.sPort		= 7200;
+
+	StCharWillEnterGame CharWillEnterGame;
+	CharWillEnterGame.dwIdentifyCode	= DBCharPickCharAck.CharPickCharAck.dwIdentifyCode;
+	CharWillEnterGame.u64CharID			= DBCharPickCharAck.CharPickCharAck.u64CharID;
+
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+	WriteHelper.BeginWrite(CMD_SVR_CHAR_WILL_ENTER, 0, 0, 0);
+	WriteHelper.Write(CharWillEnterGame);
+	WriteHelper.EndWrite();
+	CGameService::GetInstancePtr()->SendCmdToConnection(DBCharPickCharAck.u64ConnID, &m_WriteBuffer);
+
 	WriteHelper.BeginWrite(CMD_CHAR_PICK_CHAR_ACK, 0, 0, 0);
 	WriteHelper.Write(DBCharPickCharAck.CharPickCharAck);
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToConnection(DBCharPickCharAck.u64ConnID, &m_WriteBuffer);
+
 	return 0;
 }
 

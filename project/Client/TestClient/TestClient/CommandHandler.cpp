@@ -11,6 +11,7 @@
 #include "DataBuffer/BufferHelper.h"
 #include "PacketDef/LoginPacket.h"
 #include "DlgSelect.h"
+#include "Error.h"
 
 CClientCmdHandler::CClientCmdHandler(void)
 {
@@ -277,7 +278,7 @@ UINT32 CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID
 
 	pBufferHelper->Read(MsgLoginAck);
 
-	if(MsgLoginAck.byteCode == 0)
+	if(MsgLoginAck.nRetCode == E_FAILED)
 	{
 		MessageBox(NULL, "登录失败! 密码或账号不对!!","提示", MB_OK);
 	}
@@ -320,11 +321,11 @@ UINT32 CClientCmdHandler::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID,
 	StCharPickCharAck CharPickCharAck;
 	pBufferHelper->Read(CharPickCharAck);
 
-	if(CharPickCharAck.byteCode == 1)
+	if(CharPickCharAck.nRetCode == E_SUCCESSED)
 	{
 		CNetworkMgr::GetInstancePtr()->DisConnect();
 		m_HostPlayer.SetObjectID(CharPickCharAck.u64CharID);
-		CNetworkMgr::GetInstancePtr()->ConnectToServer("127.0.0.1", 7100);
+		CNetworkMgr::GetInstancePtr()->ConnectToServer(CharPickCharAck.szIpAddr, CharPickCharAck.sPort);
 	}
 
 	return 0;
@@ -335,7 +336,7 @@ UINT32 CClientCmdHandler::OnCmdNewAccountAck( UINT16 wCommandID, UINT64 u64ConnI
 {
 	StCharNewAccountAck CharNewAccountAck;
 	pBufferHelper->Read(CharNewAccountAck);
-	if(CharNewAccountAck.nRetCode == 1)
+	if(CharNewAccountAck.nRetCode == E_SUCCESSED)
 	{
 		MessageBox(NULL,"注册账号成功!", "提示", MB_OK);
 	}

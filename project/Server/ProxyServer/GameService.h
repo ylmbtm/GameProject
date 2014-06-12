@@ -24,13 +24,14 @@ public:
 	BOOL		OnIdle();
 
 public:
-	CServerCmdHandler   m_ServerCmdHandler;
 
 	BOOL		RelayToServer(CStaticPlayer *pClientObj, IDataBuffer *pBuffer);
 
 	BOOL		RelayToClient(CStaticPlayer *pClientObj, IDataBuffer *pBuffer);
 
-
+public:
+	//处理普通的网络连接
+	CServerCmdHandler   m_ServerCmdHandler;
 };
 
 #endif

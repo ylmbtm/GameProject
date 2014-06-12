@@ -36,6 +36,8 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 		return TRUE;
 	}
 
+	//这下面运行的函数都是多线程执行的函数，需要考虑重入的问题。
+
 	switch(pBufferHelper->GetCommandHeader()->wCommandID)
 	{
 	case CMD_CHAR_ENTER_GAME_REQ:
@@ -64,6 +66,12 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			RelayToServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
 		}
 		break;
+	case CMD_SVR_CHAR_WILL_ENTER:
+		{
+			StCharWillEnterGame CharWillEnterGame;
+			pBufferHelper->Read(CharWillEnterGame);
+
+		}
 	default:
 		{
 			CStaticPlayer *pClientObj = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);

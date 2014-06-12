@@ -1,6 +1,9 @@
 ﻿#ifndef __COMMON_DEFINE_H__
 #define __COMMON_DEFINE_H__
 
+#define MAX_NAME_LEN				32
+
+
 //以下是对象类型
 #define OBJECT_UNKNOW			0
 #define OBJECT_PLAYER			1
@@ -26,7 +29,7 @@
 #define UPDATE_DEST_MYSELF			3
 
 
-#define MAX_NAME_LEN				32
+
 
 
 ////////////////////////////////////////////

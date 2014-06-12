@@ -22,7 +22,7 @@ struct StCharNewAccountReq
 
 struct StCharNewAccountAck
 {
-	UINT8 nRetCode;
+	UINT16 nRetCode;
 };
 
 struct StCharNewCharReq
@@ -42,7 +42,7 @@ struct StCharPickInfo
 
 struct StCharNewCharAck
 {
-	UINT8          RetCode;
+	UINT16 nRetCode;
 	StCharPickInfo CharPickInfo;
 };
 
@@ -56,7 +56,7 @@ struct StCharLoginReq	//登录请求消息
 
 struct StCharLoginAck	//登录请求消息
 {
-	UINT8	byteCode;
+	UINT16	nRetCode;
 	UINT8   nCount;
 	StCharPickInfo CharPickInfo[4];
 	//StCharPickInfo;
@@ -73,8 +73,11 @@ struct StCharPickCharReq	//选择角色请求
 
 struct StCharPickCharAck	//选择角色请求回复
 {
-	UINT8	byteCode;
+	UINT16	nRetCode;
 	UINT64  u64CharID;
+	UINT32  dwIdentifyCode;
+	UINT16  sPort;
+	CHAR    szIpAddr[32];
 };
 
 
@@ -83,7 +86,7 @@ struct StCharPickCharAck	//选择角色请求回复
 struct StCharEnterGameReq
 {
 	UINT64 u64CharID;		//进入游戏请求
-	UINT32 dwEnterCode;		//进入游戏请求码
+	UINT32 dwIndentifyCode;		//进入游戏请求码
 };
 
 struct StCharEnterGameAck

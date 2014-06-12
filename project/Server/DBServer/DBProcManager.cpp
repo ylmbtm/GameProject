@@ -98,9 +98,11 @@ BOOL CDBProcManager::CreateNewChar(StCharNewCharReq &Req,  StCharNewCharAck &Ack
 		Ack.CharPickInfo.dwFeature = QueryRes.getIntField("F_Feature", 0);
 		strncpy(Ack.CharPickInfo.szCharName, QueryRes.getStringField("F_Name", ""), 32);
 		Ack.CharPickInfo.dwLevel = QueryRes.getIntField("F_Level", 0);
+
+		return TRUE;
 	}
 
-	return TRUE;
+	return FALSE;
 }
 
 UINT32 CDBProcManager::GetMaxAccountID()

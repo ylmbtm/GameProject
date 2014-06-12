@@ -14,8 +14,8 @@ enum Command_ID
 	CMD_DISCONNECT_NOTIFY,		//断开连接通知
 
 	//用于服务器间连络的命令
-	CMD_REGISTER_TO_CENTER,		//注册自己到中心服务器
-	CMD_ACTIVE_SERVER_LIST,		//中心服务器来的数据
+	CMD_SVR_REGISTER_TO_CENTER,		//注册自己到中心服务器
+	CMD_SVR_ACTIVE_SERVER_LIST,		//中心服务器来的数据
 
 	//玩家版本验证命令
 	CMD_CHAR_VERIFY_VERSION,	//玩家发版本请求验证
@@ -59,6 +59,9 @@ enum Command_ID
 
 	CMD_DB_PICK_CHAR_REQ,
 	CMD_DB_PICK_CHAR_ACK,
+
+	//
+	CMD_SVR_CHAR_WILL_ENTER,	//通知代理服，玩家准备进入
 
 	CMD_ROLE_ENTER,
 	CMD_ROLE_MOVE,
