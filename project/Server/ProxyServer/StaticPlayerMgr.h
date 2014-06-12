@@ -47,8 +47,8 @@ public:
 	BOOL		   GetPlayerOnline(UINT64 u64CharID);
 
 
-	stdext::hash_map<UINT64, CStaticPlayer*> m_vtOnlinePlayer;
-	stdext::hash_map<UINT64, CStaticPlayer*> m_vtOfflinePlayer;
+	//stdext::hash_map<UINT64, CStaticPlayer*> m_vtOnlinePlayer;
+	//stdext::hash_map<UINT64, CStaticPlayer*> m_vtOfflinePlayer;
 };
 
 #endif /*__CLIENT_OBJECT_MGR_H__*/

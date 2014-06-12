@@ -57,6 +57,7 @@ struct StCharLoginReq	//登录请求消息
 struct StCharLoginAck	//登录请求消息
 {
 	UINT16	nRetCode;
+	UINT32  dwAccountID;
 	UINT8   nCount;
 	StCharPickInfo CharPickInfo[4];
 	//StCharPickInfo;
@@ -91,7 +92,7 @@ struct StCharEnterGameReq
 
 struct StCharEnterGameAck
 {
-	UINT32 dwEnterCode;		//进入游戏请求码
+	UINT32 dwIndentifyCode;		//进入游戏请求码
 };
 
 struct StCharLeaveGameReq

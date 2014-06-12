@@ -25,6 +25,7 @@
 #define IDC_EDT_PASSWORD2               1004
 #define IDC_BUTTON1                     1005
 #define IDC_BTN_CONNECT                 1005
+#define IDC_BTN_NEW_CHAR                1005
 #define IDC_LIST1                       1006
 #define ID_32771                        32771
 #define ID_Login                        32772

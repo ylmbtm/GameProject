@@ -121,7 +121,7 @@ UINT32 CLoginCmdHandler::OnCmdNewCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 	DBNewCharReq.CharNewCharReq = CharNewCharReq;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_DB_PICK_CHAR_REQ, 0, 0, 0);
+	WriteHelper.BeginWrite(CMD_DB_NEW_CHAR_REQ, 0, 0, 0);
 	WriteHelper.Write(DBNewCharReq);
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
@@ -139,7 +139,7 @@ UINT32 CLoginCmdHandler::OnCmdPickCharReq( UINT16 wCommandID, UINT64 u64ConnID, 
 	DBPickCharReq.CharPickCharReq = CharPickCharReq;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_DB_NEW_CHAR_REQ, 0, 0, 0);
+	WriteHelper.BeginWrite(CMD_DB_PICK_CHAR_REQ, 0, 0, 0);
 	WriteHelper.Write(DBPickCharReq);
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
@@ -182,6 +182,7 @@ UINT32 CLoginCmdHandler::OnCmdDBPickCharAck( UINT16 wCommandID, UINT64 u64ConnID
 	//选人这里需要做以下几件事。
 	//1。将可用的proxyver地址和端口，ID发给客户端。
 	//2。将登录的识别码和ID发给代理服
+	//3。将玩家应该进入的地图告诉玩家。
 
 	DBCharPickCharAck.CharPickCharAck.dwIdentifyCode = rand()%10000;
 	DBCharPickCharAck.CharPickCharAck.nRetCode  = 0;
@@ -191,6 +192,7 @@ UINT32 CLoginCmdHandler::OnCmdDBPickCharAck( UINT16 wCommandID, UINT64 u64ConnID
 	StCharWillEnterGame CharWillEnterGame;
 	CharWillEnterGame.dwIdentifyCode	= DBCharPickCharAck.CharPickCharAck.dwIdentifyCode;
 	CharWillEnterGame.u64CharID			= DBCharPickCharAck.CharPickCharAck.u64CharID;
+	CharWillEnterGame.dwGameSvrID		= 101;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_SVR_CHAR_WILL_ENTER, 0, 0, 0);

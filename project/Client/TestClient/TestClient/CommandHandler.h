@@ -4,6 +4,7 @@
 #include "IBufferHandler.h"
 #include "CommandDef.h"
 #include "PlayerObject.h"
+#include "DlgSelect.h"
 
 class CClientCmdHandler : public ICommandHandler
 {
@@ -22,7 +23,7 @@ public:
 
 	BOOL SendLoginReq(LPCTSTR szAccountName, LPCTSTR szPassword);
 	BOOL SendNewAccountReq(LPCTSTR szAccountName, LPCTSTR szPassword);
-	BOOL SendNewCharReq(UINT32 dwAccountID, UINT32 dwFeature);
+	BOOL SendNewCharReq(UINT32 dwAccountID,LPCTSTR szCharName, UINT32 dwFeature);
 	BOOL SendPickCharReq(UINT64 u64CharID);
 
 
@@ -50,6 +51,8 @@ public:
 	CPlayerObject m_HostPlayer;
 
 	CPlayerObjectMgr m_PlayerObjMgr;
+
+	CDlgSelect DlgSelect;
 };
 
 

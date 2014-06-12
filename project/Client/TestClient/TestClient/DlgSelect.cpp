@@ -30,6 +30,7 @@ void CDlgSelect::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CDlgSelect, CDialog)
 	ON_BN_CLICKED(IDOK, &CDlgSelect::OnBnClickedOk)
+	ON_BN_CLICKED(IDC_BTN_NEW_CHAR, &CDlgSelect::OnBnClickedBtnNewChar)
 END_MESSAGE_MAP()
 
 
@@ -47,18 +48,7 @@ BOOL CDlgSelect::OnInitDialog()
 	m_CharList.InsertColumn(3, "职业", LVCFMT_LEFT, 100);
 	m_CharList.InsertColumn(4, "脸型", LVCFMT_LEFT, 100);
 
-	CHAR szValue[64]={0};
-
-	
-	for(int i = 0; i < m_nCount; i++)
-	{
-		sprintf(szValue, "%d", m_CharInfoList[i].dwLevel);
-		m_CharList.InsertItem(i, m_CharInfoList[i].szCharName);
-		m_CharList.InsertItem(i, szValue);
-		m_CharList.InsertItem(i, "男");
-		m_CharList.InsertItem(i, "法师");
-		m_CharList.SetItemData(i, i);
-	}
+	RefreshListCtrl();
 
 	return TRUE; 
 }
@@ -76,4 +66,44 @@ void CDlgSelect::OnBnClickedOk()
 	CClientCmdHandler::GetInstancePtr()->SendPickCharReq(m_CharInfoList[SelData].u64CharID);
 
 	OnOK();
+}
+
+void CDlgSelect::OnBnClickedBtnNewChar()
+{
+	CClientCmdHandler::GetInstancePtr()->SendNewCharReq(m_dwAccountID,"Testtet" ,123);
+
+	OnOK();
+}
+
+BOOL CDlgSelect::AddCharPickInfo( StCharPickInfo &PickInfo )
+{
+	if(m_nCount >= 4)
+	{
+		return FALSE;
+	}
+
+	m_CharInfoList[m_nCount] = PickInfo;
+	m_nCount++;
+
+	//RefreshListCtrl();
+
+	return TRUE;
+}
+
+BOOL CDlgSelect::RefreshListCtrl()
+{
+	m_CharList.DeleteAllItems();
+
+	CHAR szValue[64]={0};
+	for(int i = 0; i < m_nCount; i++)
+	{
+		sprintf(szValue, "%d", m_CharInfoList[i].dwLevel);
+		m_CharList.InsertItem(i, m_CharInfoList[i].szCharName);
+		m_CharList.SetItemText(i, 1, szValue);
+		m_CharList.SetItemText(i, 2, "男");
+		m_CharList.SetItemText(i, 3,"法师");
+		m_CharList.SetItemData(i, i);
+	}
+
+	return TRUE;
 }

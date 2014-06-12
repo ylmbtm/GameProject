@@ -9,6 +9,7 @@
 #include "DataBuffer/BufferHelper.h"
 #include "StaticPlayerMgr.h"
 #include "PacketDef/ClientPacket.h"
+#include "CharWillEnterList.h"
 
 CGameService::CGameService(void)
 {
@@ -37,12 +38,25 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 	}
 
 	//这下面运行的函数都是多线程执行的函数，需要考虑重入的问题。
-
 	switch(pBufferHelper->GetCommandHeader()->wCommandID)
 	{
 	case CMD_CHAR_ENTER_GAME_REQ:
 		{
-			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
+			CWillEnterNode *pWillEnterNode = CWillEnterNodeMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
+			if(pWillEnterNode == NULL)
+			{
+				break;
+			}
+
+			StCharEnterGameReq CharEnterGameReq;
+			pBufferHelper->Read(CharEnterGameReq);
+			 
+			if(pWillEnterNode->m_dwIndentifyCode == CharEnterGameReq.dwIndentifyCode)
+			{
+				break;
+			}
+
+			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(CharEnterGameReq.u64CharID);
 			if(pStaticPlayer == NULL)
 			{
 				pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->CreateStaicPlayer(pBufferHelper->GetCommandHeader()->u64CharID);
@@ -71,7 +85,12 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			StCharWillEnterGame CharWillEnterGame;
 			pBufferHelper->Read(CharWillEnterGame);
 
+			CWillEnterNode *pWillEnterNode = CWillEnterNodeMgr::GetInstancePtr()->CreateWillEnterNode(CharWillEnterGame.u64CharID);
+			pWillEnterNode->m_dwIndentifyCode = CharWillEnterGame.dwIdentifyCode;
+			pWillEnterNode->m_GameSvrConnID   = CharWillEnterGame.dwGameSvrID;
+
 		}
+		break;
 	default:
 		{
 			CStaticPlayer *pClientObj = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
@@ -231,3 +250,26 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 
 	return TRUE;
 }
+
+/*
+
+class ClientEngine
+{
+	BOOL InitEngine();
+
+	BOOL CloseEngine();
+
+	BOOL SetClientID(UINT64 u64ClientID);  //一般是角色ID
+
+	BOOL SetLoginSvrInfo(char *szIpAddr, UINT16 sPort);
+
+	BOOL SendData(char *pData, UINT32 dwLen);
+
+	BOOL Login(char *pszAccountName, char *pszPassword);
+
+	BOOL RegisterNetHandler(IMessageHandler *pMsgHandler);
+
+	BOOL Render();
+};
+
+*/

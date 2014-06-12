@@ -81,7 +81,7 @@ BOOL CDBProcManager::CreateNewChar(StCharNewCharReq &Req,  StCharNewCharAck &Ack
 {
 	CHAR szSql[MAX_PATH];
 
-	sprintf(szSql, "insert into t_charinfo(F_AccountID, F_Name, F_Feature) values('%d', '%s','%s')", Req.dwAccountID, Req.szCharName, Req.dwFeature);
+	sprintf(szSql, "insert into t_charinfo(F_AccountID, F_Name, F_Feature) values('%d', '%s','%d')", Req.dwAccountID, Req.szCharName, Req.dwFeature);
 
 	if(m_DBConnection.execDML(szSql) <= 0)
 	{

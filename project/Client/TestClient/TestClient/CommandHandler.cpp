@@ -284,7 +284,7 @@ UINT32 CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID
 	}
 	else
 	{
-		CDlgSelect DlgSelect;
+		DlgSelect.m_dwAccountID = MsgLoginAck.dwAccountID;
 		DlgSelect.m_nCount = MsgLoginAck.nCount;
 		for(int i = 0; i < MsgLoginAck.nCount; i++)
 		{
@@ -348,11 +348,21 @@ UINT32 CClientCmdHandler::OnCmdNewAccountAck( UINT16 wCommandID, UINT64 u64ConnI
 	return 0;
 }
 
-BOOL CClientCmdHandler::SendNewCharReq( UINT32 dwAccountID , UINT32 dwFeature)
+BOOL CClientCmdHandler::SendNewCharReq( UINT32 dwAccountID , LPCTSTR szCharName, UINT32 dwFeature)
 {
 	StCharNewCharReq CharNewCharReq;
 	CharNewCharReq.dwFeature = dwFeature;
 	CharNewCharReq.dwAccountID = dwAccountID;
+	strncpy(CharNewCharReq.szCharName, szCharName, 32);
+	CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
+
+	WriteHelper.BeginWrite(CMD_CHAR_NEW_CHAR_REQ, 0, 0, 0);
+
+	WriteHelper.Write(CharNewCharReq);
+
+	WriteHelper.EndWrite();
+
+	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
 
 	return TRUE;
 }
@@ -362,6 +372,13 @@ UINT32 CClientCmdHandler::OnCmdNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 {
 	StCharNewCharAck CharNewCharAck;
 	pBufferHelper->Read(CharNewCharAck);
+
+
+	DlgSelect.AddCharPickInfo(CharNewCharAck.CharPickInfo);
+
+
+	DlgSelect.DoModal();
+
 
 	return 0;
 }
