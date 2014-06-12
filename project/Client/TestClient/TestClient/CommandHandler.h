@@ -5,8 +5,9 @@
 #include "CommandDef.h"
 #include "PlayerObject.h"
 #include "DlgSelect.h"
+#include "ClientEngine.h"
 
-class CClientCmdHandler : public ICommandHandler
+class CClientCmdHandler : public IMessageHandler
 {
 private:
 	CClientCmdHandler(void);
@@ -21,7 +22,6 @@ public:
 	BOOL OnUpdate(UINT32 dwTick);
 
 
-	BOOL SendLoginReq(LPCTSTR szAccountName, LPCTSTR szPassword);
 	BOOL SendNewAccountReq(LPCTSTR szAccountName, LPCTSTR szPassword);
 	BOOL SendNewCharReq(UINT32 dwAccountID,LPCTSTR szCharName, UINT32 dwFeature);
 	BOOL SendPickCharReq(UINT64 u64CharID);
@@ -29,7 +29,6 @@ public:
 
 	//*********************消息处理定义开始******************************
 public:
-	UINT32 OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	UINT32 OnCmdLoginGameAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	UINT32 OnCmdEnterGameAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
@@ -53,6 +52,8 @@ public:
 	CPlayerObjectMgr m_PlayerObjMgr;
 
 	CDlgSelect DlgSelect;
+
+	ClientEngine m_ClientEngine;
 };
 
 

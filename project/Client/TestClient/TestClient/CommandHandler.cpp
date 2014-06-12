@@ -15,6 +15,7 @@
 
 CClientCmdHandler::CClientCmdHandler(void)
 {
+	m_ClientEngine.RegisterNetHandler((IMessageHandler*)this);
 }
 
 CClientCmdHandler::~CClientCmdHandler(void)
@@ -32,8 +33,6 @@ BOOL CClientCmdHandler::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CB
 {
 	switch(wCommandID)
 	{
-		PROCESS_COMMAND_ITEM_T(CMD_CONNECT_NOTIFY,		OnCmdConnectNotify);
-
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_LOGIN_ACK,		OnCmdLoginGameAck);
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_PICK_CHAR_ACK,	OnCmdPickCharAck);
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_NEW_CHAR_ACK,	OnCmdNewCharAck);
@@ -56,57 +55,6 @@ BOOL CClientCmdHandler::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CB
 
 	return TRUE;
 }
-
-
-UINT32 CClientCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
-{
-	StConnectNotify ConnectNotify;
-
-	pBufferHelper->Read(ConnectNotify);
-
-	UINT32 ConType = ConnectNotify.btConType;
-
-	ConnectNotify.btConType =  TYPE_CLT_PLAYER;
-
-	ConnectNotify.u64ConnID = m_HostPlayer.GetObjectID();
-
-	CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
-
-	WriteHelper.BeginWrite(CMD_CONNECT_NOTIFY, CMDH_SVR_CON, 0, 0);
-
-	WriteHelper.Write(ConnectNotify);
-
-	WriteHelper.EndWrite();
-
-	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
-
-
-	if(ConType == TYPE_SVR_PROXY)
-	{
-		StCharEnterGameReq CharEnterGameReq;
-
-		CharEnterGameReq.u64CharID = m_HostPlayer.GetObjectID();
-
-		CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
-
-		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_REQ, CMDH_SENCE, 12, CharEnterGameReq.u64CharID);
-
-		WriteHelper.Write(CharEnterGameReq);
-
-		WriteHelper.EndWrite();
-
-		CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
-	}
-	else if(ConType == TYPE_SVR_LOGIN)
-	{
-		CDlgLogin DlgLogin;
-		DlgLogin.DoModal();
-	}
-
-	return 0;
-}
-
-
 
 UINT32 CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
@@ -252,24 +200,6 @@ BOOL CClientCmdHandler::SendNewAccountReq( LPCTSTR szAccountName, LPCTSTR szPass
 	return TRUE;
 }
 
-BOOL CClientCmdHandler::SendLoginReq( LPCTSTR szAccountName, LPCTSTR szPassword )
-{
-	StCharLoginReq CharLoginReq;
-	strncpy(CharLoginReq.szAccountName, szAccountName, 32);
-	strncpy(CharLoginReq.szPassword, szPassword, 32);
-
-	CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
-
-	WriteHelper.BeginWrite(CMD_CHAR_LOGIN_REQ, 0, 0, 0);
-
-	WriteHelper.Write(CharLoginReq);
-
-	WriteHelper.EndWrite();
-
-	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
-
-	return TRUE;
-}
 
 
 UINT32 CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )

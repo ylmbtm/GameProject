@@ -1,50 +1,50 @@
 ﻿#ifndef __NETWORK_MANAGER_H__
 #define __NETWORK_MANAGER_H__
-
-
 #include "IBufferHandler.h"
 
 #define BUFFSIZE 8192
 
 class CNetworkMgr
 {
-private:
+public:
 	CNetworkMgr(void);
 	virtual ~CNetworkMgr(void);
 
 public:
 	static CNetworkMgr* GetInstancePtr();
+
 public:
+	BOOL	InitNetSystem();
 
-	BOOL   InitNetSystem();
+	BOOL	DisConnect();
 
-	BOOL   DisConnect();
+	BOOL	IsConnected();
 
-	BOOL   IsConnected();
+	BOOL	ConnectToServer(std::string strIpAddr, UINT16 sPort);
 
-	BOOL   ConnectToServer(std::string strIpAddr, UINT16 sPort);
+	BOOL	OnTime();
 
-	BOOL   OnTime();
+	BOOL	ReceiveData();
 
-	BOOL   RecvData();
+	BOOL	ProcessData();
 
-	BOOL   ProcessData();
+	BOOL	SendData(CHAR *pData, UINT32 dwLen);
 
-	BOOL   SendData(char *pData, UINT32 dwLen);
+	BOOL	m_bConnected;
 
-	BOOL   m_bConnected;
+	SOCKET	m_hSocket;
 
-	SOCKET m_hSocket;
-
-	CHAR  m_Buffer[BUFFSIZE];
+	CHAR	m_Buffer[BUFFSIZE];
 
 	IDataBuffer  *m_pReadBuffer;
 
 	IDataBuffer  *m_pWriteBuffer;
 
-	int m_nDataLen;
+	INT32 m_nDataLen;
 
 	DWORD m_nLastError;
+
+	ICommandHandler *m_EngineMsgHandler;
 };
 
 

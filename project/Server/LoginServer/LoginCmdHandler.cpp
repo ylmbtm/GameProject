@@ -16,6 +16,7 @@
 #include "PacketDef/LoginPacket.h"
 #include "PacketDef/ClientPacket.h"
 #include "PacketDef/DBPacket.h"
+#include "Error.h"
 
 
 
@@ -185,7 +186,7 @@ UINT32 CLoginCmdHandler::OnCmdDBPickCharAck( UINT16 wCommandID, UINT64 u64ConnID
 	//3。将玩家应该进入的地图告诉玩家。
 
 	DBCharPickCharAck.CharPickCharAck.dwIdentifyCode = rand()%10000;
-	DBCharPickCharAck.CharPickCharAck.nRetCode  = 0;
+	DBCharPickCharAck.CharPickCharAck.nRetCode  = E_SUCCESSED;
 	strncpy(DBCharPickCharAck.CharPickCharAck.szIpAddr, "127.0.0.1", 32);
 	DBCharPickCharAck.CharPickCharAck.sPort		= 7200;
 

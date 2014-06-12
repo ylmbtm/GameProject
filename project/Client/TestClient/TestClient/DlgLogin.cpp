@@ -57,7 +57,7 @@ void CDlgLogin::OnBnClickedOk()
 {
 	UpdateData(TRUE);
 
-	CClientCmdHandler::GetInstancePtr()->SendLoginReq((LPCTSTR)m_strAccountName, (LPCTSTR)m_strPassword);
+	
 
 	OnOK();
 } 

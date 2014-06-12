@@ -86,14 +86,14 @@ BOOL CNetworkMgr::ConnectToServer(std::string strIpAddr, UINT16 sPort)
 
 BOOL CNetworkMgr::OnTime()
 {
-	RecvData();
+	ReceiveData();
 
 	ProcessData();
 
 	return TRUE;
 }
 
-BOOL CNetworkMgr::RecvData()
+BOOL CNetworkMgr::ReceiveData()
 {
 	int nReadLen = recv(m_hSocket, m_Buffer + m_nDataLen, BUFFSIZE - m_nDataLen, 0);
 	if(nReadLen < 0)
