@@ -5,10 +5,13 @@
 #include "DataBuffer\BufferHelper.h"
 #include "ConnectionType.h"
 #include "PacketDef\ClientPacket.h"
+#include "Error.h"
 
 ClientEngine::ClientEngine(void)
 {
 	m_u64ClientID = 0;
+	
+	m_NetworkMgr.m_EngineMsgHandler = (ICommandHandler *)this;
 }
 
 ClientEngine::~ClientEngine(void)
@@ -19,7 +22,7 @@ ClientEngine::~ClientEngine(void)
 
 BOOL ClientEngine::InitEngine()
 {
-	m_NetworkMgr.m_EngineMsgHandler = (ICommandHandler *)this;
+	
 
 	return TRUE;
 }
@@ -53,16 +56,20 @@ BOOL ClientEngine::SetLoginSvrInfo( char *szIpAddr, UINT16 sPort )
 
 BOOL ClientEngine::SendData( char *pData, UINT32 dwLen )
 {
+	m_NetworkMgr.SendData(pData, dwLen);
 
 	return TRUE;
 }
 
-BOOL ClientEngine::Login( char *pszAccountName, char *pszPassword )
+BOOL ClientEngine::Login(const char *pszAccountName, const char *pszPassword )
 {
 	if(!m_NetworkMgr.ConnectToServer(m_strLoginSvrIp, m_sLoginSvrPort))
 	{
 		return FALSE;
 	}
+
+	m_strAccountName = pszAccountName;
+	m_strPassword  = pszPassword;
 
 	return TRUE;
 }
@@ -97,10 +104,20 @@ BOOL ClientEngine::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CBuffer
 	{
 		PROCESS_COMMAND_ITEM_T(CMD_CONNECT_NOTIFY,		OnCmdConnectNotify);
 
+		PROCESS_COMMAND_ITEM_T(CMD_CHAR_PICK_CHAR_ACK,	OnCmdPickCharAck);
+
 
 	default:
 		{
+			for(std::vector<IMessageHandler*>::iterator itor = m_vtMsgHandler.begin(); itor != m_vtMsgHandler.end(); itor++)
+			{
+				IMessageHandler *pHandler = *itor;
 
+				if(pHandler->OnCommandHandle(wCommandID, u64ConnID, pBufferHelper))
+				{
+					break;
+				}
+			}
 		}
 		break;
 	}
@@ -162,6 +179,33 @@ UINT32 ClientEngine::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBu
 		WriteHelper.EndWrite();
 
 		m_NetworkMgr.SendData(m_NetworkMgr.m_pWriteBuffer->GetData(), m_NetworkMgr.m_pWriteBuffer->GetDataLenth());
+	}
+
+	return 0;
+}
+
+ClientEngine* ClientEngine::GetInstancePtr()
+{
+	static ClientEngine _Handler;
+
+	return &_Handler;
+}
+
+IDataBuffer* ClientEngine::GetWriteBuffer()
+{
+	return m_NetworkMgr.m_pWriteBuffer;
+}
+
+UINT32 ClientEngine::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StCharPickCharAck CharPickCharAck;
+	pBufferHelper->Read(CharPickCharAck);
+
+	if(CharPickCharAck.nRetCode == E_SUCCESSED)
+	{
+		m_NetworkMgr.DisConnect();
+		m_u64ClientID = CharPickCharAck.u64CharID;
+		m_NetworkMgr.ConnectToServer(CharPickCharAck.szIpAddr, CharPickCharAck.sPort);
 	}
 
 	return 0;

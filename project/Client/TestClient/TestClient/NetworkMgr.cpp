@@ -6,7 +6,6 @@
 #include "DataBuffer/DataBuffer.h"
 #include "PacketHeader.h"
 #include "DataBuffer/BufferHelper.h"
-#include "CommandHandler.h"
 #include "DataBuffer/BufferHelper.h"
 
 CNetworkMgr::CNetworkMgr(void)
@@ -20,10 +19,14 @@ CNetworkMgr::CNetworkMgr(void)
 	m_pReadBuffer	= new CDataBuffer<BUFFSIZE>;
 
 	m_pWriteBuffer	= new CDataBuffer<BUFFSIZE>;
+
+	CommonSocket::InitNetwork();
 }
 
 CNetworkMgr::~CNetworkMgr(void)
 {
+	CommonSocket::UninitNetwork();
+
 	if(m_pReadBuffer)
 	{
 		delete m_pReadBuffer;
@@ -34,24 +37,6 @@ CNetworkMgr::~CNetworkMgr(void)
 		delete m_pWriteBuffer;
 	}
 
-}
-
-CNetworkMgr* CNetworkMgr::GetInstancePtr()
-{
-	static CNetworkMgr _NetworkMgr;
-
-	return &_NetworkMgr;
-}
-
-BOOL CNetworkMgr::InitNetSystem()
-{
-	if(!CommonSocket::InitNetwork())
-	{
-		MessageBox(NULL, "网络初始化失败!", "错误提示", MB_OK);
-		return FALSE;
-	}
-
-	return TRUE;
 }
 
 BOOL CNetworkMgr::DisConnect()
@@ -227,7 +212,7 @@ BOOL CNetworkMgr::ProcessData()
 			return FALSE;
 		}
 
-		CClientCmdHandler::GetInstancePtr()->OnCommandHandle(pCommandHeader->wCommandID, 0, &BufferReader);
+		m_EngineMsgHandler->OnCommandHandle(pCommandHeader->wCommandID, 0, &BufferReader);
 	}
 
 	return TRUE;

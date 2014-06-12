@@ -6,7 +6,6 @@
 #include "TestClient.h"
 #include "TestClientDlg.h"
 #include "CommandHandler.h"
-#include "NetworkMgr.h"
 #include "DataBuffer\BufferHelper.h"
 #include "PacketDef\CommonPacket.h"
 #include "PacketDef\ClientPacket.h"
@@ -117,7 +116,7 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 		_MoveGs.y = CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.y;
 		_MoveGs.z = CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.z;
 
-		CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
+		CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
 
 		WriteHelper.BeginWrite(CMD_ROLE_MOVE, CMDH_SENCE, 12, CClientCmdHandler::GetInstancePtr()->m_HostPlayer.GetObjectID());
 
@@ -125,7 +124,7 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 
 		WriteHelper.EndWrite();
 
-		CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
+		ClientEngine::GetInstancePtr()->SendData(ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetData(), ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetDataLenth());
 
 		//CString strText;
 		//strText.Format("当前角色:%d, 坐标x = %f, z= %f", (UINT32)CClientCmdHandler::GetInstancePtr()->m_HostPlayer.GetObjectID(),

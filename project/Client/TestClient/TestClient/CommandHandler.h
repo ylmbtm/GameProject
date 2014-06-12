@@ -34,7 +34,6 @@ public:
 
 	UINT32 OnCmdNewAccountAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	UINT32 OnCmdNewCharAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
-	UINT32 OnCmdPickCharAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
 
 	//CMD_CHAR_NEARBY_ADD,			//添加周围的对象
@@ -52,8 +51,6 @@ public:
 	CPlayerObjectMgr m_PlayerObjMgr;
 
 	CDlgSelect DlgSelect;
-
-	ClientEngine m_ClientEngine;
 };
 
 

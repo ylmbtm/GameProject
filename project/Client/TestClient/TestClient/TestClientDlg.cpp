@@ -5,7 +5,6 @@
 #include "stdafx.h"
 #include "TestClient.h"
 #include "TestClientDlg.h"
-#include "NetworkMgr.h"
 #include "PacketDef/ClientPacket.h"
 #include "DataBuffer/BufferHelper.h"
 #include "CommandDef.h"
@@ -119,15 +118,14 @@ BOOL CTestClientDlg::OnInitDialog()
 	rcClient.bottom -=2;
 	m_DlgGame.MoveWindow(rcClient);
 
-	CNetworkMgr::GetInstancePtr()->InitNetSystem();
-
 	SetTimer(1, 25, NULL);
 
 	AllocConsole();
 
 	freopen("CONOUT$","w+t",stdout);   
 
-	
+	ClientEngine::GetInstancePtr()->SetClientID(0);
+	ClientEngine::GetInstancePtr()->SetLoginSvrInfo("127.0.0.1", 7994);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -209,7 +207,7 @@ void CTestClientDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 
-	CNetworkMgr::GetInstancePtr()->OnTime();
+	ClientEngine::GetInstancePtr()->Render();
 
 	CDialog::OnTimer(nIDEvent);
 
@@ -222,19 +220,18 @@ void CTestClientDlg::OnTimer(UINT_PTR nIDEvent)
 
 void CTestClientDlg::OnDisconnect()
 { 
-	CDlgSelect DlgSelect;
-	DlgSelect.DoModal();
 	// TODO: 在此添加命令处理程序代码
-	//CNetworkMgr::GetInstancePtr()->DisConnect();
+	
 }
 
 void CTestClientDlg::OnConnect()
 {
-	CNetworkMgr::GetInstancePtr()->ConnectToServer("127.0.0.1", 7994);
+	
 }
 
 void CTestClientDlg::OnLeaveGame()
 {
+	/*
 	StCharLeaveGameReq CharLeaveGameReq;
 
 	CharLeaveGameReq.dwLeaveReason = 1;
@@ -247,7 +244,7 @@ void CTestClientDlg::OnLeaveGame()
 
 	WriteHelper.EndWrite();
 
-	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
+	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());*/
 }
 
 void CTestClientDlg::OnNewAccount()

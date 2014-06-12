@@ -10,10 +10,13 @@ struct IMessageHandler
 
 class ClientEngine : public ICommandHandler
 {
-public:
+private:
 	ClientEngine();
 
 	~ClientEngine();
+
+public:
+	static ClientEngine* GetInstancePtr();
 
 	BOOL InitEngine();
 
@@ -25,7 +28,9 @@ public:
 
 	BOOL SendData(char *pData, UINT32 dwLen);
 
-	BOOL Login(char *pszAccountName, char *pszPassword);
+	IDataBuffer* GetWriteBuffer();
+
+	BOOL Login(const char *pszAccountName, const char *pszPassword);
 
 	BOOL RegisterNetHandler(IMessageHandler *pMsgHandler);
 
@@ -36,6 +41,8 @@ public:
 	BOOL OnUpdate(UINT32 dwTick){return TRUE;};
 
 	UINT32 OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+
+	UINT32 OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper );
 protected:
 
 	UINT64				m_u64ClientID;

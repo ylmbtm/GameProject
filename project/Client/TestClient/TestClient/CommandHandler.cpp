@@ -4,7 +4,6 @@
 #include "PacketDef/TransferPacket.h"
 #include "DataBuffer/BufferHelper.h"
 #include "ConnectionType.h"
-#include "NetworkMgr.h"
 #include "PacketDef/ClientPacket.h"
 #include "resource.h"
 #include "TestClientDlg.h"
@@ -15,7 +14,7 @@
 
 CClientCmdHandler::CClientCmdHandler(void)
 {
-	m_ClientEngine.RegisterNetHandler((IMessageHandler*)this);
+	ClientEngine::GetInstancePtr()->RegisterNetHandler((IMessageHandler*)this);
 }
 
 CClientCmdHandler::~CClientCmdHandler(void)
@@ -34,7 +33,6 @@ BOOL CClientCmdHandler::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CB
 	switch(wCommandID)
 	{
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_LOGIN_ACK,		OnCmdLoginGameAck);
-		PROCESS_COMMAND_ITEM_T(CMD_CHAR_PICK_CHAR_ACK,	OnCmdPickCharAck);
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_NEW_CHAR_ACK,	OnCmdNewCharAck);
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_NEW_ACCOUNT_ACK,OnCmdNewAccountAck);
 
@@ -187,7 +185,7 @@ BOOL CClientCmdHandler::SendNewAccountReq( LPCTSTR szAccountName, LPCTSTR szPass
 	strncpy(CharNewAccountReq.szAccountName, szAccountName, 32);
 	strncpy(CharNewAccountReq.szPassword, szPassword, 32);
 
-	CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
+	CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
 
 	WriteHelper.BeginWrite(CMD_CHAR_NEW_ACCOUNT_REQ, 0, 0, 0);
 
@@ -195,7 +193,7 @@ BOOL CClientCmdHandler::SendNewAccountReq( LPCTSTR szAccountName, LPCTSTR szPass
 
 	WriteHelper.EndWrite();
 
-	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
+	ClientEngine::GetInstancePtr()->SendData(ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetData(), ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetDataLenth());
 
 	return TRUE;
 }
@@ -233,7 +231,7 @@ BOOL CClientCmdHandler::SendPickCharReq( UINT64 u64CharID )
 	StCharPickCharReq CharPickCharReq;
 	CharPickCharReq.u64CharID = u64CharID;
 
-	CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
+	CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
 
 	WriteHelper.BeginWrite(CMD_CHAR_PICK_CHAR_REQ, 0, 0, 0);
 
@@ -241,24 +239,9 @@ BOOL CClientCmdHandler::SendPickCharReq( UINT64 u64CharID )
 
 	WriteHelper.EndWrite();
 
-	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
+	ClientEngine::GetInstancePtr()->SendData(ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetData(), ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetDataLenth());
 
 	return TRUE;
-}
-
-UINT32 CClientCmdHandler::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
-{
-	StCharPickCharAck CharPickCharAck;
-	pBufferHelper->Read(CharPickCharAck);
-
-	if(CharPickCharAck.nRetCode == E_SUCCESSED)
-	{
-		CNetworkMgr::GetInstancePtr()->DisConnect();
-		m_HostPlayer.SetObjectID(CharPickCharAck.u64CharID);
-		CNetworkMgr::GetInstancePtr()->ConnectToServer(CharPickCharAck.szIpAddr, CharPickCharAck.sPort);
-	}
-
-	return 0;
 }
 
 
@@ -284,7 +267,7 @@ BOOL CClientCmdHandler::SendNewCharReq( UINT32 dwAccountID , LPCTSTR szCharName,
 	CharNewCharReq.dwFeature = dwFeature;
 	CharNewCharReq.dwAccountID = dwAccountID;
 	strncpy(CharNewCharReq.szCharName, szCharName, 32);
-	CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
+	CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
 
 	WriteHelper.BeginWrite(CMD_CHAR_NEW_CHAR_REQ, 0, 0, 0);
 
@@ -292,7 +275,7 @@ BOOL CClientCmdHandler::SendNewCharReq( UINT32 dwAccountID , LPCTSTR szCharName,
 
 	WriteHelper.EndWrite();
 
-	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());
+	ClientEngine::GetInstancePtr()->SendData(ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetData(), ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetDataLenth());
 
 	return TRUE;
 }

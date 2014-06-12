@@ -11,11 +11,6 @@ public:
 	virtual ~CNetworkMgr(void);
 
 public:
-	static CNetworkMgr* GetInstancePtr();
-
-public:
-	BOOL	InitNetSystem();
-
 	BOOL	DisConnect();
 
 	BOOL	IsConnected();

@@ -5,7 +5,7 @@
 #include "TestClient.h"
 #include "DlgLogin.h"
 #include "PacketDef/CommonPacket.h"
-#include "NetworkMgr.h"
+
 #include "CommandDef.h"
 #include "DataBuffer/BufferHelper.h"
 #include "CommandHandler.h"
@@ -57,7 +57,7 @@ void CDlgLogin::OnBnClickedOk()
 {
 	UpdateData(TRUE);
 
-	
+	ClientEngine::GetInstancePtr()->Login((LPCTSTR)m_strAccountName, (LPCTSTR)m_strPassword);
 
 	OnOK();
 } 
@@ -65,5 +65,5 @@ void CDlgLogin::OnBnClickedOk()
 
 void CDlgLogin::OnBnClickedBtnConnect()
 {
-	CNetworkMgr::GetInstancePtr()->ConnectToServer("127.0.0.1", 7994);
+	
 }
