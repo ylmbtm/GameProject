@@ -23,6 +23,11 @@ BOOL CDBProcManager::InitManager()
 
 BOOL CDBProcManager::CreateAccount( char *szAccount, char *szPassword )
 {
+	if(0 != VerifyAccount(szAccount, szPassword))
+	{
+		return FALSE;
+	}
+
 	CHAR szSql[MAX_PATH];
 
 	sprintf(szSql, "insert into t_accountinfo(F_AccountName, F_Password) values('%s', '%s')", szAccount, szPassword);
@@ -71,7 +76,6 @@ UINT32 CDBProcManager::VerifyAccount( char *szAccount, char *szPassword )
 	while(!QueryRes.eof())  
 	{  
 		return QueryRes.getIntField("F_AccountID", 0);
-		QueryRes.nextRow();
 	}  
 	
 	return 0;
@@ -79,6 +83,11 @@ UINT32 CDBProcManager::VerifyAccount( char *szAccount, char *szPassword )
 
 BOOL CDBProcManager::CreateNewChar(StCharNewCharReq &Req,  StCharNewCharAck &Ack)
 {
+	if(GetCharID(Req.szCharName) != 0)
+	{
+		return FALSE;
+	}
+
 	CHAR szSql[MAX_PATH];
 
 	sprintf(szSql, "insert into t_charinfo(F_AccountID, F_Name, F_Feature) values('%d', '%s','%d')", Req.dwAccountID, Req.szCharName, Req.dwFeature);
@@ -107,6 +116,22 @@ BOOL CDBProcManager::CreateNewChar(StCharNewCharReq &Req,  StCharNewCharAck &Ack
 
 UINT32 CDBProcManager::GetMaxAccountID()
 {
+
+	return 0;
+}
+
+UINT64 CDBProcManager::GetCharID( char *szCharName )
+{
+	CHAR szSql[MAX_PATH];
+
+	sprintf(szSql, "select * from t_charinfo where F_CharName ='%s'", szCharName);
+
+	CppSQLite3Query QueryRes = m_DBConnection.execQuery(szSql);
+
+	while(!QueryRes.eof())  
+	{  
+		return QueryRes.getInt64Field("F_CharID", 0);
+	}  
 
 	return 0;
 }

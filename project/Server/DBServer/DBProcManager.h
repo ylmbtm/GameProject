@@ -17,8 +17,10 @@ public:
 	//create new a account
 	BOOL CreateAccount(char *szAccount, char *szPassword);
 
-	//验证成功返回账号ID
+	//VerifyAccount
 	UINT32 VerifyAccount(char *szAccount, char *szPassword);
+
+	UINT64 GetCharID(char *szCharName);
 
 	//load account char info
 	BOOL   LoadAccountCharInfo(UINT32 dwAccountID, StCharLoginAck &Ack);
