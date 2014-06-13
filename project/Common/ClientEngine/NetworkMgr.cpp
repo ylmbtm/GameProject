@@ -1,11 +1,8 @@
 ﻿#include "stdafx.h"
 #include "NetworkMgr.h"
-#include "Utility/CommonSocket.h"
-#include "resource.h"
-#include "TestClientDlg.h"
-#include "DataBuffer/DataBuffer.h"
 #include "PacketHeader.h"
-#include "DataBuffer/BufferHelper.h"
+#include "Utility/CommonSocket.h"
+#include "DataBuffer/DataBuffer.h"
 #include "DataBuffer/BufferHelper.h"
 
 CNetworkMgr::CNetworkMgr(void)

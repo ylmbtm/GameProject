@@ -5,7 +5,7 @@
 #include "CommandDef.h"
 #include "PlayerObject.h"
 #include "DlgSelect.h"
-#include "ClientEngine.h"
+#include "ClientEngine\ClientEngine.h"
 
 class CClientCmdHandler : public IMessageHandler
 {

@@ -192,10 +192,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ClientEngine.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\CommandHandler.cpp"
 				>
 			</File>
@@ -213,10 +209,6 @@
 			</File>
 			<File
 				RelativePath=".\DlgSelect.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NetworkMgr.cpp"
 				>
 			</File>
 			<File
@@ -274,10 +266,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ClientEngine.h"
-				>
-			</File>
-			<File
 				RelativePath=".\CommandHandler.h"
 				>
 			</File>
@@ -295,10 +283,6 @@
 			</File>
 			<File
 				RelativePath=".\DlgSelect.h"
-				>
-			</File>
-			<File
-				RelativePath=".\NetworkMgr.h"
 				>
 			</File>
 			<File
@@ -381,6 +365,26 @@
 			</File>
 			<File
 				RelativePath="..\..\..\Common\DataBuffer\DataBuffer.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="ClientEngine"
+			>
+			<File
+				RelativePath="..\..\..\Common\ClientEngine\ClientEngine.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\Common\ClientEngine\ClientEngine.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\Common\ClientEngine\NetworkMgr.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\Common\ClientEngine\NetworkMgr.h"
 				>
 			</File>
 		</Filter>
