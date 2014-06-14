@@ -22,6 +22,8 @@ public:
 
 	UINT64 GetCharID(char *szCharName);
 
+	UINT32 GetAccountID(char *szAccount);
+
 	//load account char info
 	BOOL   LoadAccountCharInfo(UINT32 dwAccountID, StCharLoginAck &Ack);
 

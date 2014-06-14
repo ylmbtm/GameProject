@@ -34,7 +34,7 @@ public:
 
 	BOOL Login(const char *pszAccountName, const char *pszPassword);
 
-	BOOL RegisterNetHandler(IMessageHandler *pMsgHandler);
+	BOOL RegisterMsgHandler(IMessageHandler *pMsgHandler);
 
 	BOOL Render();
 

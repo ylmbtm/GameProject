@@ -23,7 +23,7 @@ BOOL CDBProcManager::InitManager()
 
 BOOL CDBProcManager::CreateAccount( char *szAccount, char *szPassword )
 {
-	if(0 != VerifyAccount(szAccount, szPassword))
+	if(0 != GetAccountID(szAccount))
 	{
 		return FALSE;
 	}
@@ -125,6 +125,22 @@ UINT64 CDBProcManager::GetCharID( char *szCharName )
 	CHAR szSql[MAX_PATH];
 
 	sprintf(szSql, "select * from t_charinfo where F_CharName ='%s'", szCharName);
+
+	CppSQLite3Query QueryRes = m_DBConnection.execQuery(szSql);
+
+	while(!QueryRes.eof())  
+	{  
+		return QueryRes.getInt64Field("F_CharID", 0);
+	}  
+
+	return 0;
+}
+
+UINT32 CDBProcManager::GetAccountID( char *szAccount )
+{
+	CHAR szSql[MAX_PATH];
+
+	sprintf(szSql, "select * from t_accountinfo where F_AccountName ='%s'", szAccount);
 
 	CppSQLite3Query QueryRes = m_DBConnection.execQuery(szSql);
 

@@ -77,7 +77,7 @@ BOOL ClientEngine::Login(const char *pszAccountName, const char *pszPassword)
 	return TRUE;
 }
 
-BOOL ClientEngine::RegisterNetHandler(IMessageHandler *pMsgHandler)
+BOOL ClientEngine::RegisterMsgHandler(IMessageHandler *pMsgHandler)
 {
 	for(std::vector<IMessageHandler*>::iterator itor = m_vtMsgHandler.begin(); itor != m_vtMsgHandler.end(); itor++)
 	{

@@ -31,7 +31,7 @@ public:
 
 	//*********************消息处理定义结束******************************
 
-	std::map<UINT64, StRegisterToCenterSvr> m_vtActiveSvrList;
+	std::map<UINT64, StSvrServerInfo> m_vtActiveSvrList;
 };
 
 #endif //_SERVER_CMD_HANDLER_H_

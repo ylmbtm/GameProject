@@ -72,9 +72,7 @@ UINT32 CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID
 	if(ConnectNotify.btConType == TYPE_SVR_CENTER)
 	{
 		// 发送其它服务器的请求信息	
-
-		StRegisterToCenterSvr RegisterToCenterSvr;
-
+		StSvrServerInfo RegisterToCenterSvr;
 		RegisterToCenterSvr.dwSvrID = CGlobalConfig::GetInstancePtr()->m_dwServerID;
 		RegisterToCenterSvr.dwType = CGlobalConfig::GetInstancePtr()->m_dwServerType;
 		strncpy(RegisterToCenterSvr.szIpAddr, CGlobalConfig::GetInstancePtr()->m_strIpAddr.c_str(), 32);
@@ -103,7 +101,7 @@ UINT32 CServerCmdHandler::OnCmdRegisterToCenter(UINT16 wCommandID, UINT64 u64Con
 
 	WriteHelper.Write(nCount);
 
-	for(std::map<UINT64, StRegisterToCenterSvr>::iterator itor = m_vtActiveSvrList.begin(); itor != m_vtActiveSvrList.end(); itor++)
+	for(std::map<UINT64, StSvrServerInfo>::iterator itor = m_vtActiveSvrList.begin(); itor != m_vtActiveSvrList.end(); itor++)
 	{
 		WriteHelper.Write(itor->second);
 	}
@@ -112,7 +110,7 @@ UINT32 CServerCmdHandler::OnCmdRegisterToCenter(UINT16 wCommandID, UINT64 u64Con
 	
 	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 
-	StRegisterToCenterSvr RegisterToCenterSvr; 
+	StSvrServerInfo RegisterToCenterSvr; 
 
 	pBufferHelper->Read(RegisterToCenterSvr);
 
@@ -129,7 +127,7 @@ UINT32 CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID
 
 	pBufferHelper->Read(dwCount);
 
-	StRegisterToCenterSvr RegisterToCenterSvr;
+	StSvrServerInfo RegisterToCenterSvr;
 	for(UINT32 i = 0; i < dwCount; i++)
 	{
 		pBufferHelper->Read(RegisterToCenterSvr);

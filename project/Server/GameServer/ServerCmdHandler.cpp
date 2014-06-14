@@ -68,7 +68,7 @@ UINT32 CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID
 	if(ConnectNotify.btConType == TYPE_SVR_CENTER)
 	{
 		// 发送其它服务器的请求信息	
-		StRegisterToCenterSvr RegisterToCenterSvr;
+		StSvrServerInfo RegisterToCenterSvr;
 
 		RegisterToCenterSvr.dwSvrID = CGlobalConfig::GetInstancePtr()->m_dwServerID;
 		RegisterToCenterSvr.dwType = CGlobalConfig::GetInstancePtr()->m_dwServerType;
@@ -99,7 +99,7 @@ UINT32 CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID
 
 	pBufferHelper->Read(dwCount);
 
-	StRegisterToCenterSvr RegisterToCenterSvr;
+	StSvrServerInfo RegisterToCenterSvr;
 	for(UINT32 i = 0; i < dwCount; i++)
 	{
 		pBufferHelper->Read(RegisterToCenterSvr);

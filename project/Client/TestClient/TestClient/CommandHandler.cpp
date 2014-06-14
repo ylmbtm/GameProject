@@ -14,7 +14,7 @@
 
 CClientCmdHandler::CClientCmdHandler(void)
 {
-	ClientEngine::GetInstancePtr()->RegisterNetHandler((IMessageHandler*)this);
+	ClientEngine::GetInstancePtr()->RegisterMsgHandler((IMessageHandler*)this);
 }
 
 CClientCmdHandler::~CClientCmdHandler(void)

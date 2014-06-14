@@ -4,20 +4,13 @@
 #pragma  pack(push)
 #pragma  pack(1)
 
-struct StRegisterToCenterSvr
+struct StSvrServerInfo
 {
 	UINT32	dwSvrID;	//服务器ID
 	UINT8   dwType;	//服务器或玩家的类型
 	UINT16  sPort;
 	CHAR	szIpAddr[32];
 };
-
-struct StActiveSvrList
-{
-	UINT32 dwCount;
-	StRegisterToCenterSvr SvrInfo[10];
-};
-
 
 struct StCharWillEnterGame
 {
