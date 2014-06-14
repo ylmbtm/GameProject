@@ -41,35 +41,38 @@ BOOL ClientEngine::SetClientID( UINT64 u64ClientID )
 	return TRUE;
 }
 
-BOOL ClientEngine::SetLoginSvrInfo( char *szIpAddr, UINT16 sPort )
+BOOL ClientEngine::SendData( char *pData, UINT32 dwLen )
 {
-	if((szIpAddr == NULL)||(sPort == 0))
+	if((pData == NULL)||(dwLen == 0))
 	{
 		return FALSE;
 	}
 
-	m_strLoginSvrIp = szIpAddr;
-	m_sLoginSvrPort = sPort;
-
-	return TRUE;
-}
-
-BOOL ClientEngine::SendData( char *pData, UINT32 dwLen )
-{
 	m_NetworkMgr.SendData(pData, dwLen);
 
 	return TRUE;
 }
 
-BOOL ClientEngine::Login(const char *pszAccountName, const char *pszPassword )
+BOOL ClientEngine::Login(const char *pszAccountName, const char *pszPassword)
 {
-	if(!m_NetworkMgr.ConnectToServer(m_strLoginSvrIp, m_sLoginSvrPort))
+	if((pszPassword == NULL)||(pszAccountName == NULL))
 	{
 		return FALSE;
 	}
 
-	m_strAccountName = pszAccountName;
-	m_strPassword  = pszPassword;
+	StCharLoginReq CharLoginReq;
+	strncpy(CharLoginReq.szAccountName, pszAccountName, 32);
+	strncpy(CharLoginReq.szPassword, pszPassword, 32);
+
+	CBufferHelper WriteHelper(TRUE, m_NetworkMgr.m_pWriteBuffer);
+
+	WriteHelper.BeginWrite(CMD_CHAR_LOGIN_REQ, 0, 0, 0);
+
+	WriteHelper.Write(CharLoginReq);
+
+	WriteHelper.EndWrite();
+
+	m_NetworkMgr.SendData(m_NetworkMgr.m_pWriteBuffer->GetData(), m_NetworkMgr.m_pWriteBuffer->GetDataLenth());
 
 	return TRUE;
 }
@@ -91,9 +94,7 @@ BOOL ClientEngine::RegisterNetHandler(IMessageHandler *pMsgHandler)
 
 BOOL ClientEngine::Render()
 {
-	m_NetworkMgr.ReceiveData();
-
-	m_NetworkMgr.ProcessData();
+	m_NetworkMgr.ProcessOnce();
 
 	return TRUE;
 }
@@ -166,19 +167,7 @@ UINT32 ClientEngine::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBu
 	}
 	else if(ConType == TYPE_SVR_LOGIN)
 	{
-		StCharLoginReq CharLoginReq;
-		strncpy(CharLoginReq.szAccountName, m_strAccountName.c_str(), 32);
-		strncpy(CharLoginReq.szPassword, m_strPassword.c_str(), 32);
-
-		CBufferHelper WriteHelper(TRUE, m_NetworkMgr.m_pWriteBuffer);
-
-		WriteHelper.BeginWrite(CMD_CHAR_LOGIN_REQ, 0, 0, 0);
-
-		WriteHelper.Write(CharLoginReq);
-
-		WriteHelper.EndWrite();
-
-		m_NetworkMgr.SendData(m_NetworkMgr.m_pWriteBuffer->GetData(), m_NetworkMgr.m_pWriteBuffer->GetDataLenth());
+		m_NetworkMgr.SetConnectState(Succ_Connect);
 	}
 
 	return 0;
@@ -209,6 +198,16 @@ UINT32 ClientEngine::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	}
 
 	return 0;
+}
+
+BOOL ClientEngine::ConnectToServer( std::string strIpAddr, UINT16 sPort )
+{
+	return m_NetworkMgr.ConnectToServer(strIpAddr, sPort);
+}
+
+BOOL ClientEngine::DisConnect()
+{
+	return m_NetworkMgr.DisConnect();
 }
 
 

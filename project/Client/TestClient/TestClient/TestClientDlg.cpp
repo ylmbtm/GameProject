@@ -125,7 +125,7 @@ BOOL CTestClientDlg::OnInitDialog()
 	freopen("CONOUT$","w+t",stdout);   
 
 	ClientEngine::GetInstancePtr()->SetClientID(0);
-	ClientEngine::GetInstancePtr()->SetLoginSvrInfo("127.0.0.1", 7994);
+	ClientEngine::GetInstancePtr()->ConnectToServer("127.0.0.1", 7994);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -210,12 +210,6 @@ void CTestClientDlg::OnTimer(UINT_PTR nIDEvent)
 	ClientEngine::GetInstancePtr()->Render();
 
 	CDialog::OnTimer(nIDEvent);
-
-	//HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE); //本例以输出为例
-
-	//WriteConsole(hCon, "afdsfsd", 10, NULL,NULL);
-
-	//printf("afdsfdsfsdfsa");
 }
 
 void CTestClientDlg::OnDisconnect()

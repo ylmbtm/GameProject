@@ -11,7 +11,7 @@ CNetworkMgr::CNetworkMgr(void)
 
 	m_nDataLen		= 0;
 
-	m_bConnected	= FALSE;
+	m_ConnectState	= Not_Connect;
 
 	m_pReadBuffer	= new CDataBuffer<BUFFSIZE>;
 
@@ -38,39 +38,44 @@ CNetworkMgr::~CNetworkMgr(void)
 
 BOOL CNetworkMgr::DisConnect()
 {
+	CommonSocket::ShutDownRecv(m_hSocket);
+	CommonSocket::ShutDownSend(m_hSocket);
 	CommonSocket::CloseSocket(m_hSocket);
 
-	m_bConnected = FALSE;
+	m_ConnectState = Not_Connect;
 
 	return FALSE;
 }
 
 BOOL CNetworkMgr::ConnectToServer(std::string strIpAddr, UINT16 sPort)
 {
+	SetConnectState(Start_Connect);
+
 	m_hSocket = CommonSocket::CreateSocket(AF_INET, SOCK_STREAM, 0);
 	if((m_hSocket == INVALID_SOCKET)||(m_hSocket == NULL))
 	{
-		MessageBox(NULL, "创建套接字失败!", "错误提示", MB_OK);
+		printf("创建套接字失败!\n");
+
+		SetConnectState(Not_Connect);
+
 		return FALSE;
 	}
 
 
 	if(!CommonSocket::ConnectSocket(m_hSocket, strIpAddr.c_str(), sPort))
 	{
-		MessageBox(NULL, "连接服务器失败!", "错误提示", MB_OK);
+		printf("连接服务器失败!\n");
+
+		SetConnectState(Not_Connect);
+
+		CommonSocket::CloseSocket(m_hSocket);
+
 		return FALSE;
 	}
 	
 	CommonSocket::SetSocketUnblock(m_hSocket);
 
-	return TRUE;
-}
-
-BOOL CNetworkMgr::OnTime()
-{
-	ReceiveData();
-
-	ProcessData();
+	SetConnectState(Raw_Connect);
 
 	return TRUE;
 }
@@ -83,54 +88,23 @@ BOOL CNetworkMgr::ReceiveData()
 		DWORD nError = CommonSocket::GetSocketLastError();
 		if(nError == WSAEWOULDBLOCK)
 		{
-			//如果没有连接，表明连接成功
-			if(!m_bConnected)
-			{
-				m_bConnected = TRUE;
 
-				printf("连接成功1!");
-			}
-
-			if(nError != m_nLastError)
-			{
-				printf("接收数据发生错误:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
-
-				m_nLastError = nError;
-			}
 		}
 		else 
 		{
-			if(nError != m_nLastError)
-			{
-				printf("接收数据发生错误:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
-
-				m_nLastError = nError;
-			}
-
-			if(m_bConnected)
-			{
-				m_bConnected = FALSE;
-			}
+			printf("接收数据发生错误:%s!\n", CommonSocket::GetLastErrorStr(nError).c_str());
 		}
 	}
 	else if(nReadLen == 0)
 	{
-		printf("对方关闭了连接!");
+		printf("对方关闭了连接!\n");
 
-		if(m_bConnected)
-		{
-			m_bConnected = FALSE;
-		}
+		SetConnectState(Not_Connect); 
+
+		CommonSocket::CloseSocket(m_hSocket);
 	}
 	else
 	{
-		if(!m_bConnected)
-		{
-			m_bConnected = TRUE;
-
-			printf("连接成功2!， 收到%d字节数据", nReadLen);
-		}
-
 		m_nDataLen += nReadLen;
 	}
 	
@@ -140,8 +114,10 @@ BOOL CNetworkMgr::ReceiveData()
 
 BOOL CNetworkMgr::SendData( char *pData, UINT32 dwLen )
 {
-	if(!m_bConnected)
+	if((m_ConnectState != Succ_Connect)&&(m_ConnectState != Raw_Connect))
 	{
+		printf("没有连接服务器!\n");
+
 		return FALSE;
 	}
 
@@ -149,12 +125,8 @@ BOOL CNetworkMgr::SendData( char *pData, UINT32 dwLen )
 	if(nWriteLen < 0)
 	{
 		DWORD nError = CommonSocket::GetSocketLastError();
-		if(nError != m_nLastError)
-		{
-			printf("发送数据发生错误:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
 
-			m_nLastError = nError;
-		}
+		printf("发送数据发生错误:%s!\n", CommonSocket::GetLastErrorStr(nError).c_str());
 
 		return FALSE;
 	}
@@ -162,18 +134,13 @@ BOOL CNetworkMgr::SendData( char *pData, UINT32 dwLen )
 	{
 		if(nWriteLen < dwLen)
 		{
-			m_bConnected = FALSE;
-
+			SetConnectState(Not_Connect);
+			CommonSocket::CloseSocket(m_hSocket);
 			return FALSE;
 		}
 	}
 	
 	return TRUE;
-}
-
-BOOL CNetworkMgr::IsConnected()
-{
-	return m_bConnected;
 }
 
 BOOL CNetworkMgr::ProcessData()
@@ -213,6 +180,52 @@ BOOL CNetworkMgr::ProcessData()
 	}
 
 	return TRUE;
+}
+
+BOOL CNetworkMgr::ProcessOnce()
+{
+	if(m_ConnectState == Not_Connect)
+	{
+		return FALSE;
+	}
+
+	if(m_ConnectState == Start_Connect)
+	{
+		return FALSE;
+	}
+
+	if(m_ConnectState == Raw_Connect)
+	{
+
+	}
+
+	ReceiveData();
+
+	ProcessData();
+
+	return TRUE;
+}
+
+void CNetworkMgr::SetConnectState( ConnectState val )
+{
+	if(val == Not_Connect)
+	{
+		printf("设置未连接!\n");
+	}
+	else if(val == Start_Connect)
+	{
+		printf("设置开始连接!\n");
+	}
+	else if(val == Raw_Connect)
+	{
+		printf("设置己完成原始连接!\n");
+	}
+	else if(val == Succ_Connect)
+	{
+		printf("设置连接成功!\n");
+	}
+	
+	m_ConnectState = val;
 }
 
 

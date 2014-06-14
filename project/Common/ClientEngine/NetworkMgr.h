@@ -1,9 +1,16 @@
 ﻿#ifndef __NETWORK_MANAGER_H__
 #define __NETWORK_MANAGER_H__
-
 #include "IBufferHandler.h"
 
 #define BUFFSIZE 8192
+
+enum ConnectState
+{
+	Not_Connect,
+	Start_Connect,
+	Raw_Connect,
+	Succ_Connect
+};
 
 class CNetworkMgr
 {
@@ -14,8 +21,6 @@ public:
 public:
 	BOOL	DisConnect();
 
-	BOOL	IsConnected();
-
 	BOOL	ConnectToServer(std::string strIpAddr, UINT16 sPort);
 
 	BOOL	OnTime();
@@ -24,10 +29,13 @@ public:
 
 	BOOL	ProcessData();
 
+	BOOL    ProcessOnce();
+
 	BOOL	SendData(CHAR *pData, UINT32 dwLen);
 
-	BOOL	m_bConnected;
+	ConnectState m_ConnectState;
 
+	void SetConnectState(ConnectState val);
 	SOCKET	m_hSocket;
 
 	CHAR	m_Buffer[BUFFSIZE];
@@ -37,8 +45,6 @@ public:
 	IDataBuffer  *m_pWriteBuffer;
 
 	INT32 m_nDataLen;
-
-	DWORD m_nLastError;
 
 	ICommandHandler *m_EngineMsgHandler;
 };
