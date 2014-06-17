@@ -2,6 +2,7 @@
 #define _GAME_SERVICE_H_
 #include "ServiceBase.h"
 #include "ServerCmdHandler.h"
+#include "CharWillEnterList.h"
 class  CStaticPlayer;
 class  CConnection;
 
@@ -32,6 +33,8 @@ public:
 public:
 	//处理普通的网络连接
 	CServerCmdHandler   m_ServerCmdHandler;
+
+	CWillEnterNodeMgr   m_WillEnterNodeMgr;
 };
 
 #endif

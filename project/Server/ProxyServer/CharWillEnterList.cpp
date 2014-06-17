@@ -30,40 +30,19 @@ CWillEnterNodeMgr::~CWillEnterNodeMgr(void)
 {
 }
 
-CWillEnterNodeMgr* CWillEnterNodeMgr::GetInstancePtr()
-{
-	static CWillEnterNodeMgr _WillEnterNodeMgr;
-
-	return &_WillEnterNodeMgr;
-}
-
 CWillEnterNode* CWillEnterNodeMgr::GetByCharID(UINT64 u64CharID)
 {
-	iterator itor = find(u64CharID);
-	if(itor != end())
-	{
-		return itor->second;
-	}
-
-	return NULL;
+	return GetByKey(u64CharID);
 }
 
 CWillEnterNode* CWillEnterNodeMgr::CreateWillEnterNode(UINT64 u64CharID)
 {
-	CWillEnterNode *pWillEnterNode = new CWillEnterNode;
-
-	pWillEnterNode->m_u64CharID = u64CharID;
-
-	insert(std::make_pair(u64CharID, pWillEnterNode));
-
-	return pWillEnterNode;
+	return InsertAlloc(u64CharID);
 }
 
 BOOL CWillEnterNodeMgr::RemoveByCharID(UINT64 u64CharID)
 {
-	erase(u64CharID);
-
-	return TRUE;
+	return Delete(u64CharID);;
 }
 
 

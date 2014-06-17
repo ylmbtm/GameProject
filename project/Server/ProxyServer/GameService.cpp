@@ -9,7 +9,6 @@
 #include "DataBuffer/BufferHelper.h"
 #include "StaticPlayerMgr.h"
 #include "PacketDef/ClientPacket.h"
-#include "CharWillEnterList.h"
 
 CGameService::CGameService(void)
 {
@@ -42,7 +41,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 	{
 	case CMD_CHAR_ENTER_GAME_REQ:
 		{
-			CWillEnterNode *pWillEnterNode = CWillEnterNodeMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
+			CWillEnterNode *pWillEnterNode = m_WillEnterNodeMgr.GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
 			if(pWillEnterNode == NULL)
 			{
 				break;
@@ -85,7 +84,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			StCharWillEnterGame CharWillEnterGame;
 			pBufferHelper->Read(CharWillEnterGame);
 
-			CWillEnterNode *pWillEnterNode = CWillEnterNodeMgr::GetInstancePtr()->CreateWillEnterNode(CharWillEnterGame.u64CharID);
+			CWillEnterNode *pWillEnterNode = m_WillEnterNodeMgr.CreateWillEnterNode(CharWillEnterGame.u64CharID);
 			pWillEnterNode->m_dwIndentifyCode = CharWillEnterGame.dwIdentifyCode;
 			pWillEnterNode->m_GameSvrConnID   = CharWillEnterGame.dwGameSvrID;
 

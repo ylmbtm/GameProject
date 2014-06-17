@@ -44,10 +44,15 @@ public:
 
 	//对外的接口
 public:
+	TValue*			InsertAlloc(TKey Key);
 	bool			Insert(TKey Key, TValue Value);
 	bool			Delete(TKey Key);
 	TNodeTypePtr	Find(TKey Key);
 	void			Traversal();
+	TValue*			GetByKey(TKey Key);
+	bool			Insert(TNodeTypePtr pRootNode);
+	TNodeTypePtr    AllocNode();
+	void			FreeNode(TNodeTypePtr pNode);
 
 
 
@@ -63,8 +68,7 @@ private:
     int				Max(int Value1,int Value2);//求最大值
 	int				GetHeight(TNodeTypePtr pNode);
 
-	TNodeTypePtr    AllocNode();
-	void			FreeNode(TNodeTypePtr pNode);
+	
 	bool			AllocBufferNode(int nSize = 1024);
 	bool			FreeBufferNode();
 private:
@@ -74,6 +78,56 @@ private:
 
 	std::vector<TNodeType*> m_NodeBuff;
 };
+
+template<typename TKey, typename TValue>
+TValue* AVLTree<TKey, TValue>::InsertAlloc( TKey Key )
+{
+	TNodeTypePtr pNode = AllocNode();
+	if(pNode == NULL)
+	{
+		return NULL;
+	}
+
+	pNode->m_Key  = Key;
+
+	if(m_pRoot == NULL)
+	{
+		m_pRoot = pNode;
+
+		
+	}
+	else
+	{
+		InsertInner(m_pRoot, pNode);
+	}
+
+	return &pNode->m_Data;
+}
+
+template<typename TKey, typename TValue>
+bool AVLTree<TKey, TValue>::Insert( TNodeTypePtr pRootNode )
+{
+	if(m_pRoot == NULL)
+	{
+		m_pRoot = pRootNode;
+
+		return true;
+	}
+
+	return InsertInner(m_pRoot, pRootNode);
+}
+
+template<typename TKey, typename TValue>
+TValue* AVLTree<TKey, TValue>::GetByKey( TKey Key )
+{
+	TNodeTypePtr pNode = Find(Key);
+	if(pNode == NULL)
+	{
+		return NULL;
+	}
+
+	return &pNode->m_Data;
+}
 
 template<typename TKey, typename TValue>
 TreeNode<TKey, TValue>* AVLTree<TKey, TValue>::AllocNode()

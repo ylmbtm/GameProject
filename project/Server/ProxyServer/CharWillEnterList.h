@@ -1,5 +1,6 @@
 ﻿#ifndef __CHAR_WILL_ENTER_LISTH__
 #define __CHAR_WILL_ENTER_LISTH__
+#include "Utility/AVLTree.h"
 
 class  CWillEnterNode
 {
@@ -23,14 +24,11 @@ public:
 	UINT32 m_dwTickount;
 };
 
-class CWillEnterNodeMgr : public stdext::hash_map<UINT64, CWillEnterNode*>
+class CWillEnterNodeMgr : public AVLTree<UINT64, CWillEnterNode>
 {
-private:
+public:
 	CWillEnterNodeMgr(void);
 	~CWillEnterNodeMgr(void);
-
-public:
-	static CWillEnterNodeMgr* GetInstancePtr();
 
 	CWillEnterNode* GetByCharID(UINT64 u64CharID);
 
