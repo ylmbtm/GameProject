@@ -6,6 +6,7 @@
 struct IMessageHandler
 {
 	virtual BOOL OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper) = 0;
+	//virtual BOOL OnConnection(bool bSuccessed);
 };
 
 class ClientEngine : public ICommandHandler
