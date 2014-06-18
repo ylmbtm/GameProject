@@ -26,13 +26,13 @@ public:
 
 	UINT32 OnCmdDisConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
-	UINT32 OnCmdTestMsg(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
-
 	UINT32 OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
 	//*********************消息处理定义结束******************************
 
-	std::map<UINT64, StSvrServerInfo> m_vtActiveSvrList;
+	std::map<UINT64, StSvrServerInfo> m_ConnectedSvrList;	//己连接的服务器列表
+
+	std::map<UINT64, StSvrServerInfo> m_WaitConSvrList;	//待连接的服务器列表
 
 	BOOL m_bConnectToCenter;
 	UINT32 m_dwLastTry;

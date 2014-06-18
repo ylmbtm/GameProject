@@ -1,5 +1,6 @@
 ﻿#ifndef __CLIENT_OBJECT_MGR_H__
 #define __CLIENT_OBJECT_MGR_H__
+#include "Utility\AVLTree.h"
 
 enum LineState
 {
@@ -29,7 +30,7 @@ public:
 	UINT64 m_GameSvrConnID;
 };
 
-class CStaticPlayerMgr : public stdext::hash_map<UINT64, CStaticPlayer*>
+class CStaticPlayerMgr : public AVLTree<UINT64, CStaticPlayer>
 {
 private:
 	CStaticPlayerMgr(void);
@@ -45,10 +46,6 @@ public:
 	BOOL		   RemoveByCharID(UINT64 u64CharID);
 
 	BOOL		   GetPlayerOnline(UINT64 u64CharID);
-
-
-	//stdext::hash_map<UINT64, CStaticPlayer*> m_vtOnlinePlayer;
-	//stdext::hash_map<UINT64, CStaticPlayer*> m_vtOfflinePlayer;
 };
 
 #endif /*__CLIENT_OBJECT_MGR_H__*/

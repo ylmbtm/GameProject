@@ -39,8 +39,6 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 {
 	CLog::GetInstancePtr()->AddLog("收到连接断开的事件!!!!!!");
 
-
-
 	//以下是向各个系统投递连接断开的消息
 	StDisConnectNotify DisConnectNotify;
 	DisConnectNotify.u64ConnID = pConnection->GetConnectionID();

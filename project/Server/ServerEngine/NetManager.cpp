@@ -377,8 +377,6 @@ CConnection* CNetManager::AssociateCompletePort( SOCKET hSocket )
 	{
 		pConnection->CloseConnection(FALSE);
 
-		CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
-
 		return NULL;
 	}
 

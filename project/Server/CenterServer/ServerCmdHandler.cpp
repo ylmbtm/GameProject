@@ -94,10 +94,11 @@ UINT32 CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID
 
 UINT32 CServerCmdHandler::OnCmdRegisterToCenter(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
+	///先将其它的服务器地址发给注册来的服务器
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_SVR_ACTIVE_SERVER_LIST, CMDH_SVR_CON, 0, 0);
 
-	int nCount = m_vtActiveSvrList.size()>10?10:m_vtActiveSvrList.size();
+	int nCount = m_vtActiveSvrList.size();
 
 	WriteHelper.Write(nCount);
 
@@ -108,6 +109,7 @@ UINT32 CServerCmdHandler::OnCmdRegisterToCenter(UINT16 wCommandID, UINT64 u64Con
 
 	WriteHelper.EndWrite();
 	
+	//收下注册服务器的信息
 	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 
 	StSvrServerInfo RegisterToCenterSvr; 

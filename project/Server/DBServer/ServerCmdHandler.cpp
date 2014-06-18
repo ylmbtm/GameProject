@@ -86,6 +86,17 @@ UINT32 CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID
 
 		CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 	}
+	else
+	{
+		//连接成功，将此服务器信息从待连列中删除
+		m_WaitConSvrList.erase(ConnectNotify.u64ConnID);
+		if(m_WaitConSvrList.empty())
+		{
+			CLog::GetInstancePtr()->AddLog("************所有的服务器己全部连接完成************");
+		}
+	}
+
+	
 
 	return 0;
 }
@@ -94,7 +105,7 @@ UINT32 CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID
 {
 	m_bConnectToCenter = TRUE;
 
-	m_vtActiveSvrList.clear();
+	m_WaitConSvrList.clear();
 
 	UINT32 dwCount = 0;
 
@@ -120,7 +131,7 @@ UINT32 CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID
 			ASSERT_FAIELD;
 		}
 
-		m_vtActiveSvrList.insert(std::make_pair(u64ConnID,RegisterToCenterSvr));
+		m_WaitConSvrList.insert(std::make_pair(RegisterToCenterSvr.dwSvrID, RegisterToCenterSvr));
 	}
 
 	return 0;
@@ -144,7 +155,7 @@ BOOL CServerCmdHandler::OnUpdate( UINT32 dwTick )
 
 UINT32 CServerCmdHandler::OnCmdDisConnectNotify( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
-	m_vtActiveSvrList.erase(u64ConnID);
+	m_WaitConSvrList.erase(u64ConnID);
 
 	return 0;
 }

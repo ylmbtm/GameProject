@@ -44,6 +44,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			CWillEnterNode *pWillEnterNode = m_WillEnterNodeMgr.GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
 			if(pWillEnterNode == NULL)
 			{
+				//非法的进入
 				break;
 			}
 
@@ -52,6 +53,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			 
 			if(pWillEnterNode->m_dwIndentifyCode == CharEnterGameReq.dwIndentifyCode)
 			{
+				//非法的进入
 				break;
 			}
 

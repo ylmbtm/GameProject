@@ -53,7 +53,7 @@ public:
 	bool			Insert(TNodeTypePtr pRootNode);
 	TNodeTypePtr    AllocNode();
 	void			FreeNode(TNodeTypePtr pNode);
-
+	void			DoEnumNode(TNodeTypePtr pNode);
 
 
 private:
@@ -78,6 +78,12 @@ private:
 
 	std::vector<TNodeType*> m_NodeBuff;
 };
+
+template<typename TKey, typename TValue>
+void AVLTree<TKey, TValue>::DoEnumNode( TNodeTypePtr pNode )
+{
+
+}
 
 template<typename TKey, typename TValue>
 TValue* AVLTree<TKey, TValue>::InsertAlloc( TKey Key )
@@ -391,7 +397,6 @@ template<typename TKey, typename TValue>
 	{
 		return pNode;
 	}
-
 }
 //查找接口
 template<typename TKey,typename TValue>
@@ -521,7 +526,7 @@ void AVLTree<TKey, TValue>::Insubtree(TNodeTypePtr pNode)
 	}
 
     Insubtree(pNode->m_pLeft);//先遍历左子树
-	printf("%d\n", pNode->m_Key);
+	DoEnumNode(pNode);
     Insubtree(pNode->m_pRight);//再遍历右子树
 }
 //中序遍历接口

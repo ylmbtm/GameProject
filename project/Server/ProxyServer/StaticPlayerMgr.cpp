@@ -43,31 +43,25 @@ CStaticPlayerMgr* CStaticPlayerMgr::GetInstancePtr()
 
 CStaticPlayer* CStaticPlayerMgr::GetByCharID(UINT64 u64CharID)
 {
-	iterator itor = find(u64CharID);
-	if(itor != end())
-	{
-		return itor->second;
-	}
-
-	return NULL;
+	return GetByKey(u64CharID);
 }
 
 CStaticPlayer* CStaticPlayerMgr::CreateStaicPlayer(UINT64 u64CharID)
 {
-	CStaticPlayer *pClientObj = new CStaticPlayer;
+	CStaticPlayer *pClientObj = InsertAlloc(u64CharID);
+	if(pClientObj == NULL)
+	{
+		return NULL;
+	}
 
 	pClientObj->m_u64CharID = u64CharID;
-
-	insert(std::make_pair(u64CharID, pClientObj));
 
 	return pClientObj;
 }
 
 BOOL CStaticPlayerMgr::RemoveByCharID(UINT64 u64CharID)
 {
-	erase(u64CharID);
-
-	return TRUE;
+	return Delete(u64CharID);
 }
 
 
