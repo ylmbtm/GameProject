@@ -372,8 +372,6 @@ VOID CConnectionMgr::DeleteConnection( CConnection *pConnection )
 {
 	if(pConnection->GetConnectionID() == 0)
 	{
-		delete pConnection;
-
 		CAutoLock Lock(&m_CritSec);
 
 		std::set<CConnection*>::iterator itor = m_WaitConnList.find(pConnection);
@@ -385,17 +383,15 @@ VOID CConnectionMgr::DeleteConnection( CConnection *pConnection )
 	else if(pConnection->GetConnectionID() < SVR_CONN_ID)
 	{
 		m_StableConnList[pConnection->GetConnectionID()] = NULL;
-		
-		delete pConnection;
 	}
 	else
 	{
 		CAutoLock Lock(&m_CritSec);
 
 		m_VarieableConnList.erase(pConnection->GetConnectionID());
-		
-		delete pConnection;
 	}
+	
+	delete pConnection;
 
 	return ;
 }

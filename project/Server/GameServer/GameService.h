@@ -24,6 +24,12 @@ public:
 
 	BOOL		LoadScene();
 
+public:
+	UINT64				m_u64DBConnID;
+	UINT64				GetDBConnID() const;
+	void				SetDBConnID(UINT64 ConnID);
+	BOOL				SendCmdToDBConnection(IDataBuffer *pDataBuf);
+
 protected:
 	CSceneManager m_SceneManager;
 

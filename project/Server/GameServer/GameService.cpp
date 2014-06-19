@@ -152,3 +152,24 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	return TRUE;
 }
 
+BOOL CGameService::SendCmdToDBConnection(IDataBuffer *pDataBuf)
+{
+	if(m_u64DBConnID == 0)
+	{
+		return FALSE;
+	}
+
+	SendCmdToConnection(m_u64DBConnID, pDataBuf);
+
+	return TRUE;
+}
+
+UINT64 CGameService::GetDBConnID() const
+{
+	return m_u64DBConnID;
+}
+
+void CGameService::SetDBConnID( UINT64 ConnID )
+{
+	m_u64DBConnID = ConnID;
+}

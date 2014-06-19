@@ -85,6 +85,10 @@ UINT32 CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID
 
 		CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 	}
+	else if(ConnectNotify.btConType == TYPE_SVR_DATABASE)
+	{
+		CGameService::GetInstancePtr()->SetDBConnID(u64ConnID);
+	}
 	else
 	{
 		//连接成功，将此服务器信息从待连列中删除
