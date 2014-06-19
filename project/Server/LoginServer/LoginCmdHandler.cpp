@@ -194,6 +194,7 @@ UINT32 CLoginCmdHandler::OnCmdDBPickCharAck( UINT16 wCommandID, UINT64 u64ConnID
 	CharWillEnterGame.dwIdentifyCode	= DBCharPickCharAck.CharPickCharAck.dwIdentifyCode;
 	CharWillEnterGame.u64CharID			= DBCharPickCharAck.CharPickCharAck.u64CharID;
 	CharWillEnterGame.dwGameSvrID		= 101;
+	CharWillEnterGame.dwSceneID			= 12;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_SVR_CHAR_WILL_ENTER, 0, 0, 0);

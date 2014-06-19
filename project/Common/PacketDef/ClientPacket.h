@@ -93,6 +93,7 @@ struct StCharEnterGameReq
 struct StCharEnterGameAck
 {
 	UINT32 dwIndentifyCode;		//进入游戏请求码
+	UINT32 dwSceneID;
 };
 
 struct StCharLeaveGameReq

@@ -30,6 +30,15 @@ public:
 
 	BOOL AddToUpdateList(CWorldObject *pWorldObject);
 
+
+public:
+	UINT32	GetSceneID(){ return m_dwSceneID; }
+
+public:
+	UINT32							m_dwSceneID;
+
+
+
 protected:
 	CCommonWorkThread				m_WorkThread;			//工作线程
 
@@ -47,7 +56,8 @@ public:
 	INT32 OnCmdEnterGameReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	INT32 OnCmdLeaveGameReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	INT32 OnCmdPlayerMove(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
-
+	INT32 OnCmdDBGetCharAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	
 	//*********************消息处理定义结束******************************
 
 	BOOL SendCreateObjectToGrids(CWorldObject *pWorldObject, INT32 Grids[9]);

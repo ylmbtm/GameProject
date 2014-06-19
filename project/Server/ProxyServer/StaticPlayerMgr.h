@@ -13,7 +13,7 @@ enum LineState
 class  CStaticPlayer
 {
 public:
-	CStaticPlayer();
+	CStaticPlayer():m_u64CharID(0),m_dwSceneID(0),m_GameSvrConnID(0){}
 
 	~CStaticPlayer();
 
@@ -24,10 +24,16 @@ public:
 
 	UINT64	GetCharID();
 
-public:
-	UINT64 m_u64CharID;
+	VOID    SetSceneID(UINT32 dwSceneID);
 
-	UINT64 m_GameSvrConnID;
+	UINT32  GetSceneID();
+
+public:
+	UINT64	m_u64CharID;
+
+	UINT32	m_dwSceneID;
+
+	UINT64	m_GameSvrConnID;
 };
 
 class CStaticPlayerMgr : public AVLTree<UINT64, CStaticPlayer>

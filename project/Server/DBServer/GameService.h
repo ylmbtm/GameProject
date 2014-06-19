@@ -16,7 +16,6 @@ public:
 	static CGameService* GetInstancePtr();
 
 public:
-
 	BOOL		OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
 	BOOL		OnDisconnect(CConnection *pConnection);

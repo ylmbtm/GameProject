@@ -60,6 +60,7 @@ BOOL CDBCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuffer
 		PROCESS_COMMAND_ITEM(CMD_DB_NEW_CHAR_REQ,		OnCmdDBNewCharReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_PICK_CHAR_REQ,		OnCmdDBPickCharReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_LOGIN_REQ,			OnCmdDBLoginReq);
+		PROCESS_COMMAND_ITEM(CMD_DB_GET_CHAR_REQ,		OnCmdDBGetCharReq);
 	default:
 		{
 
@@ -177,5 +178,11 @@ UINT32 CDBCmdHandler::OnCmdDBLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 
+	return 0;
+}
+
+UINT32 CDBCmdHandler::OnCmdDBGetCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	
 	return 0;
 }

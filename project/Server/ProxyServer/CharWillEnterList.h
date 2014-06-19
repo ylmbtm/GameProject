@@ -22,6 +22,8 @@ public:
 	UINT32 m_dwIndentifyCode;
 
 	UINT32 m_dwTickount;
+
+	UINT32 m_dwSceneID;
 };
 
 class CWillEnterNodeMgr : public AVLTree<UINT64, CWillEnterNode>

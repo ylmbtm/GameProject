@@ -1,11 +1,6 @@
 ﻿#include "StdAfx.h"
 #include "StaticPlayerMgr.h"
 
-CStaticPlayer::CStaticPlayer()
-{
-	m_GameSvrConnID = 0;
-}
-
 CStaticPlayer::~CStaticPlayer()
 {
 
@@ -24,6 +19,16 @@ UINT64 CStaticPlayer::GetCharID()
 VOID CStaticPlayer::SetGameSvrConnID( UINT64 u64ConnID )
 {
 	m_GameSvrConnID = u64ConnID;
+}
+
+VOID CStaticPlayer::SetSceneID( UINT32 dwSceneID )
+{
+	m_dwSceneID = dwSceneID;
+}
+
+UINT32 CStaticPlayer::GetSceneID()
+{
+	return m_dwSceneID;
 }
 
 CStaticPlayerMgr::CStaticPlayerMgr(void)

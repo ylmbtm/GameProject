@@ -60,6 +60,11 @@ enum Command_ID
 	CMD_DB_PICK_CHAR_REQ,
 	CMD_DB_PICK_CHAR_ACK,
 
+	CMD_DB_GET_CHAR_REQ,
+	CMD_DB_GET_CHAR_ACK,
+
+	///////////////////////////////////////////////////
+
 	//
 	CMD_SVR_CHAR_WILL_ENTER,	//通知代理服，玩家准备进入
 

@@ -64,8 +64,11 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 				if(pStaticPlayer != NULL)
 				{
 					pStaticPlayer->SetGameSvrConnID(pWillEnterNode->m_GameSvrConnID);
+					pStaticPlayer->SetSceneID(pWillEnterNode->m_dwSceneID);
 				}
 			}
+
+			pBufferHelper->GetCommandHeader()->dwSceneID = pWillEnterNode->m_dwSceneID;
 
 			RelayToServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
 		}
@@ -89,6 +92,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			CWillEnterNode *pWillEnterNode = m_WillEnterNodeMgr.CreateWillEnterNode(CharWillEnterGame.u64CharID);
 			pWillEnterNode->m_dwIndentifyCode = CharWillEnterGame.dwIdentifyCode;
 			pWillEnterNode->m_GameSvrConnID   = CharWillEnterGame.dwGameSvrID;
+			pWillEnterNode->m_dwSceneID		  = CharWillEnterGame.dwSceneID;
 
 		}
 		break;
@@ -225,6 +229,7 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pConnection->GetConnectionID());
 	if(pStaticPlayer == NULL)
 	{
+		CLog::GetInstancePtr()->AddLog("收到连接断开的事件， 但没有玩家连接数据!!!!!!");
 		return TRUE;
 	}
 
@@ -239,7 +244,7 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	}
 
 	CBufferHelper WriteHelper(TRUE, pSendBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_LEAVE_GAME_REQ, CMDH_SENCE, 12, pStaticPlayer->GetCharID());
+	WriteHelper.BeginWrite(CMD_CHAR_LEAVE_GAME_REQ, CMDH_SENCE, pStaticPlayer->GetSceneID(), pStaticPlayer->GetCharID());
 	WriteHelper.Write(CharLeaveGameReq);
 	WriteHelper.EndWrite();
 
