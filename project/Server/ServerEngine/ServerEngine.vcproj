@@ -286,6 +286,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Common\Utility\AVLTree.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Common\DataBuffer\BufferHelper.cpp"
 				>
 			</File>

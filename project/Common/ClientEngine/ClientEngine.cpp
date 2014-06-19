@@ -157,7 +157,7 @@ UINT32 ClientEngine::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBu
 
 		CBufferHelper WriteHelper(TRUE, m_NetworkMgr.m_pWriteBuffer);
 
-		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_REQ, CMDH_SENCE, 12, CharEnterGameReq.u64CharID);
+		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_REQ, CMDH_SENCE, 0, CharEnterGameReq.u64CharID);
 
 		WriteHelper.Write(CharEnterGameReq);
 

@@ -64,6 +64,17 @@ struct StDBCharPickCharAck	//选择角色请求回复
 	StCharPickCharAck CharPickCharAck;
 };
 
+struct StDBGetCharReq
+{
+	UINT64  u64CharID;
+	UINT32  dwSceneID;
+	UINT64  dwServerID;
+};
+
+
+struct StDBGetCharAck 
+{
+};
 
 
 

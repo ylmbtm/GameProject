@@ -57,11 +57,10 @@ BOOL CScene::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper 
 
 	switch(wCommandID)
 	{
-	PROCESS_COMMAND_ITEM(CMD_CHAR_LOGIN_REQ,		OnCmdRoleLogin);
 	PROCESS_COMMAND_ITEM(CMD_CHAR_ENTER_GAME_REQ,	OnCmdEnterGameReq);
 	PROCESS_COMMAND_ITEM(CMD_CHAR_LEAVE_GAME_REQ,	OnCmdLeaveGameReq);
-	PROCESS_COMMAND_ITEM(CMD_ROLE_MOVE,				OnCmdPlayerMove);
 	PROCESS_COMMAND_ITEM(CMD_DB_GET_CHAR_ACK,		OnCmdDBGetCharAck);
+	PROCESS_COMMAND_ITEM(CMD_ROLE_MOVE,				OnCmdPlayerMove);
 	default:
 		{
 			CPlayerObject *pPlayerObject = m_PlayerObjectMgr.GetPlayer(pCmdHeader->u64CharID);
@@ -117,11 +116,6 @@ BOOL CScene::AddToMap( CWorldObject *pWorldObject)
 	return TRUE;
 }
 
-INT32 CScene::OnCmdRoleLogin( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
-{
-	
-	return 0;
-}
 
 INT32 CScene::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {

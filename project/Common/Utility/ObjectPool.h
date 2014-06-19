@@ -2,16 +2,16 @@
 #define __OBJECT_POOL_H__
 
 template<typename T>
-class COjbectItem
+class CObjectItem
 {
-	T *m_pValue;
+	T m_Value;
 
 	COjbectItem *m_pNext;
 };
 
 
-template <typename ValueType>
-class CObjectPool : public stdext::hash_map<UINT32, CObjectPool<ValueType>>
+template <typename T>
+class CObjectPool
 {
 public:
 	CObjectPool(void);
