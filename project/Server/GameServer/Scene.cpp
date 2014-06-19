@@ -18,7 +18,7 @@
 
 CScene::CScene()
 {
-	m_WorkThread.SetCommandHandler(this);
+	
 }
 
 CScene::~CScene()
@@ -28,6 +28,10 @@ CScene::~CScene()
 
 BOOL CScene::Init(UINT32 dwSceneID)
 {
+	m_dwSceneID = dwSceneID;
+	
+	m_WorkThread.SetCommandHandler(this);
+
 	m_WorkThread.Start();
 
 	m_GridManager.Init(-1000, 1000, -1000, 1000);
@@ -53,10 +57,11 @@ BOOL CScene::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper 
 
 	switch(wCommandID)
 	{
-	PROCESS_COMMAND_ITEM(CMD_CHAR_LOGIN_REQ, OnCmdRoleLogin);
-	PROCESS_COMMAND_ITEM(CMD_CHAR_ENTER_GAME_REQ, OnCmdEnterGameReq);
-	PROCESS_COMMAND_ITEM(CMD_CHAR_LEAVE_GAME_REQ, OnCmdLeaveGameReq);
-	PROCESS_COMMAND_ITEM(CMD_ROLE_MOVE, OnCmdPlayerMove);
+	PROCESS_COMMAND_ITEM(CMD_CHAR_LOGIN_REQ,		OnCmdRoleLogin);
+	PROCESS_COMMAND_ITEM(CMD_CHAR_ENTER_GAME_REQ,	OnCmdEnterGameReq);
+	PROCESS_COMMAND_ITEM(CMD_CHAR_LEAVE_GAME_REQ,	OnCmdLeaveGameReq);
+	PROCESS_COMMAND_ITEM(CMD_ROLE_MOVE,				OnCmdPlayerMove);
+	PROCESS_COMMAND_ITEM(CMD_DB_GET_CHAR_ACK,		OnCmdDBGetCharAck);
 	default:
 		{
 			CPlayerObject *pPlayerObject = m_PlayerObjectMgr.GetPlayer(pCmdHeader->u64CharID);
@@ -140,6 +145,8 @@ INT32 CScene::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHel
 	if(pDataBuffer != NULL)
 	{
 		StCharEnterGameAck CharEnterGameAck;
+		CharEnterGameAck.dwIndentifyCode = CharEnterGameReq.dwIndentifyCode;
+		CharEnterGameAck.dwSceneID       = GetSceneID();
 
 		CBufferHelper WriteHelper(TRUE, pDataBuffer);
 
@@ -480,6 +487,8 @@ INT32 CScene::OnCmdLeaveGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHel
 
 	pBufferHelper->Read(CharLeaveGameReq);
 
+	//if(CharLeaveGameReq.dwLeaveReason == 1)
+
 	CPlayerObject *pPlayerObject = m_PlayerObjectMgr.GetPlayer(pBufferHelper->GetCommandHeader()->u64CharID);
 	if(pPlayerObject == NULL)
 	{
@@ -541,5 +550,11 @@ BOOL CScene::AddToUpdateList( CWorldObject *pWorldObject )
 	m_UpdateObjectMgr.AddUpdateObject(pWorldObject);
 
 	return TRUE;
+}
+
+INT32 CScene::OnCmdDBGetCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+
+	return 0;
 }
 
