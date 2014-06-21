@@ -50,13 +50,13 @@ void CDlgGame::OnPaint()
 
 	dc.FillSolidRect(&rc, RGB(255,255,255));
 	
-	DrawPlayer(dc.GetSafeHdc(), pClientCmdHandler->m_HostPlayer.m_ObjectPos.x, pClientCmdHandler->m_HostPlayer.m_ObjectPos.z);
+	DrawPlayer(dc.GetSafeHdc(), pClientCmdHandler->m_HostPlayer.m_ObjectPos.x, pClientCmdHandler->m_HostPlayer.m_ObjectPos.z, pClientCmdHandler->m_HostPlayer.m_szObjectName);
 
 	for(CPlayerObjectMgr::iterator itor = pClientCmdHandler->m_PlayerObjMgr.begin(); itor != pClientCmdHandler->m_PlayerObjMgr.end(); ++itor)
 	{
 		CPlayerObject *pObject = itor->second;
 
-		DrawPlayer(dc.GetSafeHdc(),  pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
+		DrawPlayer(dc.GetSafeHdc(),  pObject->m_ObjectPos.x, pObject->m_ObjectPos.z, pObject->m_szObjectName);
 
 		//DrawItem(dc.GetSafeHdc(), rand()%300,rand()%300);
 
@@ -73,14 +73,26 @@ void CDlgGame::OnSize(UINT nType, int cx, int cy)
 	// TODO: 在此处添加消息处理程序代码
 }
 
-VOID CDlgGame::DrawPlayer( HDC hDC, int nX, int nY )
+VOID CDlgGame::DrawPlayer( HDC hDC, int nX, int nY , char *szName)
 {
+	RECT Rc;
+	Rc.left = nX - 20;
+	Rc.right = nX + 20;
+	Rc.top   = nY - 20;
+	Rc.bottom = nY+10;
+	DrawText(hDC, szName,strlen(szName), &Rc, DT_CENTER);
 	Draw(hDC, nX, nY, RGB(255, 0 , 0), 5);
 	return ;
 }
 
-VOID CDlgGame::DrawNpc( HDC hDC,int nX, int nY )
+VOID CDlgGame::DrawNpc( HDC hDC,int nX, int nY , char *szName)
 {
+	RECT Rc;
+	Rc.left = nX - 20;
+	Rc.right = nX + 20;
+	Rc.top   = nY - 20;
+	Rc.bottom = nY+10;
+	DrawText(hDC, szName, strlen(szName), &Rc, DT_CENTER);
 	Draw(hDC, nX, nY, RGB(0 ,255,  0), 5);
 	return ;
 }
@@ -94,6 +106,12 @@ VOID CDlgGame::DrawItem( HDC hDC,int nX, int nY )
 VOID CDlgGame::Draw( HDC hDC,int nX, int nY, COLORREF clr, int nRadius )
 {
 	CPoint point;
+
+	MoveToEx(hDC, nX-(nX%50)-50, nY-(nY%50)-50, &point);
+	LineTo(hDC, nX-(nX%50)+100, nY-(nY%50)-50);
+	LineTo(hDC, nX-(nX%50)+100, nY-(nY%50)+100);
+	LineTo(hDC, nX-(nX%50)-50, nY-(nY%50)+100);
+	LineTo(hDC, nX-(nX%50)-50, nY-(nY%50)-50);
 
 	MoveToEx(hDC, nX-75, nY-75, &point);
 	LineTo(hDC, nX+75, nY-75);

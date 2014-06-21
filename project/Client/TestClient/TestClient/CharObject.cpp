@@ -4,6 +4,7 @@
 #include "Utility/Log/Log.h"
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
+#include "DataBuffer/BufferHelper.h"
 
 
 
@@ -21,6 +22,8 @@ UINT32 CCharObject::ReadFromBuffer( CBufferHelper *pBufHelper )
 {
 	UINT32 dwSize = 0;
 	dwSize += CWorldObject::ReadFromBuffer(pBufHelper);
+
+	dwSize += pBufHelper->Read(m_szObjectName);
 
 	return dwSize;
 }

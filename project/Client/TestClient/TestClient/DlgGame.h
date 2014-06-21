@@ -22,9 +22,9 @@ public:
 	afx_msg void OnPaint();
 
 public:
-	VOID  DrawPlayer(HDC hDC, int nX, int nY);
+	VOID  DrawPlayer(HDC hDC, int nX, int nY, char *szName);
 
-	VOID  DrawNpc(HDC hDC,int nX, int nY);
+	VOID  DrawNpc(HDC hDC,int nX, int nY, char *szName);
 
 	VOID  DrawItem(HDC hDC,int nX, int nY);
 
