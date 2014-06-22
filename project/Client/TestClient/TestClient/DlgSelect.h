@@ -28,14 +28,18 @@ protected:
 public:
 	BOOL AddCharPickInfo(StCharPickInfo &PickInfo);
 
+	BOOL DelChar(UINT64 u64CharID);
+
 	BOOL RefreshListCtrl();
 
 public:
 
 	UINT32			m_nCount;
-	StCharPickInfo  m_CharInfoList[4];
+	std::vector<StCharPickInfo>  m_CharInfoList;
 	UINT32			m_dwAccountID;
 
 	CListCtrl m_CharList;
 	
+	afx_msg void OnNMRClickList1(NMHDR *pNMHDR, LRESULT *pResult);
+	CString m_strNewName;
 };

@@ -60,6 +60,7 @@ BOOL CDBCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuffer
 	{
 		PROCESS_COMMAND_ITEM(CMD_DB_NEW_ACCOUNT_REQ,	OnCmdDBNewAccountReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_NEW_CHAR_REQ,		OnCmdDBNewCharReq);
+		PROCESS_COMMAND_ITEM(CMD_DB_DEL_CHAR_REQ,		OnCmdDBDelCharReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_PICK_CHAR_REQ,		OnCmdDBPickCharReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_LOGIN_REQ,			OnCmdDBLoginReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_LOAD_CHAR_REQ,		OnCmdDBLoadCharReq);
@@ -183,6 +184,32 @@ UINT32 CDBCmdHandler::OnCmdDBLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	return 0;
 }
 
+UINT32 CDBCmdHandler::OnCmdDBDelCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StDBDelCharReq DBDelCharReq;
+	pBufferHelper->Read(DBDelCharReq);
+
+	StDBCharDelCharAck DBCharDelCharAck;
+	DBCharDelCharAck.u64ConnID = DBDelCharReq.u64ConnID;
+
+	if(!m_DBProcManager.DelChar(DBDelCharReq.CharDelCharReq))
+	{
+		DBCharDelCharAck.CharDelCharAck.nRetCode = E_FAILED;
+	}
+	else
+	{
+		DBCharDelCharAck.CharDelCharAck.nRetCode = E_SUCCESSED;
+	}
+
+	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+	WriteHelper.BeginWrite(CMD_DB_DEL_CHAR_ACK, 0, 0, 0);
+	WriteHelper.Write(DBCharDelCharAck);
+	WriteHelper.EndWrite();
+	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
+	return 0;
+}
+
+
 UINT32 CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	/*
@@ -200,3 +227,4 @@ UINT32 CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 	
 	return 0;
 }
+

@@ -32,6 +32,20 @@ struct StCharNewCharReq
 	UINT32	dwFeature;	// sex, face type, hair color, face color, and job
 };
 
+struct StCharDelCharReq
+{
+	UINT32	dwAccountID;	//账号ID
+	UINT64	u64CharID;	
+};
+
+struct StCharDelCharAck
+{
+	UINT16 nRetCode;
+	UINT32	dwAccountID;	//账号ID
+	UINT64	u64CharID;	
+
+};
+
 struct StCharPickInfo
 {
 	UINT64  u64CharID;

@@ -34,6 +34,20 @@ struct StDBCharNewCharAck
 	StCharNewCharAck CharNewCharAck;
 };
 
+struct StDBDelCharReq
+{
+	UINT64 u64ConnID;
+
+	StCharDelCharReq CharDelCharReq;
+};
+
+struct StDBCharDelCharAck
+{
+	UINT64 u64ConnID;
+
+	StCharDelCharAck CharDelCharAck;
+};
+
 struct StDBCharLoginReq	//登录请求消息
 {
 	UINT64 u64ConnID;

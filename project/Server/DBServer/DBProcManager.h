@@ -31,6 +31,8 @@ public:
 
 	BOOL   CreateNewChar(StCharNewCharReq &Req, StCharNewCharAck &Ack);
 
+	BOOL   DelChar(StCharDelCharReq &Req);
+
 	CppSQLite3DB	m_DBConnection;
 
 	UINT32			m_dwMaxAccountID;

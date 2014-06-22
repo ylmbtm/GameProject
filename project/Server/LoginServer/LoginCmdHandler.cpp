@@ -50,11 +50,13 @@ BOOL CLoginCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	{
 		PROCESS_COMMAND_ITEM(CMD_CHAR_NEW_ACCOUNT_REQ,	OnCmdNewAccountReq);
 		PROCESS_COMMAND_ITEM(CMD_CHAR_NEW_CHAR_REQ,		OnCmdNewCharReq);
+		PROCESS_COMMAND_ITEM(CMD_CHAR_DEL_CHAR_REQ,		OnCmdDelCharReq);
 		PROCESS_COMMAND_ITEM(CMD_CHAR_PICK_CHAR_REQ,	OnCmdPickCharReq);
 		PROCESS_COMMAND_ITEM(CMD_CHAR_LOGIN_REQ,		OnCmdLoginReq);
 
 		PROCESS_COMMAND_ITEM(CMD_DB_NEW_ACCOUNT_ACK,	OnCmdDBNewAccountAck);
 		PROCESS_COMMAND_ITEM(CMD_DB_NEW_CHAR_ACK,		OnCmdDBNewCharAck);
+		PROCESS_COMMAND_ITEM(CMD_DB_DEL_CHAR_ACK,		OnCmdDBDelCharAck);
 		PROCESS_COMMAND_ITEM(CMD_DB_PICK_CHAR_ACK,		OnCmdDBPickCharAck);
 		PROCESS_COMMAND_ITEM(CMD_DB_LOGIN_ACK,			OnCmdDBLoginAck);
 
@@ -220,6 +222,38 @@ UINT32 CLoginCmdHandler::OnCmdDBLoginAck( UINT16 wCommandID, UINT64 u64ConnID, C
 	WriteHelper.Write(DBCharLoginAck.CharLoginAck);
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToConnection(DBCharLoginAck.u64ConnID, &m_WriteBuffer);
+
+	return 0;
+}
+
+UINT32 CLoginCmdHandler::OnCmdDelCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StCharDelCharReq CharDelCharReq;
+	pBufferHelper->Read(CharDelCharReq);
+
+	StDBDelCharReq DBDelCharReq;
+	DBDelCharReq.u64ConnID = u64ConnID;
+	DBDelCharReq.CharDelCharReq = CharDelCharReq;
+
+	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+	WriteHelper.BeginWrite(CMD_DB_DEL_CHAR_REQ, 0, 0, 0);
+	WriteHelper.Write(DBDelCharReq);
+	WriteHelper.EndWrite();
+	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
+
+	return 0;
+}
+
+UINT32 CLoginCmdHandler::OnCmdDBDelCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StDBCharDelCharAck DBDelCharAck;
+	pBufferHelper->Read(DBDelCharAck);
+
+	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+	WriteHelper.BeginWrite(CMD_CHAR_DEL_CHAR_ACK, 0, 0, 0);
+	WriteHelper.Write(DBDelCharAck.CharDelCharAck);
+	WriteHelper.EndWrite();
+	CGameService::GetInstancePtr()->SendCmdToConnection(DBDelCharAck.u64ConnID, &m_WriteBuffer);
 
 	return 0;
 }

@@ -64,6 +64,7 @@ BOOL CDBProcManager::LoadAccountCharInfo( UINT32 dwAccountID, StCharLoginAck &Ac
 		Ack.CharPickInfo[i].dwFeature = QueryRes.getIntField("F_Feature", 0);
 		strncpy(Ack.CharPickInfo[i].szCharName, QueryRes.getStringField("F_Name", ""), 32);
 		Ack.CharPickInfo[i].dwLevel = QueryRes.getIntField("F_Level", 0);
+		Ack.CharPickInfo[i].u64CharID = QueryRes.getInt64Field("F_CharID");
 		i++;
 		QueryRes.nextRow();
 	}
@@ -115,6 +116,7 @@ BOOL CDBProcManager::CreateNewChar(StCharNewCharReq &Req,  StCharNewCharAck &Ack
 		Ack.CharPickInfo.dwFeature = QueryRes.getIntField("F_Feature", 0);
 		strncpy(Ack.CharPickInfo.szCharName, QueryRes.getStringField("F_Name", ""), 32);
 		Ack.CharPickInfo.dwLevel = QueryRes.getIntField("F_Level", 0);
+		Ack.CharPickInfo.u64CharID = QueryRes.getInt64Field("F_CharID");
 
 		return TRUE;
 	}
@@ -158,5 +160,19 @@ UINT32 CDBProcManager::GetAccountID( char *szAccount )
 	}  
 
 	return 0;
+}
+
+BOOL CDBProcManager::DelChar( StCharDelCharReq &Req)
+{
+	CHAR szSql[MAX_PATH];
+
+	sprintf(szSql, "delete from t_charinfo where F_CharID='%lld'", Req.u64CharID);
+
+	if(m_DBConnection.execDML(szSql) <= 0)
+	{
+		return FALSE;
+	}
+
+	return TRUE;
 }
 

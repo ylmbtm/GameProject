@@ -15,6 +15,7 @@
 #define IDC_EDIT1                       1000
 #define IDC_EDT_ACCOUNT                 1000
 #define IDC_EDT_ACCOUNTNAME             1000
+#define IDC_EDT_NAME                    1000
 #define IDC_EDIT2                       1001
 #define IDC_EDT_PASSWORD                1001
 #define IDC_HOTKEY1                     1002

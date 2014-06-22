@@ -34,6 +34,7 @@ BOOL CClientCmdHandler::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CB
 	{
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_LOGIN_ACK,		OnCmdLoginGameAck);
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_NEW_CHAR_ACK,	OnCmdNewCharAck);
+		PROCESS_COMMAND_ITEM_T(CMD_CHAR_DEL_CHAR_ACK,	OnCmdDelCharAck);
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_NEW_ACCOUNT_ACK,OnCmdNewAccountAck);
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_ENTER_GAME_ACK,	OnCmdEnterGameAck)
 
@@ -213,7 +214,7 @@ UINT32 CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID
 		DlgSelect.m_nCount = MsgLoginAck.nCount;
 		for(int i = 0; i < MsgLoginAck.nCount; i++)
 		{
-			DlgSelect.m_CharInfoList[i] = MsgLoginAck.CharPickInfo[i];
+			DlgSelect.m_CharInfoList.push_back(MsgLoginAck.CharPickInfo[i]);
 		}
 		
 		DlgSelect.DoModal();
@@ -287,6 +288,39 @@ UINT32 CClientCmdHandler::OnCmdNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	DlgSelect.AddCharPickInfo(CharNewCharAck.CharPickInfo);
 
 	DlgSelect.DoModal();
+	return 0;
+}
+
+BOOL CClientCmdHandler::SendDelCharReq( UINT32 dwAccountID,UINT64 dwCharID )
+{
+	StCharDelCharReq CharDelCharReq;
+	CharDelCharReq.dwAccountID = dwAccountID;
+	CharDelCharReq.u64CharID    = dwCharID;
+	CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
+
+	WriteHelper.BeginWrite(CMD_CHAR_DEL_CHAR_REQ, 0, 0, 0);
+
+	WriteHelper.Write(CharDelCharReq);
+
+	WriteHelper.EndWrite();
+
+	ClientEngine::GetInstancePtr()->SendData(ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetData(), ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetDataLenth());
+
+	return TRUE;
+}
+
+UINT32 CClientCmdHandler::OnCmdDelCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StCharDelCharAck CharDelCharAck;
+	pBufferHelper->Read(CharDelCharAck);
+
+	if(CharDelCharAck.nRetCode == E_SUCCESSED)
+	{
+		DlgSelect.DelChar(CharDelCharAck.u64CharID);
+	}
+
+	DlgSelect.DoModal();
+
 	return 0;
 }
 

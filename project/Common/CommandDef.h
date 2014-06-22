@@ -27,6 +27,9 @@ enum Command_ID
 	CMD_CHAR_NEW_CHAR_REQ,		//新建一个角色
 	CMD_CHAR_NEW_CHAR_ACK,		//新建一个角色的回包
 
+	CMD_CHAR_DEL_CHAR_REQ,		//删除一个角色
+	CMD_CHAR_DEL_CHAR_ACK,		//删除一个角色的回包
+
 	CMD_CHAR_LOGIN_REQ,			//玩家登录
 	CMD_CHAR_LOGIN_ACK,			//登录返回包
 
@@ -53,6 +56,9 @@ enum Command_ID
 
 	CMD_DB_NEW_CHAR_REQ,
 	CMD_DB_NEW_CHAR_ACK,
+
+	CMD_DB_DEL_CHAR_REQ,
+	CMD_DB_DEL_CHAR_ACK,
 
 	CMD_DB_LOGIN_REQ,
 	CMD_DB_LOGIN_ACK,

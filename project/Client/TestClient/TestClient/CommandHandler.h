@@ -24,6 +24,7 @@ public:
 
 	BOOL SendNewAccountReq(LPCTSTR szAccountName, LPCTSTR szPassword);
 	BOOL SendNewCharReq(UINT32 dwAccountID,LPCTSTR szCharName, UINT32 dwFeature);
+	BOOL SendDelCharReq(UINT32 dwAccountID,UINT64 dwCharID);
 	BOOL SendPickCharReq(UINT64 u64CharID);
 
 
@@ -34,6 +35,7 @@ public:
 
 	UINT32 OnCmdNewAccountAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	UINT32 OnCmdNewCharAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	UINT32 OnCmdDelCharAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
 
 	//CMD_CHAR_NEARBY_ADD,			//添加周围的对象
