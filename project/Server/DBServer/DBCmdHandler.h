@@ -3,6 +3,7 @@
 #include "CmdHandler/CommonCmdHandler.h"
 #include "PacketDef/ServerPacket.h"
 #include "DBProcManager.h"
+#include "DBPlayerObject.h"
 
 
 class CDBCmdHandler : public CCommonCmdHandler
@@ -32,6 +33,8 @@ public:
 	//*********************消息处理定义结束******************************
 
 
+	//玩家数据管理器
+	CDBPlayerObjectMgr  m_DBPlayerMgr;
 
 	//数据库定义
 	CDBProcManager   m_DBProcManager;

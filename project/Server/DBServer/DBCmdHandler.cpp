@@ -212,18 +212,30 @@ UINT32 CDBCmdHandler::OnCmdDBDelCharReq( UINT16 wCommandID, UINT64 u64ConnID, CB
 
 UINT32 CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
-	/*
-	CPlayerObject *pPlayerObj = GetPlayerObj();
-	if(pPlayerObj != NULL)
-	{
-		pPlayerObj->SaveData();
-	}
-	else
-	{
-		inertAlloc();
+	StDBLoadCharInfoReq DBLoadCharInfoReq;
+	pBufferHelper->Read(DBLoadCharInfoReq);
 
-		pPlayerObj->LoadData();
-	}*/
+	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_ACK, 0, DBLoadCharInfoReq.dwSceneID, DBLoadCharInfoReq.u64CharID);
+
+	CDBPlayerObject *pDBPlayer = m_DBPlayerMgr.GetPlayer(DBLoadCharInfoReq.u64CharID);
+	if(pDBPlayer == NULL)
+	{
+		//读取一条记录，
+		//读出成功
+		pDBPlayer = m_DBPlayerMgr.InsertAlloc(DBLoadCharInfoReq.u64CharID);
+
+		if(!pDBPlayer->LoadFromDB())
+		{
+			return 0;
+		}
+	}
+
+	pDBPlayer->WriteToPacket(WriteHelper);
+
+	WriteHelper.EndWrite();
+	
+	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 	
 	return 0;
 }
