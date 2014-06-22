@@ -27,6 +27,9 @@ public:
 	VOID			SetConnectID(UINT64 u64ConnID);
 
 public:
+	BOOL			LoadFromDBPcket(CBufferHelper *pBufferHelper);
+
+public:
 	UINT64 m_u64ConnID;
 
 

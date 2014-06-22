@@ -215,8 +215,14 @@ UINT32 CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 	StDBLoadCharInfoReq DBLoadCharInfoReq;
 	pBufferHelper->Read(DBLoadCharInfoReq);
 
+
+	StDBLoadCharInfoAck DBLoadCharInfoAck;
+	DBLoadCharInfoAck.dwProxySvrID = DBLoadCharInfoReq.dwProxySvrID;
+
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_ACK, 0, DBLoadCharInfoReq.dwSceneID, DBLoadCharInfoReq.u64CharID);
+
+	WriteHelper.Write(DBLoadCharInfoAck);
 
 	CDBPlayerObject *pDBPlayer = m_DBPlayerMgr.GetPlayer(DBLoadCharInfoReq.u64CharID);
 	if(pDBPlayer == NULL)
@@ -231,7 +237,7 @@ UINT32 CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 		}
 	}
 
-	pDBPlayer->WriteToPacket(WriteHelper);
+	pDBPlayer->WriteToPacket(&WriteHelper);
 
 	WriteHelper.EndWrite();
 	

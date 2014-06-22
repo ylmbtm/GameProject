@@ -126,8 +126,9 @@ INT32 CScene::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHel
 
 	StDBLoadCharInfoReq DBLoadCharInfoReq;
 	DBLoadCharInfoReq.dwSceneID = m_dwSceneID;
-	DBLoadCharInfoReq.dwServerID= CGlobalConfig::GetInstancePtr()->m_dwServerID;
+	DBLoadCharInfoReq.dwGameSvrID= CGlobalConfig::GetInstancePtr()->m_dwServerID;
 	DBLoadCharInfoReq.u64CharID = CharEnterGameReq.u64CharID;
+	DBLoadCharInfoReq.dwProxySvrID = u64ConnID;
 	
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_REQ, 0, 0, 0);
@@ -135,45 +136,7 @@ INT32 CScene::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHel
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 
-	/*
-	StCharEnterGameReq CharEnterGameReq;
 
-	pBufferHelper->Read(CharEnterGameReq);
-
-	CPlayerObject *pPlayerObject = new CPlayerObject;
-
-	pPlayerObject->SetObjectID(CharEnterGameReq.u64CharID);
-
-	pPlayerObject->SetPosition(70, 0, 80);
-
-	pPlayerObject->SetConnectID(u64ConnID);
-
-	m_PlayerObjectMgr.AddPlayer(pPlayerObject);
-
-	m_UpdateObjectMgr.AddUpdateObject(pPlayerObject);
-
-	IDataBuffer *pDataBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(1024);
-	if(pDataBuffer != NULL)
-	{
-		StCharEnterGameAck CharEnterGameAck;
-		CharEnterGameAck.dwIndentifyCode = CharEnterGameReq.dwIndentifyCode;
-		CharEnterGameAck.dwSceneID       = GetSceneID();
-
-		CBufferHelper WriteHelper(TRUE, pDataBuffer);
-
-		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_ACK, CMDH_SENCE, 0,  CharEnterGameReq.u64CharID);
-
-		WriteHelper.Write(CharEnterGameAck);
-
-		pPlayerObject->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_DEST_MYSELF);
-
-		WriteHelper.EndWrite();
-
-		CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, pDataBuffer);
-	}
-
-	AddToMap(pPlayerObject);
-	*/
 	return 0;
 }
 
@@ -564,12 +527,13 @@ BOOL CScene::AddToUpdateList( CWorldObject *pWorldObject )
 }
 
 INT32 CScene::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
-{/*
+{
+	StDBLoadCharInfoAck DBLoadCharInfoAck;
+	pBufferHelper->Read(DBLoadCharInfoAck);
+
 	CPlayerObject *pPlayerObject = new CPlayerObject;
 
-	pPlayerObject->SetObjectID(CharEnterGameReq.u64CharID);
-
-	pPlayerObject->SetPosition(70, 0, 80);
+	pPlayerObject->LoadFromDBPcket(pBufferHelper);
 
 	pPlayerObject->SetConnectID(u64ConnID);
 
@@ -577,25 +541,17 @@ INT32 CScene::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHe
 
 	m_UpdateObjectMgr.AddUpdateObject(pPlayerObject);
 
-
 	StCharEnterGameAck CharEnterGameAck;
-	CharEnterGameAck.dwIndentifyCode = CharEnterGameReq.dwIndentifyCode;
 	CharEnterGameAck.dwSceneID       = GetSceneID();
-
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-
-	WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_ACK, CMDH_SENCE, 0,  CharEnterGameReq.u64CharID);
-
+	WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_ACK, CMDH_SENCE, 0,  pPlayerObject->GetObjectID());
 	WriteHelper.Write(CharEnterGameAck);
-
 	pPlayerObject->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_DEST_MYSELF);
-
 	WriteHelper.EndWrite();
+	CGameService::GetInstancePtr()->SendCmdToConnection(DBLoadCharInfoAck.dwProxySvrID, &m_WriteBuffer);
 
-	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, pDataBuffer);
-	
 	AddToMap(pPlayerObject);
-	*/
+	
 	return 0;
 }
 

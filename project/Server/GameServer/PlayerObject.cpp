@@ -80,6 +80,13 @@ BOOL CPlayerObject::OnUpdate( UINT32 dwTick )
 	return TRUE;
 }
 
+BOOL CPlayerObject::LoadFromDBPcket( CBufferHelper *pBufferHelper )
+{
+
+
+	return TRUE;
+}
+
 BOOL CPlayerObjectMgr::AddPlayer( CPlayerObject *pObject )
 {
 	insert(std::make_pair(pObject->GetObjectID(), pObject));

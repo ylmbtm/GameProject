@@ -29,7 +29,7 @@ public:
 	VOID			SetObjectID(UINT64 u64ObjectID);
 
 protected:
-	UINT64 m_u64ObjectID;	
+	UINT64			m_u64ObjectID;	
 };
 
 #endif //__OBJECT_H__

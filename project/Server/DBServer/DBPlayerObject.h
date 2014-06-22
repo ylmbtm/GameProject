@@ -9,11 +9,16 @@ public:
 
 	~CDBPlayerObject();
 public:
-	UINT32	WriteToPacket(CBufferHelper &WriteBuffer);
+	UINT32	WriteToPacket( CBufferHelper *pWriteBuffer );
+
+	UINT32  WritePlayerBaseInfo( CBufferHelper *pWriteBuffer );
 
 	BOOL	LoadFromDB();
-
 public:
+	UINT64  m_u64ObjectID;
+	
+
+
 };
 
 

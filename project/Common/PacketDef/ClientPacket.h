@@ -108,6 +108,7 @@ struct StCharEnterGameAck
 {
 	UINT32 dwIndentifyCode;		//进入游戏请求码
 	UINT32 dwSceneID;
+	//后面跟的是玩家的数据
 };
 
 struct StCharLeaveGameReq
