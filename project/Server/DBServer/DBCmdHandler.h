@@ -26,9 +26,10 @@ public:
 	UINT32 OnCmdDBNewCharReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	UINT32 OnCmdDBPickCharReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	UINT32 OnCmdDBLoginReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
-	UINT32 OnCmdDBGetCharReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	UINT32 OnCmdDBLoadCharReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	
 	//*********************消息处理定义结束******************************
+
 
 
 	//数据库定义

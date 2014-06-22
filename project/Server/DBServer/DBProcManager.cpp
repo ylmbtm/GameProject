@@ -11,12 +11,20 @@ CDBProcManager::~CDBProcManager(void)
 {
 }
 
-BOOL CDBProcManager::InitManager()
+BOOL CDBProcManager::Init()
 {
 	std::string strCurDir = CommonFunc::GetCurrentDir();
 	strCurDir+= "\\GameData.db";
 
 	m_DBConnection.open(strCurDir.c_str());
+
+	return TRUE;
+
+}
+
+BOOL CDBProcManager::Uninit()
+{
+	m_DBConnection.close();
 
 	return TRUE;
 }
@@ -146,8 +154,9 @@ UINT32 CDBProcManager::GetAccountID( char *szAccount )
 
 	while(!QueryRes.eof())  
 	{  
-		return QueryRes.getInt64Field("F_CharID", 0);
+		return QueryRes.getIntField("F_AccountID", 0);
 	}  
 
 	return 0;
 }
+

@@ -59,7 +59,7 @@ BOOL CScene::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper 
 	{
 	PROCESS_COMMAND_ITEM(CMD_CHAR_ENTER_GAME_REQ,	OnCmdEnterGameReq);
 	PROCESS_COMMAND_ITEM(CMD_CHAR_LEAVE_GAME_REQ,	OnCmdLeaveGameReq);
-	PROCESS_COMMAND_ITEM(CMD_DB_GET_CHAR_ACK,		OnCmdDBGetCharAck);
+	PROCESS_COMMAND_ITEM(CMD_DB_LOAD_CHAR_ACK,		OnCmdDBLoadCharAck);
 	PROCESS_COMMAND_ITEM(CMD_ROLE_MOVE,				OnCmdPlayerMove);
 	default:
 		{
@@ -546,7 +546,7 @@ BOOL CScene::AddToUpdateList( CWorldObject *pWorldObject )
 	return TRUE;
 }
 
-INT32 CScene::OnCmdDBGetCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+INT32 CScene::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 
 	return 0;

@@ -10,7 +10,7 @@
 
 CCharObject::CCharObject()
 {
-
+	memset(m_szObjectName, 0, MAX_NAME_LEN);
 }
 
 CCharObject::~CCharObject()

@@ -19,7 +19,11 @@ public:
 
 	virtual UINT32  ReadFromBuffer(CBufferHelper *pBufHelper);
 
-public:
+	char*			GetObjectName();
+
+	void			SetObjectName(char *szName);
+
+private:
 	char			m_szObjectName[MAX_NAME_LEN];
 };
 

@@ -10,7 +10,9 @@ public:
 	CDBProcManager(void);
 	~CDBProcManager(void);
 
-	BOOL InitManager();
+	BOOL Init();
+
+	BOOL Uninit();
 
 	UINT32 GetMaxAccountID();
 

@@ -37,7 +37,7 @@ BOOL CDBCmdHandler::Init(UINT32 dwReserved)
 		return FALSE;
 	}
 
-	if(!m_DBProcManager.InitManager())
+	if(!m_DBProcManager.Init())
 	{
 		return FALSE;
 	}
@@ -48,6 +48,8 @@ BOOL CDBCmdHandler::Init(UINT32 dwReserved)
 BOOL CDBCmdHandler::Uninit()
 {
 	CCommonCmdHandler::Uninit();
+
+	m_DBProcManager.Uninit();
 
 	return TRUE;
 }
@@ -60,7 +62,7 @@ BOOL CDBCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuffer
 		PROCESS_COMMAND_ITEM(CMD_DB_NEW_CHAR_REQ,		OnCmdDBNewCharReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_PICK_CHAR_REQ,		OnCmdDBPickCharReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_LOGIN_REQ,			OnCmdDBLoginReq);
-		PROCESS_COMMAND_ITEM(CMD_DB_GET_CHAR_REQ,		OnCmdDBGetCharReq);
+		PROCESS_COMMAND_ITEM(CMD_DB_LOAD_CHAR_REQ,		OnCmdDBLoadCharReq);
 	default:
 		{
 
@@ -181,8 +183,20 @@ UINT32 CDBCmdHandler::OnCmdDBLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	return 0;
 }
 
-UINT32 CDBCmdHandler::OnCmdDBGetCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+UINT32 CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
+	/*
+	CPlayerObject *pPlayerObj = GetPlayerObj();
+	if(pPlayerObj != NULL)
+	{
+		pPlayerObj->SaveData();
+	}
+	else
+	{
+		inertAlloc();
+
+		pPlayerObj->LoadData();
+	}*/
 	
 	return 0;
 }

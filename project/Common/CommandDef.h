@@ -60,8 +60,8 @@ enum Command_ID
 	CMD_DB_PICK_CHAR_REQ,
 	CMD_DB_PICK_CHAR_ACK,
 
-	CMD_DB_GET_CHAR_REQ,
-	CMD_DB_GET_CHAR_ACK,
+	CMD_DB_LOAD_CHAR_REQ,
+	CMD_DB_LOAD_CHAR_ACK,
 
 	///////////////////////////////////////////////////
 

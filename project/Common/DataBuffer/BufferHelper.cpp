@@ -96,6 +96,8 @@ UINT32 CBufferHelper::Read( CHAR *pszValue )
 
 	memcpy(pszValue, m_pDataBuffer->GetData() + m_dwCurPos, wLen);
 
+	pszValue[wLen] = 0;
+
 	m_dwCurPos += wLen;
 
 	return wLen + sizeof(UINT16);
