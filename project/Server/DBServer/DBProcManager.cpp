@@ -134,7 +134,7 @@ UINT64 CDBProcManager::GetCharID( char *szCharName )
 {
 	CHAR szSql[MAX_PATH];
 
-	sprintf(szSql, "select * from t_charinfo where F_CharName ='%s'", szCharName);
+	sprintf(szSql, "select * from t_charinfo where F_Name ='%s'", szCharName);
 
 	CppSQLite3Query QueryRes = m_DBConnection.execQuery(szSql);
 

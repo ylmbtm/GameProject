@@ -23,7 +23,7 @@ public:
 
 	void			SetObjectName(char *szName);
 
-private:
+protected:
 	char			m_szObjectName[MAX_NAME_LEN];
 };
 

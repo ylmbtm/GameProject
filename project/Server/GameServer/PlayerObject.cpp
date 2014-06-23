@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "PlayerObject.h"
+#include "DataBuffer\BufferHelper.h"
 
 CPlayerObject::CPlayerObject()
 {
@@ -82,7 +83,9 @@ BOOL CPlayerObject::OnUpdate( UINT32 dwTick )
 
 BOOL CPlayerObject::LoadFromDBPcket( CBufferHelper *pBufferHelper )
 {
-
+	pBufferHelper->Read(m_u64ObjectID);
+	pBufferHelper->Read(m_szObjectName);
+	pBufferHelper->Read(m_ObjectPos);
 
 	return TRUE;
 }

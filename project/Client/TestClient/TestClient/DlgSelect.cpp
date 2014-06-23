@@ -93,7 +93,7 @@ BOOL CDlgSelect::AddCharPickInfo( StCharPickInfo &PickInfo )
 		return FALSE;
 	}
 
-	m_CharInfoList[m_nCount] = PickInfo;
+	m_CharInfoList.push_back(PickInfo);
 
 	m_nCount++;
 

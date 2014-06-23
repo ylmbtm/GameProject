@@ -242,7 +242,7 @@ UINT32 CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 
 	WriteHelper.EndWrite();
 	
-	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
+	CGameService::GetInstancePtr()->SendCmdToConnection(DBLoadCharInfoReq.dwGameSvrID, &m_WriteBuffer);
 	
 	return 0;
 }
