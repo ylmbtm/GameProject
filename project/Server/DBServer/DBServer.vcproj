@@ -182,6 +182,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DBPlayerObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DBProcManager.cpp"
 				>
 			</File>
@@ -225,6 +229,10 @@
 			>
 			<File
 				RelativePath=".\DBCmdHandler.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DBPlayerObject.h"
 				>
 			</File>
 			<File

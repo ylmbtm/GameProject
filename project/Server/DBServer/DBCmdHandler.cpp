@@ -162,7 +162,6 @@ UINT32 CDBCmdHandler::OnCmdDBLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	StDBCharLoginAck DBCharLoginAck;
 	DBCharLoginAck.u64ConnID = DBCharLoginReq.u64ConnID;
 	
-
 	UINT32 dwAccountID = m_DBProcManager.VerifyAccount(DBCharLoginReq.CharLoginReq.szAccountName, DBCharLoginReq.CharLoginReq.szPassword);
 	if(dwAccountID == 0)
 	{
@@ -230,6 +229,8 @@ UINT32 CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 		//读取一条记录，
 		//读出成功
 		pDBPlayer = m_DBPlayerMgr.InsertAlloc(DBLoadCharInfoReq.u64CharID);
+
+		pDBPlayer->m_u64ObjectID = DBLoadCharInfoReq.u64CharID;
 
 		if(!pDBPlayer->LoadFromDB())
 		{

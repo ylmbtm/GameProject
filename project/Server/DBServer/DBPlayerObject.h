@@ -1,6 +1,8 @@
 ﻿#ifndef __DB_PLAYER_OBJECT_H__
 #define __DB_PLAYER_OBJECT_H__
 #include "Utility/AVLTree.h"
+#include "GameDef.h"
+#include "Utility/Position.h"
 
 class CDBPlayerObject
 {
@@ -15,7 +17,9 @@ public:
 
 	BOOL	LoadFromDB();
 public:
-	UINT64  m_u64ObjectID;
+	UINT64		m_u64ObjectID;
+	CHAR		m_szObjectName[MAX_NAME_LEN];
+	CPosition	m_ObjectPos;
 	
 
 
