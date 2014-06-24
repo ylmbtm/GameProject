@@ -14,11 +14,6 @@ BOOL CPropertyMgr::ClearChangeFlag()
 	return TRUE;
 }
 
-BOOL CPropertyMgr::SetUpdate()
-{
-
-	return TRUE;
-}
 
 UINT32 CPropertyMgr::WriteToBuffer( CBufferHelper *pBufHelper, UINT32 dwChangeFlag, UINT32 dwDest )
 {

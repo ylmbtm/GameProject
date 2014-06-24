@@ -67,8 +67,6 @@ public:
 
 	virtual BOOL	ClearChangeFlag();
 
-	virtual BOOL    SetUpdate();
-
 	virtual UINT32	WriteToBuffer(CBufferHelper *pBufHelper, UINT32 dwChangeFlag, UINT32 dwDest);
 
 	virtual UINT32  ReadFromBuffer(CBufferHelper *pBufHelper);

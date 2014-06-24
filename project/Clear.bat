@@ -1,7 +1,6 @@
 cd ./
 pause
 
-del /s /q *.exe 
 del /s /q *.ilk 
 del /s /q *.pdb 
 del /s /q *.log
@@ -11,7 +10,6 @@ del /s /q *.dep
 del /s /q *.pch
 del /s /q *.idb
 del /s /q *.ncb
-del /s /q *.lib
 del /s /q *.sdf
 del /s /q *.tlog
 del /s /q *.aps
