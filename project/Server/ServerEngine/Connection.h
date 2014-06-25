@@ -43,7 +43,7 @@ public:
 
 	VOID	SetConnectionType(UINT8 byteType);
 
-	BOOL	CloseConnection(BOOL bNotify);
+	BOOL	Close(BOOL bNotify);
 
 	BOOL	SetSocket(SOCKET hSocket);
 

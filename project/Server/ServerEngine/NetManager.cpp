@@ -196,7 +196,7 @@ BOOL CNetManager::WorkThread_ProcessEvent()
 					{
 						//说明对方己经关闭
 						CLog::GetInstancePtr()->AddLog("完成端口收到数据为0, 对方己经关闭连接!");
-						pConnection->CloseConnection(TRUE);
+						pConnection->Close(TRUE);
 					}
 					else
 					{
@@ -326,7 +326,7 @@ BOOL    CNetManager::WorkThread_SendData()
 				{
 					CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 未能发送出数据，所以主动关闭连接!");
 
-					pConnection->CloseConnection(TRUE);
+					pConnection->Close(TRUE);
 
 					pDataBuffer->Release();
 				}
@@ -339,7 +339,7 @@ BOOL    CNetManager::WorkThread_SendData()
 			{
 				if(pConnection != NULL)
 				{
-					pConnection->CloseConnection(TRUE);
+					pConnection->Close(TRUE);
 				}
 
 				pDataBuffer->Release();
@@ -375,7 +375,7 @@ CConnection* CNetManager::AssociateCompletePort( SOCKET hSocket )
 
 	if(NULL == CreateIoCompletionPort((HANDLE)hSocket, m_hCompletePort, (ULONG_PTR)pConnection, 0))
 	{
-		pConnection->CloseConnection(FALSE);
+		pConnection->Close(FALSE);
 
 		return NULL;
 	}
@@ -460,7 +460,7 @@ BOOL    CNetManager::WorkThread_SendData()
 		{
 			if(pConnection != NULL)
 			{
-				pConnection->CloseConnection(TRUE);
+				pConnection->Close(TRUE);
 			}
 
 			CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 缓冲区满了!");
@@ -498,7 +498,7 @@ CConnection* CNetManager::AssociateCompletePort( SOCKET hSocket )
 
 	if(-1 == epoll_ctl(m_hCompletePort, EPOLL_CTL_ADD, hSocket,&EpollEvent))
 	{
-		pConnection->CloseConnection(FALSE);
+		pConnection->Close(FALSE);
 
 		CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 

@@ -64,8 +64,6 @@ BOOL CConnection::DoReceive()
 		{
 			CLog::GetInstancePtr()->AddLog("关闭连接，因为接收数据发生错误:%s!", CommonSocket::GetLastErrorStr(nError).c_str());
 
-			CloseConnection(TRUE);
-
 			return FALSE;
 		}
 	}
@@ -95,8 +93,6 @@ BOOL CConnection::DoReceive()
 
 			CLog::GetInstancePtr()->AddLog("收到数据为0， 判断是对方关闭################!!");
 
-			CloseConnection(TRUE);
-
 			return FALSE;
 		}
 		else if(nBytes < 0)
@@ -111,8 +107,6 @@ BOOL CConnection::DoReceive()
 			else
 			{
 				CLog::GetInstancePtr()->AddLog("读失败， 可能连接己断开 原因:%s!!", CommonSocket::GetLastErrorStr(nErr).c_str());
-
-				CloseConnection(TRUE);
 
 				return FALSE;
 			}
@@ -174,7 +168,7 @@ BOOL CConnection::ExtractBuffer()
 	return TRUE;
 }
 
-BOOL CConnection::CloseConnection(BOOL bNotify)
+BOOL CConnection::Close(BOOL bNotify)
 {
 	if((m_bConnected)&&(m_u64ConnID != 0))
 	{
@@ -203,9 +197,19 @@ BOOL CConnection::HandleRecvEvent(UINT32 dwBytes)
 
 	ExtractBuffer();
 
-	DoReceive();
+	if (!DoReceive())
+	{
+		Close(TRUE);
+
+		return TRUE;
+	}
 #else
-	DoReceive();
+	if (!DoReceive())
+	{
+		Close(TRUE);
+
+		return TRUE;
+	}
 
 	ExtractBuffer();
 #endif
@@ -404,7 +408,7 @@ BOOL CConnectionMgr::CloseAllConnection()
 		pConn = m_StableConnList[i];
 		if(pConn != NULL)
 		{
-			pConn->CloseConnection(FALSE);
+			pConn->Close(FALSE);
 		}
 	}
 
@@ -413,7 +417,7 @@ BOOL CConnectionMgr::CloseAllConnection()
 		pConn = *itor;
 		if(pConn != NULL)
 		{
-			pConn->CloseConnection(FALSE);
+			pConn->Close(FALSE);
 		}
 	}
 
@@ -422,7 +426,7 @@ BOOL CConnectionMgr::CloseAllConnection()
 		pConn = itor->second;
 		if(pConn != NULL)
 		{
-			pConn->CloseConnection(FALSE);
+			pConn->Close(FALSE);
 		}
 	}
 
