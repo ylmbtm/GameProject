@@ -21,6 +21,10 @@ public:
 
 	BOOL Uninit();
 
+	BOOL OnThreadBegin();
+
+	BOOL OnThreadEnd();
+
 	//*********************消息处理定义开始******************************
 public:
 	UINT32 OnCmdDBNewAccountReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);

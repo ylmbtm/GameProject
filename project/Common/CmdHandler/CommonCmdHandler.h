@@ -3,7 +3,7 @@
 #include "CmdHandler/CommonWorkThread.h"
 #include "DataBuffer/DataBuffer.h"
 
-class CCommonCmdHandler : public ICommandHandler
+class CCommonCmdHandler : public IThreadCommandHandler
 {
 public:
 	CCommonCmdHandler();
@@ -19,6 +19,10 @@ public:
 	BOOL Uninit();
 
 	BOOL AddMessage(UINT64 u64ConnID, IDataBuffer *pDataBuffer);
+
+	BOOL OnThreadBegin(){return TRUE;}
+
+	BOOL OnThreadEnd(){return TRUE;}
 	
 
 protected:

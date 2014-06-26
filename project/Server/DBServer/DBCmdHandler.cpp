@@ -247,3 +247,14 @@ UINT32 CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 	return 0;
 }
 
+BOOL CDBCmdHandler::OnThreadBegin()
+{
+
+	return TRUE;
+}
+
+BOOL CDBCmdHandler::OnThreadEnd()
+{
+	return TRUE;
+}
+

@@ -7,7 +7,7 @@
 #include "DataBuffer/DataBuffer.h"
 
 
-class CScene : public ICommandHandler
+class CScene : public IThreadCommandHandler
 {
 public:
 	CScene();
@@ -21,6 +21,10 @@ public:
 	BOOL Init(UINT32 dwSceneID);
 
 	BOOL Uninit();
+
+	BOOL OnThreadBegin(){return TRUE;}
+
+	BOOL OnThreadEnd(){return TRUE;}
 
 	BOOL AddMessage(UINT64 u64ConnID, IDataBuffer *pDataBuffer);
 
@@ -36,7 +40,6 @@ public:
 
 public:
 	UINT32							m_dwSceneID;
-
 
 
 protected:

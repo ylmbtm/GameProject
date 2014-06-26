@@ -40,14 +40,18 @@ public:
 
 	BOOL			AddMessage(UINT64 u64ConnID, IDataBuffer *pDataBuffer);
 
-	BOOL			SetCommandHandler(ICommandHandler *pCommandHandler);
+	BOOL			SetCommandHandler(IThreadCommandHandler *pCommandHandler);
+
+	BOOL			OnThreadBegin();
+
+	BOOL			OnThreadEnd();
 
 protected:
 	THANDLE					m_hThread;
 
 	BOOL					m_bRun;
 
-	ICommandHandler			*m_pCommandHandler;
+	IThreadCommandHandler	*m_pCommandHandler;
 
 	ArrayLockFreeQueue<MsgItem>   m_MessageQueue;
 

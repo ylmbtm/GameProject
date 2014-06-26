@@ -26,7 +26,7 @@ public:
 
 public:
 	CServerCmdHandler   m_ServerCmdHandler;
-	CDBCmdHandler	m_DBCmdHandler;
+	CDBCmdHandler		m_DBCmdHandler;
 };
 
 #endif

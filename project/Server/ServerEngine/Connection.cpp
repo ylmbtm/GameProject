@@ -185,8 +185,6 @@ BOOL CConnection::Close(BOOL bNotify)
 
 	m_hSocket = INVALID_SOCKET;
 
-	CConnectionMgr::GetInstancePtr()->DeleteConnection(this);
-
 	return TRUE;
 }
 
@@ -199,16 +197,12 @@ BOOL CConnection::HandleRecvEvent(UINT32 dwBytes)
 
 	if (!DoReceive())
 	{
-		Close(TRUE);
-
-		return TRUE;
+		return FALSE;
 	}
 #else
 	if (!DoReceive())
 	{
-		Close(TRUE);
-
-		return TRUE;
+		return FALSE;
 	}
 
 	ExtractBuffer();

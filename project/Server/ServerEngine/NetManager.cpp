@@ -197,10 +197,16 @@ BOOL CNetManager::WorkThread_ProcessEvent()
 						//说明对方己经关闭
 						CLog::GetInstancePtr()->AddLog("完成端口收到数据为0, 对方己经关闭连接!");
 						pConnection->Close(TRUE);
+						CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 					}
 					else
 					{
-						pConnection->HandleRecvEvent(dwNumOfByte);
+						if(!pConnection->HandleRecvEvent(dwNumOfByte))
+						{
+							//收数据失败，基本就是连接己断开
+							pConnection->Close(TRUE);
+							CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
+						}
 					}
 				}
 			}
@@ -328,6 +334,8 @@ BOOL    CNetManager::WorkThread_SendData()
 
 					pConnection->Close(TRUE);
 
+					CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
+
 					pDataBuffer->Release();
 				}
 			}
@@ -340,6 +348,8 @@ BOOL    CNetManager::WorkThread_SendData()
 				if(pConnection != NULL)
 				{
 					pConnection->Close(TRUE);
+
+					CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 				}
 
 				pDataBuffer->Release();
@@ -461,6 +471,8 @@ BOOL    CNetManager::WorkThread_SendData()
 			if(pConnection != NULL)
 			{
 				pConnection->Close(TRUE);
+
+				CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 			}
 
 			CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 缓冲区满了!");
@@ -633,13 +645,20 @@ BOOL CNetManager::WorkThread_ProcessEvent()
 
 		if(_EventNode.dwEvent == EVENT_READ)
 		{
-			pConnection->HandleRecvEvent(0);
+			if(!pConnection->HandleRecvEvent(0))
+			{
+				//基本表明连接己断开，可以关闭连接了。
+				pConnection->Close(TRUE);
+				CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
+			}
+			else
+			{
+				struct epoll_event EpollEvent;
+				EpollEvent.data.ptr= pConnection;
+				EpollEvent.events  = EPOLLIN|EPOLLET;
 
-			struct epoll_event EpollEvent;
-			EpollEvent.data.ptr= pConnection;
-			EpollEvent.events  = EPOLLIN|EPOLLET;
-
-			epoll_ctl(m_hCompletePort, EPOLL_CTL_MOD, pConnection->GetSocket(),  &EpollEvent);
+				epoll_ctl(m_hCompletePort, EPOLL_CTL_MOD, pConnection->GetSocket(),  &EpollEvent);
+			}
 		}
 		else if(_EventNode.dwEvent == EVENT_WRITE)
 		{
@@ -724,9 +743,9 @@ BOOL CNetManager::Close()
 {
 	StopListen();
 
-	CloseSendDataThread();
-
 	CloseEventThread();
+	
+	CloseSendDataThread();
 
 	CConnectionMgr::GetInstancePtr()->CloseAllConnection();
 
