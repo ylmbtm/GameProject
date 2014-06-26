@@ -76,8 +76,8 @@ void CDlgGame::OnSize(UINT nType, int cx, int cy)
 VOID CDlgGame::DrawPlayer( HDC hDC, int nX, int nY , char *szName)
 {
 	RECT Rc;
-	Rc.left = nX - 20;
-	Rc.right = nX + 20;
+	Rc.left = nX - 40;
+	Rc.right = nX + 40;
 	Rc.top   = nY - 20;
 	Rc.bottom = nY+10;
 	DrawText(hDC, szName,strlen(szName), &Rc, DT_CENTER);
@@ -88,8 +88,8 @@ VOID CDlgGame::DrawPlayer( HDC hDC, int nX, int nY , char *szName)
 VOID CDlgGame::DrawNpc( HDC hDC,int nX, int nY , char *szName)
 {
 	RECT Rc;
-	Rc.left = nX - 20;
-	Rc.right = nX + 20;
+	Rc.left = nX - 40;
+	Rc.right = nX + 40;
 	Rc.top   = nY - 20;
 	Rc.bottom = nY+10;
 	DrawText(hDC, szName, strlen(szName), &Rc, DT_CENTER);

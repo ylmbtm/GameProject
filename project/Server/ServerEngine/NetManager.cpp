@@ -81,7 +81,12 @@ BOOL CNetManager::WorkThread_Listen()
 			SendIdentifyInfo(hClientSocket);
 
 #ifdef WIN32
-			pConnection->DoReceive();
+			if(!pConnection->DoReceive())
+			{
+				pConnection->Close(FALSE);
+
+				CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
+			}
 #endif
 		}
 		else
@@ -229,12 +234,19 @@ BOOL CNetManager::WorkThread_ProcessEvent()
 
 						if(SendIdentifyInfo(pConnection->GetSocket()))
 						{
-							pConnection->DoReceive();
+							if(!pConnection->DoReceive())
+							{
+								pConnection->Close(FALSE);
+
+								CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
+							}
 						}
 					}
 					else
 					{
 						CLog::GetInstancePtr()->AddLog("连接其它服务器失败!");
+
+						pConnection->Close(FALSE);
 
 						pConnection->SetConnectionOK(FALSE);
 
@@ -799,7 +811,12 @@ BOOL CNetManager::ConnectToOtherSvr( std::string strIpAddr, UINT16 sPort )
 
 	SendIdentifyInfo(hSocket);
 
-	pConnection->DoReceive();
+	if(!pConnection->DoReceive())
+	{
+		pConnection->Close(FALSE);
+
+		CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
+	}
 
 	return TRUE;
 }
