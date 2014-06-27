@@ -24,6 +24,8 @@ public:
 
 	UINT64 GetCharID(char *szCharName);
 
+	UINT64 GenarateCharID(UINT32 dwAccountID);
+
 	UINT32 GetAccountID(char *szAccount);
 
 	//load account char info

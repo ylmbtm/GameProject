@@ -2,9 +2,6 @@
 #ifndef __COMMON_DATA_TYPE__
 #define __COMMON_DATA_TYPE__
 
-#define MAX_PATH	  	260
-#define CONST_BUFF_SIZE	(8192)
-
 #define TRUE			1
 #define FALSE			0
 

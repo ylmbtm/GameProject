@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DBProcManager.h"
 #include "Utility\CommonFunc.h"
+#include "ObjectID.h"
 
 
 CDBProcManager::CDBProcManager(void)
@@ -97,9 +98,11 @@ BOOL CDBProcManager::CreateNewChar(StCharNewCharReq &Req,  StCharNewCharAck &Ack
 		return FALSE;
 	}
 
+	UINT64 u64NewCharID = GenarateCharID(Req.dwAccountID);
+
 	CHAR szSql[MAX_PATH];
 
-	sprintf(szSql, "insert into t_charinfo(F_AccountID, F_Name, F_Feature) values('%d', '%s','%d')", Req.dwAccountID, Req.szCharName, Req.dwFeature);
+	sprintf(szSql, "insert into t_charinfo(F_CharID, F_AccountID, F_Name, F_Feature) values('%lld','%d', '%s','%d')",u64NewCharID, Req.dwAccountID, Req.szCharName, Req.dwFeature);
 
 	if(m_DBConnection.execDML(szSql) <= 0)
 	{
@@ -110,7 +113,6 @@ BOOL CDBProcManager::CreateNewChar(StCharNewCharReq &Req,  StCharNewCharAck &Ack
 
 	CppSQLite3Query QueryRes = m_DBConnection.execQuery(szSql);
 
-	QueryRes.nextRow();
 	while(!QueryRes.eof())
 	{
 		Ack.CharPickInfo.dwFeature = QueryRes.getIntField("F_Feature", 0);
@@ -174,5 +176,25 @@ BOOL CDBProcManager::DelChar( StCharDelCharReq &Req)
 	}
 
 	return TRUE;
+}
+
+UINT64 CDBProcManager::GenarateCharID( UINT32 dwAccountID )
+{
+	CHAR szSql[MAX_PATH];
+
+	sprintf(szSql, "select max(F_CharID) as F_CharID from t_charinfo where F_AccountID ='%d'", dwAccountID);
+
+	CppSQLite3Query QueryRes = m_DBConnection.execQuery(szSql);
+
+	UINT64 dwTempID = 0;
+	while(!QueryRes.eof())  
+	{  
+		dwTempID = QueryRes.getInt64Field("F_CharID", 0);
+		break;
+	}  
+
+	UINT32 dwIndex = GET_ROLE_INDEX(dwTempID) + 1;
+
+	return MAKE_PLAYER_ID(dwIndex, dwAccountID);
 }
 

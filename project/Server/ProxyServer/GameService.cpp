@@ -9,6 +9,7 @@
 #include "DataBuffer/BufferHelper.h"
 #include "StaticPlayerMgr.h"
 #include "PacketDef/ClientPacket.h"
+#include "ObjectID.h"
 
 CGameService::CGameService(void)
 {
@@ -41,6 +42,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 	{
 	case CMD_CHAR_ENTER_GAME_REQ:
 		{
+			CHECK_PAYER_ID(pBufferHelper->GetCommandHeader()->u64CharID);
 			CWillEnterNode *pWillEnterNode = m_WillEnterNodeMgr.GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
 			if(pWillEnterNode == NULL)
 			{
@@ -50,6 +52,8 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 
 			StCharEnterGameReq CharEnterGameReq;
 			pBufferHelper->Read(CharEnterGameReq);
+
+			CHECK_PAYER_ID(CharEnterGameReq.u64CharID);
 			 
 			if(pWillEnterNode->m_dwIndentifyCode == CharEnterGameReq.dwIndentifyCode)
 			{

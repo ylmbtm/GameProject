@@ -40,7 +40,7 @@ struct StCharDelCharReq
 
 struct StCharDelCharAck
 {
-	UINT16 nRetCode;
+	UINT16  nRetCode;
 	UINT32	dwAccountID;	//账号ID
 	UINT64	u64CharID;	
 

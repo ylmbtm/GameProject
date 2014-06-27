@@ -2,6 +2,7 @@
 #define __PLATFORM_H__
 
 #include "TypeDef.h"
+#include "GameDefine.h"
 #include <errno.h>
 
 #ifdef WIN32
@@ -14,9 +15,7 @@
 #include <stdarg.h>
 #pragma  comment(lib,"ws2_32")
 #pragma  comment(lib, "Mswsock") 
-
 #else
-
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -32,7 +31,6 @@
 #include <sys/time.h>
 #include <sys/stat.h>
 #include <stdarg.h>
-
 
 #define WSAEWOULDBLOCK 		EWOULDBLOCK            
 #define WSAEINPROGRESS 		EINPROGRESS            

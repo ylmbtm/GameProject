@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "CommandDef.h"
-#include "GameDef.h"
+#include "GameDefine.h"
 #include "Error.h"
 #include "DBCmdHandler.h"
 #include "Utility/Log/Log.h"
@@ -142,6 +142,7 @@ UINT32 CDBCmdHandler::OnCmdDBPickCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 
 	StDBCharPickCharAck DBCharPickCharAck;
 	DBCharPickCharAck.u64ConnID = DBCharPickCharReq.u64ConnID;
+	DBCharPickCharAck.CharPickCharAck.u64CharID = DBCharPickCharReq.CharPickCharReq.u64CharID;
 	DBCharPickCharAck.CharPickCharAck.nRetCode = E_SUCCESSED;
 
 
@@ -232,10 +233,23 @@ UINT32 CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 
 		pDBPlayer->m_u64ObjectID = DBLoadCharInfoReq.u64CharID;
 
-		if(!pDBPlayer->LoadFromDB())
+		CHAR szSql[MAX_PATH];
+		sprintf(szSql, "select * from t_charinfo where F_CharID = '%lld'", DBLoadCharInfoReq.u64CharID);
+
+		CppSQLite3Query QueryRes = m_DBProcManager.m_DBConnection.execQuery(szSql);
+
+		if(!QueryRes.eof())
 		{
-			return 0;
+			pDBPlayer->m_dwFeature = QueryRes.getIntField("F_Feature", 0);
+			strncpy(pDBPlayer->m_szObjectName, QueryRes.getStringField("F_Name", ""), 32);
+			pDBPlayer->m_dwLevel = QueryRes.getIntField("F_Level", 0);
+	
 		}
+
+		//if(!pDBPlayer->LoadFromDB())
+		//{
+		//	return 0;
+		//}
 	}
 
 	pDBPlayer->WriteToPacket(&WriteHelper);

@@ -1,7 +1,7 @@
 ﻿#ifndef __DB_PLAYER_OBJECT_H__
 #define __DB_PLAYER_OBJECT_H__
 #include "Utility/AVLTree.h"
-#include "GameDef.h"
+#include "GameDefine.h"
 #include "Utility/Position.h"
 
 class CDBPlayerObject
@@ -20,6 +20,8 @@ public:
 	UINT64		m_u64ObjectID;
 	CHAR		m_szObjectName[MAX_NAME_LEN];
 	CPosition	m_ObjectPos;
+	UINT32		m_dwFeature;
+	UINT32      m_dwLevel;
 	
 
 

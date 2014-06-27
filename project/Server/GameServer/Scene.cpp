@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "CommandDef.h"
-#include "GameDef.h"
+#include "GameDefine.h"
 #include "PacketHeader.h"
 #include "Utility/Log/Log.h"
 #include "Utility/CommonFunc.h"
@@ -14,6 +14,7 @@
 #include "GameService.h"
 #include "Scene.h"
 #include "PacketDef/DBPacket.h"
+#include "ObjectID.h"
 
 
 
@@ -121,8 +122,9 @@ BOOL CScene::AddToMap( CWorldObject *pWorldObject)
 INT32 CScene::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharEnterGameReq CharEnterGameReq;
-
 	pBufferHelper->Read(CharEnterGameReq);
+
+	CHECK_PAYER_ID(CharEnterGameReq.u64CharID);
 
 	StDBLoadCharInfoReq DBLoadCharInfoReq;
 	DBLoadCharInfoReq.dwSceneID = m_dwSceneID;
@@ -535,7 +537,7 @@ INT32 CScene::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHe
 
 	pPlayerObject->LoadFromDBPcket(pBufferHelper);
 
-	pPlayerObject->SetConnectID(u64ConnID);
+	pPlayerObject->SetConnectID(DBLoadCharInfoAck.dwProxySvrID);
 
 	m_PlayerObjectMgr.AddPlayer(pPlayerObject);
 

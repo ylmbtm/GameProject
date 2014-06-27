@@ -377,10 +377,6 @@
 				RelativePath="..\..\Common\Utility\RandomValue.h"
 				>
 			</File>
-			<File
-				RelativePath="..\..\Common\TypeDef.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="CmdDefine"
@@ -390,11 +386,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Common\GameDef.h"
+				RelativePath="..\..\Common\GameDefine.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Common\ObjectID.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Common\PacketHeader.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Common\TypeDef.h"
 				>
 			</File>
 		</Filter>

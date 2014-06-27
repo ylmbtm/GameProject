@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "CommandDef.h"
-#include "GameDef.h"
+#include "GameDefine.h"
 #include "LoginCmdHandler.h"
 #include "Utility/Log/Log.h"
 #include "Utility/CommonFunc.h"

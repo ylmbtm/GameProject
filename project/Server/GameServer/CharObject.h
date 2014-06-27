@@ -1,7 +1,7 @@
 ﻿#ifndef _CHAR_OBJECT_H_
 #define _CHAR_OBJECT_H_
 #include "WorldObject.h"
-#include "GameDef.h"
+#include "GameDefine.h"
 
 class CCharObject : public CWorldObject
 {
