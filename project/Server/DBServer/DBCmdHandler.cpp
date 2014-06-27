@@ -231,6 +231,8 @@ UINT32 CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 		//读出成功
 		pDBPlayer = m_DBPlayerMgr.InsertAlloc(DBLoadCharInfoReq.u64CharID);
 
+		pDBPlayer->Init();
+
 		pDBPlayer->m_u64ObjectID = DBLoadCharInfoReq.u64CharID;
 
 		CHAR szSql[MAX_PATH];

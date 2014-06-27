@@ -10,6 +10,11 @@ public:
 	CDBPlayerObject();
 
 	~CDBPlayerObject();
+	
+	BOOL Init();;
+
+	BOOL Uninit();;
+
 public:
 	UINT32	WriteToPacket( CBufferHelper *pWriteBuffer );
 
