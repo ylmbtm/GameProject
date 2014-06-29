@@ -50,7 +50,7 @@ public:
 	TNodeTypePtr	Find(TKey Key);
 	void			Traversal();
 	TValue*			GetByKey(TKey Key);
-	bool			Insert(TNodeTypePtr pRootNode);
+	bool			Insert(TNodeTypePtr pNode);
 	TNodeTypePtr    AllocNode();
 	void			FreeNode(TNodeTypePtr pNode);
 	void			DoEnumNode(TNodeTypePtr pNode);
@@ -99,19 +99,21 @@ TValue* AVLTree<TKey, TValue>::InsertAlloc( TKey Key )
 	if(m_pRoot == NULL)
 	{
 		m_pRoot = pNode;
-
-		
 	}
 	else
 	{
-		InsertInner(m_pRoot, pNode);
+		if(InsertInner(m_pRoot, pNode))
+		{
+			FreeNode(pNode);
+			return NULL;
+		}
 	}
 
 	return &pNode->m_Data;
 }
 
 template<typename TKey, typename TValue>
-bool AVLTree<TKey, TValue>::Insert( TNodeTypePtr pRootNode )
+bool AVLTree<TKey, TValue>::Insert( TNodeTypePtr pNode )
 {
 	if(m_pRoot == NULL)
 	{
@@ -369,6 +371,7 @@ bool AVLTree<TKey, TValue>::InsertInner(TNodeTypePtr &pParentNode, TNodeTypePtr 
     }
 	else
 	{
+		//己经存在
 		return false;
 	}
 
