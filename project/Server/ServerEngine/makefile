@@ -3,9 +3,11 @@ CCLIB=ar
 CC_INCLUDE=-I/usr/include
 	 
 MY_INCLUDE=-I$(PWD) \
-		-I$../../Common \
-		-I$../../Common/Utility \
-		-I$../../Common/PacketDef
+		-I../../Common \
+		-I../../Common/Utility \
+		-I../../Common/PacketDef \
+		-I../../Common/DataBuff \
+		-I../../Common/CmdHandler
 					 
 CC_LIB=-L/usr/lib \
 	-L/lib \
@@ -13,26 +15,18 @@ CC_LIB=-L/usr/lib \
 			 
 MY_LIB=
 
-TARGET=../Debug/libServerEngine.a
+TARGET=libServerEngine.a
 
-OBJPATH=./Debug/
+OBJPATH=./Linux/
 
-SRCS=  ../../Common/Utility/Log/Log.cpp
-SRCS:= ../../Common/Utility/IniFile/IniFile.cpp
-SRCS:= ../../Common/Utility/CommonConvert.cpp \
-			 ../../Common/Utility/CommonFunc.cpp \
-       ../../Common/Utility/CommonSocket.cpp \
-       ../../Common/Utility/CommonThread.cpp
-SRCS:=./BufferHelper.cpp \
-			./Connection.cpp \
-			./DataBuffer.cpp \
-			./GlobalConfig.cpp \
-			./NetManager.cpp \
-			./ServiceBase.cpp \
-			./stdafx.cpp \
-			./TimerManager.cpp
+SRCS= $(wildcard ./*.cpp)
+SRCS:=$(SRCS) $(wildcard ../../Common/Utility/*.cpp)
+SRCS:=$(SRCS) $(wildcard ../../Common/CmdHandler/*.cpp)
+SRCS:=$(SRCS) $(wildcard ../../Common/DataBuffer/*.cpp)
+SRCS:=$(SRCS) $(wildcard ../../Common/Utility/Log/*.cpp)
+SRCS:=$(SRCS) $(wildcard ../../Common/Utility/IniFile/*.cpp)
 
-#SRCS=$(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.cpp))
+#//SRCS=$(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.cpp))
 
 OBJS=$(SRCS:.cpp=.o)
 
@@ -45,6 +39,7 @@ OBJS=$(SRCS:.cpp=.o)
 
 $(TARGET):$(OBJS)
 	$(CCLIB) -rs -o $(TARGET) $(OBJS)
+	mv $(OBJS) ../Linux
 
 $(OBJS):%.o:%.cpp
 	$(CC) -g -w -c $< -o $@ $(CC_INCLUDE) $(MY_INCLUDE)

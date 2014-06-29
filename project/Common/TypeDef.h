@@ -19,6 +19,10 @@ typedef unsigned int	UINT32;
 typedef int				BOOL;
 typedef void			VOID;
 typedef float			FLOAT;
+typedef double			DOUBLE;
+typedef long long       INT64;
+typedef unsigned long long UINT64;
+typedef char			BYTE;
 
 typedef int				SOCKET;
 typedef int				HANDLE;

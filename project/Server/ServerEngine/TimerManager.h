@@ -11,15 +11,15 @@ public:
 	UINT32 dwStartTime;
 	UINT32 dwEndTime;
 	UINT32 dwTimerID;
-	WPARAM wParam;
-	LPARAM lParam;
+	UINT32 wParam;
+	UINT32 lParam;
 
 	BYTE   RepeatTimes;
 
 	TimeEvent *m_pNext;
 };
 
-#define BEGIN_TIMER_PROCESS VOID TimerManager::OnTimerEvent( TimeEvent *pEvent ){if(pEvent == NULL){return ;}switch(pEvent->dwTimerID){
+#define BEGIN_TIMER_PROCESS VOID OnTimerEvent( TimeEvent *pEvent ){if(pEvent == NULL){return ;}switch(pEvent->dwTimerID){
 #define PROCESS_TIMER_ITEM(TIMER_ID, FUNC) case TIMER_ID:{FUNC(pEvent->dwStartTime, pEvent->dwStartTime, pEvent->wParam, pEvent->lParam);}break;
 #define END_TIMER_PROCESS default:{}break;}}
 
@@ -31,7 +31,7 @@ public:
 	~TimerManager();
 
 public:
-	BOOL AddTimer(UINT32 dwTimerID, WPARAM wParam, LPARAM lParam);
+	BOOL AddTimer(UINT32 dwTimerID, UINT32 wParam, UINT32 lParam);
 
 	BOOL DelTimer(UINT32 dwTimerID);
 

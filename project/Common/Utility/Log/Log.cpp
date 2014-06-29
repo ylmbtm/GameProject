@@ -59,7 +59,9 @@ CLog* CLog::GetInstancePtr()
 
 BOOL CLog::StartLog(std::string strPrefix, std::string strLogDir)
 {
+#ifdef WIN32
 	SetConsoleTitle(strPrefix.c_str());
+#endif
 
 	std::string strPath = CommonFunc::GetCurrentDir();
 

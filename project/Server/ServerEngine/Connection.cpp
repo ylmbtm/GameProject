@@ -79,10 +79,10 @@ BOOL CConnection::DoReceive()
 {
 	while(TRUE)
 	{
-		int nBytes = recv(m_hSocket, m_pBuffer+m_dwDataLen, BUFF_SIZE - m_dwDataLen, 0);
+		int nBytes = recv(m_hSocket, m_pBuffer+m_dwDataLen, CONST_BUFF_SIZE - m_dwDataLen, 0);
 		if(nBytes == 0)
 		{
-			if(m_dwDataLen == BUFF_SIZE)
+			if(m_dwDataLen == CONST_BUFF_SIZE)
 			{
 				CLog::GetInstancePtr()->AddLog("buffer满了，需要再读一次!!");
 

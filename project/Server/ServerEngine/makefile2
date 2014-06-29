@@ -5,7 +5,7 @@ CC_INCLUDE=-I/usr/include
 MY_INCLUDE=-I$(PWD) \
 		-I$../../Common \
 		-I$../../Common/Utility \
-		-I$../../PacketDef
+		-I$../../Common/PacketDef
 					 
 CC_LIB=-L/usr/lib \
 	-L/lib \
@@ -13,15 +13,24 @@ CC_LIB=-L/usr/lib \
 			 
 MY_LIB=
 
-TARGET=libServerEngine.a
+TARGET=../Linux/libServerEngine.a
 
-OBJPATH=./Debug/
+OBJPATH=./Linux/
 
-SRCS= 
-SRCS:=$(SRCS) $(wildcard ./Common/*.cpp)
-SRCS:=$(SRCS) $(wildcard ./CmdPacket/*.cpp)
-SRCS:=$(SRCS) $(wildcard ./IniFile/*.cpp)
-SRCS:=$(SRCS) $(wildcard ./Log/*.cpp)
+SRCS=	../../Common/Utility/Log/Log.cpp
+SRCS:=	../../Common/Utility/IniFile/IniFile.cpp
+SRCS:=	../../Common/Utility/CommonConvert.cpp \
+	../../Common/Utility/CommonFunc.cpp \
+	../../Common/Utility/CommonSocket.cpp \
+	../../Common/Utility/CommonThread.cpp
+SRCS:=	./BufferHelper.cpp \
+	./Connection.cpp \
+	./DataBuffer.cpp \
+	./GlobalConfig.cpp \
+	./NetManager.cpp \
+	./ServiceBase.cpp \
+	./stdafx.cpp \
+	./TimerManager.cpp
 
 #SRCS=$(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.cpp))
 

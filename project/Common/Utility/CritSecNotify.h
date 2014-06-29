@@ -58,7 +58,7 @@ public:
 };
 
 #else //LINUX
-
+#define INFINITE (0xffffffff)
 #include <pthread.h>
 class CCritSecNotify 
 {

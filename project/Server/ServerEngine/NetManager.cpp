@@ -428,12 +428,17 @@ BOOL    CNetManager::WorkThread_SendData()
 {
 	while(!m_bCloseSend)
 	{
-		SendData _SendData = m_SendDataList.GetCurData();
+		SendDataNode _SendNode;
 
-		IDataBuffer *pDataBuffer = (IDataBuffer *)_SendData.pPtr;
+		if(!m_SendDataList.Pop(_SendNode))
+		{
+			continue;
+		}
+
+		IDataBuffer *pDataBuffer = (IDataBuffer *)_SendNode.pPtr;
 		if(pDataBuffer == NULL)
 		{
-			if(_SendData.dwConnID != 1)
+			if(_SendNode.u64ConnID != 1)
 			{
 				CLog::GetInstancePtr()->AddLog("发送线程:空消息 ，准备退出发送线程!");
 			}
@@ -443,9 +448,9 @@ BOOL    CNetManager::WorkThread_SendData()
 
 		SOCKET hSocket = INVALID_SOCKET;
 		CConnection *pConnection = NULL;
-		if(_SendData.bConnID)
+		if(_SendNode.bIsConnID)
 		{
-			pConnection = CConnectionMgr::GetInstancePtr()->GetConnectionByConnID(_SendData.dwConnID);
+			pConnection = CConnectionMgr::GetInstancePtr()->GetConnectionByConnID(_SendNode.u64ConnID);
 			if(pConnection == NULL)
 			{
 				CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 无效的连接ID!");
@@ -459,7 +464,7 @@ BOOL    CNetManager::WorkThread_SendData()
 		}
 		else
 		{
-			hSocket = _SendData.dwConnID;
+			hSocket = _SendNode.u64ConnID;
 		}
 
 		if(hSocket == INVALID_SOCKET)
@@ -541,7 +546,7 @@ BOOL CNetManager::DestroyCompletePort()
 
 BOOL CNetManager::CreateDispatchThread()
 {
-	m_hDispathThread = CommonThread::CreateThread(_NetEventDispatchThread,  (void*)NULL);
+	m_hDispathThread = CommonThreadFunc::CreateThread(_NetEventDispatchThread,  (void*)NULL);
 	if(m_hDispathThread != (THANDLE)NULL)
 	{
 		ASSERT_FAIELD;
@@ -598,7 +603,7 @@ BOOL CNetManager::WorkThread_DispathEvent()
 
 					_EventNode.pPtr = EpollEvent[i].data.ptr;
 
-					m_DispatchEventList.Push(_Event);
+					m_DispatchEventList.Push(_EventNode);
 
 					CLog::GetInstancePtr()->AddLog("-------EPOLLIN--------成功----!");
 				}
@@ -644,10 +649,10 @@ BOOL CNetManager::WorkThread_ProcessEvent()
 			continue;
 		}
 
-		CConnection *pConnection = (CConnection *)_Event.pPtr;
+		CConnection *pConnection = (CConnection *)_EventNode.pPtr;
 		if(pConnection == NULL)
 		{
-			if(_Event.dwEvent != 1)
+			if(_EventNode.dwEvent != 1)
 			{
 				CLog::GetInstancePtr()->AddLog("错误:取出一个空事件!");
 			}

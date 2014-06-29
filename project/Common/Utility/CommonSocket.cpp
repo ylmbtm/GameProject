@@ -187,8 +187,11 @@ UINT32  CommonSocket::IpAddrStrToInt(CHAR *pszIpAddr)
 	sockaddr_in SvrAddr;
 	
 	inet_pton(AF_INET, pszIpAddr, &SvrAddr.sin_addr);
-
+#ifdef WIN32
 	return SvrAddr.sin_addr.S_un.S_addr;
+#else
+	return SvrAddr.sin_addr.s_addr;
+#endif
 }
 
 

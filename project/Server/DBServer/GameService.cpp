@@ -86,7 +86,7 @@ BOOL WINAPI HandlerCloseEvent(DWORD dwCtrlType)
 #else
 void  HandlerCloseEvent(int nSignalNum)
 {
-	g_GameService->StopService();
+	CGameService::GetInstancePtr()->StopService();
 
 	exit(0);
 

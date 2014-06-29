@@ -19,12 +19,12 @@ UINT32 CommonFunc::GetProcessorNum()
 
 std::string CommonFunc::GetCurrentDir()
 {
-	char szPath[MAX_PATH];
+	char szPath[MAX_PATH_LEN];
 
 #ifdef WIN32
-	_getcwd(szPath, MAX_PATH);
+	_getcwd(szPath, MAX_PATH_LEN);
 #else
-	getcwd(szPath, MAX_PATH);
+	getcwd(szPath, MAX_PATH_LEN);
 #endif
 	return std::string(szPath);
 }
@@ -35,7 +35,7 @@ UINT32 CommonFunc::GetTickCount()
 	return ::GetTickCount();
 #else
 
-	UIN32 dwTickCount = 0;;
+	UINT32 dwTickCount = 0;;
 	struct timespec on;
 	if(0 == clock_gettime(CLOCK_MONOTONIC,&on) )
 	{

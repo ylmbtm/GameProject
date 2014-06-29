@@ -38,10 +38,7 @@ public:
 
 	BOOL		    RemoveByCharID(UINT64 u64CharID);
 
-	void			DoEnumNode(TNodeTypePtr pNode)
-	{
-		printf("%d", pNode->m_Data);
-	}
+	void			DoEnumNode(TNodeTypePtr pNode);
 };
 
 #endif /*__CHAR_WILL_ENTER_LISTH__*/

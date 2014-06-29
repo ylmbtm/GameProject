@@ -26,7 +26,7 @@ TimerManager::~TimerManager()
 
 }
 
-BOOL TimerManager::AddTimer( UINT32 dwTimerID, WPARAM wParam, LPARAM lParam )
+BOOL TimerManager::AddTimer( UINT32 dwTimerID, UINT32 wParam, UINT32 lParam )
 {
 	TimeEvent *pNewEvent = NULL;
 	if(m_pFree == NULL)
