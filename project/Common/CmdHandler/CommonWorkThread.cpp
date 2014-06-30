@@ -38,7 +38,10 @@ void CCommonWorkThread::Run()
 			m_pCommandHandler->OnUpdate(dwTick);
 		}
 
-		CommonThreadFunc::Sleep(50-dwTick+m_dwLastTick);
+		if(m_MessageQueue.size() <= 0)
+		{
+			CommonThreadFunc::Sleep(50-dwTick+m_dwLastTick);
+		}
 		
 	}
 }

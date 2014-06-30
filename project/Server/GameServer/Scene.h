@@ -34,6 +34,10 @@ public:
 
 	BOOL AddToUpdateList(CWorldObject *pWorldObject);
 
+	BOOL HandleUpdateList();
+
+	BOOL HandleUpdateObject(CWorldObject *pWorldObject);
+
 
 public:
 	UINT32	GetSceneID(){ return m_dwSceneID; }
@@ -62,13 +66,13 @@ public:
 	
 	//*********************消息处理定义结束******************************
 
-	BOOL SendCreateObjectToGrids(CWorldObject *pWorldObject, INT32 Grids[9]);
+	BOOL SendNewObjectToGrids(CWorldObject *pWorldObject, INT32 Grids[9]);
 
-	BOOL SendCreateGridsToPlayer(INT32 Grids[9], CPlayerObject *pPlayerObj);
+	BOOL SendNewGridsToObject(INT32 Grids[9], CPlayerObject *pPlayerObj);
 
-	BOOL SendUpdatePlayerToGrids(CPlayerObject *pPlayerObj, INT32 Grids[9]);
+	BOOL SendUpdateObjectToGrids(CWorldObject *pWorldObj, INT32 Grids[9]);
 
-	BOOL SendRemovePlayerToGrids(UINT64 u64CharID, INT32 Grids[9]);
+	BOOL SendRemoveObjectToGrids(UINT64 u64CharID, INT32 Grids[9]);
 
 	BOOL SendRemoveGridsToPlayer(INT32 Grids[9], CPlayerObject *pPlayerObj);
 

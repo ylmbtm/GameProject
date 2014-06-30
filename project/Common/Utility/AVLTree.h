@@ -102,7 +102,7 @@ TValue* AVLTree<TKey, TValue>::InsertAlloc( TKey Key )
 	}
 	else
 	{
-		if(InsertInner(m_pRoot, pNode))
+		if(!InsertInner(m_pRoot, pNode))
 		{
 			FreeNode(pNode);
 			return NULL;

@@ -55,10 +55,12 @@ public:
 	CWorldObject		*m_pGridPrev;
 
 public:
-
 	CPosition	m_ObjectPos;
 
 	CScene		*m_pOwnerScene;		
+
+public:
+	CPosition   m_OldObjPos;//己经同步出去的地址
 
 };
 
