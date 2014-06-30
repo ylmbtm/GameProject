@@ -73,12 +73,9 @@ public:
 
 
 public:
-	BOOL AddUpdateObject(CWorldObject *pObject)
-	{
-		insert(pObject);
+	BOOL AddUpdateObject(CWorldObject *pObject);
 
-		return TRUE;
-	}
+	BOOL RemoveUpdateObject(CWorldObject *pObject);
 
 	CWorldObject* GetFisrtOjbect();
 };

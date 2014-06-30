@@ -54,11 +54,21 @@ BOOL CWorldObject::ClearChangeFlag()
 	return TRUE;
 }
 
-BOOL CWorldObject::SetUpdate()
+BOOL CWorldObject::SetUpdate(UpdateTypeEnum UpdateType)
 {
 	if(m_pOwnerScene != NULL)
 	{
+		if(UpdateType > m_UpdateType)
+		{
+			m_UpdateType = UpdateType;
+		}
+
 		m_pOwnerScene->AddToUpdateList(this);
+	}
+	else
+	{
+		ASSERT_FAIELD;
+		return FALSE;
 	}
 	
 	return TRUE;

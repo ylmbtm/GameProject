@@ -13,7 +13,7 @@ public:
 
 	virtual BOOL	ClearChangeFlag();
 
-	virtual BOOL    SetUpdate();
+	virtual BOOL    SetUpdate(UpdateTypeEnum UpdateType);
 
 	virtual UINT32	WriteToBuffer(CBufferHelper *pBufHelper, UINT32 dwChangeFlag, UINT32 dwDest);
 

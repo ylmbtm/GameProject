@@ -34,6 +34,8 @@ public:
 
 	BOOL AddToUpdateList(CWorldObject *pWorldObject);
 
+	BOOL RemoveFromUpList(CWorldObject *pWorldObject);
+
 	BOOL HandleUpdateList();
 
 	BOOL HandleUpdateObject(CWorldObject *pWorldObject);

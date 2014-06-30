@@ -108,7 +108,12 @@ CPlayerObject* CPlayerObjectMgr::GetPlayer( UINT64 ObjectID )
 	return NULL;
 }
 
+BOOL CUpdateObjectMgr::AddUpdateObject( CWorldObject *pObject )
+{
+	insert(pObject);
 
+	return TRUE;
+}
 
 CWorldObject* CUpdateObjectMgr::GetFisrtOjbect()
 {
@@ -124,3 +129,18 @@ CWorldObject* CUpdateObjectMgr::GetFisrtOjbect()
 
 	return pWorldObject;
 }
+
+BOOL CUpdateObjectMgr::RemoveUpdateObject( CWorldObject *pObject )
+{
+	iterator itor = find(pObject);
+	if(itor == end())
+	{
+		return FALSE;
+	}
+
+	erase(itor);
+
+	return TRUE;
+}
+
+

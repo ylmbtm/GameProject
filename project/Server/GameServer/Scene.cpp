@@ -43,9 +43,7 @@ BOOL CScene::Init(UINT32 dwSceneID)
 
 BOOL CScene::Uninit()
 {
-	m_WorkThread.Stop();
-
-	return TRUE;
+	return m_WorkThread.Stop();
 }
 
 BOOL CScene::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
@@ -82,7 +80,7 @@ BOOL CScene::AddMessage(UINT64 u64ConnID, IDataBuffer *pDataBuffer)
 	return m_WorkThread.AddMessage(u64ConnID, pDataBuffer);
 }
 
-BOOL CScene::AddToMap( CWorldObject *pWorldObject)
+BOOL CScene::AddToMap(CWorldObject *pWorldObject)
 {
 	INT32 dwIndex = m_GridManager.GetIndexByPos(pWorldObject->m_ObjectPos.x, pWorldObject->m_ObjectPos.z);
 	if(dwIndex == -1)
@@ -104,16 +102,7 @@ BOOL CScene::AddToMap( CWorldObject *pWorldObject)
 
 	pWorldObject->SetOwnerScene(this);
 
-	INT32 Grids[10];
-
-	m_GridManager.GetSurroundingGrids(dwIndex, Grids);
-
-	SendNewObjectToGrids(pWorldObject, Grids);
-
-	if(pWorldObject->GetObjectType() == OBJECT_PLAYER)
-	{
-		SendNewGridsToObject(Grids, (CPlayerObject*)pWorldObject);
-	}
+	pWorldObject->SetUpdate(Update_New);
 
 	return TRUE;
 }
@@ -162,33 +151,24 @@ INT32 CScene::OnCmdPlayerMove( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelpe
 		return 0;
 	}
 
-
 	INT32 nCurIndex  = m_GridManager.GetIndexByPos(pPlayerObj->m_ObjectPos.x, pPlayerObj->m_ObjectPos.z);
 
 	ASSERT(m_GridManager.IsObjectExist(pPlayerObj, nCurIndex));
 
-	if(nDestIndex == nCurIndex)  //如果还在一个格子里，只需要修改一下坐标就行了。
+	if(nDestIndex != nCurIndex)  //如果还在一个格子里，只需要修改一下坐标就行了。
 	{
-		pPlayerObj->m_ObjectPos.x = CharMoveReq.x;
-		pPlayerObj->m_ObjectPos.y = CharMoveReq.y;
-		pPlayerObj->m_ObjectPos.z = CharMoveReq.z;
+		ASSERT(!m_GridManager.IsObjectExist(pPlayerObj, nDestIndex));
 
-		pPlayerObj->SetUpdate();
+		m_GridManager.RemoveObjectFromGrid(pPlayerObj, nCurIndex);
 
-		return 0;
+		m_GridManager.AddObjectToGrid(pPlayerObj, nDestIndex);
 	}
-
-	ASSERT(!m_GridManager.IsObjectExist(pPlayerObj, nDestIndex));
-
-	m_GridManager.RemoveObjectFromGrid(pPlayerObj, nCurIndex);
-
+	
 	pPlayerObj->m_ObjectPos.x = CharMoveReq.x;
 	pPlayerObj->m_ObjectPos.y = CharMoveReq.y;
 	pPlayerObj->m_ObjectPos.z = CharMoveReq.z;
 
-	m_GridManager.AddObjectToGrid(pPlayerObj, nDestIndex);
-
-	pPlayerObj->SetUpdate();
+	pPlayerObj->SetUpdate(Update_Update);
 
 	return 0;
 }
@@ -459,8 +439,6 @@ INT32 CScene::OnCmdLeaveGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHel
 
 	m_PlayerObjectMgr.erase(pPlayerObject->GetObjectID());
 
-	delete pPlayerObject;
-
 	return 0;
 }
 
@@ -482,12 +460,7 @@ BOOL CScene::RemoveFromMap( CWorldObject *pWorldObject )
 
 	pGrid->RemoveObject(pWorldObject);
 
-	pWorldObject->SetOwnerScene(NULL);
-
-	INT32 Grids[10];
-	m_GridManager.GetSurroundingGrids(dwIndex, Grids);
-
-	SendRemoveObjectToGrids(pWorldObject->GetObjectID(), Grids);
+	pWorldObject->SetUpdate(Update_Delete);
 
 	return TRUE;
 
@@ -506,9 +479,12 @@ BOOL CScene::OnUpdate( UINT32 dwTick )
 
 BOOL CScene::AddToUpdateList( CWorldObject *pWorldObject )
 {
-	m_UpdateObjectMgr.AddUpdateObject(pWorldObject);
+	return m_UpdateObjectMgr.AddUpdateObject(pWorldObject);
+}
 
-	return TRUE;
+BOOL CScene::RemoveFromUpList( CWorldObject *pWorldObject )
+{
+	return m_UpdateObjectMgr.RemoveUpdateObject(pWorldObject);
 }
 
 INT32 CScene::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
@@ -524,18 +500,22 @@ INT32 CScene::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHe
 
 	m_PlayerObjectMgr.AddPlayer(pPlayerObject);
 
-	m_UpdateObjectMgr.AddUpdateObject(pPlayerObject);
-
-	StCharEnterGameAck CharEnterGameAck;
-	CharEnterGameAck.dwSceneID       = GetSceneID();
-	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_ACK, CMDH_SENCE, 0,  pPlayerObject->GetObjectID());
-	WriteHelper.Write(CharEnterGameAck);
-	pPlayerObject->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_DEST_MYSELF);
-	WriteHelper.EndWrite();
-	CGameService::GetInstancePtr()->SendCmdToConnection(DBLoadCharInfoAck.dwProxySvrID, &m_WriteBuffer);
-
-	AddToMap(pPlayerObject);
+	if(AddToMap(pPlayerObject))
+	{
+		StCharEnterGameAck CharEnterGameAck;
+		CharEnterGameAck.dwSceneID       = GetSceneID();
+		CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_ACK, CMDH_SENCE, 0,  pPlayerObject->GetObjectID());
+		WriteHelper.Write(CharEnterGameAck);
+		pPlayerObject->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_DEST_MYSELF);
+		WriteHelper.EndWrite();
+		CGameService::GetInstancePtr()->SendCmdToConnection(DBLoadCharInfoAck.dwProxySvrID, &m_WriteBuffer);
+	}
+	else
+	{
+		ASSERT_FAIELD;
+		return 0;
+	}
 	
 	return 0;
 }
@@ -564,42 +544,86 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 	INT32 nCurIndex = m_GridManager.GetIndexByPos(pWorldObject->m_ObjectPos.x, pWorldObject->m_ObjectPos.z);
 	if(nCurIndex == -1)
 	{
-		//不合法的地址
-		ASSERT_FAIELD;
+		ASSERT_FAIELD;//不合法的地址
 
 		return TRUE;
 	}
 
-	INT32 nSrcIndex  = m_GridManager.GetIndexByPos(pWorldObject->m_OldObjPos.x, pWorldObject->m_OldObjPos.z);
-
-	if(nCurIndex == nSrcIndex)  //如果还在一个格子里，只需要修改一下坐标就行了。
+	if(pWorldObject->m_UpdateType == Update_Unknow)
+	{
+		ASSERT_FAIELD;
+	}
+	else if(pWorldObject->m_UpdateType == Update_New)
 	{
 		INT32 Grids[10];
 
 		m_GridManager.GetSurroundingGrids(nCurIndex, Grids);
 
-		SendUpdateObjectToGrids(pWorldObject, Grids);
+		SendNewObjectToGrids(pWorldObject, Grids);
 
-		return 0;
+		if(pWorldObject->GetObjectType() == OBJECT_PLAYER)
+		{
+			SendNewGridsToObject(Grids, (CPlayerObject*)pWorldObject);
+		}
+
+		pWorldObject->m_UpdateObjPos = pWorldObject->m_ObjectPos;
+
+		pWorldObject->m_UpdateType   = Update_Unknow;
 	}
+	else if(pWorldObject->m_UpdateType == Update_Delete)
+	{
+		INT32 Grids[10];
 
-	INT32 AddGrid[10], RemoveGrid[10], StayGrid[10];
+		m_GridManager.GetSurroundingGrids(nCurIndex, Grids);
 
-	m_GridManager.CalDiffGrids(nSrcIndex, nCurIndex, AddGrid, RemoveGrid, StayGrid);
+		SendRemoveObjectToGrids(pWorldObject->GetObjectID(), Grids);
 
-	//将玩家发的更新发给周围的格子里
-	SendUpdateObjectToGrids(pWorldObject, StayGrid);
+		if(pWorldObject->GetObjectType() == OBJECT_PLAYER)
+		{
+			delete (CPlayerObject*)pWorldObject;
+		}
 
-	SendNewObjectToGrids(pWorldObject, AddGrid);
+		return TRUE;
+	}
+	else
+	{
+		INT32 nSrcIndex  = m_GridManager.GetIndexByPos(pWorldObject->m_UpdateObjPos.x, pWorldObject->m_UpdateObjPos.z);
 
-	SendNewGridsToObject(AddGrid, (CPlayerObject*)pWorldObject);
+		if(nCurIndex == nSrcIndex)  //如果还在一个格子里，只需要修改一下坐标就行了。
+		{
+			INT32 Grids[10];
 
-	SendRemoveObjectToGrids(pWorldObject->GetObjectID(), RemoveGrid);
+			m_GridManager.GetSurroundingGrids(nCurIndex, Grids);
 
-	SendRemoveGridsToPlayer(RemoveGrid, (CPlayerObject*)pWorldObject);
+			SendUpdateObjectToGrids(pWorldObject, Grids);
 
-	pWorldObject->m_OldObjPos = pWorldObject->m_ObjectPos;
+			return 0;
+		}
+
+		INT32 AddGrid[10], RemoveGrid[10], StayGrid[10];
+
+		m_GridManager.CalDiffGrids(nSrcIndex, nCurIndex, AddGrid, RemoveGrid, StayGrid);
+
+		//将玩家发的更新发给周围的格子里
+		SendUpdateObjectToGrids(pWorldObject, StayGrid);
+
+		SendNewObjectToGrids(pWorldObject, AddGrid);
+
+		SendNewGridsToObject(AddGrid, (CPlayerObject*)pWorldObject);
+
+		SendRemoveObjectToGrids(pWorldObject->GetObjectID(), RemoveGrid);
+
+		SendRemoveGridsToPlayer(RemoveGrid, (CPlayerObject*)pWorldObject);
+
+		pWorldObject->m_UpdateObjPos = pWorldObject->m_ObjectPos;
+
+		pWorldObject->m_UpdateType   = Update_Unknow;
+	}
+	
+	
 
 	return TRUE;
 }
+
+
 

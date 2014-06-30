@@ -41,7 +41,7 @@ BOOL CObject::ClearChangeFlag()
 	return TRUE;
 }
 
-BOOL CObject::SetUpdate()
+BOOL CObject::SetUpdate(UpdateTypeEnum UpdateType)
 {
 
 	return TRUE;

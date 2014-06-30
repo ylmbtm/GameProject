@@ -17,6 +17,16 @@
 #define UPDATE_DEST_MYSELF			3
 
 
+enum  UpdateTypeEnum
+{
+	Update_Unknow,
+	Update_Update,
+	Update_New,
+	Update_Delete
+};
+
+
+
 
 
 
