@@ -11,6 +11,7 @@
 #include "PacketDef/LoginPacket.h"
 #include "DlgSelect.h"
 #include "Error.h"
+#include "ObjectID.h"
 
 CClientCmdHandler::CClientCmdHandler(void)
 {
@@ -163,6 +164,8 @@ UINT32 CClientCmdHandler::OnCmdEnterGameAck( UINT16 wCommandID, UINT64 u64ConnID
 
 	m_HostPlayer.ReadFromBuffer(pBufferHelper);
 
+	CHECK_PAYER_ID(m_HostPlayer.GetObjectID());
+
 	printf("登录成功!");
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
@@ -231,6 +234,8 @@ BOOL CClientCmdHandler::SendPickCharReq( UINT64 u64CharID )
 
 	CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
 
+	CHECK_PAYER_ID(u64CharID);
+
 	WriteHelper.BeginWrite(CMD_CHAR_PICK_CHAR_REQ, 0, 0, 0);
 
 	WriteHelper.Write(CharPickCharReq);
@@ -284,6 +289,8 @@ UINT32 CClientCmdHandler::OnCmdNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	StCharNewCharAck CharNewCharAck;
 	pBufferHelper->Read(CharNewCharAck);
 
+	CHECK_PAYER_ID(CharNewCharAck.CharPickInfo.u64CharID);
+
 
 	DlgSelect.AddCharPickInfo(CharNewCharAck.CharPickInfo);
 
@@ -297,6 +304,8 @@ BOOL CClientCmdHandler::SendDelCharReq( UINT32 dwAccountID,UINT64 dwCharID )
 	CharDelCharReq.dwAccountID = dwAccountID;
 	CharDelCharReq.u64CharID    = dwCharID;
 	CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
+
+	CHECK_PAYER_ID(dwCharID);
 
 	WriteHelper.BeginWrite(CMD_CHAR_DEL_CHAR_REQ, 0, 0, 0);
 

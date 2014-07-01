@@ -9,6 +9,7 @@
 #include "DataBuffer\BufferHelper.h"
 #include "PacketDef\CommonPacket.h"
 #include "PacketDef\ClientPacket.h"
+#include "ObjectID.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -123,6 +124,8 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 		WriteHelper.Write(_MoveGs);
 
 		WriteHelper.EndWrite();
+
+		CHECK_PAYER_ID(CClientCmdHandler::GetInstancePtr()->m_HostPlayer.GetObjectID());
 
 		ClientEngine::GetInstancePtr()->SendData(ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetData(), ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetDataLenth());
 

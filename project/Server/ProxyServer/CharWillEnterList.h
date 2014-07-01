@@ -19,7 +19,7 @@ public:
 
 	UINT64 m_GameSvrConnID;
 
-	UINT32 m_dwIndentifyCode;
+	UINT32 m_dwIdentifyCode;
 
 	UINT32 m_dwTickount;
 

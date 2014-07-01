@@ -6,6 +6,7 @@
 #include "ConnectionType.h"
 #include "PacketDef\ClientPacket.h"
 #include "Error.h"
+#include "ObjectID.h"
 
 ClientEngine::ClientEngine(void)
 {
@@ -155,6 +156,10 @@ UINT32 ClientEngine::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBu
 
 		CharEnterGameReq.u64CharID = m_u64ClientID;
 
+		CharEnterGameReq.dwIdentifyCode = m_dwIdentifyCode;
+
+		CHECK_PAYER_ID(m_u64ClientID);
+
 		CBufferHelper WriteHelper(TRUE, m_NetworkMgr.m_pWriteBuffer);
 
 		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_REQ, CMDH_SENCE, 0, CharEnterGameReq.u64CharID);
@@ -190,10 +195,13 @@ UINT32 ClientEngine::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	StCharPickCharAck CharPickCharAck;
 	pBufferHelper->Read(CharPickCharAck);
 
+	CHECK_PAYER_ID(CharPickCharAck.u64CharID);
+
 	if(CharPickCharAck.nRetCode == E_SUCCESSED)
 	{
 		m_NetworkMgr.DisConnect();
 		m_u64ClientID = CharPickCharAck.u64CharID;
+		m_dwIdentifyCode = CharPickCharAck.dwIdentifyCode;
 		m_NetworkMgr.ConnectToServer(CharPickCharAck.szIpAddr, CharPickCharAck.sPort);
 	}
 

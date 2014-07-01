@@ -23,11 +23,13 @@ void CCommonWorkThread::Run()
 {
 	while (m_bRun)
 	{
+		//这就把所有的消息都处理完了
 		ProcessMessage();
 
 		UINT32 dwTick = CommonFunc::GetTickCount();
 		if((dwTick - m_dwLastTick) >= 50)
 		{
+			//处理所有的定时器
 			ProcessTimeEvent();
 			
 			m_dwLastTick = dwTick;
@@ -35,6 +37,7 @@ void CCommonWorkThread::Run()
 
 		if(m_MessageQueue.size() <= 0)
 		{
+			//如果没有消息了，来处理更新队列
 			m_pCommandHandler->OnUpdate(dwTick);
 		}
 

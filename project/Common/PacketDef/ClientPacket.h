@@ -101,12 +101,12 @@ struct StCharPickCharAck	//选择角色请求回复
 struct StCharEnterGameReq
 {
 	UINT64 u64CharID;		//进入游戏请求
-	UINT32 dwIndentifyCode;		//进入游戏请求码
+	UINT32 dwIdentifyCode;		//进入游戏请求码
 };
 
 struct StCharEnterGameAck
 {
-	UINT32 dwIndentifyCode;		//进入游戏请求码
+	UINT32 dwIdentifyCode;		//进入游戏请求码
 	UINT32 dwSceneID;
 	//后面跟的是玩家的数据
 };

@@ -50,6 +50,7 @@ public:
 protected:
 
 	UINT64				m_u64ClientID;
+	UINT32				m_dwIdentifyCode;
 
 	CNetworkMgr			m_NetworkMgr;
 	

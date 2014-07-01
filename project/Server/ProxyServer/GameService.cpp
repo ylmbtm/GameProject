@@ -56,7 +56,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 
 			CHECK_PAYER_ID(CharEnterGameReq.u64CharID);
 			 
-			if(pWillEnterNode->m_dwIndentifyCode != CharEnterGameReq.dwIndentifyCode)
+			if(pWillEnterNode->m_dwIdentifyCode != CharEnterGameReq.dwIdentifyCode)
 			{
 				m_WillEnterNodeMgr.RemoveByCharID(CharEnterGameReq.u64CharID);
 				//非法的进入
@@ -109,7 +109,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 				break;
 			}
 
-			pWillEnterNode->m_dwIndentifyCode = CharWillEnterGame.dwIdentifyCode;
+			pWillEnterNode->m_dwIdentifyCode = CharWillEnterGame.dwIdentifyCode;
 			pWillEnterNode->m_GameSvrConnID   = CharWillEnterGame.dwGameSvrID;
 			pWillEnterNode->m_dwSceneID		  = CharWillEnterGame.dwSceneID;
 		}
