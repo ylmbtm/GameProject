@@ -10,7 +10,6 @@ enum ConnectionType
 	TYPE_SVR_LOGIN,
 	TYPE_SVR_DATABASE,
 	TYPE_CLT_PLAYER
-		
 };
 
 

@@ -620,8 +620,6 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 		pWorldObject->m_UpdateType   = Update_Unknow;
 	}
 	
-	
-
 	return TRUE;
 }
 

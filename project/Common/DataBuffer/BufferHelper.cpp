@@ -24,6 +24,7 @@ BOOL CBufferHelper::BeginWrite(UINT16 wCommandID, UINT8 CmdHandleID, UINT16 dwSc
 {
 	if(m_pDataBuffer == NULL)
 	{
+		ASSERT_FAIELD;
 		return FALSE;
 	}
 
@@ -56,6 +57,7 @@ BOOL CBufferHelper::BeginRead()
 {
 	if(m_pDataBuffer == NULL)
 	{
+		ASSERT_FAIELD;
 		return FALSE;
 	}
 
@@ -90,6 +92,8 @@ TransferHeader* CBufferHelper::GetTransferHeader()
 
 UINT32 CBufferHelper::Read( CHAR *pszValue )
 {
+	ASSERT(pszValue != NULL);
+
 	UINT16 wLen = 0;
 
 	Read(wLen);
@@ -105,6 +109,8 @@ UINT32 CBufferHelper::Read( CHAR *pszValue )
 
 UINT32 CBufferHelper::Read( BYTE *pData, UINT32 dwBytes )
 {
+	ASSERT(pData != NULL);
+
 	memcpy(pData, m_pDataBuffer->GetData() + m_dwCurPos, dwBytes);
 
 	m_dwCurPos += dwBytes;
@@ -125,6 +131,8 @@ UINT32 CBufferHelper::Read( std::string &strValue )
 
 UINT32 CBufferHelper::Write( BYTE *pData, UINT32 dwBytes )
 {
+	ASSERT(pData != NULL);
+
 	memcpy(m_pDataBuffer->GetData() + m_dwCurPos, pData,  dwBytes);
 
 	m_dwCurPos += dwBytes;
@@ -134,6 +142,8 @@ UINT32 CBufferHelper::Write( BYTE *pData, UINT32 dwBytes )
 
 UINT32 CBufferHelper::Write( const CHAR *pszValue )
 {
+	ASSERT(pszValue != NULL);
+
 	UINT16 wLen = strlen(pszValue);
 
 	Write(wLen);

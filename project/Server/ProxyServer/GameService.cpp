@@ -47,6 +47,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			if(pWillEnterNode == NULL)
 			{
 				//非法的进入
+				ASSERT_FAIELD;
 				break;
 			}
 
@@ -55,8 +56,9 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 
 			CHECK_PAYER_ID(CharEnterGameReq.u64CharID);
 			 
-			if(pWillEnterNode->m_dwIndentifyCode == CharEnterGameReq.dwIndentifyCode)
+			if(pWillEnterNode->m_dwIndentifyCode != CharEnterGameReq.dwIndentifyCode)
 			{
+				m_WillEnterNodeMgr.RemoveByCharID(CharEnterGameReq.u64CharID);
 				//非法的进入
 				break;
 			}
@@ -70,7 +72,14 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 					pStaticPlayer->SetGameSvrConnID(pWillEnterNode->m_GameSvrConnID);
 					pStaticPlayer->SetSceneID(pWillEnterNode->m_dwSceneID);
 				}
+				else
+				{
+					ASSERT_FAIELD;
+					break;
+				}
 			}
+
+			m_WillEnterNodeMgr.RemoveByCharID(CharEnterGameReq.u64CharID);
 
 			pBufferHelper->GetCommandHeader()->dwSceneID = pWillEnterNode->m_dwSceneID;
 
@@ -94,10 +103,15 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			pBufferHelper->Read(CharWillEnterGame);
 
 			CWillEnterNode *pWillEnterNode = m_WillEnterNodeMgr.CreateWillEnterNode(CharWillEnterGame.u64CharID);
+			if(pWillEnterNode == NULL)
+			{
+				ASSERT_FAIELD;
+				break;
+			}
+
 			pWillEnterNode->m_dwIndentifyCode = CharWillEnterGame.dwIdentifyCode;
 			pWillEnterNode->m_GameSvrConnID   = CharWillEnterGame.dwGameSvrID;
 			pWillEnterNode->m_dwSceneID		  = CharWillEnterGame.dwSceneID;
-
 		}
 		break;
 	default:
@@ -106,6 +120,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			if(pClientObj == NULL)
 			{
 				ASSERT_FAIELD;
+				break;
 			}
 
 			if(u64ConnID < 1000)
@@ -127,6 +142,7 @@ BOOL CGameService::StartRun()
 {
 	if(!CLog::GetInstancePtr()->StartLog("ProxyServer"))
 	{
+		ASSERT_FAIELD;
 		return FALSE;
 	}
 
@@ -135,17 +151,21 @@ BOOL CGameService::StartRun()
 	if(!CGlobalConfig::GetInstancePtr()->Load("ProxyServer.ini"))
 	{
 		CLog::GetInstancePtr()->AddLog("配制文件加载失败!");
+		ASSERT_FAIELD;
 		return FALSE;
 	}
 
 	if(!StartService())
 	{
 		CLog::GetInstancePtr()->AddLog("启动服务失败!");
-
+		ASSERT_FAIELD;
 		return FALSE;
 	}
 
-	m_ServerCmdHandler.Init(0);
+	if(!m_ServerCmdHandler.Init(0))
+	{
+		ASSERT_FAIELD;
+	}
 
 	OnIdle();
 
@@ -164,7 +184,7 @@ BOOL WINAPI HandlerCloseEvent(DWORD dwCtrlType)
 		ComEvent.SetEvent();
 	}
 
-	return FALSE;
+	return TRUE;
 }
 #else
 void  HandlerCloseEvent(int nSignalNum)
