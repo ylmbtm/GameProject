@@ -94,6 +94,8 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 				ASSERT_FAIELD;
 			}
 
+			pBufferHelper->GetCommandHeader()->dwSceneID = pStaticPlayer->GetSceneID();
+
 			RelayToServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
 		}
 		break;
@@ -129,6 +131,8 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			}
 			else
 			{
+				pBufferHelper->GetCommandHeader()->dwSceneID = pClientObj->GetSceneID();
+
 				RelayToServer(pClientObj, pBufferHelper->GetDataBuffer());
 			}
 		}

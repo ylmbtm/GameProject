@@ -29,7 +29,7 @@ struct StCharNewCharReq
 {
 	UINT32	dwAccountID;	//账号ID
 	CHAR	szCharName[32];
-	UINT32	dwFeature;	// sex, face type, hair color, face color, and job
+	UINT32	dwFeature;	// sex:1, face type:4, hair color:4, face color:4, and job:3
 };
 
 struct StCharDelCharReq
