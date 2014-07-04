@@ -124,9 +124,10 @@ struct StCharLeaveGameAck
 
 struct StCharMoveReq
 {
-	FLOAT x;
-	FLOAT y;
-	FLOAT z;
+	UINT16	sDir; //朝向
+	FLOAT	x;
+	FLOAT	y;
+	FLOAT	z;
 };
 
 #pragma  pack(pop)

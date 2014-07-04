@@ -25,5 +25,7 @@ UINT32 CCharObject::ReadFromBuffer( CBufferHelper *pBufHelper )
 
 	dwSize += pBufHelper->Read(m_szObjectName);
 
+	dwSize += pBufHelper->Read(m_ObjectStatus.dwValues);
+
 	return dwSize;
 }

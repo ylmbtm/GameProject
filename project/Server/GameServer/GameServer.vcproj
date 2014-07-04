@@ -353,6 +353,30 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="include"
+			>
+			<File
+				RelativePath="..\..\Common\Error.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Common\GameDefine.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Common\GameStruct.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Common\ObjectID.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Common\TypeDef.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>

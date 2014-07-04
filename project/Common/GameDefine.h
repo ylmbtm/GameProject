@@ -5,7 +5,6 @@
 #define MAX_NAME_LEN				(32)
 #define CONST_BUFF_SIZE				(8192)
 
-
 /***************************************
 //以下是
 ***************************************/
@@ -24,7 +23,6 @@ enum  UpdateTypeEnum
 	Update_New,
 	Update_Delete
 };
-
 
 
 

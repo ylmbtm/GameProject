@@ -37,6 +37,8 @@ UINT32 CCharObject::WriteToBuffer( CBufferHelper *pBufHelper, UINT32 dwChangeFla
 
 	dwSize += pBufHelper->Write(m_szObjectName);
 
+	dwSize += pBufHelper->Write(m_ObjectStatus.dwValues);
+
 
 	return dwSize;
 }
@@ -47,6 +49,8 @@ UINT32 CCharObject::ReadFromBuffer( CBufferHelper *pBufHelper )
 	dwSize += CWorldObject::ReadFromBuffer(pBufHelper);
 
 	dwSize += pBufHelper->Read(m_szObjectName);
+
+	dwSize += pBufHelper->Read(m_ObjectStatus.dwValues);
 
 	return dwSize;
 }

@@ -30,20 +30,6 @@
 
 #define CHECK_PAYER_ID(charid) ASSERT(GET_OBJ_TYPE(charid) == OBJECT_PLAYER);ASSERT(GET_ROLE_INDEX(charid) < 10);
 
-/***************************************
-//以下是
-***************************************/
-#define UPDATE_FLAG_CHANGE			0
-#define UPDATE_FLAG_CREATE			1
-
-#define UPDATE_DEST_OTHER			1
-#define UPDATE_DEST_SERVER			2
-#define UPDATE_DEST_MYSELF			3
-
-
-
-
-
 ////////////////////////////////////////////
 
 

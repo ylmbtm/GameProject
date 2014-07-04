@@ -22,13 +22,13 @@ public:
 	afx_msg void OnPaint();
 
 public:
-	VOID  DrawPlayer(HDC hDC, int nX, int nY, char *szName);
+	VOID  DrawPlayer(HDC hDC, int nX, int nY, int nDir, char *szName);
 
 	VOID  DrawNpc(HDC hDC,int nX, int nY, char *szName);
 
 	VOID  DrawItem(HDC hDC,int nX, int nY);
 
-	VOID  Draw(HDC hDC,int nX, int nY, COLORREF clr, int nRadius);
+	VOID  Draw(HDC hDC,int nX, int nY, int nDir, COLORREF clr, int nRadius);
 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 };

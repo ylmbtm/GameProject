@@ -50,13 +50,13 @@ void CDlgGame::OnPaint()
 
 	dc.FillSolidRect(&rc, RGB(255,255,255));
 	
-	DrawPlayer(dc.GetSafeHdc(), pClientCmdHandler->m_HostPlayer.m_ObjectPos.x, pClientCmdHandler->m_HostPlayer.m_ObjectPos.z, pClientCmdHandler->m_HostPlayer.m_szObjectName);
+	DrawPlayer(dc.GetSafeHdc(), pClientCmdHandler->m_HostPlayer.m_ObjectPos.x, pClientCmdHandler->m_HostPlayer.m_ObjectPos.z, pClientCmdHandler->m_HostPlayer.m_ObjectStatus.nDir, pClientCmdHandler->m_HostPlayer.m_szObjectName);
 
 	for(CPlayerObjectMgr::iterator itor = pClientCmdHandler->m_PlayerObjMgr.begin(); itor != pClientCmdHandler->m_PlayerObjMgr.end(); ++itor)
 	{
 		CPlayerObject *pObject = itor->second;
 
-		DrawPlayer(dc.GetSafeHdc(),  pObject->m_ObjectPos.x, pObject->m_ObjectPos.z, pObject->m_szObjectName);
+		DrawPlayer(dc.GetSafeHdc(),  pObject->m_ObjectPos.x, pObject->m_ObjectPos.z,pObject->m_ObjectStatus.nDir, pObject->m_szObjectName);
 
 		//DrawItem(dc.GetSafeHdc(), rand()%300,rand()%300);
 
@@ -73,7 +73,7 @@ void CDlgGame::OnSize(UINT nType, int cx, int cy)
 	// TODO: 在此处添加消息处理程序代码
 }
 
-VOID CDlgGame::DrawPlayer( HDC hDC, int nX, int nY , char *szName)
+VOID CDlgGame::DrawPlayer( HDC hDC, int nX, int nY , int nDir, char *szName)
 {
 	RECT Rc;
 	Rc.left = nX - 40;
@@ -81,7 +81,7 @@ VOID CDlgGame::DrawPlayer( HDC hDC, int nX, int nY , char *szName)
 	Rc.top   = nY - 20;
 	Rc.bottom = nY+10;
 	DrawText(hDC, szName,strlen(szName), &Rc, DT_CENTER);
-	Draw(hDC, nX, nY, RGB(255, 0 , 0), 5);
+	Draw(hDC, nX, nY, nDir, RGB(255, 0 , 0), 5);
 	return ;
 }
 
@@ -93,17 +93,17 @@ VOID CDlgGame::DrawNpc( HDC hDC,int nX, int nY , char *szName)
 	Rc.top   = nY - 20;
 	Rc.bottom = nY+10;
 	DrawText(hDC, szName, strlen(szName), &Rc, DT_CENTER);
-	Draw(hDC, nX, nY, RGB(0 ,255,  0), 5);
+	Draw(hDC, nX, nY, 0, RGB(0 ,255,  0), 5);
 	return ;
 }
 
 VOID CDlgGame::DrawItem( HDC hDC,int nX, int nY )
 {
-	Draw(hDC, nX, nY, RGB(0 ,  0, 255), 7);
+	Draw(hDC, nX, nY, 0, RGB(0 ,  0, 255), 7);
 	return ;
 }
 
-VOID CDlgGame::Draw( HDC hDC,int nX, int nY, COLORREF clr, int nRadius )
+VOID CDlgGame::Draw( HDC hDC,int nX, int nY, int nDir, COLORREF clr, int nRadius )
 {
 	CPoint point;
 
