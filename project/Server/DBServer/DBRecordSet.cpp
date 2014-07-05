@@ -13,25 +13,22 @@
 
 CDBRecordSet::CDBRecordSet( void )
 {
-
+	m_RowCount		= 0;
+	m_pMySqlStmt	= 0;
+	m_pResult		= 0;
+	m_nFieldNum		= 0;
+	m_pBinds		= 0;
 }
 
 CDBRecordSet::~CDBRecordSet( void )
 {
+
 }
 
 bool CDBRecordSet::MoveNext( void )
 {
-	int nRet = mysql_stmt_fetch(m_pMySqlStmt);
-		
 	//获取数据成功
-	if(0 == nRet)
-	{
-		return true;
-	}
-
-	//下面的值得怀疑
-	if(MYSQL_DATA_TRUNCATED == nRet)
+	if(0 == mysql_stmt_fetch(m_pMySqlStmt))
 	{
 		return true;
 	}
@@ -43,6 +40,7 @@ size_t CDBRecordSet::GetCount( void )
 {
 	if(m_pMySqlStmt == NULL)
 	{
+		ASSERT_FAIELD;
 		return 0;
 	}
 
@@ -521,18 +519,94 @@ bool CDBRecordSet::InitRecordSet(MYSQL_STMT *pMySqlStmt, MYSQL_RES *pResult)
 {
 	if((pMySqlStmt == NULL)||(pResult == NULL))
 	{
+		ASSERT_FAIELD;
 		return false;
 	}
 
 	if (0 != mysql_stmt_bind_result(pMySqlStmt, m_pBinds))
 	{
-	  return false;
+		mysql_stmt_close( pMySqlStmt );
+
+		pMySqlStmt = NULL;
+
+		ASSERT_FAIELD;
+		return false;
+	}
+	
+	m_pMySqlStmt = pMySqlStmt;
+	m_pResult    = pResult;
+
+    return true;
+}
+
+bool CDBRecordSet::SetFielsInfo( int nNum, ... )
+{
+	va_list argList;
+	va_start( argList, nNum );
+
+	SetFieldNum(nNum);
+
+	for (int i=0; i < nNum; i++)
+	{
+		enum_field_types fdType = va_arg(argList, enum_field_types);
+		SetFieldType(i, fdType);
 	}
 
-	if (0 != mysql_stmt_store_result(pMySqlStmt))
+	va_end( argList );
+
+	return true;
+}
+
+bool CDBRecordSet::SetFieldNum( int nNum )
+{
+	if(nNum <= 0)
 	{
+		ASSERT_FAIELD;
 		return false;
 	}
 
-    return true;
+	m_nFieldNum = nNum;
+
+	m_pBinds = new MYSQL_BIND[nNum];
+
+	memset(m_pBinds, 0, sizeof(MYSQL_BIND)*nNum);
+
+	return true;
+}
+
+int CDBRecordSet::GetFieldNum()
+{
+	return m_nFieldNum;
+}
+
+void CDBRecordSet::SetFieldType( int nIndex, enum_field_types fdType )
+{
+	MYSQL_BIND *pTemp = &m_pBinds[nIndex];
+
+	int BufferSize = 0;
+
+	switch ( fdType )
+	{
+	case MYSQL_TYPE_TINY:		BufferSize = 1;	break;
+	case MYSQL_TYPE_SHORT:		BufferSize = 2;	break;
+	case MYSQL_TYPE_INT24:		BufferSize = 4;	break;
+	case MYSQL_TYPE_LONG:		BufferSize = 4;	break;
+	case MYSQL_TYPE_LONGLONG:	BufferSize = 8;break;
+	case MYSQL_TYPE_FLOAT:		BufferSize = 4;	break;
+	case MYSQL_TYPE_DOUBLE:		BufferSize = 8;	break;
+	case MYSQL_TYPE_STRING:		BufferSize = 255;break;
+	case MYSQL_TYPE_VAR_STRING:	BufferSize = 65535;break;
+	case MYSQL_TYPE_TINY_BLOB:	BufferSize = 256;break;
+	case MYSQL_TYPE_BLOB:		BufferSize = 65535;break;
+	case MYSQL_TYPE_MEDIUM_BLOB:BufferSize = 16777215;break;
+	case MYSQL_TYPE_LONG_BLOB:	BufferSize = 4026531840;break;
+	}
+
+	nLen = 0;
+	pTemp->buffer			= malloc(BufferSize);
+	pTemp->buffer_length	= BufferSize;
+	pTemp->buffer_type      = fdType;
+	pTemp->length			= &nLen;
+
+	return ;
 }

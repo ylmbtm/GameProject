@@ -10,6 +10,8 @@ CDBStoredProcedure::CDBStoredProcedure(char const *pzProcedure, int nParam)
 
 	m_pMybind = NULL;
 
+	m_strSql = pzProcedure;
+
 	if(nParam > 0)
 	{
 		m_pMybind = new MYSQL_BIND[nParam];
@@ -43,7 +45,7 @@ void CDBStoredProcedure::set_bool( size_t idx_, my_bool bval_ )
 	}
 
 	*(my_bool*)temp->buffer = bval_;
-	temp->buffer_length = 1;
+	temp->buffer_length = sizeof(my_bool);
 	temp->buffer_type = MYSQL_TYPE_TINY;
 	temp->is_unsigned = UNSIGNED_FLAG;
 	temp->is_null_value = 0;
@@ -59,7 +61,7 @@ void CDBStoredProcedure::set_int8( size_t idx_, int8 i8_ )
 	}
 
 	*(int8*)temp->buffer = i8_;
-	temp->buffer_length = 1;
+	temp->buffer_length = sizeof(int8);
 	temp->buffer_type = MYSQL_TYPE_TINY;
 	temp->is_unsigned = 0;
 	temp->is_null_value = 0;
@@ -75,7 +77,7 @@ void CDBStoredProcedure::set_uint8( size_t idx_, uint8 ui8_ )
 	}
 
 	*(uint8*)temp->buffer = ui8_;
-	temp->buffer_length = 1;
+	temp->buffer_length = sizeof(ui8_);
 	temp->buffer_type = MYSQL_TYPE_TINY;
 	temp->is_unsigned = UNSIGNED_FLAG;
 	temp->is_null_value = 0;
@@ -91,7 +93,7 @@ void CDBStoredProcedure::set_int16( size_t idx_, int16 i16_ )
 	}
 
 	*(int16*)temp->buffer = i16_;
-	temp->buffer_length = 1;
+	temp->buffer_length = sizeof(i16_);
 	temp->buffer_type = MYSQL_TYPE_SHORT;
 	temp->is_unsigned = 0;
 	temp->is_null_value = 0;
@@ -107,7 +109,7 @@ void CDBStoredProcedure::set_uint16( size_t idx_, uint16 ui16_ )
 	}
 
 	*(uint16*)temp->buffer = ui16_;
-	temp->buffer_length = 1;
+	temp->buffer_length = sizeof(ui16_);
 	temp->buffer_type = MYSQL_TYPE_SHORT;
 	temp->is_unsigned = UNSIGNED_FLAG;
 	temp->is_null_value = 0;
@@ -123,7 +125,7 @@ void CDBStoredProcedure::set_int32( size_t idx_, int32 i32_ )
 	}
 
 	*(int32*)temp->buffer = i32_;
-	temp->buffer_length = 1;
+	temp->buffer_length = sizeof(i32_);
 	temp->buffer_type = MYSQL_TYPE_LONG;
 	temp->is_unsigned = 0;
 	temp->is_null_value = 0;
@@ -139,7 +141,7 @@ void CDBStoredProcedure::set_uint32( size_t idx_, uint32 ui32_ )
 	}
 
 	*(uint32*)temp->buffer = ui32_;
-	temp->buffer_length = 1;
+	temp->buffer_length = sizeof(ui32_);
 	temp->buffer_type = MYSQL_TYPE_LONG;
 	temp->is_unsigned = UNSIGNED_FLAG;
 	temp->is_null_value = 0;
@@ -155,7 +157,7 @@ void CDBStoredProcedure::set_int64( size_t idx_, int64 i64_ )
 	}
 
 	*(int64*)temp->buffer = i64_;
-	temp->buffer_length = 1;
+	temp->buffer_length = sizeof(i64_);
 	temp->buffer_type = MYSQL_TYPE_LONGLONG;
 	temp->is_unsigned = 0;
 	temp->is_null_value = 0;
@@ -171,7 +173,7 @@ void CDBStoredProcedure::set_uint64( size_t idx_, uint64 ui64_ )
 	}
 
 	*(uint64*)temp->buffer = ui64_;
-	temp->buffer_length = 1;
+	temp->buffer_length = sizeof(uint64);
 	temp->buffer_type = MYSQL_TYPE_LONGLONG;
 	temp->is_unsigned = UNSIGNED_FLAG;
 	temp->is_null_value = 0;
@@ -187,7 +189,7 @@ void CDBStoredProcedure::set_float( size_t idx_, float fval_ )
 	}
 
 	*(float*)temp->buffer = fval_;
-	temp->buffer_length = 1;
+	temp->buffer_length = sizeof(float);
 	temp->buffer_type = MYSQL_TYPE_FLOAT;
 	temp->is_unsigned = 0;
 	temp->is_null_value = 0;
@@ -203,7 +205,7 @@ void CDBStoredProcedure::set_double( size_t idx_, double dval_ )
 	}
 
 	*(double*)temp->buffer = dval_;
-	temp->buffer_length = 1;
+	temp->buffer_length = sizeof(dval_);
 	temp->buffer_type = MYSQL_TYPE_DOUBLE;
 	temp->is_unsigned = 0;
 	temp->is_null_value = 0;

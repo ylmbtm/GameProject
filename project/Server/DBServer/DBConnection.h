@@ -30,7 +30,7 @@ public:
     void Close( void );
 
     // execute.
-    int Execute( CDBStoredProcedure *pDBStoredProcedure );
+    int Execute( CDBStoredProcedure *pDBStoredProcedure);
 
     // query.
     int Query( CDBStoredProcedure *pDBStoredProcedure);

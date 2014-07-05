@@ -12,64 +12,13 @@ public:
 	~CDBRecordSet( void );
 
 public:
-	bool SetFielsInfo(int nNum, ...)
-	{
-		va_list argList;
-		va_start( argList, nNum );
+	bool SetFielsInfo(int nNum, ...);
 
-		SetFieldNum(nNum);
+	bool SetFieldNum(int nNum);
 
-		for (int i=0; i < nNum; i++)
-		{
-			enum_field_types fdType = va_arg(argList, enum_field_types);
-			SetFieldType(i, fdType);
-		}
-		
-		va_end( argList );
+	int GetFieldNum();
 
-		return true;
-	}
-
-	bool SetFieldNum(int nNum)
-	{
-		m_nFieldNum = nNum;
-		if(nNum > 0)
-		{
-			m_pBinds = new MYSQL_BIND[nNum];
-
-			memset(m_pBinds, 0, sizeof(MYSQL_BIND)*nNum);
-		}
-
-		return true;
-	}
-
-	void SetFieldType(int nIndex, enum_field_types fdType)
-	{
-		MYSQL_BIND *pTemp = &m_pBinds[nIndex];
-
-		int BufferSize = 0;
-
-		switch ( fdType )
-		{
-		case MYSQL_TYPE_TINY:	BufferSize = 1;	break;
-		case MYSQL_TYPE_SHORT:	BufferSize = 2;	break;
-		case MYSQL_TYPE_INT24:	BufferSize = 4;	break;
-		case MYSQL_TYPE_LONG:	BufferSize = 4;	break;
-		case MYSQL_TYPE_LONGLONG:BufferSize = 8;break;
-		case MYSQL_TYPE_FLOAT:	BufferSize = 4;	break;
-		case MYSQL_TYPE_DOUBLE:	BufferSize = 8;	break;
-		case MYSQL_TYPE_STRING: BufferSize = 255;break;
-		case MYSQL_TYPE_VAR_STRING:BufferSize = 65535;break;
-		case MYSQL_TYPE_BLOB:	BufferSize = 256;break;
-		case MYSQL_TYPE_TINY_BLOB:BufferSize = 65535;break;
-		case MYSQL_TYPE_MEDIUM_BLOB:BufferSize = 16777215;break;
-		case MYSQL_TYPE_LONG_BLOB:BufferSize = 4026531840;break;
-		}
-
-		pTemp->buffer			= malloc(BufferSize);
-		pTemp->buffer_length	= BufferSize;
-		pTemp->buffer_type      = fdType;
-	}
+	void SetFieldType(int nIndex, enum_field_types fdType);
 
 public:
     // next.
@@ -123,12 +72,13 @@ public:
     // initialize.
     bool InitRecordSet(MYSQL_STMT *pMySqlStmt, MYSQL_RES *pResult);
 
+	unsigned long nLen;
+
 
 private:
     size_t                       m_RowCount;
 	MYSQL_STMT					*m_pMySqlStmt;
 	MYSQL_RES					*m_pResult;
-
 
 	int							 m_nFieldNum;
 	MYSQL_BIND					*m_pBinds;
