@@ -53,6 +53,7 @@
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4996;4244"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -377,14 +378,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\Common\ClientEngine\ClientEngine.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\Common\ClientEngine\NetworkMgr.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\Common\ClientEngine\NetworkMgr.h"
 				>
 			</File>
 		</Filter>
