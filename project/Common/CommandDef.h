@@ -19,6 +19,7 @@ enum Command_ID
 
 	//玩家版本验证命令
 	CMD_CHAR_VERIFY_VERSION,	//玩家发版本请求验证
+	CMD_CHAR_GAME_MANAGER,      //GM命令
 
 	//玩家登录命令
 	CMD_CHAR_NEW_ACCOUNT_REQ,	//玩家注册账号的命令

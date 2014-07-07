@@ -116,6 +116,23 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			pWillEnterNode->m_dwSceneID		  = CharWillEnterGame.dwSceneID;
 		}
 		break;
+	case CMD_CHAR_GAME_MANAGER:
+		{
+			CConnection *pConn = GetConnectionByID(u64ConnID);
+			if(pConn == NULL)
+			{
+				break;
+			}
+
+			//判断IP是否合法
+			if(pConn->m_dwIpAddr == 0)
+			{
+
+			}
+
+			
+		}
+		break;
 	default:
 		{
 			CStaticPlayer *pClientObj = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);

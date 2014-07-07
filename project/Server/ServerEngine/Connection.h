@@ -73,6 +73,8 @@ public:
 
 	UINT32						m_dwDataLen;
 	CHAR						m_pBuffer[CONST_BUFF_SIZE];
+
+	UINT32						m_dwIpAddr;
 };
 
 

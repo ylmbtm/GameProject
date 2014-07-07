@@ -59,9 +59,10 @@ BOOL CNetManager::WorkThread_Listen()
 {
 	while(TRUE)
 	{
-		sockaddr_in SvrAddr;
-		socklen_t nLen = sizeof(SvrAddr);
-		SOCKET hClientSocket = accept(m_hListenSocket, (sockaddr*)&SvrAddr, &nLen);
+		sockaddr_in Con_Addr;
+		socklen_t nLen = sizeof(Con_Addr);
+		memset(&Con_Addr, 0, sizeof(Con_Addr));
+		SOCKET hClientSocket = accept(m_hListenSocket, (sockaddr*)&Con_Addr, &nLen);
 		if(hClientSocket == INVALID_SOCKET)
 		{
 			CLog::GetInstancePtr()->AddLog("accept 错误 原因:%s!", CommonSocket::GetLastErrorStr(CommonSocket::GetSocketLastError()).c_str());
@@ -864,6 +865,8 @@ BOOL CNetManager::ConnectToOtherSvrEx( std::string strIpAddr, UINT16 sPort )
 	bRet = CommonSocket::ConnectSocket(hSocket, strIpAddr.c_str(), sPort);
 
 #endif
+
+	pConnection->m_dwIpAddr = CommonSocket::IpAddrStrToInt((CHAR*)strIpAddr.c_str());
 
 	if(!bRet)
 	{

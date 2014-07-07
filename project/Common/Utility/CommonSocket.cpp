@@ -187,11 +187,8 @@ UINT32  CommonSocket::IpAddrStrToInt(CHAR *pszIpAddr)
 	sockaddr_in SvrAddr;
 	
 	inet_pton(AF_INET, pszIpAddr, &SvrAddr.sin_addr);
-#ifdef WIN32
-	return SvrAddr.sin_addr.S_un.S_addr;
-#else
+
 	return SvrAddr.sin_addr.s_addr;
-#endif
 }
 
 
@@ -228,7 +225,17 @@ BOOL	CommonSocket::ConnectSocketEx(SOCKET hSocket, const char *pAddr, short sPor
 		}
 	}
 
-
 	return TRUE;
 }
 #endif
+
+std::string CommonSocket::IpAddrIntToStr( UINT32 dwIpAddr )
+{
+	in_addr Addr;
+
+	Addr.s_addr = dwIpAddr;
+	
+	CHAR szIpBuffer[20] = {0};
+	inet_ntop(AF_INET, &Addr, szIpBuffer, 20);
+	return std::string(szIpBuffer);
+}

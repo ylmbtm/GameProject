@@ -121,6 +121,10 @@ struct StCharLeaveGameAck
 
 };
 
+struct StCharGmCmdReq
+{
+	CHAR szGMCommand[256];
+};
 
 struct StCharMoveReq
 {
