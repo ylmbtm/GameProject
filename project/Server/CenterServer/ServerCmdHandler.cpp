@@ -62,7 +62,7 @@ BOOL CServerCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBu
 }
 
 
-UINT32 CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+BOOL CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
 	StConnectNotify ConnectNotify;
 
@@ -89,10 +89,10 @@ UINT32 CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID
 		CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 	}
 
-	return 0;
+	return TRUE;
 }
 
-UINT32 CServerCmdHandler::OnCmdRegisterToCenter(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+BOOL CServerCmdHandler::OnCmdRegisterToCenter(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
 	///先将其它的服务器地址发给注册来的服务器
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
@@ -118,10 +118,10 @@ UINT32 CServerCmdHandler::OnCmdRegisterToCenter(UINT16 wCommandID, UINT64 u64Con
 
 	m_vtActiveSvrList.insert(std::make_pair(u64ConnID,RegisterToCenterSvr));
 
-	return 0;
+	return TRUE;
 }
 
-UINT32 CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+BOOL CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
 	UINT32 dwCount = 0;
 
@@ -153,7 +153,7 @@ UINT32 CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID
 		m_vtActiveSvrList.insert(std::make_pair(u64ConnID,RegisterToCenterSvr));
 	}
 
-	return 0;
+	return TRUE;
 }
 
 BOOL CServerCmdHandler::OnUpdate( UINT32 dwTick )
@@ -161,9 +161,9 @@ BOOL CServerCmdHandler::OnUpdate( UINT32 dwTick )
 	return TRUE;
 }
 
-UINT32 CServerCmdHandler::OnCmdDisConnectNotify( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CServerCmdHandler::OnCmdDisConnectNotify( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	m_vtActiveSvrList.erase(u64ConnID);
 
-	return 0;
+	return TRUE;
 }

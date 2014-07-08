@@ -3,6 +3,16 @@
 
 #include "Utility/CritSec.h"
 
+enum LogLevel
+{
+	Log_All,
+	Log_Info,
+	Log_Warnning,
+	Log_Error,
+	Log_None
+};
+
+
 class CLog
 {
 private:
@@ -18,12 +28,23 @@ public:
 
 	void AddLog(char* lpszFormat,...);
 
-protected:
-	CCritSec		  m_CritSec;
+	void LogWarnning(char* lpszFormat,...);
 
-	INT32			  m_LogCount;
+	void LogError(char* lpszFormat,...);
+
+	void LogInfo(char* lpszFormat,...);
+
+	void SetLogLevel(int Level);
+
+protected:
+	CCritSec			m_CritSec;
+
+	INT32				m_LogCount;
 
 	FILE *m_pLogFile;
+
+	INT32				m_LogLevel;
 };
+
 
 #endif

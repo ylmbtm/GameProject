@@ -110,3 +110,142 @@ BOOL CLog::CloseLog()
 
 	return TRUE;
 }
+
+void CLog::LogWarnning( char* lpszFormat,... )
+{
+	if(m_LogLevel > Log_Info)
+	{
+		return ;
+	}
+
+	if(m_pLogFile == NULL)
+	{
+		return ;
+	}
+
+	CHAR szLog[512];
+
+	time_t _time;
+	time(&_time);
+	tm *pTime = localtime(&_time);
+
+	sprintf(szLog,"[%02d-%02d-%02d %02d:%02d:%02d][%04x] ", pTime->tm_year%100, pTime->tm_mon, pTime->tm_mday, pTime->tm_hour, pTime->tm_min, pTime->tm_sec, 0xffff&CommonFunc::GetCurThreadID());
+
+	va_list argList;
+	va_start( argList, lpszFormat );
+	vsprintf(szLog+26, lpszFormat, argList);
+	va_end( argList );
+
+	strcat(szLog,"\n");
+
+
+	CAutoLock Lock(&m_CritSec);
+	fputs(szLog, m_pLogFile);
+	printf(szLog);
+
+	m_LogCount++;
+
+	if(m_LogCount >= 10)
+	{
+		fflush(m_pLogFile);
+
+		m_LogCount = 0;
+	}
+
+	return ;
+}
+
+void CLog::LogError( char* lpszFormat,... )
+{
+	if(m_LogLevel > Log_Error)
+	{
+		return ;
+	}
+
+	if(m_pLogFile == NULL)
+	{
+		return ;
+	}
+
+	CHAR szLog[512];
+
+	time_t _time;
+	time(&_time);
+	tm *pTime = localtime(&_time);
+
+	sprintf(szLog,"[%02d-%02d-%02d %02d:%02d:%02d][%04x] ", pTime->tm_year%100, pTime->tm_mon, pTime->tm_mday, pTime->tm_hour, pTime->tm_min, pTime->tm_sec, 0xffff&CommonFunc::GetCurThreadID());
+
+	va_list argList;
+	va_start( argList, lpszFormat );
+	vsprintf(szLog+26, lpszFormat, argList);
+	va_end( argList );
+
+	strcat(szLog,"\n");
+
+
+	CAutoLock Lock(&m_CritSec);
+	fputs(szLog, m_pLogFile);
+	printf(szLog);
+
+	m_LogCount++;
+
+	if(m_LogCount >= 10)
+	{
+		fflush(m_pLogFile);
+
+		m_LogCount = 0;
+	}
+
+	return ;
+}
+
+void CLog::LogInfo( char* lpszFormat,... )
+{
+	if(m_LogLevel > Log_Info)
+	{
+		return ;
+	}
+
+	if(m_pLogFile == NULL)
+	{
+		return ;
+	}
+
+	CHAR szLog[512];
+
+	time_t _time;
+	time(&_time);
+	tm *pTime = localtime(&_time);
+
+	sprintf(szLog,"[%02d-%02d-%02d %02d:%02d:%02d][%04x] ", pTime->tm_year%100, pTime->tm_mon, pTime->tm_mday, pTime->tm_hour, pTime->tm_min, pTime->tm_sec, 0xffff&CommonFunc::GetCurThreadID());
+
+	va_list argList;
+	va_start( argList, lpszFormat );
+	vsprintf(szLog+26, lpszFormat, argList);
+	va_end( argList );
+
+	strcat(szLog,"\n");
+
+
+	CAutoLock Lock(&m_CritSec);
+	fputs(szLog, m_pLogFile);
+	printf(szLog);
+
+	m_LogCount++;
+
+	if(m_LogCount >= 10)
+	{
+		fflush(m_pLogFile);
+
+		m_LogCount = 0;
+	}
+
+	return ;
+}
+
+void CLog::SetLogLevel( int Level )
+{
+	m_LogLevel = Level;
+
+	return ;
+}

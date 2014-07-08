@@ -102,7 +102,7 @@ BOOL CScene::AddToMap(CWorldObject *pWorldObject)
 
 	pWorldObject->SetOwnerScene(this);
 
-	pWorldObject->SetUpdate(Update_New);
+	pWorldObject->SetUpdate(UT_New);
 
 	return TRUE;
 }
@@ -128,7 +128,7 @@ INT32 CScene::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHel
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 
 
-	return 0;
+	return TRUE;
 }
 
 INT32 CScene::OnCmdPlayerMove( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
@@ -140,7 +140,7 @@ INT32 CScene::OnCmdPlayerMove( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelpe
 	if(pPlayerObj == NULL)
 	{
 		ASSERT_FAIELD;
-		return 0;
+		return TRUE;
 	}
 
 	INT32 nDestIndex = m_GridManager.GetIndexByPos(CharMoveReq.x, CharMoveReq.z);
@@ -148,7 +148,7 @@ INT32 CScene::OnCmdPlayerMove( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelpe
 	{
 		//不合法的目标地址
 		ASSERT_FAIELD;
-		return 0;
+		return TRUE;
 	}
 
 	INT32 nCurIndex  = m_GridManager.GetIndexByPos(pPlayerObj->m_ObjectPos.x, pPlayerObj->m_ObjectPos.z);
@@ -168,9 +168,9 @@ INT32 CScene::OnCmdPlayerMove( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelpe
 	pPlayerObj->m_ObjectPos.y = CharMoveReq.y;
 	pPlayerObj->m_ObjectPos.z = CharMoveReq.z;
 
-	pPlayerObj->SetUpdate(Update_Update);
+	pPlayerObj->SetUpdate(UT_Update);
 
-	return 0;
+	return TRUE;
 }
 
 BOOL CScene::SendNewObjectToGrids(CWorldObject *pWorldObject, INT32 Grids[9])
@@ -277,7 +277,7 @@ BOOL CScene::SendNewGridsToObject( INT32 Grids[9], CPlayerObject *pPlayerObj )
 	return TRUE;
 }
 
-BOOL CScene::SendUpdateObjectToGrids( CWorldObject *pWorldObj, INT32 Grids[9] )
+BOOL CScene::SendUpdateObjectToGrids(CWorldObject *pWorldObj, INT32 Grids[9] )
 {
 	//先把玩家的变化包组装好
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
@@ -432,14 +432,14 @@ INT32 CScene::OnCmdLeaveGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHel
 	if(pPlayerObject == NULL)
 	{
 		ASSERT_FAIELD;
-		return 0;
+		return TRUE;
 	}
 
 	RemoveFromMap(pPlayerObject);
 
 	m_PlayerObjectMgr.erase(pPlayerObject->GetObjectID());
 
-	return 0;
+	return TRUE;
 }
 
 BOOL CScene::RemoveFromMap( CWorldObject *pWorldObject )
@@ -460,7 +460,7 @@ BOOL CScene::RemoveFromMap( CWorldObject *pWorldObject )
 
 	pGrid->RemoveObject(pWorldObject);
 
-	pWorldObject->SetUpdate(Update_Delete);
+	pWorldObject->SetUpdate(UT_Delete);
 
 	return TRUE;
 
@@ -514,10 +514,10 @@ INT32 CScene::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHe
 	else
 	{
 		ASSERT_FAIELD;
-		return 0;
+		return TRUE;
 	}
 	
-	return 0;
+	return TRUE;
 }
 
 BOOL CScene::HandleUpdateList()
@@ -549,11 +549,11 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 		return TRUE;
 	}
 
-	if(pWorldObject->m_UpdateType == Update_Unknow)
+	if(pWorldObject->m_UpdateType == UT_Unknow)
 	{
 		ASSERT_FAIELD;
 	}
-	else if(pWorldObject->m_UpdateType == Update_New)
+	else if(pWorldObject->m_UpdateType == UT_New)
 	{
 		INT32 Grids[10];
 
@@ -568,9 +568,9 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 
 		pWorldObject->m_UpdateObjPos = pWorldObject->m_ObjectPos;
 
-		pWorldObject->m_UpdateType   = Update_Unknow;
+		pWorldObject->m_UpdateType   = UT_Unknow;
 	}
-	else if(pWorldObject->m_UpdateType == Update_Delete)
+	else if(pWorldObject->m_UpdateType == UT_Delete)
 	{
 		INT32 Grids[10];
 
@@ -585,9 +585,11 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 
 		return TRUE;
 	}
-	else
+	else if(pWorldObject->m_UpdateType == UT_Update)
 	{
 		INT32 nSrcIndex  = m_GridManager.GetIndexByPos(pWorldObject->m_UpdateObjPos.x, pWorldObject->m_UpdateObjPos.z);
+
+		SendUpdateObjectToMyself(pWorldObject);
 
 		if(nCurIndex == nSrcIndex)  //如果还在一个格子里，只需要修改一下坐标就行了。
 		{
@@ -597,7 +599,8 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 
 			SendUpdateObjectToGrids(pWorldObject, Grids);
 
-			return 0;
+		
+			return TRUE;
 		}
 
 		INT32 AddGrid[10], RemoveGrid[10], StayGrid[10];
@@ -617,9 +620,24 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 
 		pWorldObject->m_UpdateObjPos = pWorldObject->m_ObjectPos;
 
-		pWorldObject->m_UpdateType   = Update_Unknow;
+		pWorldObject->m_UpdateType   = UT_Unknow;
 	}
 	
+	return TRUE;
+}
+
+BOOL CScene::SendUpdateObjectToMyself( CWorldObject *pWorldObj )
+{
+	//先把玩家的变化包组装好
+	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+	WriteHelper.BeginWrite(CMD_CHAR_UPDATE_MYSELF, 0, 0, 0);
+	pWorldObj->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CHANGE, UPDATE_DEST_MYSELF);
+	WriteHelper.EndWrite();
+
+	CPlayerObject *pPlayerObject = (CPlayerObject *)pWorldObj;
+
+	CGameService::GetInstancePtr()->SendCmdToConnection(pPlayerObject->GetConnectID(), pPlayerObject->GetObjectID(), 0, &m_WriteBuffer);
+
 	return TRUE;
 }
 

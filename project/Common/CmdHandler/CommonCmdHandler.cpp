@@ -41,10 +41,10 @@ BOOL CCommonCmdHandler::AddMessage( UINT64 u64ConnID, IDataBuffer *pDataBuffer )
 
 
 
-UINT32 CCommonCmdHandler::OnCmdDefaultHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+BOOL CCommonCmdHandler::OnCmdDefaultHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
 
-	return 0;
+	return TRUE;
 }
 
 BOOL CCommonCmdHandler::OnUpdate( UINT32 dwTick )

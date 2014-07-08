@@ -17,6 +17,7 @@ enum Command_ID
 	CMD_SVR_REGISTER_TO_CENTER,		//注册自己到中心服务器
 	CMD_SVR_ACTIVE_SERVER_LIST,		//中心服务器来的数据
 
+
 	//玩家版本验证命令
 	CMD_CHAR_VERIFY_VERSION,	//玩家发版本请求验证
 	CMD_CHAR_GAME_MANAGER,      //GM命令

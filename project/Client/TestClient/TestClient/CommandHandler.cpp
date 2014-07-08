@@ -42,6 +42,7 @@ BOOL CClientCmdHandler::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CB
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_NEARBY_ADD,		OnCmdNearByAdd);
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_NEARBY_UPDATE,	OnCmdNearByUpdate);
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_NEARBY_REMOVE,	OnCmdNearByRemove);
+		PROCESS_COMMAND_ITEM_T(CMD_CHAR_UPDATE_MYSELF,	OnCmdUpdateMyself);
 
 	default:
 		{
@@ -53,7 +54,7 @@ BOOL CClientCmdHandler::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CB
 	return TRUE;
 }
 
-UINT32 CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	UINT32 dwCount = 0;
 	pBufferHelper->Read(dwCount);
@@ -88,10 +89,10 @@ UINT32 CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, C
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
 
-	return 0;
+	return TRUE;
 }
 
-UINT32 CClientCmdHandler::OnCmdNearByUpdate( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CClientCmdHandler::OnCmdNearByUpdate( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	UINT32 dwCount = 0;
 	pBufferHelper->Read(dwCount);
@@ -117,10 +118,10 @@ UINT32 CClientCmdHandler::OnCmdNearByUpdate( UINT16 wCommandID, UINT64 u64ConnID
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
 
-	return 0;
+	return TRUE;
 }
 
-UINT32 CClientCmdHandler::OnCmdNearByRemove( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CClientCmdHandler::OnCmdNearByRemove( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	UINT32 dwCount = 0;
 	pBufferHelper->Read(dwCount);
@@ -153,10 +154,10 @@ UINT32 CClientCmdHandler::OnCmdNearByRemove( UINT16 wCommandID, UINT64 u64ConnID
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
 
-	return 0;
+	return TRUE;
 }
 
-UINT32 CClientCmdHandler::OnCmdEnterGameAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CClientCmdHandler::OnCmdEnterGameAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharEnterGameAck CharEnterGameAck;
 
@@ -170,7 +171,7 @@ UINT32 CClientCmdHandler::OnCmdEnterGameAck( UINT16 wCommandID, UINT64 u64ConnID
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
 
-	return 0;
+	return TRUE;
 }
 
 BOOL CClientCmdHandler::OnUpdate( UINT32 dwTick )
@@ -201,7 +202,7 @@ BOOL CClientCmdHandler::SendNewAccountReq( LPCTSTR szAccountName, LPCTSTR szPass
 
 
 
-UINT32 CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharLoginAck MsgLoginAck;
 
@@ -248,7 +249,7 @@ BOOL CClientCmdHandler::SendPickCharReq( UINT64 u64CharID )
 }
 
 
-UINT32 CClientCmdHandler::OnCmdNewAccountAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CClientCmdHandler::OnCmdNewAccountAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharNewAccountAck CharNewAccountAck;
 	pBufferHelper->Read(CharNewAccountAck);
@@ -261,7 +262,7 @@ UINT32 CClientCmdHandler::OnCmdNewAccountAck( UINT16 wCommandID, UINT64 u64ConnI
 		MessageBox(NULL,"注册账号失败!", "提示", MB_OK);
 	}
 
-	return 0;
+	return TRUE;
 }
 
 BOOL CClientCmdHandler::SendNewCharReq( UINT32 dwAccountID , LPCTSTR szCharName, UINT32 dwFeature)
@@ -284,7 +285,7 @@ BOOL CClientCmdHandler::SendNewCharReq( UINT32 dwAccountID , LPCTSTR szCharName,
 }
 
 
-UINT32 CClientCmdHandler::OnCmdNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CClientCmdHandler::OnCmdNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharNewCharAck CharNewCharAck;
 	pBufferHelper->Read(CharNewCharAck);
@@ -295,7 +296,8 @@ UINT32 CClientCmdHandler::OnCmdNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	DlgSelect.AddCharPickInfo(CharNewCharAck.CharPickInfo);
 
 	DlgSelect.DoModal();
-	return 0;
+
+	return TRUE;
 }
 
 BOOL CClientCmdHandler::SendDelCharReq( UINT32 dwAccountID,UINT64 dwCharID )
@@ -318,7 +320,7 @@ BOOL CClientCmdHandler::SendDelCharReq( UINT32 dwAccountID,UINT64 dwCharID )
 	return TRUE;
 }
 
-UINT32 CClientCmdHandler::OnCmdDelCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CClientCmdHandler::OnCmdDelCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharDelCharAck CharDelCharAck;
 	pBufferHelper->Read(CharDelCharAck);
@@ -330,7 +332,14 @@ UINT32 CClientCmdHandler::OnCmdDelCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 
 	DlgSelect.DoModal();
 
-	return 0;
+	return TRUE;
+}
+
+BOOL CClientCmdHandler::OnCmdUpdateMyself( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	m_HostPlayer.ReadFromBuffer(pBufferHelper);
+
+	return TRUE;
 }
 
 

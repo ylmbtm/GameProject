@@ -18,10 +18,10 @@
 
 enum  UpdateTypeEnum
 {
-	Update_Unknow,
-	Update_Update,
-	Update_New,
-	Update_Delete
+	UT_Unknow,
+	UT_Update,
+	UT_New,
+	UT_Delete
 };
 
 

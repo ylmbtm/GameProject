@@ -78,7 +78,7 @@ BOOL CLoginCmdHandler::OnUpdate( UINT32 dwTick )
 }
 
 
-UINT32 CLoginCmdHandler::OnCmdLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CLoginCmdHandler::OnCmdLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharLoginReq MsgLoginReq;
 	pBufferHelper->Read(MsgLoginReq);
@@ -93,10 +93,10 @@ UINT32 CLoginCmdHandler::OnCmdLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 	
-	return 0;
+	return TRUE;
 }
 
-UINT32 CLoginCmdHandler::OnCmdNewAccountReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CLoginCmdHandler::OnCmdNewAccountReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharNewAccountReq CharNewAccountReq;
 	pBufferHelper->Read(CharNewAccountReq);
@@ -111,10 +111,10 @@ UINT32 CLoginCmdHandler::OnCmdNewAccountReq( UINT16 wCommandID, UINT64 u64ConnID
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 
-	return 0;
+	return TRUE;
 }
 
-UINT32 CLoginCmdHandler::OnCmdNewCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CLoginCmdHandler::OnCmdNewCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharNewCharReq CharNewCharReq;
 	pBufferHelper->Read(CharNewCharReq);
@@ -129,10 +129,10 @@ UINT32 CLoginCmdHandler::OnCmdNewCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 
-	return 0;
+	return TRUE;
 }
 
-UINT32 CLoginCmdHandler::OnCmdPickCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CLoginCmdHandler::OnCmdPickCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharPickCharReq CharPickCharReq;
 	pBufferHelper->Read(CharPickCharReq);
@@ -147,10 +147,10 @@ UINT32 CLoginCmdHandler::OnCmdPickCharReq( UINT16 wCommandID, UINT64 u64ConnID, 
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 
-	return 0;
+	return TRUE;
 }
 
-UINT32 CLoginCmdHandler::OnCmdDBNewAccountAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CLoginCmdHandler::OnCmdDBNewAccountAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StDBNewAccountAck DBNewAccountAck;
 	pBufferHelper->Read(DBNewAccountAck);
@@ -161,10 +161,10 @@ UINT32 CLoginCmdHandler::OnCmdDBNewAccountAck( UINT16 wCommandID, UINT64 u64Conn
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToConnection(DBNewAccountAck.u64ConnID, &m_WriteBuffer);
 
-	return 0;
+	return TRUE;
 }
 
-UINT32 CLoginCmdHandler::OnCmdDBNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CLoginCmdHandler::OnCmdDBNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {	
 	StDBCharNewCharAck DBNewCharAck;
 	pBufferHelper->Read(DBNewCharAck);
@@ -174,10 +174,10 @@ UINT32 CLoginCmdHandler::OnCmdDBNewCharAck( UINT16 wCommandID, UINT64 u64ConnID,
 	WriteHelper.Write(DBNewCharAck.CharNewCharAck);
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToConnection(DBNewCharAck.u64ConnID, &m_WriteBuffer);
-	return 0;
+	return TRUE;
 }
 
-UINT32 CLoginCmdHandler::OnCmdDBPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CLoginCmdHandler::OnCmdDBPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StDBCharPickCharAck DBCharPickCharAck;
 	pBufferHelper->Read(DBCharPickCharAck);
@@ -209,10 +209,10 @@ UINT32 CLoginCmdHandler::OnCmdDBPickCharAck( UINT16 wCommandID, UINT64 u64ConnID
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToConnection(DBCharPickCharAck.u64ConnID, &m_WriteBuffer);
 
-	return 0;
+	return TRUE;
 }
 
-UINT32 CLoginCmdHandler::OnCmdDBLoginAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CLoginCmdHandler::OnCmdDBLoginAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StDBCharLoginAck DBCharLoginAck;
 	pBufferHelper->Read(DBCharLoginAck);
@@ -223,10 +223,10 @@ UINT32 CLoginCmdHandler::OnCmdDBLoginAck( UINT16 wCommandID, UINT64 u64ConnID, C
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToConnection(DBCharLoginAck.u64ConnID, &m_WriteBuffer);
 
-	return 0;
+	return TRUE;
 }
 
-UINT32 CLoginCmdHandler::OnCmdDelCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CLoginCmdHandler::OnCmdDelCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharDelCharReq CharDelCharReq;
 	pBufferHelper->Read(CharDelCharReq);
@@ -241,10 +241,10 @@ UINT32 CLoginCmdHandler::OnCmdDelCharReq( UINT16 wCommandID, UINT64 u64ConnID, C
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 
-	return 0;
+	return TRUE;
 }
 
-UINT32 CLoginCmdHandler::OnCmdDBDelCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CLoginCmdHandler::OnCmdDBDelCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StDBCharDelCharAck DBDelCharAck;
 	pBufferHelper->Read(DBDelCharAck);
@@ -255,5 +255,5 @@ UINT32 CLoginCmdHandler::OnCmdDBDelCharAck( UINT16 wCommandID, UINT64 u64ConnID,
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToConnection(DBDelCharAck.u64ConnID, &m_WriteBuffer);
 
-	return 0;
+	return TRUE;
 }

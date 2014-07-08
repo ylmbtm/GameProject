@@ -285,10 +285,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Common\CommonDef.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Common\PacketDef\CommonPacket.h"
 				>
 			</File>

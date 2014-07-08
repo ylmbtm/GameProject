@@ -78,6 +78,8 @@ public:
 
 	BOOL SendRemoveGridsToPlayer(INT32 Grids[9], CPlayerObject *pPlayerObj);
 
+	BOOL SendUpdateObjectToMyself(CWorldObject *pWorldObj);
+
 
 	
 };

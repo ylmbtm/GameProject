@@ -32,7 +32,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 		m_ServerCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
 	}
 
-	return 0;
+	return TRUE;
 }
 
 BOOL CGameService::OnDisconnect( CConnection *pConnection )

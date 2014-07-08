@@ -58,7 +58,7 @@ BOOL CServerCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBu
 }
 
 
-UINT32 CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+BOOL CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
 	StConnectNotify ConnectNotify;
 
@@ -100,10 +100,10 @@ UINT32 CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID
 		}
 	}
 
-	return 0;
+	return TRUE;
 }
 
-UINT32 CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+BOOL CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
 	m_bConnectToCenter = TRUE;
 
@@ -136,7 +136,7 @@ UINT32 CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID
 		m_WaitConSvrList.insert(std::make_pair(RegisterToCenterSvr.dwSvrID,RegisterToCenterSvr));
 	}
 
-	return 0;
+	return TRUE;
 }
 
 BOOL CServerCmdHandler::OnUpdate( UINT32 dwTick )
@@ -155,9 +155,9 @@ BOOL CServerCmdHandler::OnUpdate( UINT32 dwTick )
 }
 
 
-UINT32 CServerCmdHandler::OnCmdDisConnectNotify( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CServerCmdHandler::OnCmdDisConnectNotify( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	m_WaitConSvrList.erase(u64ConnID);
 
-	return 0;
+	return TRUE;
 }

@@ -32,7 +32,7 @@ protected:
 
 	//*********************消息处理定义开始******************************
 public:
-	UINT32 OnCmdDefaultHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	BOOL OnCmdDefaultHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
 	//*********************消息处理定义结束******************************
 };

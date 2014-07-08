@@ -130,7 +130,20 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 
 			}
 
-			
+			StCharGmCmdReq CharGmCmdReq;
+			pBufferHelper->Read(CharGmCmdReq);
+	
+			if(!OnCmdGMCommand(CMD_CHAR_GAME_MANAGER, u64ConnID, pBufferHelper))
+			{
+				CStaticPlayer *pClientObj = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
+				if(pClientObj == NULL)
+				{
+					ASSERT_FAIELD;
+					break;
+				}
+
+				RelayToServer(pClientObj, pBufferHelper->GetDataBuffer());
+			}
 		}
 		break;
 	default:
@@ -156,7 +169,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 	}
 
 	
-	return 0;
+	return TRUE;
 }
 
 BOOL CGameService::StartRun()
@@ -302,25 +315,13 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	return TRUE;
 }
 
-/*
-
-class ClientEngine
+BOOL CGameService::OnCmdGMCommand( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
-	BOOL InitEngine();
+	StCharGmCmdReq CharGmCmdReq;
+	pBufferHelper->Read(CharGmCmdReq);
 
-	BOOL CloseEngine();
 
-	BOOL SetClientID(UINT64 u64ClientID);  //一般是角色ID
 
-	BOOL SetLoginSvrInfo(char *szIpAddr, UINT16 sPort);
+	return FALSE;
+}
 
-	BOOL SendData(char *pData, UINT32 dwLen);
-
-	BOOL Login(char *pszAccountName, char *pszPassword);
-
-	BOOL RegisterNetHandler(IMessageHandler *pMsgHandler);
-
-	BOOL Render();
-};
-
-*/
