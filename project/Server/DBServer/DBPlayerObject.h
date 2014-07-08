@@ -4,6 +4,47 @@
 #include "GameDefine.h"
 #include "Utility/Position.h"
 
+class CAccountInfo
+{
+	UINT32 dwAccountID;
+	BOOL   bLogin;
+	UINT64 u64LoginCharID;
+	BOOL   bConnID;			//如果没登录角色，那么这个就是指连到LoginServer 的ID
+};
+
+
+class CAccountInfoMgr : public AVLTree<UINT32, CAccountInfo>
+{
+public:
+	CAccountInfoMgr()
+	{
+
+	}
+
+	~CAccountInfoMgr()
+	{
+
+	}
+
+
+
+public:
+	CAccountInfo*   GetPlayer(UINT32 dwAccountID)
+	{
+		return GetByKey(dwAccountID);
+	}
+
+	CAccountInfo*   CreatePlayerByID(UINT32 dwAccountID)
+	{
+		return InsertAlloc(dwAccountID);
+	}
+
+public:
+};
+
+
+
+
 class CDBPlayerObject
 {
 public:

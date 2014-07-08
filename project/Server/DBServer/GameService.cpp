@@ -7,6 +7,7 @@
 #include "PacketDef/TransferPacket.h"
 #include "ConnectionType.h"
 #include "DataBuffer/BufferHelper.h"
+#include "ObjectID.h"
 
 CGameService::CGameService(void)
 {
@@ -33,7 +34,8 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 	}
 	else
 	{
-		m_DBCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
+		//如果需要开启很多的线程时， 按账号划分玩家的线程 
+		m_DBCmdHandler[0].AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
 	}
 
 	return TRUE;
@@ -62,7 +64,11 @@ BOOL CGameService::StartRun()
 	}
 
 	m_ServerCmdHandler.Init(0);
-	m_DBCmdHandler.Init(0);
+
+	for(int i = 0; i < DB_THREAD_NUM; i++)
+	{
+		m_DBCmdHandler[i].Init(0);
+	}
 
 	OnIdle();
 

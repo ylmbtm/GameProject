@@ -5,6 +5,8 @@
 #include "DBCmdHandler.h"
 class CConnection;
 
+#define DB_THREAD_NUM 10
+
 class CGameService :
 	public ServiceBase
 {
@@ -26,7 +28,9 @@ public:
 
 public:
 	CServerCmdHandler   m_ServerCmdHandler;
-	CDBCmdHandler		m_DBCmdHandler;
+
+
+	CDBCmdHandler		m_DBCmdHandler[DB_THREAD_NUM];
 };
 
 #endif

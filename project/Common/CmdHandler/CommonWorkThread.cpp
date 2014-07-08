@@ -108,6 +108,8 @@ BOOL CCommonWorkThread::ProcessMessage()
 
 BOOL CCommonWorkThread::AddMessage(UINT64 u64ConnID, IDataBuffer *pDataBuffer)
 {
+	IDataBuffer *pRecvBuffer = pDataBuffer;
+	/*
 	IDataBuffer *pRecvBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pDataBuffer->GetDataLenth());
 	if(pRecvBuffer == NULL)
 	{
@@ -117,6 +119,7 @@ BOOL CCommonWorkThread::AddMessage(UINT64 u64ConnID, IDataBuffer *pDataBuffer)
 	}
 
 	pRecvBuffer->CopyFrom(pDataBuffer);
+	*/
 
 	m_MessageQueue.push(MsgItem(u64ConnID, pRecvBuffer));
 

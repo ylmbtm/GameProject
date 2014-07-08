@@ -64,6 +64,7 @@ BOOL CDBCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuffer
 		PROCESS_COMMAND_ITEM(CMD_DB_PICK_CHAR_REQ,		OnCmdDBPickCharReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_LOGIN_REQ,			OnCmdDBLoginReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_LOAD_CHAR_REQ,		OnCmdDBLoadCharReq);
+		PROCESS_COMMAND_ITEM(CMD_DB_SAVE_CHAR_REQ,		OnCmdDBSaveCharReq);
 	default:
 		{
 
@@ -173,6 +174,8 @@ BOOL CDBCmdHandler::OnCmdDBLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBuffe
 		m_DBProcManager.LoadAccountCharInfo(dwAccountID, DBCharLoginAck.CharLoginAck);
 		DBCharLoginAck.CharLoginAck.nRetCode = E_SUCCESSED;
 		DBCharLoginAck.CharLoginAck.dwAccountID = dwAccountID;
+
+		//如果这个己有登录角色，则直接把原来的踢掉
 	}
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
@@ -271,6 +274,12 @@ BOOL CDBCmdHandler::OnThreadBegin()
 
 BOOL CDBCmdHandler::OnThreadEnd()
 {
+	return TRUE;
+}
+
+BOOL CDBCmdHandler::OnCmdDBSaveCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+
 	return TRUE;
 }
 

@@ -53,23 +53,26 @@ enum Command_ID
 	CMD_CHAR_UPDATE_MYSELF,     //更新自己的数据
 
 	//下面是数据库服务器的命令
-	CMD_DB_NEW_ACCOUNT_REQ,
-	CMD_DB_NEW_ACCOUNT_ACK,
+	CMD_DB_NEW_ACCOUNT_REQ,		//新建账号
+	CMD_DB_NEW_ACCOUNT_ACK,		//新建账号回复
 
-	CMD_DB_NEW_CHAR_REQ,
-	CMD_DB_NEW_CHAR_ACK,
+	CMD_DB_NEW_CHAR_REQ,		//新建角色
+	CMD_DB_NEW_CHAR_ACK,		//新建角色回复
 
-	CMD_DB_DEL_CHAR_REQ,
-	CMD_DB_DEL_CHAR_ACK,
+	CMD_DB_DEL_CHAR_REQ,		//删除角色
+	CMD_DB_DEL_CHAR_ACK,		//删除角色回复
 
-	CMD_DB_LOGIN_REQ,
-	CMD_DB_LOGIN_ACK,
+	CMD_DB_LOGIN_REQ,			//登录请求
+	CMD_DB_LOGIN_ACK,			//登录请求回复
 
-	CMD_DB_PICK_CHAR_REQ,
-	CMD_DB_PICK_CHAR_ACK,
+	CMD_DB_PICK_CHAR_REQ,		//选择角色
+	CMD_DB_PICK_CHAR_ACK,		//选择角色回复
 
-	CMD_DB_LOAD_CHAR_REQ,
-	CMD_DB_LOAD_CHAR_ACK,
+	CMD_DB_LOAD_CHAR_REQ,		//加载角色
+	CMD_DB_LOAD_CHAR_ACK,		//加载角色回复
+
+	CMD_DB_SAVE_CHAR_REQ,		//保存角色
+	CMD_DB_SAVE_CHAR_ACK,		//保存角色回复
 
 	///////////////////////////////////////////////////
 
