@@ -49,6 +49,8 @@ public:
 
 	UINT32		Read(BYTE *pData, UINT32 dwBytes);
 
+	BOOL		Seek(INT32 nOffset);
+
 private:
 	IDataBuffer *m_pDataBuffer;
 

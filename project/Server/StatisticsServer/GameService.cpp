@@ -30,7 +30,11 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 	if(pBufferHelper->GetCommandHeader()->CmdHandleID == CMDH_SVR_CON)
 	{
 		m_ServerCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
+
+		return TRUE;
 	}
+
+	m_StatCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
 
 	return TRUE;
 }
@@ -81,6 +85,8 @@ BOOL CGameService::StartRun()
 	}
 
 	m_ServerCmdHandler.Init(0);
+
+	m_StatCmdHandler.Init(0);
 
 	OnIdle();
 

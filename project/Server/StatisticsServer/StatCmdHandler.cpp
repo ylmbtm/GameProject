@@ -86,6 +86,7 @@ BOOL CStatCmdHandler::OnCmdSvrRunningStateReq( UINT16 wCommandID, UINT64 u64Conn
 {
 	UINT32 dwReportID = 0;
 	pBufferHelper->Read(dwReportID);
+	pBufferHelper->Seek(0 - sizeof(dwReportID));
 
 	switch(dwReportID)
 	{

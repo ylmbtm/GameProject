@@ -12,9 +12,9 @@ enum SvrReportID
 
 struct  StReportBase
 {
+	UINT32 dwReportID;
 	UINT32 dwSvrID;
 	UINT32 dwSvrType;
-	UINT32 dwReportID;
 };
 
 struct StNormalReport : public StReportBase

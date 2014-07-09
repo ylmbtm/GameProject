@@ -129,6 +129,13 @@ UINT32 CBufferHelper::Read( std::string &strValue )
 	return dwSize;
 }
 
+BOOL CBufferHelper::Seek( INT32 nOffset )
+{
+	m_dwCurPos += nOffset;
+
+	return TRUE;
+}
+
 UINT32 CBufferHelper::Write( BYTE *pData, UINT32 dwBytes )
 {
 	ASSERT(pData != NULL);
@@ -182,4 +189,6 @@ UINT8* CBufferHelper::GetCurrentPoint()
 {
 	return (UINT8*)(m_pDataBuffer->GetData() + m_dwCurPos);
 }
+
+
 
