@@ -17,14 +17,13 @@ public:
 
 	BOOL			StopService();
 
-	BOOL			OnDataHandle( IDataBuffer *pDataBuffer , CConnection *pConnection);
+	BOOL			OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnection);
 
 	BOOL			OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
 	BOOL			OnUpdate(UINT32 dwTick);
 
 	BOOL			OnDisconnect(CConnection *pConnection);
-
 public:
 	BOOL			ConnectToOtherSvr(std::string strIpAddr, UINT16 sPort);
 
@@ -34,8 +33,18 @@ public:
 
 	CConnection*    GetConnectionByID(UINT64 u64ConnID);
 
-public:
+	
 
+public:
+	void			SetStatConnID(UINT64 ConnID){m_u64StatConnID = ConnID;}
+	BOOL			SendCmdToStatConnection(IDataBuffer *pDataBuf);
+
+	void			SetDBConnID(UINT64 ConnID){m_u64DBConnID = ConnID;}
+	BOOL			SendCmdToDBConnection(IDataBuffer *pDataBuf);
+
+protected:
+	UINT64			m_u64DBConnID;
+	UINT64			m_u64StatConnID;
 
 };
 

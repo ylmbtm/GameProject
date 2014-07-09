@@ -1,7 +1,6 @@
 ﻿#ifndef _GAME_SERVICE_H_
 #define _GAME_SERVICE_H_
 #include "ServiceBase.h"
-#include "SceneManager.h"
 #include "ServerCmdHandler.h"
 
 class CGameService :
@@ -22,15 +21,10 @@ public:
 
 	BOOL		OnIdle();
 
-	BOOL		LoadScene();
-
 public:
+	CServerCmdHandler   m_ServerCmdHandler;
 
 
-protected:
-	CSceneManager		m_SceneManager;
-
-	CServerCmdHandler	m_ServerCmdHandler;
 };
 
 #endif

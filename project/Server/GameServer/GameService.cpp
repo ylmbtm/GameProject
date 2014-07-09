@@ -5,7 +5,7 @@
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
 #include "ConnectionType.h"
-#include "PacketDef/TransferPacket.h"
+#include "PacketDef/ClientPacket.h"
 #include "DataBuffer/BufferHelper.h"
 #include "DataBuffer/DataBuffer.h"
 
@@ -30,6 +30,7 @@ BOOL CGameService::StartRun()
 {
 	if(!CLog::GetInstancePtr()->StartLog("GameServer"))
 	{
+		ASSERT_FAIELD;
 		return FALSE;
 	}
 
@@ -37,12 +38,14 @@ BOOL CGameService::StartRun()
 
 	if(!CGlobalConfig::GetInstancePtr()->Load("GameServer.ini"))
 	{
+		ASSERT_FAIELD;
 		CLog::GetInstancePtr()->AddLog("配制文件加载失败!");
 		return FALSE;
 	}
 
 	if(!StartService())
 	{
+		ASSERT_FAIELD;
 		CLog::GetInstancePtr()->AddLog("启动服务失败!");
 
 		return FALSE;
@@ -50,6 +53,7 @@ BOOL CGameService::StartRun()
 
 	if(!LoadScene())
 	{
+		ASSERT_FAIELD;
 		CLog::GetInstancePtr()->AddLog("加载场景失败!");
 
 		return FALSE;
@@ -152,24 +156,5 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	return TRUE;
 }
 
-BOOL CGameService::SendCmdToDBConnection(IDataBuffer *pDataBuf)
-{
-	if(m_u64DBConnID == 0)
-	{
-		return FALSE;
-	}
 
-	SendCmdToConnection(m_u64DBConnID, pDataBuf);
 
-	return TRUE;
-}
-
-UINT64 CGameService::GetDBConnID() const
-{
-	return m_u64DBConnID;
-}
-
-void CGameService::SetDBConnID( UINT64 ConnID )
-{
-	m_u64DBConnID = ConnID;
-}

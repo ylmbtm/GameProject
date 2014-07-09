@@ -49,7 +49,6 @@ BOOL CServerCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBu
 
 	default:
 		{
-
 		}
 		break;
 	}
@@ -84,15 +83,7 @@ BOOL CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, 
 
 		WriteHelper.EndWrite();
 
-		CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
-	}
-	else if(ConnectNotify.btConType == TYPE_SVR_DATABASE)
-	{
-		CGameService::GetInstancePtr()->SetDBConnID(u64ConnID);
-	}
-	else if(ConnectNotify.btConType == TYPE_SVR_STATISTICS)
-	{
-		CGameService::GetInstancePtr()->SetStatConnID(u64ConnID);
+		CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID,  &m_WriteBuffer);
 	}
 	else
 	{

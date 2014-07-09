@@ -4,12 +4,13 @@
 #include "Utility/Log/Log.h"
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
-#include "PacketDef/TransferPacket.h"
+#include "PacketDef/PacketHeader.h"
+#include "PacketDef/ClientPacket.h"
 #include "ConnectionType.h"
 #include "GameService.h"
 
 #include "Utility/CommonSocket.h"
-#include "PacketHeader.h"
+
 #include "DataBuffer/BufferHelper.h"
 #include "DataBuffer/DataBuffer.h"
 
@@ -85,6 +86,10 @@ BOOL CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, 
 		WriteHelper.EndWrite();
 
 		CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
+	}
+	else if(ConnectNotify.btConType == TYPE_SVR_STATISTICS)
+	{
+		CGameService::GetInstancePtr()->SetStatConnID(u64ConnID);
 	}
 	else
 	{

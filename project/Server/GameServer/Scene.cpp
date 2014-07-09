@@ -1,20 +1,21 @@
 ﻿#include "stdafx.h"
 #include "CommandDef.h"
 #include "GameDefine.h"
-#include "PacketHeader.h"
+#include "ObjectID.h"
+#include "GameService.h"
+#include "Scene.h"
+#include "PacketDef/PacketHeader.h"
+#include "PacketDef/ClientPacket.h"
+#include "PacketDef/CommonPacket.h"
+#include "PacketDef/DBPacket.h"
 #include "Utility/Log/Log.h"
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
-
-#include "PacketDef/ClientPacket.h"
-#include "PacketDef/CommonPacket.h"
-
 #include "DataBuffer/DataBuffer.h"
 #include "DataBuffer/BufferHelper.h"
-#include "GameService.h"
-#include "Scene.h"
-#include "PacketDef/DBPacket.h"
-#include "ObjectID.h"
+
+
+
 
 
 
@@ -122,7 +123,7 @@ INT32 CScene::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHel
 	DBLoadCharInfoReq.dwProxySvrID = u64ConnID;
 	
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_REQ, 0, 0, 0);
+	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_REQ, CMDH_OTHER, 0, 0);
 	WriteHelper.Write(DBLoadCharInfoReq);
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
@@ -177,7 +178,7 @@ BOOL CScene::SendNewObjectToGrids(CWorldObject *pWorldObject, INT32 Grids[9])
 {
 	//先把玩家的完整包组装好
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_ADD, 0, 0, 0);
+	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_ADD, CMDH_OTHER, 0, 0);
 	UINT8 objType = pWorldObject->GetObjectType();
 	UINT32 dwCount = 1;
 	WriteHelper.Write(dwCount);
@@ -225,7 +226,7 @@ BOOL CScene::SendNewGridsToObject( INT32 Grids[9], CPlayerObject *pPlayerObj )
 {
 	//先把玩家的完整包组装好
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_ADD, 0, 0, pPlayerObj->GetObjectID());
+	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_ADD, CMDH_OTHER, 0, pPlayerObj->GetObjectID());
 
 	UINT32 *pCount = (UINT32*)WriteHelper.GetCurrentPoint();
 	*pCount = 0;
@@ -281,7 +282,7 @@ BOOL CScene::SendUpdateObjectToGrids(CWorldObject *pWorldObj, INT32 Grids[9] )
 {
 	//先把玩家的变化包组装好
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_UPDATE, 0, 0, 0);
+	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_UPDATE, CMDH_OTHER, 0, 0);
 	UINT32 dwCount = 1;
 	WriteHelper.Write(dwCount);
 	WriteHelper.Write(pWorldObj->GetObjectID());
@@ -326,7 +327,7 @@ BOOL CScene::SendRemoveObjectToGrids( UINT64 u64CharID, INT32 Grids[9] )
 {
 	//先把玩家的变化包组装好
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_REMOVE, 0, 0, 0);
+	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_REMOVE, CMDH_OTHER, 0, 0);
 	UINT32 dwCount = 1;
 	WriteHelper.Write(dwCount);
 	WriteHelper.Write(u64CharID);
@@ -371,7 +372,7 @@ BOOL CScene::SendRemoveObjectToGrids( UINT64 u64CharID, INT32 Grids[9] )
 BOOL CScene::SendRemoveGridsToPlayer( INT32 Grids[9], CPlayerObject *pPlayerObj)
 {
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_REMOVE, 0, 0, 0);
+	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_REMOVE, CMDH_OTHER, 0, 0);
 	
 	UINT32 *pCount = (UINT32*)WriteHelper.GetCurrentPoint();
 	UINT32 Value = 0;
@@ -630,7 +631,7 @@ BOOL CScene::SendUpdateObjectToMyself( CWorldObject *pWorldObj )
 {
 	//先把玩家的变化包组装好
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_UPDATE_MYSELF, 0, 0, 0);
+	WriteHelper.BeginWrite(CMD_CHAR_UPDATE_MYSELF, CMDH_OTHER, 0, 0);
 	pWorldObj->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CHANGE, UPDATE_DEST_MYSELF);
 	WriteHelper.EndWrite();
 

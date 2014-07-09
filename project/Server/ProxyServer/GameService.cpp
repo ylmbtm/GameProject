@@ -5,7 +5,7 @@
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
 #include "ConnectionType.h"
-#include "PacketDef/TransferPacket.h"
+#include "PacketDef/ClientPacket.h"
 #include "DataBuffer/BufferHelper.h"
 #include "StaticPlayerMgr.h"
 #include "PacketDef/ClientPacket.h"

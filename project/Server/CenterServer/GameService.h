@@ -23,8 +23,6 @@ public:
 
 public:
 	CServerCmdHandler   m_ServerCmdHandler;
-
-
 };
 
 #endif

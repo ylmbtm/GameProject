@@ -3,8 +3,10 @@
 
 enum CmdHandler_ID
 {
-	CMDH_SENCE = 1,				//普通的游戏场影处理
-	CMDH_SVR_CON,				//服务器间的连接处理
+	CMDH_OTHER,				//其它未指定的处理器
+	CMDH_SVR_CON,			//服务器间的连接处理
+	CMDH_SENCE,				//普通的游戏场影处理
+	
 };
 
 enum Command_ID
@@ -16,7 +18,8 @@ enum Command_ID
 	//用于服务器间连络的命令
 	CMD_SVR_REGISTER_TO_CENTER,		//注册自己到中心服务器
 	CMD_SVR_ACTIVE_SERVER_LIST,		//中心服务器来的数据
-
+	
+	CMD_SVR_RUNNING_STATE_REPORT,	//服务器运行报告
 
 	//玩家版本验证命令
 	CMD_CHAR_VERIFY_VERSION,	//玩家发版本请求验证

@@ -1,7 +1,7 @@
 ﻿#ifndef _BUFFER_HELPER_H_
 #define _BUFFER_HELPER_H_
 
-#include "PacketHeader.h"
+#include "PacketDef/PacketHeader.h"
 
 #include "IBufferHandler.h"
 

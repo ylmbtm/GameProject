@@ -6,15 +6,14 @@
 #include "Utility/Log/Log.h"
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
-#include "PacketDef/TransferPacket.h"
+#include "PacketDef/PacketHeader.h"
+#include "PacketDef/ClientPacket.h"
 #include "ConnectionType.h"
 #include "GameService.h"
-
 #include "Utility/CommonSocket.h"
-#include "PacketHeader.h"
+
 #include "DataBuffer/BufferHelper.h"
 #include "DataBuffer/DataBuffer.h"
-#include "PacketDef/LoginPacket.h"
 #include "PacketDef/DBPacket.h"
 
 
@@ -81,6 +80,18 @@ BOOL CDBCmdHandler::OnUpdate( UINT32 dwTick )
 
 	return TRUE;
 }
+
+BOOL CDBCmdHandler::OnThreadBegin()
+{
+
+	return TRUE;
+}
+
+BOOL CDBCmdHandler::OnThreadEnd()
+{
+	return TRUE;
+}
+
 
 
 BOOL CDBCmdHandler::OnCmdDBNewAccountReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
@@ -266,16 +277,6 @@ BOOL CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 	return TRUE;
 }
 
-BOOL CDBCmdHandler::OnThreadBegin()
-{
-
-	return TRUE;
-}
-
-BOOL CDBCmdHandler::OnThreadEnd()
-{
-	return TRUE;
-}
 
 BOOL CDBCmdHandler::OnCmdDBSaveCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {

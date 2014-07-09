@@ -1,7 +1,6 @@
 #include "StdAfx.h"
 #include "ClientEngine.h"
 #include "CommandDef.h"
-#include "PacketDef\TransferPacket.h"
 #include "DataBuffer\BufferHelper.h"
 #include "ConnectionType.h"
 #include "PacketDef\ClientPacket.h"

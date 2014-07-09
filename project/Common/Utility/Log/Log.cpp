@@ -19,6 +19,7 @@ void CLog::AddLog( char* lpszFormat,... )
 	}
 	
 	CHAR szLog[512];
+	memset(szLog, 0 , sizeof(0));
 
 	time_t _time;
 	time(&_time);

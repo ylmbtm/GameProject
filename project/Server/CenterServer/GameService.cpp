@@ -4,7 +4,7 @@
 #include "Utility/Log/Log.h"
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
-#include "PacketDef/TransferPacket.h"
+#include "PacketDef/ClientPacket.h"
 #include "ConnectionType.h"
 #include "DataBuffer/BufferHelper.h"
 
@@ -61,17 +61,20 @@ BOOL CGameService::StartRun()
 {
 	if(!CLog::GetInstancePtr()->StartLog("CenterServer"))
 	{
+		ASSERT_FAIELD;
 		return FALSE;
 	}
 
 	if(!CGlobalConfig::GetInstancePtr()->Load("CenterServer.ini"))
 	{
+		ASSERT_FAIELD;
 		CLog::GetInstancePtr()->AddLog("配制文件加载失败!");
 		return FALSE;
 	}
 
 	if(!StartService())
 	{
+		ASSERT_FAIELD;
 		CLog::GetInstancePtr()->AddLog("启动服务失败!");
 
 		return FALSE;

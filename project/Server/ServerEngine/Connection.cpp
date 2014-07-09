@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "Connection.h"
 #include "DataBuffer/DataBuffer.h"
-#include "PacketDef/TransferPacket.h"
+#include "PacketDef/ClientPacket.h"
 #include "Utility/CommonSocket.h"
 #include "DataBuffer/BufferHelper.h"
 #include "ConnectionType.h"
@@ -177,7 +177,7 @@ BOOL CConnection::Close(BOOL bNotify)
 
 	m_bConnected = FALSE;
 
-	CLog::GetInstancePtr()->AddLog("关闭连接 连接ID: %ld, Socket : %d!",m_u64ConnID, m_hSocket);
+	CLog::GetInstancePtr()->AddLog("关闭连接 连接ID: %lld, Socket : %d!",m_u64ConnID, m_hSocket);
 
 	CommonSocket::ShutDownSend(m_hSocket);
 	CommonSocket::ShutDownRecv(m_hSocket);

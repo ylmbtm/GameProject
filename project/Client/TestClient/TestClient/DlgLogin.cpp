@@ -5,14 +5,13 @@
 #include "TestClient.h"
 #include "DlgLogin.h"
 #include "PacketDef/CommonPacket.h"
-
+#include "PacketDef/ClientPacket.h"
 #include "CommandDef.h"
 #include "DataBuffer/BufferHelper.h"
 #include "CommandHandler.h"
 #include "DataBuffer/BufferHelper.h"
 #include "GameDefine.h"
-#include "PacketDef/ClientPacket.h"
-#include "PacketDef/LoginPacket.h"
+
 
 // CDlgLogin 对话框
 

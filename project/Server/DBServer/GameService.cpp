@@ -4,7 +4,7 @@
 #include "Utility/Log/Log.h"
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
-#include "PacketDef/TransferPacket.h"
+#include "PacketDef/ClientPacket.h"
 #include "ConnectionType.h"
 #include "DataBuffer/BufferHelper.h"
 #include "ObjectID.h"
@@ -45,6 +45,7 @@ BOOL CGameService::StartRun()
 {
 	if(!CLog::GetInstancePtr()->StartLog("DBServer"))
 	{
+		ASSERT_FAIELD;
 		return FALSE;
 	}
 
@@ -52,12 +53,14 @@ BOOL CGameService::StartRun()
 
 	if(!CGlobalConfig::GetInstancePtr()->Load("DBServer.ini"))
 	{
+		ASSERT_FAIELD;
 		CLog::GetInstancePtr()->AddLog("配制文件加载失败!");
 		return FALSE;
 	}
 
 	if(!StartService())
 	{
+		ASSERT_FAIELD;
 		CLog::GetInstancePtr()->AddLog("启动服务失败!");
 
 		return FALSE;

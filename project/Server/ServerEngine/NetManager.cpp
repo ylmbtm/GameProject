@@ -4,7 +4,7 @@
 #include "Connection.h"
 #include "Utility/CommonSocket.h"
 #include "Utility/CommonFunc.h"
-#include "PacketDef/TransferPacket.h"
+#include "PacketDef/ClientPacket.h"
 #include "DataBuffer/BufferHelper.h"
 #include "CommandDef.h"
 #include "Utility/Log/Log.h"

@@ -26,12 +26,6 @@ public:
 	BOOL		OnIdle();
 
 public:
-	UINT64				m_u64DBConnID;
-	UINT64				GetDBConnID() const;
-	void				SetDBConnID(UINT64 ConnID);
-	BOOL				SendCmdToDBConnection(IDataBuffer *pDataBuf);
-
-public:
 	CServerCmdHandler   m_ServerCmdHandler;
 	CLoginCmdHandler	m_LoginCmdHandler;
 };

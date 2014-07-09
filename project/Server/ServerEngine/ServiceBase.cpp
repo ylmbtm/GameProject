@@ -4,7 +4,7 @@
 #include "DataBuffer/BufferHelper.h"
 #include "Utility/CommonSocket.h"
 #include "CommandDef.h"
-#include "PacketDef/TransferPacket.h"
+#include "PacketDef/ClientPacket.h"
 #include "Utility/Log/Log.h"
 #include "Utility/CommonEvent.h"
 #include "Utility/CommonConvert.h"
@@ -43,27 +43,31 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 
 		if(ConnectNotify.btConType == TYPE_SVR_CENTER)
 		{
-			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[中心]-服务器【%ld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
+			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[中心]-服务器【%lld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
 		}
 		else if(ConnectNotify.btConType == TYPE_SVR_GAME)
 		{
-			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[游戏]-服务器【%ld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
+			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[游戏]-服务器【%lld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
 		}
 		else if(ConnectNotify.btConType == TYPE_SVR_PROXY)
 		{
-			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[代理]-服务器【%ld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
+			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[代理]-服务器【%lld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
 		}
 		else if(ConnectNotify.btConType == TYPE_SVR_LOGIN)
 		{
-			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[登录]-服务器【%ld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
+			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[登录]-服务器【%lld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
 		}
 		else if(ConnectNotify.btConType == TYPE_SVR_DATABASE)
 		{
-			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[数据库]-服务器【%ld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
+			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[数据库]-服务器【%lld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
 		}
 		else if(ConnectNotify.btConType == TYPE_CLT_PLAYER)
 		{
-			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[客户端]-【%x】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
+			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[客户端]-【%lld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
+		}
+		else if(ConnectNotify.btConType == TYPE_SVR_STATISTICS)
+		{
+			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[统计]-服务器【%lld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
 		}
 
 		pConnection->SetConnectionType(ConnectNotify.btConType);
@@ -198,6 +202,30 @@ BOOL ServiceBase::OnUpdate( UINT32 dwTick )
 CConnection* ServiceBase::GetConnectionByID( UINT64 u64ConnID )
 {
 	return CConnectionMgr::GetInstancePtr()->GetConnectionByConnID(u64ConnID);
+}
+
+BOOL ServiceBase::SendCmdToDBConnection(IDataBuffer *pDataBuf)
+{
+	if(m_u64DBConnID == 0)
+	{
+		return FALSE;
+	}
+
+	SendCmdToConnection(m_u64DBConnID, pDataBuf);
+
+	return TRUE;
+}
+
+BOOL ServiceBase::SendCmdToStatConnection(IDataBuffer *pDataBuf)
+{
+	if(m_u64StatConnID == 0)
+	{
+		return FALSE;
+	}
+
+	SendCmdToConnection(m_u64StatConnID, pDataBuf);
+
+	return TRUE;
 }
 
 
