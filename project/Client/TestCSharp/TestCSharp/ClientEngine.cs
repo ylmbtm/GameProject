@@ -21,7 +21,7 @@ public abstract class MessageHandler
 
 public class ClientEngine
 {
-
+    UInt32              m_dwServerTime;
     UInt64				m_u64ClientID;    //客户端ID
     UInt32              m_dwIdentifyCode; //登录识别码
 
@@ -197,6 +197,11 @@ public class ClientEngine
         return true;
     }
 
+    UInt32 GetServerTime()
+    {
+        return m_dwServerTime;
+    }
+
 	//以下是内部的消息处理
     public Boolean OnCommandHandle(Command_ID wCommandID, UInt64 u64ConnID, ReadBufferHelper ReadHelper) 
     {
@@ -242,7 +247,7 @@ public class ClientEngine
         return true; 
     }
 
-    public UInt32 OnCmdConnectNotify(Command_ID wCommandID, UInt64 u64ConnID, ReadBufferHelper ReadHelper)
+    public Boolean OnCmdConnectNotify(Command_ID wCommandID, UInt64 u64ConnID, ReadBufferHelper ReadHelper)
     {
         StConnectNotify ConnectNotify = new StConnectNotify();
         
@@ -282,10 +287,10 @@ public class ClientEngine
             SetConnectState(ConnectState.Succ_Connect);
 	    }
 
-        return 0;
+        return true;
      }
 
-    public UInt32 OnCmdPickCharAck(Command_ID wCommandID, UInt64 u64ConnID, ReadBufferHelper ReadHelper)
+    public Boolean OnCmdPickCharAck(Command_ID wCommandID, UInt64 u64ConnID, ReadBufferHelper ReadHelper)
     {
         StCharPickCharAck CharPickCharAck = new StCharPickCharAck();
         CharPickCharAck.Read(ReadHelper);
@@ -299,7 +304,24 @@ public class ClientEngine
             ConnectToServer(CharPickCharAck.szIpAddr, CharPickCharAck.sPort);
         }
 
-        return 0; 
+        return true; 
+    }
+
+    public Boolean OnCmdHeartBeatAck(Command_ID wCommandID, UInt64 u64ConnID, ReadBufferHelper ReadHelper)
+    {
+        StCharHeartBeatAck CharHeartBeatAck = new StCharHeartBeatAck();
+        CharPickCharAck.Read(ReadHelper);
+
+        if (CharPickCharAck.nRetCode == 0)
+        {
+            DisConnect();
+            m_u64ClientID = CharPickCharAck.u64CharID;
+            m_dwIdentifyCode = CharPickCharAck.dwIdentifyCode;
+            m_WriteHelper.m_u64ClientID = CharPickCharAck.u64CharID;
+            ConnectToServer(CharPickCharAck.szIpAddr, CharPickCharAck.sPort);
+        }
+
+        return 0;
     }
 
     //以下都是内部网络实现

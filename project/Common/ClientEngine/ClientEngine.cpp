@@ -180,6 +180,8 @@ BOOL ClientEngine::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CBuffer
 
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_PICK_CHAR_ACK,	OnCmdPickCharAck);
 
+		PROCESS_COMMAND_ITEM_T(CMD_CHAR_HEART_BEAT_ACK,	OnCmdHearBeatAck);
+
 	default:
 		{
 			for(std::vector<IMessageHandler*>::iterator itor = m_vtMsgHandler.begin(); itor != m_vtMsgHandler.end(); itor++)
@@ -199,7 +201,7 @@ BOOL ClientEngine::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CBuffer
 }
 
 
-UINT32 ClientEngine::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+BOOL ClientEngine::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
 	StConnectNotify ConnectNotify;
 
@@ -261,7 +263,7 @@ IDataBuffer* ClientEngine::GetWriteBuffer()
 	return &m_WriteBuffer;
 }
 
-UINT32 ClientEngine::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL ClientEngine::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharPickCharAck CharPickCharAck;
 	pBufferHelper->Read(CharPickCharAck);
@@ -276,7 +278,7 @@ UINT32 ClientEngine::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBuf
 		ConnectToServer(CharPickCharAck.szIpAddr, CharPickCharAck.sPort);
 	}
 
-	return 0;
+	return TRUE;
 }
 
 BOOL ClientEngine::ConnectToServer( std::string strIpAddr, UINT16 sPort )
@@ -418,6 +420,26 @@ BOOL ClientEngine::ProcessData()
 
 		OnCommandHandle(pCommandHeader->wCommandID, 0, &BufferReader);
 	}
+
+	return TRUE;
+}
+
+UINT32 ClientEngine::GetServerTime()
+{
+	UINT32 dwTick = ::GetTickCount();
+
+	return m_dwServerTime + (m_dwServerTick - dwTick)/1000;
+}
+
+BOOL ClientEngine::OnCmdHearBeatAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StCharHeartBeatAck CharHeartBeatAck;
+	pBufferHelper->Read(CharHeartBeatAck);
+
+	UINT32 dwTick = ::GetTickCount();
+
+	m_dwServerTime = CharHeartBeatAck.dwServerTime + (dwTick - CharHeartBeatAck.dwReqTimestamp) /1000;
+	m_dwServerTick = dwTick;
 
 	return TRUE;
 }

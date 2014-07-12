@@ -86,9 +86,6 @@ struct StCharLoginAck	//登录请求消息
 	UINT32  dwAccountID;
 	UINT8   nCount;
 	StCharPickInfo CharPickInfo[4];
-	//StCharPickInfo;
-	//need to be implement
-	// this will return all the char belong to this char;
 };
 
 
@@ -141,6 +138,19 @@ struct StCharMoveReq
 	FLOAT	x;
 	FLOAT	y;
 	FLOAT	z;
+};
+
+
+struct StCharHeartBeatReq
+{
+	UINT32 dwReqTimestamp;
+
+};
+
+struct StCharHeartBeatAck
+{
+	UINT32 dwReqTimestamp;
+	UINT32 dwServerTime;
 };
 
 #pragma  pack(pop)

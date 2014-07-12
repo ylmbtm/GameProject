@@ -30,6 +30,7 @@ CGameService* CGameService::GetInstancePtr()
 
 BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
+	//从底层传过来的内存，在这个地方是不释放的, 由处理者去释放
 	if(pBufferHelper->GetCommandHeader()->CmdHandleID == CMDH_SVR_CON)
 	{
 		m_ServerCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
@@ -167,6 +168,8 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			}
 		}
 	}
+
+	pBufferHelper->GetDataBuffer()->Release();
 
 	
 	return TRUE;
@@ -323,5 +326,17 @@ BOOL CGameService::OnCmdGMCommand( UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 
 
 	return FALSE;
+}
+
+BOOL CGameService::OnCmdHeartBeatReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StCharHeartBeatReq CharHeartBeatReq;
+	pBufferHelper->Read(CharHeartBeatReq);
+
+	StCharHeartBeatAck CharHeartBeatAck;
+	CharHeartBeatAck.dwReqTimestamp = CharHeartBeatReq.dwReqTimestamp;
+	CharHeartBeatAck.dwServerTime   = CommonFunc::GetTime();
+
+	return TRUE;
 }
 

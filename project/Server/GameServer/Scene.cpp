@@ -206,8 +206,8 @@ BOOL CScene::SendNewObjectToGrids(CWorldObject *pWorldObject, INT32 Grids[9])
 			{
 				if(pIterObj->GetObjectType() == OBJECT_PLAYER)
 				{
-					CLog::GetInstancePtr()->AddLog("自己【%d】--Add--To--%d, 坐标 x = %f, z=%f", (UINT32)pWorldObject->GetObjectID(),
-						(UINT32)pIterObj->GetObjectID(), pWorldObject->m_ObjectPos.x, pWorldObject->m_ObjectPos.z);
+					CLog::GetInstancePtr()->AddLog("自己[%lld]--Add--To--[%lld], 坐标 x = %f, z=%f", pWorldObject->GetObjectID(),
+						pIterObj->GetObjectID(), pWorldObject->m_ObjectPos.x, pWorldObject->m_ObjectPos.z);
 
 					CGameService::GetInstancePtr()->SendCmdToConnection(((CPlayerObject*)pIterObj)->GetConnectID(),pIterObj->GetObjectID(), 0, &m_WriteBuffer);
 				}
@@ -254,8 +254,8 @@ BOOL CScene::SendNewGridsToObject( INT32 Grids[9], CPlayerObject *pPlayerObj )
 
 				pIterObj->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_DEST_OTHER);
 
-				CLog::GetInstancePtr()->AddLog("自己【%d】--Add--From---%d, 坐标 x = %f, z=%f", 
-					(UINT32)pIterObj->GetObjectID(), (UINT32)pPlayerObj->GetObjectID(), pIterObj->m_ObjectPos.x, pIterObj->m_ObjectPos.z);
+				CLog::GetInstancePtr()->AddLog("自己[%lld]--Add--From---[%lld], 坐标 x = %f, z=%f", 
+					pIterObj->GetObjectID(), pPlayerObj->GetObjectID(), pIterObj->m_ObjectPos.x, pIterObj->m_ObjectPos.z);
 
 				(*pCount)++;
 			}
@@ -355,7 +355,7 @@ BOOL CScene::SendRemoveObjectToGrids( UINT64 u64CharID, INT32 Grids[9] )
 				ASSERT_FAIELD;
 			}
 
-			CLog::GetInstancePtr()->AddLog("自己【%d】--Remove--From---%d, ",  (UINT32)u64CharID, (UINT32)pIterObj->GetObjectID());
+			CLog::GetInstancePtr()->AddLog("自己[%lld]--Remove--From---[%lld], ",  u64CharID, pIterObj->GetObjectID());
 
 			CGameService::GetInstancePtr()->SendCmdToConnection(pIterPlayer->GetConnectID(), pIterPlayer->GetObjectID(), 0, &m_WriteBuffer);
 
@@ -399,7 +399,7 @@ BOOL CScene::SendRemoveGridsToPlayer( INT32 Grids[9], CPlayerObject *pPlayerObj)
 				ASSERT_FAIELD;
 			}
 
-			CLog::GetInstancePtr()->AddLog("自己【%d】--Remove--From---%d, ",  (UINT32)pPlayerObj->GetObjectID(), (UINT32)pIterObj->GetObjectID());
+			CLog::GetInstancePtr()->AddLog("自己[%lld]--Remove--From---[%lld], ",  pPlayerObj->GetObjectID(), pIterObj->GetObjectID());
 
 			*pCount = *pCount + 1;
 

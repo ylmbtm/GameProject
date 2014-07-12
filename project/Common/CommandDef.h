@@ -55,6 +55,9 @@ enum Command_ID
 
 	CMD_CHAR_UPDATE_MYSELF,     //更新自己的数据
 
+	CMD_CHAR_HEART_BEAT_REQ,	//玩家心跳和对时消息回复
+	CMD_CHAR_HEART_BEAT_ACK,	//玩家心跳和对时消息
+
 	//下面是数据库服务器的命令
 	CMD_DB_NEW_ACCOUNT_REQ,		//新建账号
 	CMD_DB_NEW_ACCOUNT_ACK,		//新建账号回复

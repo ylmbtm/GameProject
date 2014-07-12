@@ -50,6 +50,8 @@ public:
 	
 	IDataBuffer* GetWriteBuffer();
 
+	UINT32  GetServerTime();
+
 protected:
 	VOID	SetConnectState(ConnectState val);
 
@@ -62,11 +64,12 @@ protected:
 
 	BOOL	OnUpdate(UINT32 dwTick){return TRUE;};
 
-	UINT32	OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	BOOL	OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
-	UINT32	OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper );
+	BOOL	OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper );
+
+	BOOL	OnCmdHearBeatAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper );
 protected:
-
 	UINT64				m_u64ClientID;
 	UINT32				m_dwIdentifyCode;
 
@@ -82,6 +85,10 @@ protected:
 	CDataBuffer<CONST_BUFF_SIZE>  m_WriteBuffer;
 	
 	std::vector<IMessageHandler*> m_vtMsgHandler;
+
+
+	UINT32				m_dwServerTime;
+	UINT32				m_dwServerTick;
 
 };
 

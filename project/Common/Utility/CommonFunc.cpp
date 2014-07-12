@@ -2,7 +2,6 @@
 #include "CommonFunc.h"
 
 
-
 UINT32 CommonFunc::GetProcessorNum()
 {
 	UINT32 dwNum = 0;
@@ -28,6 +27,16 @@ std::string CommonFunc::GetCurrentDir()
 #endif
 	return std::string(szPath);
 }
+
+UINT32 CommonFunc::GetTime()
+{
+	time_t t;    
+
+	t=time(0);
+
+	return (UINT32)t;
+}
+
 
 UINT32 CommonFunc::GetTickCount()
 {
@@ -121,3 +130,4 @@ UINT32 CommonFunc::GetFreePhysMemory()
 
 	return dwFreeSize;
 }
+
