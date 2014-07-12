@@ -1,4 +1,4 @@
-// DlgSelect.cpp : ÊµÏÖÎÄ¼þ
+ï»¿// DlgSelect.cpp : å®žçŽ°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -7,7 +7,7 @@
 #include "CommandHandler.h"
 
 
-// CDlgSelect ¶Ô»°¿ò
+// CDlgSelect å¯¹è¯æ¡†
 
 IMPLEMENT_DYNAMIC(CDlgSelect, CDialog)
 
@@ -37,7 +37,7 @@ BEGIN_MESSAGE_MAP(CDlgSelect, CDialog)
 END_MESSAGE_MAP()
 
 
-// CDlgSelect ÏûÏ¢´¦Àí³ÌÐò
+// CDlgSelect æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 BOOL CDlgSelect::OnInitDialog()
 {
@@ -45,11 +45,11 @@ BOOL CDlgSelect::OnInitDialog()
 
 	m_CharList.SetExtendedStyle(LVS_EX_GRIDLINES|LVS_EX_FULLROWSELECT);
 
-	m_CharList.InsertColumn(0, "½ÇÉ«Ãû", LVCFMT_LEFT, 100);
-	m_CharList.InsertColumn(1, "µÈ¼¶", LVCFMT_LEFT, 100);
-	m_CharList.InsertColumn(2, "ÐÔ±ð", LVCFMT_LEFT, 100);
-	m_CharList.InsertColumn(3, "Ö°Òµ", LVCFMT_LEFT, 100);
-	m_CharList.InsertColumn(4, "Á³ÐÍ", LVCFMT_LEFT, 100);
+	m_CharList.InsertColumn(0, "è§’è‰²å", LVCFMT_LEFT, 100);
+	m_CharList.InsertColumn(1, "ç­‰çº§", LVCFMT_LEFT, 100);
+	m_CharList.InsertColumn(2, "æ€§åˆ«", LVCFMT_LEFT, 100);
+	m_CharList.InsertColumn(3, "èŒä¸š", LVCFMT_LEFT, 100);
+	m_CharList.InsertColumn(4, "è„¸åž‹", LVCFMT_LEFT, 100);
 
 	RefreshListCtrl();
 
@@ -111,8 +111,8 @@ BOOL CDlgSelect::RefreshListCtrl()
 		sprintf(szValue, "%d", itor->dwLevel);
 		m_CharList.InsertItem(i, itor->szCharName);
 		m_CharList.SetItemText(i, 1, szValue);
-		m_CharList.SetItemText(i, 2, "ÄÐ");
-		m_CharList.SetItemText(i, 3,"·¨Ê¦");
+		m_CharList.SetItemText(i, 2, "ç”·");
+		m_CharList.SetItemText(i, 3,"æ³•å¸ˆ");
 		m_CharList.SetItemData(i, i);
 		i++;
 	}
@@ -134,7 +134,7 @@ void CDlgSelect::OnNMRClickList1(NMHDR *pNMHDR, LRESULT *pResult)
 
 	CMenu Menu;
 	Menu.CreatePopupMenu();
-	Menu.AppendMenu(MF_STRING, 101, "É¾³ý");
+	Menu.AppendMenu(MF_STRING, 101, "åˆ é™¤");
 	int nValue = Menu.TrackPopupMenu(TPM_LEFTALIGN|TPM_RETURNCMD, pt.x, pt.y, this);
 	if(nValue == 101 )
 	{

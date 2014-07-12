@@ -1,24 +1,24 @@
-#pragma once
+ï»¿#pragma once
 #include "afxcmn.h"
 #include "PacketDef\ClientPacket.h"
 #include "Resource.h"
 
 
-// CDlgSelect ¶Ô»°¿ò
+// CDlgSelect å¯¹è¯æ¡†
 
 class CDlgSelect : public CDialog
 {
 	DECLARE_DYNAMIC(CDlgSelect)
 
 public:
-	CDlgSelect(CWnd* pParent = NULL);   // ±ê×¼¹¹Ôìº¯Êı
+	CDlgSelect(CWnd* pParent = NULL);   // æ ‡å‡†æ„é€ å‡½æ•°
 	virtual ~CDlgSelect();
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 	enum { IDD = IDD_DLG_SELECT };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
 	virtual BOOL OnInitDialog();
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedBtnNewChar();

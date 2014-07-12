@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #ifndef __CLIENT_ENGINE_H__
 #define __CLIENT_ENGINE_H__
 #include "DataBuffer\DataBuffer.h"
@@ -32,7 +32,7 @@ public:
 
 	BOOL	CloseEngine();
 
-	BOOL	SetClientID(UINT64 u64ClientID);  //Ò»°ãÊÇ½ÇÉ«ID
+	BOOL	SetClientID(UINT64 u64ClientID);  //ä¸€èˆ¬æ˜¯è§’è‰²ID
 
 	BOOL	ConnectToServer(std::string strIpAddr, UINT16 sPort);
 
@@ -59,7 +59,7 @@ protected:
 
 	BOOL	ProcessData();
 
-	//ÒÔÏÂÊÇÄÚ²¿µÄÏûÏ¢´¦Àí
+	//ä»¥ä¸‹æ˜¯å†…éƒ¨çš„æ¶ˆæ¯å¤„ç†
 	BOOL	OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
 	BOOL	OnUpdate(UINT32 dwTick){return TRUE;};

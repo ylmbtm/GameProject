@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "DBProcManager.h"
 #include "Utility\CommonFunc.h"
 #include "ObjectID.h"

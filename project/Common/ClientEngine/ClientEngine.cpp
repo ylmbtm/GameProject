@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "ClientEngine.h"
 #include "CommandDef.h"
 #include "DataBuffer\BufferHelper.h"
@@ -65,7 +65,7 @@ BOOL ClientEngine::SendData( char *pData, INT32 dwLen )
 
 	if((m_ConnectState != Succ_Connect)&&(m_ConnectState != Raw_Connect))
 	{
-		printf("Ã»ÓĞÁ¬½Ó·şÎñÆ÷!\n");
+		printf("æ²¡æœ‰è¿æ¥æœåŠ¡å™¨!\n");
 
 		return FALSE;
 	}
@@ -75,7 +75,7 @@ BOOL ClientEngine::SendData( char *pData, INT32 dwLen )
 	{
 		DWORD nError = CommonSocket::GetSocketLastError();
 
-		printf("·¢ËÍÊı¾İ·¢Éú´íÎó:%s!\n", CommonSocket::GetLastErrorStr(nError).c_str());
+		printf("å‘é€æ•°æ®å‘ç”Ÿé”™è¯¯:%s!\n", CommonSocket::GetLastErrorStr(nError).c_str());
 
 		return FALSE;
 	}
@@ -288,7 +288,7 @@ BOOL ClientEngine::ConnectToServer( std::string strIpAddr, UINT16 sPort )
 	m_hSocket = CommonSocket::CreateSocket(AF_INET, SOCK_STREAM, 0);
 	if((m_hSocket == INVALID_SOCKET)||(m_hSocket == NULL))
 	{
-		printf("´´½¨Ì×½Ó×ÖÊ§°Ü!\n");
+		printf("åˆ›å»ºå¥—æ¥å­—å¤±è´¥!\n");
 
 		SetConnectState(Not_Connect);
 
@@ -298,7 +298,7 @@ BOOL ClientEngine::ConnectToServer( std::string strIpAddr, UINT16 sPort )
 
 	if(!CommonSocket::ConnectSocket(m_hSocket, strIpAddr.c_str(), sPort))
 	{
-		printf("Á¬½Ó·şÎñÆ÷Ê§°Ü!\n");
+		printf("è¿æ¥æœåŠ¡å™¨å¤±è´¥!\n");
 
 		SetConnectState(Not_Connect);
 
@@ -330,19 +330,19 @@ void ClientEngine::SetConnectState( ConnectState val )
 {
 	if(val == Not_Connect)
 	{
-		printf("ÉèÖÃÎ´Á¬½Ó!\n");
+		printf("è®¾ç½®æœªè¿æ¥!\n");
 	}
 	else if(val == Start_Connect)
 	{
-		printf("ÉèÖÃ¿ªÊ¼Á¬½Ó!\n");
+		printf("è®¾ç½®å¼€å§‹è¿æ¥!\n");
 	}
 	else if(val == Raw_Connect)
 	{
-		printf("ÉèÖÃ¼ºÍê³ÉÔ­Ê¼Á¬½Ó!\n");
+		printf("è®¾ç½®å·±å®ŒæˆåŸå§‹è¿æ¥!\n");
 	}
 	else if(val == Succ_Connect)
 	{
-		printf("ÉèÖÃÁ¬½Ó³É¹¦!\n");
+		printf("è®¾ç½®è¿æ¥æˆåŠŸ!\n");
 	}
 
 	m_ConnectState = val;
@@ -361,14 +361,14 @@ BOOL ClientEngine::ReceiveData()
 		}
 		else 
 		{
-			printf("½ÓÊÕÊı¾İ·¢Éú´íÎó:%s!\n", CommonSocket::GetLastErrorStr(nError).c_str());
+			printf("æ¥æ”¶æ•°æ®å‘ç”Ÿé”™è¯¯:%s!\n", CommonSocket::GetLastErrorStr(nError).c_str());
 		}
 
 		return FALSE;
 	}
 	else if(nReadLen == 0)
 	{
-		printf("¶Ô·½¹Ø±ÕÁËÁ¬½Ó!\n");
+		printf("å¯¹æ–¹å…³é—­äº†è¿æ¥!\n");
 
 		SetConnectState(Not_Connect); 
 

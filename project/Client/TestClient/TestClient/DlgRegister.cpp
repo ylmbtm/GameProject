@@ -1,4 +1,4 @@
-// DlgRegister.cpp : ÊµÏÖÎÄ¼ş
+ï»¿// DlgRegister.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -7,7 +7,7 @@
 #include "CommandHandler.h"
 
 
-// CDlgRegister ¶Ô»°¿ò
+// CDlgRegister å¯¹è¯æ¡†
 
 IMPLEMENT_DYNAMIC(CDlgRegister, CDialog)
 
@@ -36,7 +36,7 @@ BEGIN_MESSAGE_MAP(CDlgRegister, CDialog)
 END_MESSAGE_MAP()
 
 
-// CDlgRegister ÏûÏ¢´¦Àí³ÌĞò
+// CDlgRegister æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 void CDlgRegister::OnBnClickedOk()
 {
