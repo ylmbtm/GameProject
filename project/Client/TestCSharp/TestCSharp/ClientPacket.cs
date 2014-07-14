@@ -5,14 +5,14 @@ public class StConnectNotify
 	public UInt64 u64ConnID;
 	public void Read(ReadBufferHelper bh)
 	{
-		btConType = bh.ReadUInt8();
-		u64ConnID = bh.ReadUInt64();
+		btConType = bh.ReadUint8();
+		u64ConnID = bh.ReadUint64();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt8(btConType);
-		bh.WriteUInt64(u64ConnID);
+		bh.WriteUint8(btConType);
+		bh.WriteUint64(u64ConnID);
 		return ;
 	}
 };
@@ -22,14 +22,14 @@ public class StDisConnectNotify
 	public UInt64 u64ConnID;
 	public void Read(ReadBufferHelper bh)
 	{
-		btConType = bh.ReadUInt8();
-		u64ConnID = bh.ReadUInt64();
+		btConType = bh.ReadUint8();
+		u64ConnID = bh.ReadUint64();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt8(btConType);
-		bh.WriteUInt64(u64ConnID);
+		bh.WriteUint8(btConType);
+		bh.WriteUint64(u64ConnID);
 		return ;
 	}
 };
@@ -38,12 +38,12 @@ public class StCharVerifyVersionReq
 	public UInt32 dwClientVersion;
 	public void Read(ReadBufferHelper bh)
 	{
-		dwClientVersion = bh.ReadUInt32();
+		dwClientVersion = bh.ReadUint32();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt32(dwClientVersion);
+		bh.WriteUint32(dwClientVersion);
 		return ;
 	}
 };
@@ -52,12 +52,12 @@ public class StCharVerifyVersionAck
 	public UInt32 dwVerifyCode;
 	public void Read(ReadBufferHelper bh)
 	{
-		dwVerifyCode = bh.ReadUInt32();
+		dwVerifyCode = bh.ReadUint32();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt32(dwVerifyCode);
+		bh.WriteUint32(dwVerifyCode);
 		return ;
 	}
 };
@@ -73,8 +73,8 @@ public class StCharNewAccountReq
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteFixString(szAccountName);
-		bh.WriteFixString(szPassword);
+		bh.WriteFixString(szAccountName,32);
+		bh.WriteFixString(szPassword,32);
 		return ;
 	}
 };
@@ -83,12 +83,12 @@ public class StCharNewAccountAck
 	public UInt16 nRetCode;
 	public void Read(ReadBufferHelper bh)
 	{
-		nRetCode = bh.ReadUInt16();
+		nRetCode = bh.ReadUint16();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt16(nRetCode);
+		bh.WriteUint16(nRetCode);
 		return ;
 	}
 };
@@ -99,16 +99,16 @@ public class StCharNewCharReq
 	public UInt32 dwFeature;
 	public void Read(ReadBufferHelper bh)
 	{
-		dwAccountID = bh.ReadUInt32();
+		dwAccountID = bh.ReadUint32();
 		szCharName = bh.ReadFixString(32);
-		dwFeature = bh.ReadUInt32();
+		dwFeature = bh.ReadUint32();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt32(dwAccountID);
-		bh.WriteFixString(szCharName);
-		bh.WriteUInt32(dwFeature);
+		bh.WriteUint32(dwAccountID);
+		bh.WriteFixString(szCharName,32);
+		bh.WriteUint32(dwFeature);
 		return ;
 	}
 };
@@ -118,14 +118,14 @@ public class StCharDelCharReq
 	public UInt64 u64CharID;
 	public void Read(ReadBufferHelper bh)
 	{
-		dwAccountID = bh.ReadUInt32();
-		u64CharID = bh.ReadUInt64();
+		dwAccountID = bh.ReadUint32();
+		u64CharID = bh.ReadUint64();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt32(dwAccountID);
-		bh.WriteUInt64(u64CharID);
+		bh.WriteUint32(dwAccountID);
+		bh.WriteUint64(u64CharID);
 		return ;
 	}
 };
@@ -136,16 +136,16 @@ public class StCharDelCharAck
 	public UInt64 u64CharID;
 	public void Read(ReadBufferHelper bh)
 	{
-		nRetCode = bh.ReadUInt16();
-		dwAccountID = bh.ReadUInt32();
-		u64CharID = bh.ReadUInt64();
+		nRetCode = bh.ReadUint16();
+		dwAccountID = bh.ReadUint32();
+		u64CharID = bh.ReadUint64();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt16(nRetCode);
-		bh.WriteUInt32(dwAccountID);
-		bh.WriteUInt64(u64CharID);
+		bh.WriteUint16(nRetCode);
+		bh.WriteUint32(dwAccountID);
+		bh.WriteUint64(u64CharID);
 		return ;
 	}
 };
@@ -157,18 +157,18 @@ public class StCharPickInfo
 	public UInt32 dwFeature;
 	public void Read(ReadBufferHelper bh)
 	{
-		u64CharID = bh.ReadUInt64();
+		u64CharID = bh.ReadUint64();
 		szCharName = bh.ReadFixString(32);
-		dwLevel = bh.ReadUInt32();
-		dwFeature = bh.ReadUInt32();
+		dwLevel = bh.ReadUint32();
+		dwFeature = bh.ReadUint32();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt64(u64CharID);
-		bh.WriteFixString(szCharName);
-		bh.WriteUInt32(dwLevel);
-		bh.WriteUInt32(dwFeature);
+		bh.WriteUint64(u64CharID);
+		bh.WriteFixString(szCharName,32);
+		bh.WriteUint32(dwLevel);
+		bh.WriteUint32(dwFeature);
 		return ;
 	}
 };
@@ -178,13 +178,13 @@ public class StCharNewCharAck
 	public StCharPickInfo CharPickInfo= new StCharPickInfo();
 	public void Read(ReadBufferHelper bh)
 	{
-		nRetCode = bh.ReadUInt16();
+		nRetCode = bh.ReadUint16();
 		CharPickInfo.Read(bh);
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt16(nRetCode);
+		bh.WriteUint16(nRetCode);
 		CharPickInfo.Write(bh);
 		return ;
 	}
@@ -201,8 +201,8 @@ public class StCharLoginReq
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteFixString(szAccountName);
-		bh.WriteFixString(szPassword);
+		bh.WriteFixString(szAccountName,32);
+		bh.WriteFixString(szPassword,32);
 		return ;
 	}
 };
@@ -211,13 +211,13 @@ public class StCharLoginAck
 	public UInt16 nRetCode;
 	public UInt32 dwAccountID;
 	public Byte nCount;
-	public StCharPickInfo CharPickInfo = new StCharPickInfo[4];
+	public StCharPickInfo[] CharPickInfo = new StCharPickInfo[4];
 	public void Read(ReadBufferHelper bh)
 	{
-		nRetCode = bh.ReadUInt16();
-		dwAccountID = bh.ReadUInt32();
-		nCount = bh.ReadUInt8();
-		for(size_t i = 0; i < 4; i++)
+		nRetCode = bh.ReadUint16();
+		dwAccountID = bh.ReadUint32();
+		nCount = bh.ReadUint8();
+		for(int i = 0; i < 4; i++)
 		{
 			CharPickInfo[i].Read(bh);
 		}
@@ -225,10 +225,10 @@ public class StCharLoginAck
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt16(nRetCode);
-		bh.WriteUInt32(dwAccountID);
-		bh.WriteUInt8(nCount);
-		for(size_t i = 0; i < 4; i++)
+		bh.WriteUint16(nRetCode);
+		bh.WriteUint32(dwAccountID);
+		bh.WriteUint8(nCount);
+		for(int i = 0; i < 4; i++)
 		{
 			CharPickInfo[i].Write(bh);
 		}
@@ -240,12 +240,12 @@ public class StCharPickCharReq
 	public UInt64 u64CharID;
 	public void Read(ReadBufferHelper bh)
 	{
-		u64CharID = bh.ReadUInt64();
+		u64CharID = bh.ReadUint64();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt64(u64CharID);
+		bh.WriteUint64(u64CharID);
 		return ;
 	}
 };
@@ -258,20 +258,20 @@ public class StCharPickCharAck
 	public string szIpAddr;
 	public void Read(ReadBufferHelper bh)
 	{
-		nRetCode = bh.ReadUInt16();
-		u64CharID = bh.ReadUInt64();
-		dwIdentifyCode = bh.ReadUInt32();
-		sPort = bh.ReadUInt16();
+		nRetCode = bh.ReadUint16();
+		u64CharID = bh.ReadUint64();
+		dwIdentifyCode = bh.ReadUint32();
+		sPort = bh.ReadUint16();
 		szIpAddr = bh.ReadFixString(32);
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt16(nRetCode);
-		bh.WriteUInt64(u64CharID);
-		bh.WriteUInt32(dwIdentifyCode);
-		bh.WriteUInt16(sPort);
-		bh.WriteFixString(szIpAddr);
+		bh.WriteUint16(nRetCode);
+		bh.WriteUint64(u64CharID);
+		bh.WriteUint32(dwIdentifyCode);
+		bh.WriteUint16(sPort);
+		bh.WriteFixString(szIpAddr,32);
 		return ;
 	}
 };
@@ -281,14 +281,14 @@ public class StCharEnterGameReq
 	public UInt32 dwIdentifyCode;
 	public void Read(ReadBufferHelper bh)
 	{
-		u64CharID = bh.ReadUInt64();
-		dwIdentifyCode = bh.ReadUInt32();
+		u64CharID = bh.ReadUint64();
+		dwIdentifyCode = bh.ReadUint32();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt64(u64CharID);
-		bh.WriteUInt32(dwIdentifyCode);
+		bh.WriteUint64(u64CharID);
+		bh.WriteUint32(dwIdentifyCode);
 		return ;
 	}
 };
@@ -298,14 +298,14 @@ public class StCharEnterGameAck
 	public UInt32 dwSceneID;
 	public void Read(ReadBufferHelper bh)
 	{
-		dwIdentifyCode = bh.ReadUInt32();
-		dwSceneID = bh.ReadUInt32();
+		dwIdentifyCode = bh.ReadUint32();
+		dwSceneID = bh.ReadUint32();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt32(dwIdentifyCode);
-		bh.WriteUInt32(dwSceneID);
+		bh.WriteUint32(dwIdentifyCode);
+		bh.WriteUint32(dwSceneID);
 		return ;
 	}
 };
@@ -314,12 +314,12 @@ public class StCharLeaveGameReq
 	public UInt32 dwLeaveReason;
 	public void Read(ReadBufferHelper bh)
 	{
-		dwLeaveReason = bh.ReadUInt32();
+		dwLeaveReason = bh.ReadUint32();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt32(dwLeaveReason);
+		bh.WriteUint32(dwLeaveReason);
 		return ;
 	}
 };
@@ -344,7 +344,7 @@ public class StCharGmCmdReq
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteFixString(szGMCommand);
+		bh.WriteFixString(szGMCommand,32);
 		return ;
 	}
 };
@@ -356,7 +356,7 @@ public class StCharMoveReq
 	public Single z;
 	public void Read(ReadBufferHelper bh)
 	{
-		sDir = bh.ReadUInt16();
+		sDir = bh.ReadUint16();
 		x = bh.ReadFloat();
 		y = bh.ReadFloat();
 		z = bh.ReadFloat();
@@ -364,7 +364,7 @@ public class StCharMoveReq
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt16(sDir);
+		bh.WriteUint16(sDir);
 		bh.WriteFloat(x);
 		bh.WriteFloat(y);
 		bh.WriteFloat(z);
@@ -376,12 +376,12 @@ public class StCharHeartBeatReq
 	public UInt32 dwReqTimestamp;
 	public void Read(ReadBufferHelper bh)
 	{
-		dwReqTimestamp = bh.ReadUInt32();
+		dwReqTimestamp = bh.ReadUint32();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt32(dwReqTimestamp);
+		bh.WriteUint32(dwReqTimestamp);
 		return ;
 	}
 };
@@ -391,14 +391,14 @@ public class StCharHeartBeatAck
 	public UInt32 dwServerTime;
 	public void Read(ReadBufferHelper bh)
 	{
-		dwReqTimestamp = bh.ReadUInt32();
-		dwServerTime = bh.ReadUInt32();
+		dwReqTimestamp = bh.ReadUint32();
+		dwServerTime = bh.ReadUint32();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUInt32(dwReqTimestamp);
-		bh.WriteUInt32(dwServerTime);
+		bh.WriteUint32(dwReqTimestamp);
+		bh.WriteUint32(dwServerTime);
 		return ;
 	}
 };

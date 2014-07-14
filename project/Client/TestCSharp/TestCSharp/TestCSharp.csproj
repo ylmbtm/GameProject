@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="BufferHelper.cs" />
     <Compile Include="ClientEngine.cs" />
+    <Compile Include="PacketHeader.cs" />
     <Compile Include="PakcetID.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

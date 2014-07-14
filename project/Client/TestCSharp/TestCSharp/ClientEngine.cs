@@ -30,6 +30,7 @@ public class ClientEngine
     public ConnectState m_ConnectState;
 
     public Int32 mTimeOut = 500;
+    private int PacketHeaderSize = 18;
 
 
     public const int BUFFER_MAX = 8096;
@@ -310,18 +311,9 @@ public class ClientEngine
     public Boolean OnCmdHeartBeatAck(Command_ID wCommandID, UInt64 u64ConnID, ReadBufferHelper ReadHelper)
     {
         StCharHeartBeatAck CharHeartBeatAck = new StCharHeartBeatAck();
-        CharPickCharAck.Read(ReadHelper);
+        CharHeartBeatAck.Read(ReadHelper);
 
-        if (CharPickCharAck.nRetCode == 0)
-        {
-            DisConnect();
-            m_u64ClientID = CharPickCharAck.u64CharID;
-            m_dwIdentifyCode = CharPickCharAck.dwIdentifyCode;
-            m_WriteHelper.m_u64ClientID = CharPickCharAck.u64CharID;
-            ConnectToServer(CharPickCharAck.szIpAddr, CharPickCharAck.sPort);
-        }
-
-        return 0;
+        return true;
     }
 
     //以下都是内部网络实现
@@ -361,14 +353,14 @@ public class ClientEngine
 
    void ProcessData()
     {
-        if (m_DataLen < (TransferHeader.GetSize() + CommandHeader.GetSize()))
+        if (m_DataLen < PacketHeaderSize)
         {
             Array.Copy(m_RecvBuffer, 0, m_DataBuffer, m_DataLen, m_RecvLen);
 
             m_DataLen += m_RecvLen;
         }
 
-       if(m_DataLen < (TransferHeader.GetSize() + CommandHeader.GetSize()))
+        if (m_DataLen < PacketHeaderSize)
        {
            return ;
        }

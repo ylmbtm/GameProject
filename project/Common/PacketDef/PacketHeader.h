@@ -6,7 +6,7 @@
 
 struct TransferHeader
 {
-	UINT8	bCheckCode;
+	UINT8	CheckCode;
 	UINT16  dwSize;
 };
 
