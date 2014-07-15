@@ -69,6 +69,10 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 		{
 			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[统计]-服务器【%lld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
 		}
+		else if(ConnectNotify.btConType == TYPE_SVR_WORLDSVR)
+		{
+			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[世界]-服务器【%lld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
+		}
 
 		pConnection->SetConnectionType(ConnectNotify.btConType);
 

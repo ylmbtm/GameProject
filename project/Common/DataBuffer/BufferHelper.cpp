@@ -28,7 +28,7 @@ BOOL CBufferHelper::BeginWrite(UINT16 wCommandID, UINT8 CmdHandleID, UINT16 dwSc
 		return FALSE;
 	}
 
-	GetTransferHeader()->bCheckCode = 0xff;
+	GetTransferHeader()->CheckCode = 0xff;
 	CommandHeader *pCommandHeader = GetCommandHeader();
 
 	pCommandHeader->wCommandID = wCommandID;
@@ -65,7 +65,7 @@ BOOL CBufferHelper::BeginRead()
 
 	m_pDataBuffer->SetDataLenth(m_pDataBuffer->GetDataLenth());
 
-	if(GetTransferHeader()->bCheckCode != 0xff)
+	if(GetTransferHeader()->CheckCode != 0xff)
 	{
 		ASSERT_FAIELD;
 		return FALSE;
