@@ -41,6 +41,8 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 
 BOOL CGameService::StartRun()
 {
+	ASSERT_FAIELD;
+
 	if(!CLog::GetInstancePtr()->StartLog("LoginServer"))
 	{
 		ASSERT_FAIELD;
