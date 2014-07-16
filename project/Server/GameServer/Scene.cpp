@@ -118,7 +118,7 @@ INT32 CScene::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHel
 
 	StDBLoadCharInfoReq DBLoadCharInfoReq;
 	DBLoadCharInfoReq.dwSceneID = m_dwSceneID;
-	DBLoadCharInfoReq.dwGameSvrID= CGlobalConfig::GetInstancePtr()->m_dwServerID;
+	DBLoadCharInfoReq.dwGameSvrID= CGameService::GetInstancePtr()->GetServerID();
 	DBLoadCharInfoReq.u64CharID = CharEnterGameReq.u64CharID;
 	DBLoadCharInfoReq.dwProxySvrID = u64ConnID;
 	

@@ -72,8 +72,8 @@ BOOL CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, 
 
 		StSvrServerInfo RegisterToCenterSvr;
 
-		RegisterToCenterSvr.dwSvrID = CGlobalConfig::GetInstancePtr()->m_dwServerID;
-		RegisterToCenterSvr.dwType = CGlobalConfig::GetInstancePtr()->m_dwServerType;
+		RegisterToCenterSvr.dwSvrID = CGameService::GetInstancePtr()->GetServerID();
+		RegisterToCenterSvr.dwType = CGameService::GetInstancePtr()->GetServerType();
 		strncpy(RegisterToCenterSvr.szIpAddr, CGlobalConfig::GetInstancePtr()->m_strIpAddr.c_str(), 32);
 		RegisterToCenterSvr.sPort = CGlobalConfig::GetInstancePtr()->m_sPort;
 
@@ -121,7 +121,7 @@ BOOL CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID, 
 	{
 		pBufferHelper->Read(RegisterToCenterSvr);
 
-		if(RegisterToCenterSvr.dwSvrID == CGlobalConfig::GetInstancePtr()->m_dwServerID)
+		if(RegisterToCenterSvr.dwSvrID == CGameService::GetInstancePtr()->GetServerID())
 		{
 			continue;
 		}

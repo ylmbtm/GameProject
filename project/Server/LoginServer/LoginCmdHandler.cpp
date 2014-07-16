@@ -48,8 +48,8 @@ BOOL CLoginCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 {
 	StNormalReport NormalReport;
 	NormalReport.dwReportID = SVR_REPROT_NORMAL;
-	NormalReport.dwSvrID    = CGlobalConfig::GetInstancePtr()->m_dwServerID;
-	NormalReport.dwSvrType  = CGlobalConfig::GetInstancePtr()->m_dwServerType;
+	NormalReport.dwSvrID    = CGameService::GetInstancePtr()->GetServerID();
+	NormalReport.dwSvrType  = CGameService::GetInstancePtr()->GetServerType();
 
 	sprintf(NormalReport.szLogContent, "---Log Message:[%d]----", wCommandID);
 

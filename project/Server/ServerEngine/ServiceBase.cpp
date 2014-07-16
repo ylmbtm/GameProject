@@ -93,7 +93,7 @@ BOOL ServiceBase::StartService()
 {
 	CLog::GetInstancePtr()->AddLog("*******服务器信息***********");
 	CLog::GetInstancePtr()->AddLog("服务器地址:%s 监听端口:%d", CGlobalConfig::GetInstancePtr()->m_strIpAddr.c_str(), CGlobalConfig::GetInstancePtr()->m_sPort);
-	CLog::GetInstancePtr()->AddLog("服务器类型:%d 服务器ID:%d", CGlobalConfig::GetInstancePtr()->m_dwServerType, CGlobalConfig::GetInstancePtr()->m_dwServerID);
+	CLog::GetInstancePtr()->AddLog("服务器类型:%d 服务器ID:%d", GetServerType(), GetServerID());
 	CLog::GetInstancePtr()->AddLog("********服务器信息***********");
 	CLog::GetInstancePtr()->AddLog("");
 	CLog::GetInstancePtr()->AddLog("");
@@ -230,6 +230,16 @@ BOOL ServiceBase::SendCmdToStatConnection(IDataBuffer *pDataBuf)
 	SendCmdToConnection(m_u64StatConnID, pDataBuf);
 
 	return TRUE;
+}
+
+UINT32 ServiceBase::GetServerID()
+{
+	return CGlobalConfig::GetInstancePtr()->m_dwServerID;
+}
+
+UINT32 ServiceBase::GetServerType()
+{
+	return CGlobalConfig::GetInstancePtr()->m_dwServerType;
 }
 
 

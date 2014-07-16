@@ -33,7 +33,8 @@ public:
 
 	CConnection*    GetConnectionByID(UINT64 u64ConnID);
 
-	
+	UINT32			GetServerID();
+	UINT32			GetServerType();
 
 public:
 	void			SetStatConnID(UINT64 ConnID){m_u64StatConnID = ConnID;}
@@ -45,7 +46,6 @@ public:
 protected:
 	UINT64			m_u64DBConnID;
 	UINT64			m_u64StatConnID;
-
 };
 
 
