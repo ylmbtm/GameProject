@@ -109,7 +109,7 @@ public:
 	{
 		pthread_mutex_init (&mutex, NULL);
 
-		cond = PTHREAD_COND_INITIALIZER;
+		pthread_cond_init(&cond, NULL); 
 
 		bManualReset = bManualReset;
 
