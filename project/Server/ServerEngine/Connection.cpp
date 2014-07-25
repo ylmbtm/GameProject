@@ -170,20 +170,20 @@ BOOL CConnection::ExtractBuffer()
 
 BOOL CConnection::Close(BOOL bNotify)
 {
-	if((m_bConnected)&&(m_u64ConnID != 0))
+	if((m_bConnected)&&(m_u64ConnID != 0)&&bNotify)
 	{
 		m_pDataHandler->OnDisconnect(this);
 	}
 
-	m_bConnected = FALSE;
-
-	CLog::GetInstancePtr()->AddLog("关闭连接 连接ID: %lld, Socket : %d!",m_u64ConnID, m_hSocket);
+	
 
 	CommonSocket::ShutDownSend(m_hSocket);
 	CommonSocket::ShutDownRecv(m_hSocket);
 	CommonSocket::CloseSocket(m_hSocket);
 
-	m_hSocket = INVALID_SOCKET;
+	m_hSocket		= INVALID_SOCKET;
+	m_bConnected	= FALSE;
+	m_dwDataLen     = 0;
 
 	return TRUE;
 }
@@ -377,6 +377,10 @@ VOID CConnectionMgr::DeleteConnection( CConnection *pConnection )
 		{
 			m_WaitConnList.erase(itor);
 		}
+		else
+		{
+			ASSERT_FAIELD;
+		}
 	}
 	else if(pConnection->GetConnectionID() < SVR_CONN_ID)
 	{
@@ -385,8 +389,19 @@ VOID CConnectionMgr::DeleteConnection( CConnection *pConnection )
 	else
 	{
 		CAutoLock Lock(&m_CritSec);
-
+#ifdef _DEBUG
+		stdext::hash_map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.find(pConnection->GetConnectionID());
+		if(itor != m_VarieableConnList.end())
+		{
+			m_VarieableConnList.erase(pConnection->GetConnectionID());
+		}
+		else
+		{
+			ASSERT_FAIELD;
+		}
+#else
 		m_VarieableConnList.erase(pConnection->GetConnectionID());
+#endif
 	}
 	
 	delete pConnection;

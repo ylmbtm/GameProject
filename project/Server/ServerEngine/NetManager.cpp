@@ -212,6 +212,7 @@ BOOL CNetManager::WorkThread_ProcessEvent()
 						{
 							//收数据失败，基本就是连接己断开
 							pConnection->Close(TRUE);
+
 							CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 						}
 					}
@@ -249,8 +250,6 @@ BOOL CNetManager::WorkThread_ProcessEvent()
 						CLog::GetInstancePtr()->AddLog("连接其它服务器失败!");
 
 						pConnection->Close(FALSE);
-
-						pConnection->SetConnectionOK(FALSE);
 
 						CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 					}
@@ -392,6 +391,11 @@ BOOL CNetManager::CreateCompletePort()
 CConnection* CNetManager::AssociateCompletePort( SOCKET hSocket )
 {
 	CConnection *pConnection = CConnectionMgr::GetInstancePtr()->CreateConnection();
+	if(pConnection == NULL)
+	{
+		ASSERT_FAIELD;
+		return NULL;
+	}
 
 	pConnection->SetSocket(hSocket);
 
@@ -400,6 +404,9 @@ CConnection* CNetManager::AssociateCompletePort( SOCKET hSocket )
 	if(NULL == CreateIoCompletionPort((HANDLE)hSocket, m_hCompletePort, (ULONG_PTR)pConnection, 0))
 	{
 		pConnection->Close(FALSE);
+
+		CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
+		ASSERT_FAIELD;
 
 		return NULL;
 	}
@@ -668,6 +675,7 @@ BOOL CNetManager::WorkThread_ProcessEvent()
 			{
 				//基本表明连接己断开，可以关闭连接了。
 				pConnection->Close(TRUE);
+
 				CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 			}
 			else
@@ -851,32 +859,31 @@ BOOL CNetManager::ConnectToOtherSvrEx( std::string strIpAddr, UINT16 sPort )
 		return FALSE;
 	}
 
-	BOOL bRet = FALSE;
-
 #ifdef WIN32
 
 	pConnection->m_IoOverlapRecv.Clear();
 
 	pConnection->m_IoOverlapRecv.dwCmdType = NET_CMD_CONNECT;
 
-	bRet = CommonSocket::ConnectSocketEx(hSocket, strIpAddr.c_str(), sPort, (LPOVERLAPPED)&pConnection->m_IoOverlapRecv);
+	BOOL bRet = CommonSocket::ConnectSocketEx(hSocket, strIpAddr.c_str(), sPort, (LPOVERLAPPED)&pConnection->m_IoOverlapRecv);
 
 #else
 
-	bRet = CommonSocket::ConnectSocket(hSocket, strIpAddr.c_str(), sPort);
+	BOOL bRet = CommonSocket::ConnectSocket(hSocket, strIpAddr.c_str(), sPort);
 
 #endif
-
-	pConnection->m_dwIpAddr = CommonSocket::IpAddrStrToInt((CHAR*)strIpAddr.c_str());
-
 	if(!bRet)
 	{
+		pConnection->Close(FALSE);
+
 		CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 
 		CLog::GetInstancePtr()->AddLog("连接服务器%s : %d失败!!", strIpAddr.c_str(), sPort);
 
 		return FALSE;
 	}
+
+	pConnection->m_dwIpAddr = CommonSocket::IpAddrStrToInt((CHAR*)strIpAddr.c_str());
 
 	return TRUE;
 }
@@ -936,6 +943,7 @@ BOOL	CNetManager::SendBufferBySocket(SOCKET hSocket, IDataBuffer *pDataBuffer)
 	if(pDataBuffer == NULL)
 	{
 		ASSERT_FAIELD;
+
 		return FALSE;
 	}
 
