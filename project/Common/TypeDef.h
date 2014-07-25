@@ -23,6 +23,7 @@ typedef double			DOUBLE;
 typedef long long       INT64;
 typedef unsigned long long UINT64;
 typedef char			BYTE;
+typedef char			CHAR;
 
 typedef int				SOCKET;
 typedef int				HANDLE;
