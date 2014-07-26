@@ -289,15 +289,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Common\PacketHeader.h"
+				RelativePath="..\..\Common\PacketDef\PacketHeader.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Common\PacketDef\ServerPacket.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Common\PacketDef\TransferPacket.h"
 				>
 			</File>
 		</Filter>

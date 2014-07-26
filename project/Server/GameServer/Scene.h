@@ -46,8 +46,6 @@ public:
 
 public:
 	UINT32							m_dwSceneID;
-
-
 protected:
 	CCommonWorkThread				m_WorkThread;			//工作线程
 

@@ -182,6 +182,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GameSvrMgr.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ServerCmdHandler.cpp"
 				>
 			</File>
@@ -221,6 +225,10 @@
 			>
 			<File
 				RelativePath=".\GameService.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GameSvrMgr.h"
 				>
 			</File>
 			<File

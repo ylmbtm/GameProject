@@ -79,9 +79,11 @@ enum Command_ID
 
 	CMD_DB_SAVE_CHAR_REQ,		//保存角色
 	CMD_DB_SAVE_CHAR_ACK,		//保存角色回复
-
 	///////////////////////////////////////////////////
 
+	//GameServer向世界服务器汇报的命令
+	CMD_SVR_CREATE_SCENE_REQ,	//创建一个场景(副本)
+	CMD_SVR_CREATE_SCENE_ACK,	//创建一个场景(副本)回复
 	//
 	CMD_SVR_CHAR_WILL_ENTER,	//通知代理服，玩家准备进入
 

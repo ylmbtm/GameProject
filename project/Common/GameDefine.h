@@ -15,6 +15,8 @@
 #define UPDATE_DEST_SERVER			2
 #define UPDATE_DEST_MYSELF			3
 
+//以下是服务器
+#define INVALIDE_SERVERID			(0xffffffff)
 
 enum  UpdateTypeEnum
 {

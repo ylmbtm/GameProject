@@ -19,6 +19,17 @@ struct StCharWillEnterGame
 	UINT32  dwSceneID;
 	UINT32  dwIdentifyCode;
 };
+
+struct StSvrCreateSceneReq
+{
+	UINT32 dwSceneID;
+	UINT32 CreateParam;
+};
+
+struct StSvrCreateSceneAck
+{
+
+};
  
 
 #pragma  pack(pop)

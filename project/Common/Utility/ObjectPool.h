@@ -2,11 +2,12 @@
 #define __OBJECT_POOL_H__
 
 template<typename T>
-class CObjectItem
+class ObjectNode
 {
+public:
 	T m_Value;
-
-	COjbectItem *m_pNext;
+	ObjectNode<T> *m_pNext;
+	ObjectNode<T> *m_pPrev;
 };
 
 
