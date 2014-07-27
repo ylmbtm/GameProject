@@ -20,6 +20,7 @@ public:
 
 	BOOL	SendCreateSceneCmd(UINT32 dwServerID, UINT32 dwSceneID, UINT32 CreateParam);
 
+
 };
 
 #endif

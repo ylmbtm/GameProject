@@ -29,6 +29,20 @@ CSceneManager::~CSceneManager()
 	}
 }
 
+BOOL CSceneManager::Init(UINT32 dwReserved)
+{
+	CCommonCmdHandler::Init(dwReserved);
+
+	return TRUE;
+}
+
+BOOL CSceneManager::Uninit()
+{
+	CCommonCmdHandler::Uninit();
+
+	return TRUE;
+}
+
 BOOL CSceneManager::CreateScene( UINT32 dwSceneID )
 {
 	CScene *pScene = new CScene;
@@ -44,8 +58,25 @@ BOOL CSceneManager::CreateScene( UINT32 dwSceneID )
 	return TRUE;
 }
 
-BOOL CSceneManager::CommandHandler(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+BOOL CSceneManager::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
+	BOOL bHandled = TRUE;
+
+	switch(wCommandID)
+	{
+
+	default:
+		{
+			bHandled = FALSE;
+		}
+		break;
+	}
+
+	if(bHandled) //消息己经被处理
+	{
+		return TRUE;
+	}
+
 	CommandHeader *pHeader = pBufferHelper->GetCommandHeader();
 	if(pHeader == NULL)
 	{
@@ -54,10 +85,14 @@ BOOL CSceneManager::CommandHandler(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 	}
 
 	CScene *pScene = GetSceneByID(pHeader->dwSceneID);
-	if(pScene != NULL)
+	if(pScene == NULL)
 	{
-		pScene->AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
+		ASSERT_FAIELD;
+
+		return FALSE;
 	}
+
+	pScene->OnCommandHandle(wCommandID, u64ConnID, pBufferHelper);
 		
 	return TRUE;
 }
@@ -71,4 +106,16 @@ CScene* CSceneManager::GetSceneByID( UINT32 dwSceneID )
 	}
 
 	return NULL;
+}
+
+BOOL CSceneManager::OnUpdate( UINT32 dwTick )
+{
+	for(SceneMap::iterator itor = m_mapSceneList.begin(); itor != m_mapSceneList.end(); ++itor)
+	{
+		CScene *pScene = itor->second;
+
+		pScene->OnUpdate(dwTick);
+	}
+
+	return TRUE;
 }

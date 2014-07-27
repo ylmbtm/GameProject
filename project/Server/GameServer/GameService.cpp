@@ -60,6 +60,7 @@ BOOL CGameService::StartRun()
 	}
 
 	m_ServerCmdHandler.Init(0);
+	m_SceneManager.Init(0);
 
 	OnIdle();
 
@@ -127,7 +128,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 	}
 	else
 	{
-		m_SceneManager.CommandHandler(wCommandID, u64ConnID, pBufferHelper);
+		m_SceneManager.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
 	}
 
 	return 0;

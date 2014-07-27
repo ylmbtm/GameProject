@@ -7,7 +7,7 @@
 #include "DataBuffer/DataBuffer.h"
 
 
-class CScene : public IThreadCommandHandler
+class CScene : public ICommandHandler
 {
 public:
 	CScene();
@@ -21,12 +21,6 @@ public:
 	BOOL Init(UINT32 dwSceneID);
 
 	BOOL Uninit();
-
-	BOOL OnThreadBegin(){return TRUE;}
-
-	BOOL OnThreadEnd(){return TRUE;}
-
-	BOOL AddMessage(UINT64 u64ConnID, IDataBuffer *pDataBuffer);
 
 	BOOL AddToMap(CWorldObject *pWorldObject);
 
@@ -44,10 +38,8 @@ public:
 public:
 	UINT32	GetSceneID(){ return m_dwSceneID; }
 
-public:
-	UINT32							m_dwSceneID;
 protected:
-	CCommonWorkThread				m_WorkThread;			//工作线程
+	UINT32							m_dwSceneID;
 
 	CDataBuffer<CONST_BUFF_SIZE>	m_WriteBuffer;			//固定的写buffer
 

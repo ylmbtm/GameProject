@@ -14,11 +14,6 @@
 #include "DataBuffer/DataBuffer.h"
 #include "DataBuffer/BufferHelper.h"
 
-
-
-
-
-
 CScene::CScene()
 {
 	
@@ -32,10 +27,6 @@ CScene::~CScene()
 BOOL CScene::Init(UINT32 dwSceneID)
 {
 	m_dwSceneID = dwSceneID;
-	
-	m_WorkThread.SetCommandHandler(this);
-
-	m_WorkThread.Start();
 
 	m_GridManager.Init(-1000, 1000, -1000, 1000);
 
@@ -44,7 +35,7 @@ BOOL CScene::Init(UINT32 dwSceneID)
 
 BOOL CScene::Uninit()
 {
-	return m_WorkThread.Stop();
+	return TRUE;
 }
 
 BOOL CScene::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
@@ -76,10 +67,7 @@ BOOL CScene::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper 
 	return TRUE;
 }
 
-BOOL CScene::AddMessage(UINT64 u64ConnID, IDataBuffer *pDataBuffer)
-{
-	return m_WorkThread.AddMessage(u64ConnID, pDataBuffer);
-}
+
 
 BOOL CScene::AddToMap(CWorldObject *pWorldObject)
 {
