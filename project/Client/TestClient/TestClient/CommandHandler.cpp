@@ -28,7 +28,8 @@ CClientCmdHandler* CClientCmdHandler::GetInstancePtr()
 }
 
 BOOL CClientCmdHandler::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
-{
+{ 
+	BOOL bHandled = TRUE;
 	switch(wCommandID)
 	{
 		PROCESS_COMMAND_ITEM_T(CMD_CHAR_LOGIN_ACK,		OnCmdLoginGameAck);
@@ -44,12 +45,12 @@ BOOL CClientCmdHandler::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CB
 
 	default:
 		{
-
+			bHandled = FALSE;
 		}
 		break;
 	}
 
-	return TRUE;
+	return bHandled;
 }
 
 BOOL CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )

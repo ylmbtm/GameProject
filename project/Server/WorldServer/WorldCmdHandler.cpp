@@ -68,16 +68,5 @@ BOOL CWorldCmdHandler::OnUpdate( UINT32 dwTick )
 	return TRUE;
 }
 
-BOOL CWorldCmdHandler::OnThreadBegin()
-{
-
-	return TRUE;
-}
-
-BOOL CWorldCmdHandler::OnThreadEnd()
-{
-	return TRUE;
-}
-
 
 

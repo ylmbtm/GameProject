@@ -180,6 +180,7 @@ bool AVLTree<TKey, TValue>::AllocBufferNode(int nSize)
 	TNodeType *pNode = (TNodeType *)malloc(sizeof(TNodeType) * nSize);
 	if(pNode == NULL)
 	{
+		ASSERT_FAIELD;
 		return false;
 	}
 

@@ -18,10 +18,6 @@ public:
 
 	BOOL Uninit();
 
-	BOOL OnThreadBegin();
-
-	BOOL OnThreadEnd();
-
 	//*********************消息处理定义开始******************************
 public:
 
