@@ -60,6 +60,7 @@ BOOL CGameService::StartRun()
 	}
 
 	m_ServerCmdHandler.Init(0);
+
 	m_SceneManager.Init(0);
 
 	OnIdle();

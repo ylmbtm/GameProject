@@ -20,10 +20,20 @@ public:
 
 	BOOL		OnUpdate( UINT32 dwTick );
 	
+public:
 	BOOL		CreateScene(UINT32 dwSceneID);
 
 	CScene*		GetSceneByID(UINT32 dwSceneID);
 
+
+	//*********************消息处理定义开始******************************
+public:
+	BOOL OnCmdCreateSceneReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+
+
+	//*********************消息处理定义结束******************************
+
+protected:
 	SceneMap	m_mapSceneList;
 };
 

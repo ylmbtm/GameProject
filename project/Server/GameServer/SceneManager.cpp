@@ -6,6 +6,8 @@
 #include "Utility/CommonEvent.h"
 #include "PacketDef/PacketHeader.h"
 #include "DataBuffer/BufferHelper.h"
+#include "PacketDef/ServerPacket.h"
+#include "GameService.h"
 
 
 
@@ -49,7 +51,10 @@ BOOL CSceneManager::CreateScene( UINT32 dwSceneID )
 
 	if(!pScene->Init(dwSceneID))
 	{
+		ASSERT_FAIELD;
+
 		delete pScene;
+
 		return FALSE;
 	}
 
@@ -64,7 +69,11 @@ BOOL CSceneManager::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuffer
 
 	switch(wCommandID)
 	{
-
+	case CMD_SVR_CREATE_SCENE_REQ:
+		{
+			OnCmdCreateSceneReq(wCommandID, u64ConnID, pBufferHelper);
+		}
+		break;
 	default:
 		{
 			bHandled = FALSE;
@@ -116,6 +125,34 @@ BOOL CSceneManager::OnUpdate( UINT32 dwTick )
 
 		pScene->OnUpdate(dwTick);
 	}
+
+	return TRUE;
+}
+
+BOOL CSceneManager::OnCmdCreateSceneReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StSvrCreateSceneReq CreateSceneReq;
+
+	pBufferHelper->Read(CreateSceneReq);
+
+	if(!CreateScene(CreateSceneReq.dwSceneID))
+	{
+		ASSERT_FAIELD;
+
+		return TRUE;
+	}
+
+
+	StSvrCreateSceneAck CreateSceneAck;
+	CreateSceneAck.dwCreateParam = CreateSceneReq.CreateParam;
+	CreateSceneAck.dwSceneID = CreateSceneReq.dwSceneID;
+	CreateSceneAck.dwServerID= CGameService::GetInstancePtr()->GetServerID();
+
+	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+	WriteHelper.BeginWrite(CMD_SVR_CREATE_SCENE_ACK, CMDH_OTHER, 0, 0);
+	WriteHelper.Write(CreateSceneAck);
+	WriteHelper.EndWrite();
+	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 
 	return TRUE;
 }

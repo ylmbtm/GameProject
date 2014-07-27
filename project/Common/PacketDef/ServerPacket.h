@@ -28,7 +28,9 @@ struct StSvrCreateSceneReq
 
 struct StSvrCreateSceneAck
 {
-
+	UINT32 dwServerID;
+	UINT32 dwSceneID;
+	UINT32 dwCreateParam;
 };
  
 

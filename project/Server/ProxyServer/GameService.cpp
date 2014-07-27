@@ -262,10 +262,16 @@ BOOL CGameService::RelayToServer( CStaticPlayer *pClientObj, IDataBuffer *pBuffe
 	if(pClientObj == NULL)
 	{
 		ASSERT_FAIELD;
+
 		return FALSE;
 	}
 
-	SendCmdToConnection(pClientObj->GetGameSvrConnID(), pBuffer);
+	if(!SendCmdToConnection(pClientObj->GetGameSvrConnID(), pBuffer))
+	{
+		ASSERT_FAIELD;
+
+		return FALSE;
+	}
 
 	return TRUE;
 }
@@ -275,10 +281,16 @@ BOOL CGameService::RelayToClient( CStaticPlayer *pStaticPlayer, IDataBuffer *pBu
 	if(pStaticPlayer == NULL)
 	{
 		ASSERT_FAIELD;
+
 		return FALSE;
 	}
 
-	SendCmdToConnection(pStaticPlayer->GetCharID(), pBuffer);
+	if(!SendCmdToConnection(pStaticPlayer->GetCharID(), pBuffer))
+	{
+		ASSERT_FAIELD;
+
+		return FALSE;
+	}
 
 	return TRUE;
 }
