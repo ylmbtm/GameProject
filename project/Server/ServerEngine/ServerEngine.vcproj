@@ -366,14 +366,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Common\Utility\ObjectPool.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Common\Utility\ObjectPool.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Common\Utility\RandomValue.h"
 				>
 			</File>

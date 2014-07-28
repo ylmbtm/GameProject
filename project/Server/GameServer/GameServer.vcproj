@@ -193,10 +193,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Common\Utility\Position.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene.cpp"
 				>
 			</File>
