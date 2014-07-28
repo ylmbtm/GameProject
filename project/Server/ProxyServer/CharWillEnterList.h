@@ -17,13 +17,9 @@ public:
 public:
 	UINT64 m_u64CharID;
 
-	UINT64 m_GameSvrConnID;
-
 	UINT32 m_dwIdentifyCode;
 
 	UINT32 m_dwTickount;
-
-	UINT32 m_dwSceneID;
 };
 
 class CWillEnterNodeMgr : public AVLTree<UINT64, CWillEnterNode>

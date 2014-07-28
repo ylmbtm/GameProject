@@ -100,8 +100,8 @@ struct StCharPickCharAck	//选择角色请求回复
 	UINT16	nRetCode;
 	UINT64  u64CharID;
 	UINT32  dwIdentifyCode;
-	UINT16  sPort;
-	CHAR    szIpAddr[32];
+	UINT16  nProxyPort;
+	CHAR    szProxyIpAddr[32];
 };
 
 struct StCharEnterGameReq

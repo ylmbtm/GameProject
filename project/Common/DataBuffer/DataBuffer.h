@@ -191,7 +191,6 @@ public:
 public:
 	IDataBuffer* AllocDataBuff(int nSize);
 
-	CBufferManager<512>  g_BufferManagerHK;			//管理1k的内存池，需要分配1k以下的内存从这里分配
 	CBufferManager<1024>  g_BufferManager1K;		//管理1k的内存池，需要分配1k以下的内存从这里分配
 	CBufferManager<2048>  g_BufferManager2K;		//管理2k的内存池，需要分配2k以下的内存从这里分配
 	CBufferManager<4096>  g_BufferManager4K;		//管理4k的内存池，需要分配4k以下的内存从这里分配

@@ -3,17 +3,11 @@
 
 CWillEnterNode::CWillEnterNode()
 {
-	m_GameSvrConnID = 0;
 }
 
 CWillEnterNode::~CWillEnterNode()
 {
 
-}
-
-UINT64 CWillEnterNode::GetGameSvrConnID()
-{
-	return m_GameSvrConnID;
 }
 
 UINT64 CWillEnterNode::GetCharID()

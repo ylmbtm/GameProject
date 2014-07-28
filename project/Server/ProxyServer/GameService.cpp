@@ -70,8 +70,8 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 				pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->CreateStaicPlayer(pBufferHelper->GetCommandHeader()->u64CharID);
 				if(pStaticPlayer != NULL)
 				{
-					pStaticPlayer->SetGameSvrConnID(pWillEnterNode->m_GameSvrConnID);
-					pStaticPlayer->SetSceneID(pWillEnterNode->m_dwSceneID);
+					/*pStaticPlayer->SetGameSvrConnID(pWillEnterNode->m_GameSvrConnID);
+					pStaticPlayer->SetSceneID(pWillEnterNode->m_dwSceneID);*/
 				}
 				else
 				{
@@ -83,6 +83,8 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			m_WillEnterNodeMgr.RemoveByCharID(CharEnterGameReq.u64CharID);
 
 			pBufferHelper->GetCommandHeader()->dwSceneID = pWillEnterNode->m_dwSceneID;
+
+			//发向世界服
 
 			RelayToServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
 		}
@@ -112,9 +114,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 				break;
 			}
 
-			pWillEnterNode->m_dwIdentifyCode = CharWillEnterGame.dwIdentifyCode;
-			pWillEnterNode->m_GameSvrConnID   = CharWillEnterGame.dwGameSvrID;
-			pWillEnterNode->m_dwSceneID		  = CharWillEnterGame.dwSceneID;
+			pWillEnterNode->m_dwIdentifyCode  = CharWillEnterGame.dwIdentifyCode;
 		}
 		break;
 	case CMD_CHAR_GAME_MANAGER:

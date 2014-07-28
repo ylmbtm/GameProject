@@ -203,16 +203,15 @@ BOOL CLoginCmdHandler::OnCmdDBPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	//2。将登录的识别码和ID发给代理服
 	//3。将玩家应该进入的地图告诉玩家。
 
-	DBCharPickCharAck.CharPickCharAck.dwIdentifyCode = rand()%10000;
-	DBCharPickCharAck.CharPickCharAck.nRetCode  = E_SUCCESSED;
-	strncpy(DBCharPickCharAck.CharPickCharAck.szIpAddr, "127.0.0.1", 32);
-	DBCharPickCharAck.CharPickCharAck.sPort		= 7200;
+	DBCharPickCharAck.CharPickCharAck.dwIdentifyCode	= rand()%10000;
+	DBCharPickCharAck.CharPickCharAck.nRetCode			= E_SUCCESSED;
+	DBCharPickCharAck.CharPickCharAck.nProxyPort		= 7200;
+	
+	strncpy(DBCharPickCharAck.CharPickCharAck.szProxyIpAddr, "127.0.0.1", 32);
 
 	StCharWillEnterGame CharWillEnterGame;
 	CharWillEnterGame.dwIdentifyCode	= DBCharPickCharAck.CharPickCharAck.dwIdentifyCode;
 	CharWillEnterGame.u64CharID			= DBCharPickCharAck.CharPickCharAck.u64CharID;
-	CharWillEnterGame.dwGameSvrID		= 101;
-	CharWillEnterGame.dwSceneID			= 12;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_SVR_CHAR_WILL_ENTER, CMDH_OTHER, 0, 0);
