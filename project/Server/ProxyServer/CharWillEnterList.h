@@ -10,8 +10,6 @@ public:
 	~CWillEnterNode();
 
 public:
-	UINT64	GetGameSvrConnID();
-
 	UINT64	GetCharID();
 
 public:

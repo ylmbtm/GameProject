@@ -26,6 +26,14 @@ enum  UpdateTypeEnum
 	UT_Delete
 };
 
+enum ClientState
+{
+	LS_Connect,
+	PS_Connect,
+	WS_,
+	GS_,
+	DS_
+};
 
 
 

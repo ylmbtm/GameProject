@@ -13,7 +13,7 @@
 
 CGameService::CGameService(void)
 {
-
+	m_dwWorldServerID = 0;
 }
 
 CGameService::~CGameService(void)
@@ -56,7 +56,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			pBufferHelper->Read(CharEnterGameReq);
 
 			CHECK_PAYER_ID(CharEnterGameReq.u64CharID);
-			 
+			
 			if(pWillEnterNode->m_dwIdentifyCode != CharEnterGameReq.dwIdentifyCode)
 			{
 				m_WillEnterNodeMgr.RemoveByCharID(CharEnterGameReq.u64CharID);
@@ -64,29 +64,22 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 				break;
 			}
 
+			m_WillEnterNodeMgr.RemoveByCharID(CharEnterGameReq.u64CharID);
+
 			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(CharEnterGameReq.u64CharID);
 			if(pStaticPlayer == NULL)
 			{
 				pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->CreateStaicPlayer(pBufferHelper->GetCommandHeader()->u64CharID);
-				if(pStaticPlayer != NULL)
-				{
-					/*pStaticPlayer->SetGameSvrConnID(pWillEnterNode->m_GameSvrConnID);
-					pStaticPlayer->SetSceneID(pWillEnterNode->m_dwSceneID);*/
-				}
-				else
+				if(pStaticPlayer == NULL)
 				{
 					ASSERT_FAIELD;
 					break;
 				}
 			}
 
-			m_WillEnterNodeMgr.RemoveByCharID(CharEnterGameReq.u64CharID);
-
-			pBufferHelper->GetCommandHeader()->dwSceneID = pWillEnterNode->m_dwSceneID;
-
 			//发向世界服
 
-			RelayToServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
+			RelayToWorldServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
 		}
 		break;
 	case CMD_ROLE_MOVE:
@@ -99,7 +92,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 
 			pBufferHelper->GetCommandHeader()->dwSceneID = pStaticPlayer->GetSceneID();
 
-			RelayToServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
+			RelayToGameServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
 		}
 		break;
 	case CMD_SVR_CHAR_WILL_ENTER:
@@ -143,7 +136,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 					break;
 				}
 
-				RelayToServer(pClientObj, pBufferHelper->GetDataBuffer());
+				RelayToGameServer(pClientObj, pBufferHelper->GetDataBuffer());
 			}
 		}
 		break;
@@ -164,7 +157,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			{
 				pBufferHelper->GetCommandHeader()->dwSceneID = pClientObj->GetSceneID();
 
-				RelayToServer(pClientObj, pBufferHelper->GetDataBuffer());
+				RelayToGameServer(pClientObj, pBufferHelper->GetDataBuffer());
 			}
 		}
 	}
@@ -257,7 +250,7 @@ BOOL CGameService::OnIdle()
 	return TRUE;
 }
 
-BOOL CGameService::RelayToServer( CStaticPlayer *pClientObj, IDataBuffer *pBuffer )
+BOOL CGameService::RelayToGameServer( CStaticPlayer *pClientObj, IDataBuffer *pBuffer )
 {
 	if(pClientObj == NULL)
 	{
@@ -267,6 +260,32 @@ BOOL CGameService::RelayToServer( CStaticPlayer *pClientObj, IDataBuffer *pBuffe
 	}
 
 	if(!SendCmdToConnection(pClientObj->GetGameSvrConnID(), pBuffer))
+	{
+		ASSERT_FAIELD;
+
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL CGameService::RelayToWorldServer( CStaticPlayer *pClientObj, IDataBuffer *pBuffer )
+{
+	if(pClientObj == NULL)
+	{
+		ASSERT_FAIELD;
+
+		return FALSE;
+	}
+
+	if(m_dwWorldServerID == 0)
+	{
+		ASSERT_FAIELD;
+
+		return FALSE;
+	}
+
+	if(!SendCmdToConnection(m_dwWorldServerID, pBuffer))
 	{
 		ASSERT_FAIELD;
 
@@ -348,6 +367,13 @@ BOOL CGameService::OnCmdHeartBeatReq( UINT16 wCommandID, UINT64 u64ConnID, CBuff
 	StCharHeartBeatAck CharHeartBeatAck;
 	CharHeartBeatAck.dwReqTimestamp = CharHeartBeatReq.dwReqTimestamp;
 	CharHeartBeatAck.dwServerTime   = CommonFunc::GetTime();
+
+	return TRUE;
+}
+
+BOOL CGameService::SetWorldServerID( UINT32 dwSvrID )
+{
+	m_dwWorldServerID = dwSvrID;
 
 	return TRUE;
 }

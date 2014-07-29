@@ -229,12 +229,11 @@ BOOL CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 	StDBLoadCharInfoReq DBLoadCharInfoReq;
 	pBufferHelper->Read(DBLoadCharInfoReq);
 
-
 	StDBLoadCharInfoAck DBLoadCharInfoAck;
 	DBLoadCharInfoAck.dwProxySvrID = DBLoadCharInfoReq.dwProxySvrID;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_ACK, 0, DBLoadCharInfoReq.dwSceneID, DBLoadCharInfoReq.u64CharID);
+	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_ACK, 0, 0, DBLoadCharInfoReq.u64CharID);
 
 	WriteHelper.Write(DBLoadCharInfoAck);
 
@@ -272,7 +271,7 @@ BOOL CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 
 	WriteHelper.EndWrite();
 	
-	CGameService::GetInstancePtr()->SendCmdToConnection(DBLoadCharInfoReq.dwGameSvrID, &m_WriteBuffer);
+	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 	
 	return TRUE;
 }

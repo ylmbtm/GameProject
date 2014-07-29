@@ -82,8 +82,6 @@ struct StDBLoadCharInfoReq
 {
 	UINT64  dwProxySvrID;	//角色对应的代理服务器ID
 	UINT64  u64CharID;
-	UINT32  dwSceneID;
-	UINT64  dwGameSvrID;
 };
 
 

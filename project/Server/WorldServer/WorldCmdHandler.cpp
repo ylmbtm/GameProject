@@ -51,6 +51,7 @@ BOOL CWorldCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 {
 	switch(wCommandID)
 	{
+		PROCESS_COMMAND_ITEM(CMD_CHAR_ENTER_GAME_REQ,	OnCmdEnterGameReq);
 	default:
 		{
 
@@ -64,6 +65,57 @@ BOOL CWorldCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 BOOL CWorldCmdHandler::OnUpdate( UINT32 dwTick )
 {
 
+
+	return TRUE;
+}
+
+BOOL CWorldCmdHandler::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StCharEnterGameReq CharEnterGameReq;
+	pBufferHelper->Read(CharEnterGameReq);
+
+	StDBLoadCharInfoReq DBLoadCharInfoReq;
+	DBLoadCharInfoReq.u64CharID = CharEnterGameReq.u64CharID;
+	DBLoadCharInfoReq.dwProxySvrID = u64ConnID;
+
+	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_REQ, CMDH_OTHER, 0, 0);
+	WriteHelper.Write(DBLoadCharInfoReq);
+	WriteHelper.EndWrite();
+	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
+
+	return TRUE;
+}
+
+BOOL CWorldCmdHandler::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StDBLoadCharInfoAck DBLoadCharInfoAck;
+	pBufferHelper->Read(DBLoadCharInfoAck);
+
+	CPlayerObject *pPlayerObject = new CPlayerObject;
+
+	pPlayerObject->LoadFromDBPcket(pBufferHelper);
+
+	pPlayerObject->SetConnectID(DBLoadCharInfoAck.dwProxySvrID);
+
+	m_PlayerObjectMgr.AddPlayer(pPlayerObject);
+
+	if(AddToMap(pPlayerObject))
+	{
+		StCharEnterGameAck CharEnterGameAck;
+		CharEnterGameAck.dwSceneID       = GetSceneID();
+		CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_ACK, CMDH_SENCE, 0,  pPlayerObject->GetObjectID());
+		WriteHelper.Write(CharEnterGameAck);
+		pPlayerObject->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_DEST_MYSELF);
+		WriteHelper.EndWrite();
+		CGameService::GetInstancePtr()->SendCmdToConnection(DBLoadCharInfoAck.dwProxySvrID, &m_WriteBuffer);
+	}
+	else
+	{
+		ASSERT_FAIELD;
+		return TRUE;
+	}
 
 	return TRUE;
 }

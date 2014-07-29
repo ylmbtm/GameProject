@@ -24,10 +24,13 @@ public:
 
 	BOOL		OnIdle();
 
-	BOOL		RelayToServer(CStaticPlayer *pClientObj, IDataBuffer *pBuffer);
+	BOOL		RelayToGameServer(CStaticPlayer *pClientObj, IDataBuffer *pBuffer);
+
+	BOOL		RelayToWorldServer(CStaticPlayer *pClientObj, IDataBuffer *pBuffer);
 
 	BOOL		RelayToClient(CStaticPlayer *pClientObj, IDataBuffer *pBuffer);
 
+	BOOL		SetWorldServerID(UINT32 dwSvrID);
 
 public:
 	BOOL		OnCmdGMCommand(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
@@ -39,6 +42,8 @@ public:
 	CServerCmdHandler   m_ServerCmdHandler;
 
 	CWillEnterNodeMgr   m_WillEnterNodeMgr;
+
+	UINT32				m_dwWorldServerID;
 };
 
 #endif
