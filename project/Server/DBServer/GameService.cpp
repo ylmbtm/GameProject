@@ -1,13 +1,14 @@
 ﻿#include "stdafx.h"
+#include "ObjectID.h"
+#include "ConnectionType.h"
 #include "GameService.h"
 #include "CommandDef.h"
 #include "Utility/Log/Log.h"
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
 #include "PacketDef/ClientPacket.h"
-#include "ConnectionType.h"
 #include "DataBuffer/BufferHelper.h"
-#include "ObjectID.h"
+
 
 CGameService::CGameService(void)
 {

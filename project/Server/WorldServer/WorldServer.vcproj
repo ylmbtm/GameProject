@@ -186,6 +186,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PlayerObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ServerCmdHandler.cpp"
 				>
 			</File>
@@ -229,6 +233,10 @@
 			</File>
 			<File
 				RelativePath=".\GameSvrMgr.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PlayerObject.h"
 				>
 			</File>
 			<File

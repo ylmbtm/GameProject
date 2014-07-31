@@ -15,7 +15,7 @@
 #include "DataBuffer/BufferHelper.h"
 #include "DataBuffer/DataBuffer.h"
 #include "PacketDef/SvrReportPacket.h"
-
+#include "PlayerObject.h"
 
 
 
@@ -52,6 +52,7 @@ BOOL CWorldCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	switch(wCommandID)
 	{
 		PROCESS_COMMAND_ITEM(CMD_CHAR_ENTER_GAME_REQ,	OnCmdEnterGameReq);
+		PROCESS_COMMAND_ITEM(CMD_DB_LOAD_CHAR_ACK,		OnCmdDBLoadCharAck);
 	default:
 		{
 
@@ -75,8 +76,8 @@ BOOL CWorldCmdHandler::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, C
 	pBufferHelper->Read(CharEnterGameReq);
 
 	StDBLoadCharInfoReq DBLoadCharInfoReq;
-	DBLoadCharInfoReq.u64CharID = CharEnterGameReq.u64CharID;
-	DBLoadCharInfoReq.dwProxySvrID = u64ConnID;
+	DBLoadCharInfoReq.u64CharID		= CharEnterGameReq.u64CharID;
+	DBLoadCharInfoReq.dwProxySvrID	= u64ConnID;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_REQ, CMDH_OTHER, 0, 0);
@@ -92,30 +93,19 @@ BOOL CWorldCmdHandler::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	StDBLoadCharInfoAck DBLoadCharInfoAck;
 	pBufferHelper->Read(DBLoadCharInfoAck);
 
-	CPlayerObject *pPlayerObject = new CPlayerObject;
-
-	pPlayerObject->LoadFromDBPcket(pBufferHelper);
-
-	pPlayerObject->SetConnectID(DBLoadCharInfoAck.dwProxySvrID);
-
-	m_PlayerObjectMgr.AddPlayer(pPlayerObject);
-
-	if(AddToMap(pPlayerObject))
-	{
-		StCharEnterGameAck CharEnterGameAck;
-		CharEnterGameAck.dwSceneID       = GetSceneID();
-		CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_ACK, CMDH_SENCE, 0,  pPlayerObject->GetObjectID());
-		WriteHelper.Write(CharEnterGameAck);
-		pPlayerObject->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_DEST_MYSELF);
-		WriteHelper.EndWrite();
-		CGameService::GetInstancePtr()->SendCmdToConnection(DBLoadCharInfoAck.dwProxySvrID, &m_WriteBuffer);
-	}
-	else
+	CPlayerObject *pPlayerObject = m_PlayerObjectMgr.CreatePlayerByID(DBLoadCharInfoAck.u64CharID);
+	if(pPlayerObject == NULL)
 	{
 		ASSERT_FAIELD;
 		return TRUE;
 	}
+
+	pPlayerObject->LoadFromDBPcket(pBufferHelper);
+
+	//继续往游戏服转移
+
+
+	
 
 	return TRUE;
 }

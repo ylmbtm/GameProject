@@ -80,14 +80,15 @@ struct StDBCharPickCharAck	//选择角色请求回复
 
 struct StDBLoadCharInfoReq
 {
-	UINT64  dwProxySvrID;	//角色对应的代理服务器ID
+	UINT32  dwProxySvrID;	//角色对应的代理服务器ID
 	UINT64  u64CharID;
 };
 
 
 struct StDBLoadCharInfoAck 
 {
-	UINT64 dwProxySvrID;
+	UINT32 dwProxySvrID;
+	UINT64 u64CharID;
 };
 
 

@@ -1,7 +1,7 @@
 ﻿#ifndef __GRID_H__
 #define __GRID_H__
 
-#include "WorldObject.h"
+#include "GameObject/WorldObject.h"
 
 #define CELL_SIZE 50
 

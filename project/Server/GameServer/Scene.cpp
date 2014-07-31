@@ -49,7 +49,6 @@ BOOL CScene::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper 
 
 	switch(wCommandID)
 	{
-		PROCESS_COMMAND_ITEM(CMD_CHAR_ENTER_GAME_REQ,	OnCmdEnterGameReq);
 		PROCESS_COMMAND_ITEM(CMD_CHAR_LEAVE_GAME_REQ,	OnCmdLeaveGameReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_LOAD_CHAR_ACK,		OnCmdDBLoadCharAck);
 		PROCESS_COMMAND_ITEM(CMD_ROLE_MOVE,				OnCmdPlayerMove);
@@ -92,30 +91,6 @@ BOOL CScene::AddToMap(CWorldObject *pWorldObject)
 	pWorldObject->SetOwnerScene(this);
 
 	pWorldObject->SetUpdate(UT_New);
-
-	return TRUE;
-}
-
-
-INT32 CScene::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
-{
-	StCharEnterGameReq CharEnterGameReq;
-	pBufferHelper->Read(CharEnterGameReq);
-
-	CHECK_PAYER_ID(CharEnterGameReq.u64CharID);
-
-	StDBLoadCharInfoReq DBLoadCharInfoReq;
-	DBLoadCharInfoReq.dwSceneID = m_dwSceneID;
-	DBLoadCharInfoReq.dwGameSvrID= CGameService::GetInstancePtr()->GetServerID();
-	DBLoadCharInfoReq.u64CharID = CharEnterGameReq.u64CharID;
-	DBLoadCharInfoReq.dwProxySvrID = u64ConnID;
-	
-	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_REQ, CMDH_OTHER, 0, 0);
-	WriteHelper.Write(DBLoadCharInfoReq);
-	WriteHelper.EndWrite();
-	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
-
 
 	return TRUE;
 }

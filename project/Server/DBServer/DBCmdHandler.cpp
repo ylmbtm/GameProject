@@ -152,6 +152,10 @@ BOOL CDBCmdHandler::OnCmdDBPickCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 	StDBCharPickCharReq DBCharPickCharReq;
 	pBufferHelper->Read(DBCharPickCharReq);
 
+	//需要先取出账号ID, 查询账号ID下是否己有角色登录
+	//如果己有角色登录  则将原角色踢掉
+	//如查现在登录的角色和原角色相同，
+
 	StDBCharPickCharAck DBCharPickCharAck;
 	DBCharPickCharAck.u64ConnID = DBCharPickCharReq.u64ConnID;
 	DBCharPickCharAck.CharPickCharAck.u64CharID = DBCharPickCharReq.CharPickCharReq.u64CharID;
@@ -187,6 +191,9 @@ BOOL CDBCmdHandler::OnCmdDBLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBuffe
 		DBCharLoginAck.CharLoginAck.dwAccountID = dwAccountID;
 
 		//如果这个己有登录角色，则直接把原来的踢掉
+
+		//如果只是登录，还没有先择角色，刚必须要近快完成登录过程，长时间不登录，将被断开的连接
+
 	}
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
@@ -231,6 +238,7 @@ BOOL CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 
 	StDBLoadCharInfoAck DBLoadCharInfoAck;
 	DBLoadCharInfoAck.dwProxySvrID = DBLoadCharInfoReq.dwProxySvrID;
+	DBLoadCharInfoAck.u64CharID = DBLoadCharInfoReq.u64CharID;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_ACK, 0, 0, DBLoadCharInfoReq.u64CharID);
@@ -242,7 +250,7 @@ BOOL CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 	{
 		//读取一条记录，
 		//读出成功
-		pDBPlayer = m_DBPlayerMgr.InsertAlloc(DBLoadCharInfoReq.u64CharID);
+		pDBPlayer = m_DBPlayerMgr.CreatePlayerByID(DBLoadCharInfoReq.u64CharID);
 
 		pDBPlayer->Init();
 
@@ -267,7 +275,7 @@ BOOL CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 		//}
 	}
 
-	pDBPlayer->WriteToPacket(&WriteHelper);
+	pDBPlayer->WriteToDBPacket(&WriteHelper);
 
 	WriteHelper.EndWrite();
 	

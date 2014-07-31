@@ -294,38 +294,38 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Object"
+			Name="GameObject"
 			>
 			<File
-				RelativePath=".\CharObject.cpp"
+				RelativePath=".\GameObject\CharObject.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CharObject.h"
+				RelativePath=".\GameObject\CharObject.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Object.cpp"
+				RelativePath=".\GameObject\Object.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Object.h"
+				RelativePath=".\GameObject\Object.h"
 				>
 			</File>
 			<File
-				RelativePath=".\PlayerObject.cpp"
+				RelativePath=".\GameObject\PlayerObject.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\PlayerObject.h"
+				RelativePath=".\GameObject\PlayerObject.h"
 				>
 			</File>
 			<File
-				RelativePath=".\WorldObject.cpp"
+				RelativePath=".\GameObject\WorldObject.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\WorldObject.h"
+				RelativePath=".\GameObject\WorldObject.h"
 				>
 			</File>
 		</Filter>

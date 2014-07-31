@@ -1,8 +1,8 @@
 ﻿#ifndef _SCENE_H_
 #define _SCENE_H_
 #include "CmdHandler/CommonWorkThread.h"
-#include "Playerobject.h"
-#include "WorldObject.h"
+#include "GameObject/Playerobject.h"
+#include "GameObject/WorldObject.h"
 #include "GridManager.h"
 #include "DataBuffer/DataBuffer.h"
 
@@ -51,7 +51,6 @@ protected:
 	
 	//*********************消息处理定义开始******************************
 public:
-	INT32 OnCmdEnterGameReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	INT32 OnCmdLeaveGameReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	INT32 OnCmdPlayerMove(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	INT32 OnCmdDBLoadCharAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);

@@ -8,12 +8,11 @@ class TreeNode
 private:
     TreeNode():m_pLeft(NULL),m_pRight(NULL),m_nHeight(0)
 	{
-
 	}
-public:
 
-	TKey   m_Key;
+public:
     TValue m_Data;
+	TKey   m_Key;
     int	   m_nHeight;
 	TreeNode<TKey, TValue> *m_pLeft;
     TreeNode<TKey, TValue> *m_pRight;

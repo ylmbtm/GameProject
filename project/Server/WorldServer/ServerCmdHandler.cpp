@@ -43,7 +43,7 @@ BOOL CServerCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBu
 {
 	switch(wCommandID)
 	{
-		PROCESS_COMMAND_ITEM(CMD_CONNECT_NOTIFY,		OnCmdConnectNotify);
+		PROCESS_COMMAND_ITEM(CMD_CONNECT_NOTIFY,			OnCmdConnectNotify);
 
 		PROCESS_COMMAND_ITEM(CMD_SVR_ACTIVE_SERVER_LIST,	OnCmdActiveSvrList);//中心服务器来的数据
 

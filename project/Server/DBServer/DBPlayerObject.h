@@ -4,47 +4,6 @@
 #include "GameDefine.h"
 #include "Utility/Position.h"
 
-class CAccountInfo
-{
-	UINT32 dwAccountID;
-	BOOL   bLogin;
-	UINT64 u64LoginCharID;
-	BOOL   bConnID;			//如果没登录角色，那么这个就是指连到LoginServer 的ID
-};
-
-
-class CAccountInfoMgr : public AVLTree<UINT32, CAccountInfo>
-{
-public:
-	CAccountInfoMgr()
-	{
-
-	}
-
-	~CAccountInfoMgr()
-	{
-
-	}
-
-
-
-public:
-	CAccountInfo*   GetPlayer(UINT32 dwAccountID)
-	{
-		return GetByKey(dwAccountID);
-	}
-
-	CAccountInfo*   CreatePlayerByID(UINT32 dwAccountID)
-	{
-		return InsertAlloc(dwAccountID);
-	}
-
-public:
-};
-
-
-
-
 class CDBPlayerObject
 {
 public:
@@ -52,27 +11,26 @@ public:
 
 	~CDBPlayerObject();
 	
-	BOOL Init();;
+	BOOL	Init();
 
-	BOOL Uninit();;
+	BOOL	Uninit();
+	
+	BOOL	LoadFromDB();
+	
+	UINT32	WriteToDBPacket( CBufferHelper *pWriteBuffer );
 
 public:
-	UINT32	WriteToPacket( CBufferHelper *pWriteBuffer );
+	BOOL	LoadPlayerBaseInfo();
 
+public:
 	UINT32  WritePlayerBaseInfo( CBufferHelper *pWriteBuffer );
 
-	BOOL	LoadFromDB();
-public:
 	UINT64		m_u64ObjectID;
 	CHAR		m_szObjectName[MAX_NAME_LEN];
 	CPosition	m_ObjectPos;
 	UINT32		m_dwFeature;
 	UINT32      m_dwLevel;
-	
-
-
 };
-
 
 
 class CDBPlayerObjectMgr : public AVLTree<UINT64, CDBPlayerObject>
@@ -80,26 +38,20 @@ class CDBPlayerObjectMgr : public AVLTree<UINT64, CDBPlayerObject>
 public:
 	CDBPlayerObjectMgr()
 	{
-
 	}
 
 	~CDBPlayerObjectMgr()
 	{
-
 	}
 
 
 
 public:
-	CDBPlayerObject*   GetPlayer(UINT64 u64CharID)
-	{
-		return GetByKey(u64CharID);
-	}
+	CDBPlayerObject*   GetPlayer(UINT64 u64CharID);
 
-	CDBPlayerObject*   CreatePlayerByID(UINT64 u64CharID)
-	{
-		return InsertAlloc(u64CharID);
-	}
+	CDBPlayerObject*   CreatePlayerByID(UINT64 u64CharID);
+
+	BOOL			   ReleasePlayer(UINT32 u64CharID);
 
 public:
 };

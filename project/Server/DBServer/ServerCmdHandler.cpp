@@ -15,7 +15,6 @@
 #include "DataBuffer/DataBuffer.h"
 
 
-
 CServerCmdHandler::CServerCmdHandler()
 {
 	m_bConnectToCenter = FALSE;

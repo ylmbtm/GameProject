@@ -2,6 +2,8 @@
 #define _WORLD_CMD_HANDLER_H_
 #include "CmdHandler/CommonCmdHandler.h"
 #include "PacketDef/ServerPacket.h"
+#include "GameSvrMgr.h"
+#include "PlayerObject.h"
 
 class CWorldCmdHandler : public CCommonCmdHandler
 {
@@ -24,6 +26,11 @@ public:
 	BOOL OnCmdDBLoadCharAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
 	//*********************消息处理定义结束******************************
+
+
+	CGameSvrMgr			m_GameSvrMgr;
+
+	CPlayerObjectMgr    m_PlayerObjectMgr;
 };
 
 #endif //_WORLD_CMD_HANDLER_H_
