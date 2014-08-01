@@ -5,7 +5,10 @@ bool  CommonSocket::SetSocketReuseable(SOCKET hSocket)
 {
 	char nReuse = 1;
 
-	setsockopt(hSocket, SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(int));
+	if(0 != setsockopt(hSocket, SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(int)))
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -42,7 +45,10 @@ bool    CommonSocket::SetSocketNoDelay(SOCKET hSocket)
 {
 	int bOn = 1;
 
-	setsockopt(hSocket, IPPROTO_TCP, TCP_NODELAY, (char*)&bOn,sizeof(bOn)); 
+	if(0 != setsockopt(hSocket, IPPROTO_TCP, TCP_NODELAY, (char*)&bOn,sizeof(bOn)))
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -52,9 +58,10 @@ bool   CommonSocket::InitNetwork()
 {
 #if WIN32
 	WSADATA wsaData;
-	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (iResult == 0)
-		return true;
+	if(0 != WSAStartup(MAKEWORD(2, 2), &wsaData))
+	{
+		return false;
+	}
 #endif
 
 	return true;
@@ -63,7 +70,7 @@ bool   CommonSocket::InitNetwork()
 bool   CommonSocket::UninitNetwork()
 {
 #if WIN32
-	WSACleanup(); 
+	return (0 == WSACleanup()); 
 #endif
 
 	return true;
@@ -243,11 +250,12 @@ std::string CommonSocket::IpAddrIntToStr( UINT32 dwIpAddr )
 bool CommonSocket::SetSocketKeepAlive( SOCKET hSocket, int keepInterval, int keepCount, int keepIdle )
 {
 #ifdef WIN32
+	setsockopt(hSocket, SOL_SOCKET, SO_KEEPALIVE, (char*)&bKeepAlive, sizeof(bKeepAlive));
 
 #else
-	setsockopt(hSocket, SOL_TCP, TCP_KEEPIDLE, (void *)&keepIdle, sizeof(keepIdle));
-	setsockopt(hSocket, SOL_TCP,TCP_KEEPINTVL, (void *)&keepInterval, sizeof(keepInterval));
-	setsockopt(hSocket,SOL_TCP, TCP_KEEPCNT, (void *)&keepCount, sizeof(keepCount));
+	setsockopt(hSocket, SOL_TCP, TCP_KEEPIDLE,  (void *)&keepIdle, sizeof(keepIdle));
+	setsockopt(hSocket, SOL_TCP, TCP_KEEPINTVL, (void *)&keepInterval, sizeof(keepInterval));
+	setsockopt(hSocket, SOL_TCP, TCP_KEEPCNT,   (void *)&keepCount, sizeof(keepCount));
 #endif
 	
 
