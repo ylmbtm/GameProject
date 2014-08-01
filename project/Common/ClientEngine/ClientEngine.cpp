@@ -275,7 +275,7 @@ BOOL ClientEngine::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBuffe
 		DisConnect();
 		m_u64ClientID = CharPickCharAck.u64CharID;
 		m_dwIdentifyCode = CharPickCharAck.dwIdentifyCode;
-		ConnectToServer(CharPickCharAck.szIpAddr, CharPickCharAck.sPort);
+		ConnectToServer(CharPickCharAck.szProxyIpAddr, CharPickCharAck.nProxyPort);
 	}
 
 	return TRUE;

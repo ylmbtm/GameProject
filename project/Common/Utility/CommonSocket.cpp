@@ -239,3 +239,17 @@ std::string CommonSocket::IpAddrIntToStr( UINT32 dwIpAddr )
 	inet_ntop(AF_INET, &Addr, szIpBuffer, 20);
 	return std::string(szIpBuffer);
 }
+
+bool CommonSocket::SetSocketKeepAlive( SOCKET hSocket, int keepInterval, int keepCount, int keepIdle )
+{
+#ifdef WIN32
+
+#else
+	setsockopt(hSocket, SOL_TCP, TCP_KEEPIDLE, (void *)&keepIdle, sizeof(keepIdle));
+	setsockopt(hSocket, SOL_TCP,TCP_KEEPINTVL, (void *)&keepInterval, sizeof(keepInterval));
+	setsockopt(hSocket,SOL_TCP, TCP_KEEPCNT, (void *)&keepCount, sizeof(keepCount));
+#endif
+	
+
+	return true;	
+}

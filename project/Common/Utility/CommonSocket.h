@@ -18,6 +18,8 @@ namespace CommonSocket
 
 	bool		SetSocketNoDelay(SOCKET hSocket);
 
+	bool		SetSocketKeepAlive( SOCKET hSocket, int keepInterval, int keepCount, int keepIdle );
+
 	//初始化网络
 	bool		InitNetwork();
 
@@ -43,14 +45,14 @@ namespace CommonSocket
 	//关闭套接字
 	void		CloseSocket(SOCKET hSocket);
 
-	std::string  GetLastErrorStr(INT32 nError);
+	std::string GetLastErrorStr(INT32 nError);
 
 	UINT32		IpAddrStrToInt(CHAR *pszIpAddr);
 
 	std::string IpAddrIntToStr(UINT32 dwIpAddr);
 	
 #ifdef WIN32
-	BOOL	ConnectSocketEx(SOCKET hSocket, const char *pAddr, short sPort, LPOVERLAPPED lpOverlapped);
+	BOOL		ConnectSocketEx(SOCKET hSocket, const char *pAddr, short sPort, LPOVERLAPPED lpOverlapped);
 #endif
 
 }

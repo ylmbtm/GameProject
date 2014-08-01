@@ -221,10 +221,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\Common\Utility\Position.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
