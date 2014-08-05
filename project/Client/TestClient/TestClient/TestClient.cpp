@@ -119,7 +119,7 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 
 		CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
 
-		WriteHelper.BeginWrite(CMD_ROLE_MOVE, CMDH_SENCE, 12, CClientCmdHandler::GetInstancePtr()->m_HostPlayer.GetObjectID());
+		WriteHelper.BeginWrite(CMD_CHAR_MOVE_REQ, CMDH_SENCE, 12, CClientCmdHandler::GetInstancePtr()->m_HostPlayer.GetObjectID());
 
 		WriteHelper.Write(_MoveGs);
 

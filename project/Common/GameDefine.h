@@ -35,6 +35,11 @@ enum ClientState
 	DS_
 };
 
+enum LeaveGameReason
+{
+	LGR_Disconnect,		//断线退出
+	LGR_Quit			//主动退出
+};
 
 
 

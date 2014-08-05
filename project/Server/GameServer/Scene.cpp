@@ -51,7 +51,7 @@ BOOL CScene::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper 
 	{
 		PROCESS_COMMAND_ITEM(CMD_CHAR_LEAVE_GAME_REQ,	OnCmdLeaveGameReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_LOAD_CHAR_ACK,		OnCmdDBLoadCharAck);
-		PROCESS_COMMAND_ITEM(CMD_ROLE_MOVE,				OnCmdPlayerMove);
+		PROCESS_COMMAND_ITEM(CMD_CHAR_MOVE_REQ,			OnCmdPlayerMove);
 		default:
 		{
 			CPlayerObject *pPlayerObject = m_PlayerObjectMgr.GetPlayer(pCmdHeader->u64CharID);
@@ -95,7 +95,7 @@ BOOL CScene::AddToMap(CWorldObject *pWorldObject)
 	return TRUE;
 }
 
-INT32 CScene::OnCmdPlayerMove( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CScene::OnCmdPlayerMove( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharMoveReq CharMoveReq;
 	pBufferHelper->Read(CharMoveReq);
@@ -384,13 +384,20 @@ BOOL CScene::SendRemoveGridsToPlayer( INT32 Grids[9], CPlayerObject *pPlayerObj)
 	return TRUE;
 }
 
-INT32 CScene::OnCmdLeaveGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CScene::OnCmdLeaveGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharLeaveGameReq CharLeaveGameReq;
 
 	pBufferHelper->Read(CharLeaveGameReq);
 
-	//if(CharLeaveGameReq.dwLeaveReason == 1)
+	if(CharLeaveGameReq.dwLeaveReason == LGR_Disconnect)
+	{
+
+	}
+	else if(CharLeaveGameReq.dwLeaveReason == LGR_Quit)
+	{
+
+	}
 
 	CPlayerObject *pPlayerObject = m_PlayerObjectMgr.GetPlayer(pBufferHelper->GetCommandHeader()->u64CharID);
 	if(pPlayerObject == NULL)
@@ -451,7 +458,7 @@ BOOL CScene::RemoveFromUpList( CWorldObject *pWorldObject )
 	return m_UpdateObjectMgr.RemoveUpdateObject(pWorldObject);
 }
 
-INT32 CScene::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CScene::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StDBLoadCharInfoAck DBLoadCharInfoAck;
 	pBufferHelper->Read(DBLoadCharInfoAck);

@@ -90,7 +90,7 @@ BOOL CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, 
 	}
 	else if(ConnectNotify.btConType == TYPE_SVR_WORLDSVR)
 	{
-		CGameService::GetInstancePtr()->SetWorldServerID(u64ConnID);
+		CGameService::GetInstancePtr()->SetWorldServerID((UINT32)u64ConnID);
 	}
 	else
 	{

@@ -77,7 +77,7 @@ BOOL CWorldCmdHandler::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, C
 
 	StDBLoadCharInfoReq DBLoadCharInfoReq;
 	DBLoadCharInfoReq.u64CharID		= CharEnterGameReq.u64CharID;
-	DBLoadCharInfoReq.dwProxySvrID	= u64ConnID;
+	DBLoadCharInfoReq.dwProxySvrID	= (UINT32)u64ConnID;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_REQ, CMDH_OTHER, 0, 0);

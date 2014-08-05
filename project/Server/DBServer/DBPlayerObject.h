@@ -14,12 +14,7 @@ public:
 
 	BOOL	Uninit();
 	
-	BOOL	LoadFromDB();
-	
 	UINT32	WriteToDBPacket( CBufferHelper *pWriteBuffer );
-
-public:
-	BOOL	LoadPlayerBaseInfo();
 
 public:
 	UINT32  WritePlayerBaseInfo( CBufferHelper *pWriteBuffer );

@@ -15,6 +15,7 @@ CDBPlayerObject::~CDBPlayerObject()
 BOOL CDBPlayerObject::Init()
 {
 	memset(m_szObjectName, 0, MAX_NAME_LEN);
+
 	m_u64ObjectID = 0;
 
 	m_fX = 0;
@@ -22,6 +23,7 @@ BOOL CDBPlayerObject::Init()
 	m_fZ = 0;
 
 	m_dwFeature = 0;
+
 	m_dwLevel   = 0;
 
 	return TRUE;
@@ -33,21 +35,6 @@ BOOL CDBPlayerObject::Uninit()
 	return TRUE;
 }
 
-BOOL CDBPlayerObject::LoadFromDB()
-{
-	strncpy(m_szObjectName, "zhangming", MAX_NAME_LEN);
-	m_fX = 100;
-	m_fY = 100;
-	m_fZ = 100;
-
-	if(!LoadPlayerBaseInfo())
-	{
-		ASSERT_FAIELD;
-		return FALSE;
-	}
-
-	return TRUE;
-}
 
 UINT32 CDBPlayerObject::WriteToDBPacket( CBufferHelper *pWriteBuffer )
 {
@@ -67,12 +54,6 @@ UINT32 CDBPlayerObject::WritePlayerBaseInfo( CBufferHelper *pWriteBuffer )
 	dwSize += pWriteBuffer->Write(m_fZ);
 
 	return dwSize;
-}
-
-BOOL CDBPlayerObject::LoadPlayerBaseInfo()
-{
-
-	return TRUE;
 }
 
 

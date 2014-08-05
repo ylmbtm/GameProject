@@ -26,6 +26,7 @@ public:
 	BOOL SendNewCharReq(UINT32 dwAccountID,LPCTSTR szCharName, UINT32 dwFeature);
 	BOOL SendDelCharReq(UINT32 dwAccountID,UINT64 dwCharID);
 	BOOL SendPickCharReq(UINT64 u64CharID);
+	BOOL SendLeaveGameReq(UINT64 u64CharID);
 
 
 	//*********************消息处理定义开始******************************

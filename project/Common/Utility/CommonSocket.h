@@ -5,8 +5,6 @@
 
 namespace CommonSocket
 {
-	
-
 	//设置套接字为可重用状态
 	bool		SetSocketReuseable(SOCKET hSocket);
 
@@ -37,9 +35,11 @@ namespace CommonSocket
 	INT32		GetSocketLastError();
 
 	BOOL		IsSocketValid(SOCKET hSocket);
-	//关闭套接字
+
+	//关闭套接字发送
 	void		ShutDownSend(SOCKET hSocket);
 
+	//关闭套接字接收
 	void		ShutDownRecv(SOCKET hSocket);
 
 	//关闭套接字

@@ -225,20 +225,7 @@ void CTestClientDlg::OnConnect()
 
 void CTestClientDlg::OnLeaveGame()
 {
-	/*
-	StCharLeaveGameReq CharLeaveGameReq;
-
-	CharLeaveGameReq.dwLeaveReason = 1;
-
-	CBufferHelper WriteHelper(TRUE, CNetworkMgr::GetInstancePtr()->m_pWriteBuffer);
-
-	WriteHelper.BeginWrite(CMD_CHAR_LEAVE_GAME_REQ, CMDH_SENCE, 12, CClientCmdHandler::GetInstancePtr()->m_HostPlayer.GetObjectID());
-
-	WriteHelper.Write(CharLeaveGameReq);
-
-	WriteHelper.EndWrite();
-
-	CNetworkMgr::GetInstancePtr()->SendData(CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetData(), CNetworkMgr::GetInstancePtr()->m_pWriteBuffer->GetDataLenth());*/
+	CClientCmdHandler::GetInstancePtr()->SendLeaveGameReq(CClientCmdHandler::GetInstancePtr()->m_HostPlayer.GetObjectID());
 }
 
 void CTestClientDlg::OnNewAccount()

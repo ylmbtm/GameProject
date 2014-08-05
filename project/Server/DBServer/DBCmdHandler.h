@@ -37,6 +37,15 @@ public:
 	
 	//*********************消息处理定义结束******************************
 
+public:
+
+	//读取玩家的数据
+	BOOL LoadPlayerBaseData(UINT64 u64CharID);
+
+
+
+
+
 	//玩家数据管理器
 	CDBPlayerObjectMgr  m_DBPlayerMgr;
 

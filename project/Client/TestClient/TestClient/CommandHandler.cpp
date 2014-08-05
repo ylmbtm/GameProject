@@ -341,6 +341,25 @@ BOOL CClientCmdHandler::OnCmdUpdateMyself( UINT16 wCommandID, UINT64 u64ConnID, 
 	return TRUE;
 }
 
+BOOL CClientCmdHandler::SendLeaveGameReq( UINT64 u64CharID )
+{
+	StCharLeaveGameReq CharLeaveGameReq;
+
+	CharLeaveGameReq.dwLeaveReason = LGR_Quit;
+
+	CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
+
+	WriteHelper.BeginWrite(CMD_CHAR_LEAVE_GAME_REQ, CMDH_SENCE, 0, u64CharID);
+
+	WriteHelper.Write(CharLeaveGameReq);
+
+	WriteHelper.EndWrite();
+
+	ClientEngine::GetInstancePtr()->SendData(ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetData(), ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetDataLenth());
+
+	return TRUE;
+}
+
 
 
 

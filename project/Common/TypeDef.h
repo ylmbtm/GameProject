@@ -34,7 +34,4 @@ typedef int				HANDLE;
 
 #endif
 
-
-
-
 #endif /* __COMMON_DATA_TYPE__*/

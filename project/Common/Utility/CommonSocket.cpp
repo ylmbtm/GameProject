@@ -250,6 +250,8 @@ std::string CommonSocket::IpAddrIntToStr( UINT32 dwIpAddr )
 bool CommonSocket::SetSocketKeepAlive( SOCKET hSocket, int keepInterval, int keepCount, int keepIdle )
 {
 #ifdef WIN32
+	BOOL bKeepAlive = TRUE;
+
 	setsockopt(hSocket, SOL_SOCKET, SO_KEEPALIVE, (char*)&bKeepAlive, sizeof(bKeepAlive));
 
 #else

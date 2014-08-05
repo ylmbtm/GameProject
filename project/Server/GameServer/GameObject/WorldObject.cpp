@@ -5,7 +5,7 @@
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
 #include "DataBuffer/BufferHelper.h"
-#include "Scene.h"
+#include "../Scene.h"
 
 
 CWorldObject::CWorldObject()

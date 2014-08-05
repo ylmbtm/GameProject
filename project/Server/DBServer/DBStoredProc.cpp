@@ -24,7 +24,7 @@ CDBStoredProcedure::~CDBStoredProcedure( void )
 {
 	if(m_pMybind != NULL)
 	{
-		for(int i = 0; i < m_nCount; ++i)
+		for(size_t i = 0; i < m_nCount; ++i)
 		{
 			MYSQL_BIND *pTemp = &m_pMybind[i];
 

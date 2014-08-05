@@ -82,7 +82,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			RelayToWorldServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
 		}
 		break;
-	case CMD_ROLE_MOVE:
+	case CMD_CHAR_MOVE_REQ:
 		{
 			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
 			if(pStaticPlayer == NULL)
@@ -327,7 +327,7 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 
 	StCharLeaveGameReq CharLeaveGameReq;
 
-	CharLeaveGameReq.dwLeaveReason = 1;
+	CharLeaveGameReq.dwLeaveReason = LGR_Disconnect;
 
 	IDataBuffer *pSendBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(1024);
 	if(pSendBuffer == NULL)

@@ -291,3 +291,9 @@ BOOL CDBCmdHandler::OnCmdDBSaveCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 	return TRUE;
 }
 
+BOOL CDBCmdHandler::LoadPlayerBaseData( UINT64 u64CharID )
+{
+
+	return TRUE;
+}
+
