@@ -30,9 +30,9 @@ enum ClientState
 {
 	LS_Connect,
 	PS_Connect,
-	WS_,
-	GS_,
-	DS_
+	WS_Connect,
+	GS_Connect,
+	DS_Connect
 };
 
 enum LeaveGameReason

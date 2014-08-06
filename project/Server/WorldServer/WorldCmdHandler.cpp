@@ -104,6 +104,12 @@ BOOL CWorldCmdHandler::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 
 	//继续往游戏服转移
 
+	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_REQ, CMDH_OTHER, 0, 0);
+	WriteHelper.Write(DBLoadCharInfoReq);
+	WriteHelper.EndWrite();
+	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
+
 
 	
 

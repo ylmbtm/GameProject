@@ -266,13 +266,8 @@ BOOL CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 			pDBPlayer->m_dwFeature = QueryRes.getIntField("F_Feature", 0);
 			strncpy(pDBPlayer->m_szObjectName, QueryRes.getStringField("F_Name", ""), 32);
 			pDBPlayer->m_dwLevel = QueryRes.getIntField("F_Level", 0);
-	
+			pDBPlayer->m_dwSceneID = QueryRes.getIntField("F_SceneID", 0);
 		}
-
-		//if(!pDBPlayer->LoadFromDB())
-		//{
-		//	return TRUE;
-		//}
 	}
 
 	pDBPlayer->WriteToDBPacket(&WriteHelper);
