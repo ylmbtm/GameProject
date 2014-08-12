@@ -8,8 +8,6 @@
 #include <list>
 #include <set>
 #include <algorithm>
-#include <assert.h>
-
 
 #define ASSERT_FAIELD (assert(false))
 

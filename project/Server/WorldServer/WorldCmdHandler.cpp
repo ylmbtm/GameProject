@@ -94,24 +94,17 @@ BOOL CWorldCmdHandler::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	pBufferHelper->Read(DBLoadCharInfoAck);
 
 	CPlayerObject *pPlayerObject = m_PlayerObjectMgr.CreatePlayerByID(DBLoadCharInfoAck.u64CharID);
-	if(pPlayerObject == NULL)
-	{
-		ASSERT_FAIELD;
-		return TRUE;
-	}
+	CHECK_RETURN_FALSE_A(pPlayerObject);
 
 	pPlayerObject->LoadFromDBPcket(pBufferHelper);
 
 	//继续往游戏服转移
-
+	StSvrEnterSceneReq SvrEnterSceneReq;
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_REQ, CMDH_OTHER, 0, 0);
-	WriteHelper.Write(DBLoadCharInfoReq);
+	WriteHelper.BeginWrite(CMD_SVR_ENTER_SCENE_REQ, CMDH_OTHER, 0, 0);
+	WriteHelper.Write(SvrEnterSceneReq);
 	WriteHelper.EndWrite();
-	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
-
-
-	
+	CGameService::GetInstancePtr()->SendCmdToConnection(DBLoadCharInfoAck.dwProxySvrID, &m_WriteBuffer);
 
 	return TRUE;
 }

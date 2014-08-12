@@ -8,10 +8,9 @@
 
 #include <stdio.h>
 
+#include "CheckMacroDefine.h"
 #include "ServerEngine.h"
 
-#define ASSERT_FAIELD (assert(false))
-#define ASSERT(x)     (assert(x))
 
 #endif
 

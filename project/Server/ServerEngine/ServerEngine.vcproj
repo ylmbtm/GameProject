@@ -374,6 +374,10 @@
 			Name="CmdDefine"
 			>
 			<File
+				RelativePath="..\..\Common\CheckMacroDefine.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Common\Error.h"
 				>
 			</File>

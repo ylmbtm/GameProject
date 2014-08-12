@@ -7,9 +7,7 @@
 
 #include <stdio.h>
 
+#include "CheckMacroDefine.h"
 #include "ServerEngine.h"
-
-#define ASSERT_FAIELD (assert(false))
-#define ASSERT(x)     (assert(x))
 
 // TODO: 在此处引用程序需要的其他头文件
