@@ -98,6 +98,8 @@ BOOL CWorldCmdHandler::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 
 	pPlayerObject->LoadFromDBPcket(pBufferHelper);
 
+	
+
 	//继续往游戏服转移
 	StSvrEnterSceneReq SvrEnterSceneReq;
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);

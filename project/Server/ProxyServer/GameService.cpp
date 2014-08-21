@@ -82,19 +82,6 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			RelayToWorldServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
 		}
 		break;
-	case CMD_CHAR_MOVE_REQ:
-		{
-			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
-			if(pStaticPlayer == NULL)
-			{
-				ASSERT_FAIELD;
-			}
-
-			pBufferHelper->GetCommandHeader()->dwSceneID = pStaticPlayer->GetSceneID();
-
-			RelayToGameServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
-		}
-		break;
 	case CMD_SVR_CHAR_WILL_ENTER:
 		{
 			StCharWillEnterGame CharWillEnterGame;
