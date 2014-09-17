@@ -94,11 +94,13 @@ BOOL CWorldCmdHandler::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	pBufferHelper->Read(DBLoadCharInfoAck);
 
 	CPlayerObject *pPlayerObject = m_PlayerObjectMgr.CreatePlayerByID(DBLoadCharInfoAck.u64CharID);
-	CHECK_RETURN_FALSE_A(pPlayerObject);
+	CHECK_AND_RETURN_ASSERT(pPlayerObject, TRUE);
 
-	pPlayerObject->LoadFromDBPcket(pBufferHelper);
-
-	
+	if(!pPlayerObject->LoadFromDBPcket(pBufferHelper))
+	{
+		ASSERT_FAIELD;
+		return TRUE;
+	}
 
 	//继续往游戏服转移
 	StSvrEnterSceneReq SvrEnterSceneReq;

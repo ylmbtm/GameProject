@@ -53,6 +53,7 @@ public:
 	TNodeTypePtr    AllocNode();
 	void			FreeNode(TNodeTypePtr pNode);
 	void			DoEnumNode(TNodeTypePtr pNode);
+	int				GetCount();
 
 
 private:
@@ -75,8 +76,16 @@ private:
 
 	TNodeType *m_pFreeHead;
 
+	int		   m_nCount;
+
 	std::vector<TNodeType*> m_NodeBuff;
 };
+
+template<typename TKey, typename TValue>
+int AVLTree<TKey, TValue>::GetCount()
+{
+	return m_nCount;
+}
 
 template<typename TKey, typename TValue>
 void AVLTree<TKey, TValue>::DoEnumNode( TNodeTypePtr pNode )

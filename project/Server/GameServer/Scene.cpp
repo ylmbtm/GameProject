@@ -50,8 +50,8 @@ BOOL CScene::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper 
 	switch(wCommandID)
 	{
 		PROCESS_COMMAND_ITEM(CMD_CHAR_LEAVE_GAME_REQ,	OnCmdLeaveGameReq);
-		PROCESS_COMMAND_ITEM(CMD_DB_LOAD_CHAR_ACK,		OnCmdDBLoadCharAck);
 		PROCESS_COMMAND_ITEM(CMD_CHAR_MOVE_REQ,			OnCmdPlayerMove);
+		PROCESS_COMMAND_ITEM(CMD_SVR_ENTER_SCENE_REQ,   OnCmdCharEnterSceneReq);
 		default:
 		{
 			CPlayerObject *pPlayerObject = m_PlayerObjectMgr.GetPlayer(pCmdHeader->u64CharID);
@@ -458,39 +458,6 @@ BOOL CScene::RemoveFromUpList( CWorldObject *pWorldObject )
 	return m_UpdateObjectMgr.RemoveUpdateObject(pWorldObject);
 }
 
-BOOL CScene::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
-{
-	StDBLoadCharInfoAck DBLoadCharInfoAck;
-	pBufferHelper->Read(DBLoadCharInfoAck);
-
-	CPlayerObject *pPlayerObject = new CPlayerObject;
-
-	pPlayerObject->LoadFromDBPcket(pBufferHelper);
-
-	pPlayerObject->SetConnectID(DBLoadCharInfoAck.dwProxySvrID);
-
-	m_PlayerObjectMgr.AddPlayer(pPlayerObject);
-
-	if(AddToMap(pPlayerObject))
-	{
-		StCharEnterGameAck CharEnterGameAck;
-		CharEnterGameAck.dwSceneID       = GetSceneID();
-		CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_ACK, CMDH_SENCE, 0,  pPlayerObject->GetObjectID());
-		WriteHelper.Write(CharEnterGameAck);
-		pPlayerObject->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_DEST_MYSELF);
-		WriteHelper.EndWrite();
-		CGameService::GetInstancePtr()->SendCmdToConnection(DBLoadCharInfoAck.dwProxySvrID, &m_WriteBuffer);
-	}
-	else
-	{
-		ASSERT_FAIELD;
-		return TRUE;
-	}
-	
-	return TRUE;
-}
-
 BOOL CScene::HandleUpdateList()
 {
 	CWorldObject *pWorldObject = m_UpdateObjectMgr.GetFisrtOjbect();
@@ -608,6 +575,39 @@ BOOL CScene::SendUpdateObjectToMyself( CWorldObject *pWorldObj )
 	CPlayerObject *pPlayerObject = (CPlayerObject *)pWorldObj;
 
 	CGameService::GetInstancePtr()->SendCmdToConnection(pPlayerObject->GetConnectID(), pPlayerObject->GetObjectID(), 0, &m_WriteBuffer);
+
+	return TRUE;
+}
+
+BOOL CScene::OnCmdCharEnterSceneReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StSvrEnterSceneReq SvrEnterSceneReq;
+	pBufferHelper->Read(SvrEnterSceneReq);
+
+	CPlayerObject *pPlayerObject = new CPlayerObject;
+
+	pPlayerObject->LoadFromDBPcket(pBufferHelper);
+
+	pPlayerObject->SetConnectID(SvrEnterSceneReq.dwProxySvrID);
+
+	m_PlayerObjectMgr.AddPlayer(pPlayerObject);
+
+	if(AddToMap(pPlayerObject))
+	{
+		StCharEnterGameAck CharEnterGameAck;
+		CharEnterGameAck.dwSceneID       = GetSceneID();
+		CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_ACK, CMDH_SENCE, 0,  pPlayerObject->GetObjectID());
+		WriteHelper.Write(CharEnterGameAck);
+		pPlayerObject->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_DEST_MYSELF);
+		WriteHelper.EndWrite();
+		CGameService::GetInstancePtr()->SendCmdToConnection(SvrEnterSceneReq.dwProxySvrID, &m_WriteBuffer);
+	}
+	else
+	{
+		ASSERT_FAIELD;
+		return TRUE;
+	}
 
 	return TRUE;
 }

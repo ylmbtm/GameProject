@@ -12,7 +12,7 @@
 		return RET;	\
 	}
 
-#define CHECK_AND_RETURN_A(P, RET) \
+#define CHECK_AND_RETURN_ASSERT(P, RET) \
 	if(P == NULL)\
 	{\
 		ASSERT_FAIELD;\
@@ -23,9 +23,9 @@
 #define CHECK_RETURN_TRUE(x)  CHECK_AND_RETURN(x, TRUE)
 #define CHECK_RETURN_FALSE(x) CHECK_AND_RETURN(x, FALSE)
 
-#define CHECK_RETURN_NULL_A(x)  CHECK_AND_RETURN_A(x, NULL)
-#define CHECK_RETURN_TRUE_A(x)  CHECK_AND_RETURN_A(x, true)
-#define CHECK_RETURN_FALSE_A(x) CHECK_AND_RETURN_A(x, false)
+#define CHECK_RETURN_NULL_ASSERT(x)  CHECK_AND_RETURN_ASSERT(x, NULL)
+#define CHECK_RETURN_TRUE_ASSERT(x)  CHECK_AND_RETURN_ASSERT(x, true)
+#define CHECK_RETURN_FALSE_ASSERT(x) CHECK_AND_RETURN_ASSERT(x, false)
 
 ////////////////////////////////////////////
 

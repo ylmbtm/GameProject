@@ -36,6 +36,7 @@ struct StSvrEnterSceneReq
 	UINT32 dwGameSvrID;
 	UINT32 dwSceneID;
 	UINT32 dwCharID;
+	UINT32 dwProxySvrID;
 };
  
 

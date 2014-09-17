@@ -60,6 +60,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			if(pWillEnterNode->m_dwIdentifyCode != CharEnterGameReq.dwIdentifyCode)
 			{
 				m_WillEnterNodeMgr.RemoveByCharID(CharEnterGameReq.u64CharID);
+				ASSERT_FAIELD;
 				//非法的进入
 				break;
 			}
@@ -125,6 +126,25 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 
 				RelayToGameServer(pClientObj, pBufferHelper->GetDataBuffer());
 			}
+		}
+		break;
+
+	case CMD_CHAR_ENTER_GAME_ACK:
+		{
+			CStaticPlayer *pClientObj = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
+			if(pClientObj == NULL)
+			{
+				ASSERT_FAIELD;
+				break;
+			}
+
+			StCharEnterGameAck CharEnterGameAck;
+
+			pBufferHelper->Read(CharEnterGameAck);
+
+			pClientObj->SetSceneID(CharEnterGameAck.dwSceneID);
+
+			RelayToClient(pClientObj, pBufferHelper->GetDataBuffer());
 		}
 		break;
 	default:

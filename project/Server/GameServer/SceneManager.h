@@ -1,8 +1,10 @@
 ﻿#ifndef _SCENE_MANAGER_H_
 #define _SCENE_MANAGER_H_
 #include "Scene.h"
+//#include "Utility/AVLTree.h"
 #include "CmdHandler/CommonCmdHandler.h"
 
+//typedef AVLTree<UINT32, CScene*> SceneMap;
 typedef stdext::hash_map<UINT32, CScene*>  SceneMap;
 
 class CSceneManager : public CCommonCmdHandler

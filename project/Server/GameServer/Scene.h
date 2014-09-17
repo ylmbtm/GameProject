@@ -53,7 +53,7 @@ protected:
 public:
 	BOOL OnCmdLeaveGameReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	BOOL OnCmdPlayerMove(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
-	BOOL OnCmdDBLoadCharAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	BOOL OnCmdCharEnterSceneReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	
 	//*********************消息处理定义结束******************************
 
