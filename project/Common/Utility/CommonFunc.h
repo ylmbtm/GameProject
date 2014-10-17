@@ -1,6 +1,10 @@
 ﻿#ifndef __COMMON_FUNCTION__
 #define __COMMON_FUNCTION__
 
+#define GET_BIT(X,Y) (((X) >> (Y-1)) & 1)
+#define SET_BIT(X,Y) ((X) |= (1 << (Y)))
+#define CLR_BIT(X,Y) ((X) &= (~(1<<Y)))
+
 namespace CommonFunc
 {
 	UINT32			GetProcessorNum();
