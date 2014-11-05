@@ -10,7 +10,7 @@ public:
 	virtual ~CGameSvrMgr(void);
 
 public:
-	UINT32	GetServerIdBySceneID(UINT32 dwSceneID);
+	UINT32	GetServerIDBySceneID(UINT32 dwSceneID);
 
 	UINT32	MakeNewSceneID(UINT32 dwMapID);
 

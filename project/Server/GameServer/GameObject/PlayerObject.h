@@ -27,11 +27,11 @@ public:
 	VOID			SetConnectID(UINT64 u64ConnID);
 
 public:
-	BOOL			LoadFromDBPcket(CBufferHelper *pBufferHelper);
+	UINT32			LoadFromDBPacket(CBufferHelper *pBufferHelper);
 
 public:
-	UINT64 m_u64ConnID;
-
+	UINT64			m_u64ConnID;
+	UINT32			m_dwFeature;
 
 public:
 };

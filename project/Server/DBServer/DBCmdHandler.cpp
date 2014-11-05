@@ -189,7 +189,6 @@ BOOL CDBCmdHandler::OnCmdDBLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBuffe
 		m_DBProcManager.LoadAccountCharInfo(dwAccountID, DBCharLoginAck.CharLoginAck);
 		DBCharLoginAck.CharLoginAck.nRetCode = E_SUCCESSED;
 		DBCharLoginAck.CharLoginAck.dwAccountID = dwAccountID;
-
 		//如果这个己有登录角色，则直接把原来的踢掉
 
 		//如果只是登录，还没有先择角色，刚必须要近快完成登录过程，长时间不登录，将被断开的连接

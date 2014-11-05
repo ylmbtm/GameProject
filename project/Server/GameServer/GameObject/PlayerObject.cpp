@@ -81,13 +81,18 @@ BOOL CPlayerObject::OnUpdate( UINT32 dwTick )
 	return TRUE;
 }
 
-BOOL CPlayerObject::LoadFromDBPcket( CBufferHelper *pBufferHelper )
+UINT32 CPlayerObject::LoadFromDBPacket( CBufferHelper *pBufferHelper )
 {
-	pBufferHelper->Read(m_u64ObjectID);
-	pBufferHelper->Read(m_szObjectName);
-	pBufferHelper->Read(m_ObjectPos);
+	UINT32 dwSize = 0;
 
-	return TRUE;
+	dwSize += pBufferHelper->Read(m_u64ObjectID);
+	dwSize += pBufferHelper->Read(m_szObjectName);
+	dwSize += pBufferHelper->Read(m_dwFeature);
+	dwSize += pBufferHelper->Read(m_ObjectPos.x);
+	dwSize += pBufferHelper->Read(m_ObjectPos.y);
+	dwSize += pBufferHelper->Read(m_ObjectPos.z);
+
+	return dwSize;
 }
 
 BOOL CPlayerObjectMgr::AddPlayer( CPlayerObject *pObject )

@@ -50,6 +50,7 @@ UINT32 CDBPlayerObject::WritePlayerBaseInfo( CBufferHelper *pWriteBuffer )
 	dwSize += pWriteBuffer->Write(m_u64ObjectID);
 	dwSize += pWriteBuffer->Write(m_szObjectName);
 	dwSize += pWriteBuffer->Write(m_dwSceneID);
+	dwSize += pWriteBuffer->Write(m_dwFeature);
 	dwSize += pWriteBuffer->Write(m_fX);
 	dwSize += pWriteBuffer->Write(m_fY);
 	dwSize += pWriteBuffer->Write(m_fZ);

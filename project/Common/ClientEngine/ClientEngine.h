@@ -6,7 +6,7 @@
 
 enum ConnectState
 {
-	Not_Connect,
+	Not_Connect,	//无连接
 	Start_Connect,
 	Raw_Connect,
 	Succ_Connect

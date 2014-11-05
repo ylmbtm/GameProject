@@ -1,5 +1,6 @@
 ﻿#ifndef _OBJECT_POS_
 #define _OBJECT_POS_
+
 class CPosition
 {
 public:

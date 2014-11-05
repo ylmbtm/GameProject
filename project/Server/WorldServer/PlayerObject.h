@@ -11,17 +11,20 @@ public:
 
 	~CPlayerObject();
 	
+	//  初始化玩家对象
 	BOOL	Init();
-
+	//  反初始化玩家对家
 	BOOL	Uninit();
 	
-	BOOL	LoadFromDB();
+	//从数据库包中读取对像数据
+	UINT32	LoadFromDBPacket(CBufferHelper *pBufferHelper);
 
-	BOOL	LoadFromDBPcket(CBufferHelper *pBufferHelper);
+	UINT32  SaveDataToPacket(CBufferHelper *pBufferHelper);
 
 public:
 	UINT64		m_u64ObjectID;
 	CHAR		m_szObjectName[MAX_NAME_LEN];
+	UINT32		m_dwSceneID;
 	CPosition	m_ObjectPos;
 	UINT32		m_dwFeature;
 	UINT32      m_dwLevel;
@@ -33,13 +36,13 @@ class CPlayerObjectMgr : public AVLTree<UINT64, CPlayerObject>
 public:
 	CPlayerObjectMgr()
 	{
+
 	}
 
 	~CPlayerObjectMgr()
 	{
+
 	}
-
-
 
 public:
 	CPlayerObject*		GetPlayer(UINT64 u64CharID);

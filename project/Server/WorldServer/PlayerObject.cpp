@@ -33,20 +33,34 @@ BOOL CPlayerObject::Uninit()
 	return TRUE;
 }
 
-BOOL CPlayerObject::LoadFromDB()
-{
-	strncpy(m_szObjectName, "zhangming", MAX_NAME_LEN);
-	m_ObjectPos.x = 100;
-	m_ObjectPos.y = 100;
-	m_ObjectPos.z = 100;
 
-	return TRUE;
+UINT32 CPlayerObject::LoadFromDBPacket( CBufferHelper *pBufferHelper )
+{
+	UINT32 dwSize = 0;
+
+	dwSize += pBufferHelper->Read(m_u64ObjectID);
+	dwSize += pBufferHelper->Read(m_szObjectName);
+	dwSize += pBufferHelper->Read(m_dwSceneID);
+	dwSize += pBufferHelper->Read(m_dwFeature);
+	dwSize += pBufferHelper->Read(m_ObjectPos.x);
+	dwSize += pBufferHelper->Read(m_ObjectPos.y);
+	dwSize += pBufferHelper->Read(m_ObjectPos.z);
+
+	return dwSize;
 }
 
-
-BOOL CPlayerObject::LoadFromDBPcket( CBufferHelper *pBufferHelper )
+UINT32 CPlayerObject::SaveDataToPacket( CBufferHelper *pBufferHelper )
 {
-	return TRUE;
+	UINT32 dwSize = 0;
+
+	dwSize += pBufferHelper->Write(m_u64ObjectID);
+	dwSize += pBufferHelper->Write(m_szObjectName);
+	dwSize += pBufferHelper->Write(m_dwFeature);
+	dwSize += pBufferHelper->Write(m_ObjectPos.x);
+	dwSize += pBufferHelper->Write(m_ObjectPos.y);
+	dwSize += pBufferHelper->Write(m_ObjectPos.z);
+
+	return dwSize;
 }
 
 

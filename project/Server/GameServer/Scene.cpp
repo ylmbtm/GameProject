@@ -581,12 +581,14 @@ BOOL CScene::SendUpdateObjectToMyself( CWorldObject *pWorldObj )
 
 BOOL CScene::OnCmdCharEnterSceneReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
+	CHECK_AND_RETURN_ASSERT(pBufferHelper, TRUE);
+
 	StSvrEnterSceneReq SvrEnterSceneReq;
 	pBufferHelper->Read(SvrEnterSceneReq);
 
 	CPlayerObject *pPlayerObject = new CPlayerObject;
 
-	pPlayerObject->LoadFromDBPcket(pBufferHelper);
+	pPlayerObject->LoadFromDBPacket(pBufferHelper);
 
 	pPlayerObject->SetConnectID(SvrEnterSceneReq.dwProxySvrID);
 
