@@ -102,7 +102,6 @@ BOOL CWorldCmdHandler::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 		return TRUE;
 	}
 
-
 	UINT32 dwGameSvrID = m_GameSvrMgr.GetServerIDBySceneID(pPlayerObject->m_dwSceneID);
 	if(dwGameSvrID == 0)
 	{

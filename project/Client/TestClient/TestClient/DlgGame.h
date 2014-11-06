@@ -20,6 +20,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnPaint();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 
 public:
 	VOID  DrawPlayer(HDC hDC, int nX, int nY, int nDir, char *szName);
@@ -30,5 +31,8 @@ public:
 
 	VOID  Draw(HDC hDC,int nX, int nY, int nDir, COLORREF clr, int nRadius);
 
-	afx_msg void OnSize(UINT nType, int cx, int cy);
+
+	int MapPointToViewPoint(FLOAT fMapPoint);
+
+	
 };

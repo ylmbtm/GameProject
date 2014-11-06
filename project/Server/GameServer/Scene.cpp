@@ -536,7 +536,8 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 			m_GridManager.GetSurroundingGrids(nCurIndex, Grids);
 
 			SendUpdateObjectToGrids(pWorldObject, Grids);
-
+			
+			pWorldObject->m_UpdateObjPos = pWorldObject->m_ObjectPos;
 		
 			return TRUE;
 		}

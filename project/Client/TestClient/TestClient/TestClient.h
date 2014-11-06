@@ -25,9 +25,13 @@ public:
 	virtual BOOL InitInstance();
 
 // 实现
-
 	DECLARE_MESSAGE_MAP()
+
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+
+
+public:
+	DWORD  m_dwLastTick;
 };
 
 extern CTestClientApp theApp;

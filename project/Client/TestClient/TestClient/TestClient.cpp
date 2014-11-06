@@ -87,8 +87,17 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 {
 	// TODO: 在此添加专用代码和/或调用基类
 
-	if(pMsg->message == WM_KEYUP)
+	if(pMsg->message == WM_KEYDOWN)
 	{
+		DWORD dwTick = GetTickCount();
+
+		if((dwTick - m_dwLastTick)<100)
+		{
+			return CWinAppEx::PreTranslateMessage(pMsg);
+		}
+		
+		m_dwLastTick = dwTick;
+
 		if(pMsg->wParam == VK_LEFT)
 		{
 			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.x-=2;
@@ -135,11 +144,11 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 
 		//((CTestClientDlg*)AfxGetMainWnd())->m_LogList.AddString(strText);
 
-		return TRUE;
+		//return TRUE;
 	}
 	else if(pMsg->message == WM_KEYUP)
 	{
-		return TRUE;
+		//return TRUE;
 	}
 
 

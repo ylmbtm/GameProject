@@ -114,8 +114,8 @@ BOOL CTestClientDlg::OnInitDialog()
 	CRect rcClient;
 	GetClientRect(rcClient);
 	rcClient.left += 200;
-	rcClient.right -= 2;
-	rcClient.bottom -=2;
+	rcClient.right  = rcClient.left + 1000;
+	rcClient.bottom = rcClient.top + 1000;
 	m_DlgGame.MoveWindow(rcClient);
 
 	SetTimer(1, 25, NULL);
@@ -126,6 +126,8 @@ BOOL CTestClientDlg::OnInitDialog()
 
 	ClientEngine::GetInstancePtr()->SetClientID(0);
 	ClientEngine::GetInstancePtr()->ConnectToServer("127.0.0.1", 7994);
+
+	MoveWindow(10,0, 1250, 900);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -189,8 +191,8 @@ void CTestClientDlg::OnSize(UINT nType, int cx, int cy)
 		CRect rcClient;
 		GetClientRect(rcClient);
 		rcClient.left += 200;
-		rcClient.right -= 2;
-		rcClient.bottom -=2;
+		rcClient.right  = rcClient.left + 1000;
+		rcClient.bottom = rcClient.top + 1000;
 		m_DlgGame.MoveWindow(rcClient);
 		m_DlgGame.Invalidate();
 	}

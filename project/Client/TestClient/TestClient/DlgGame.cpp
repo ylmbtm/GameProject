@@ -50,13 +50,13 @@ void CDlgGame::OnPaint()
 
 	dc.FillSolidRect(&rc, RGB(255,255,255));
 	
-	DrawPlayer(dc.GetSafeHdc(), pClientCmdHandler->m_HostPlayer.m_ObjectPos.x, pClientCmdHandler->m_HostPlayer.m_ObjectPos.z, pClientCmdHandler->m_HostPlayer.m_ObjectStatus.nDir, pClientCmdHandler->m_HostPlayer.m_szObjectName);
+	DrawPlayer(dc.GetSafeHdc(), MapPointToViewPoint(pClientCmdHandler->m_HostPlayer.m_ObjectPos.x), MapPointToViewPoint(pClientCmdHandler->m_HostPlayer.m_ObjectPos.z), pClientCmdHandler->m_HostPlayer.m_ObjectStatus.nDir, pClientCmdHandler->m_HostPlayer.m_szObjectName);
 
 	for(CPlayerObjectMgr::iterator itor = pClientCmdHandler->m_PlayerObjMgr.begin(); itor != pClientCmdHandler->m_PlayerObjMgr.end(); ++itor)
 	{
 		CPlayerObject *pObject = itor->second;
 
-		DrawPlayer(dc.GetSafeHdc(),  pObject->m_ObjectPos.x, pObject->m_ObjectPos.z,pObject->m_ObjectStatus.nDir, pObject->m_szObjectName);
+		DrawPlayer(dc.GetSafeHdc(),  MapPointToViewPoint(pObject->m_ObjectPos.x), MapPointToViewPoint(pObject->m_ObjectPos.z),pObject->m_ObjectStatus.nDir, pObject->m_szObjectName);
 
 		//DrawItem(dc.GetSafeHdc(), rand()%300,rand()%300);
 
@@ -124,4 +124,9 @@ VOID CDlgGame::Draw( HDC hDC,int nX, int nY, int nDir, COLORREF clr, int nRadius
 	Ellipse(hDC, nX - nRadius, nY - nRadius, nX + nRadius, nY + nRadius);
 	SelectObject(hDC, hOldBrush);
 	DeleteObject(hNewBrush);
+}
+
+int CDlgGame::MapPointToViewPoint( FLOAT fMapPoint )
+{
+	return (fMapPoint+1000)/2;
 }

@@ -212,6 +212,7 @@ BOOL ServiceBase::SendCmdToDBConnection(IDataBuffer *pDataBuf)
 {
 	if(m_u64DBConnID == 0)
 	{
+		ASSERT_FAIELD;
 		return FALSE;
 	}
 

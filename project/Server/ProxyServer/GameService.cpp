@@ -144,6 +144,8 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 
 			pClientObj->SetSceneID(CharEnterGameAck.dwSceneID);
 
+			pClientObj->SetGameSvrConnID(u64ConnID);
+
 			RelayToClient(pClientObj, pBufferHelper->GetDataBuffer());
 		}
 		break;
