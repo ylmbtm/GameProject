@@ -51,6 +51,10 @@ public:
 
 	BOOL		Seek(INT32 nOffset);
 
+	UINT32		WriteCheckBufferCode();
+
+	UINT32		ReadCheckBufferCode();
+
 private:
 	IDataBuffer *m_pDataBuffer;
 

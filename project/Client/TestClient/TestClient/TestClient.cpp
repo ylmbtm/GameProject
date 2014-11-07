@@ -98,6 +98,8 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 		
 		m_dwLastTick = dwTick;
 
+		printf("当前坐标(%d, %d)--", (int)CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.x, (int)CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.z);
+
 		if(pMsg->wParam == VK_LEFT)
 		{
 			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.x-=2;
@@ -125,6 +127,9 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 		_MoveGs.x = CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.x;
 		_MoveGs.y = CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.y;
 		_MoveGs.z = CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.z;
+
+
+		printf("请求坐标(%d, %d)\n", (int)CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.x, (int)CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.z);
 
 		CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
 

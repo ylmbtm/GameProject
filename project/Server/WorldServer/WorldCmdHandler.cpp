@@ -53,6 +53,7 @@ BOOL CWorldCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	{
 		PROCESS_COMMAND_ITEM(CMD_CHAR_ENTER_GAME_REQ,	OnCmdEnterGameReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_LOAD_CHAR_ACK,		OnCmdDBLoadCharAck);
+		PROCESS_COMMAND_ITEM(CMD_SVR_CREATE_SCENE_ACK,	OnCmdCreateSceneAck);
 	default:
 		{
 
@@ -128,5 +129,21 @@ BOOL CWorldCmdHandler::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	return TRUE;
 }
 
+BOOL CWorldCmdHandler::OnCmdCreateSceneAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StSvrCreateSceneAck CreateSceneAck;
+	pBufferHelper->Read(CreateSceneAck);
 
+	if(CreateSceneAck.dwAckCode == E_SUCCESSED)
+	{
+		//创建场景成功 
+	}
+	else
+	{
+		//创建场景失败
+	}
+
+
+	return TRUE;
+}
 

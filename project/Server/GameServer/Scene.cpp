@@ -134,6 +134,8 @@ BOOL CScene::OnCmdPlayerMove( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper
 
 	pPlayerObj->SetUpdate(UT_Update);
 
+	CLog::GetInstancePtr()->AddLog("响应客户端坐标请求[%lld], 坐标 x =%f, z=%f", pPlayerObj->GetObjectID(), pPlayerObj->m_ObjectPos.x, pPlayerObj->m_ObjectPos.z);
+
 	return TRUE;
 }
 
@@ -567,13 +569,18 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 
 BOOL CScene::SendUpdateObjectToMyself( CWorldObject *pWorldObj )
 {
+	CLog::GetInstancePtr()->AddLog("SendUpdateObjectToMyself[%lld]——A, 坐标 x =%f, z=%f", pWorldObj->GetObjectID(), pWorldObj->m_ObjectPos.x, pWorldObj->m_ObjectPos.z);
 	//先把玩家的变化包组装好
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_CHAR_UPDATE_MYSELF, CMDH_OTHER, 0, 0);
+	WriteHelper.WriteCheckBufferCode();
 	pWorldObj->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CHANGE, UPDATE_DEST_MYSELF);
+	WriteHelper.WriteCheckBufferCode();
 	WriteHelper.EndWrite();
 
 	CPlayerObject *pPlayerObject = (CPlayerObject *)pWorldObj;
+
+	CLog::GetInstancePtr()->AddLog("SendUpdateObjectToMyself[%lld]——B, 坐标 x =%f, z=%f", pWorldObj->GetObjectID(), pWorldObj->m_ObjectPos.x, pWorldObj->m_ObjectPos.z);
 
 	CGameService::GetInstancePtr()->SendCmdToConnection(pPlayerObject->GetConnectID(), pPlayerObject->GetObjectID(), 0, &m_WriteBuffer);
 

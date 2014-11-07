@@ -8,6 +8,7 @@
 #include "DataBuffer/BufferHelper.h"
 #include "PacketDef/ServerPacket.h"
 #include "GameService.h"
+#include "Error.h"
 
 
 
@@ -132,26 +133,29 @@ BOOL CSceneManager::OnUpdate( UINT32 dwTick )
 BOOL CSceneManager::OnCmdCreateSceneReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StSvrCreateSceneReq CreateSceneReq;
-
 	pBufferHelper->Read(CreateSceneReq);
-
-	if(!CreateScene(CreateSceneReq.dwSceneID))
-	{
-		ASSERT_FAIELD;
-
-		return TRUE;
-	}
-
 
 	StSvrCreateSceneAck CreateSceneAck;
 	CreateSceneAck.dwCreateParam = CreateSceneReq.CreateParam;
 	CreateSceneAck.dwSceneID = CreateSceneReq.dwSceneID;
 	CreateSceneAck.dwServerID= CGameService::GetInstancePtr()->GetServerID();
 
+	if (!CreateScene(CreateSceneReq.dwSceneID))
+	{
+		ASSERT_FAIELD;
+
+		CreateSceneAck.dwAckCode = E_FAILED;
+	}
+	else
+	{
+		CreateSceneAck.dwAckCode = E_SUCCESSED;
+	}
+	
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_SVR_CREATE_SCENE_ACK, CMDH_OTHER, 0, 0);
 	WriteHelper.Write(CreateSceneAck);
 	WriteHelper.EndWrite();
+
 	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 
 	return TRUE;

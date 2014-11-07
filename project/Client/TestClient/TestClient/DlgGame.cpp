@@ -50,13 +50,13 @@ void CDlgGame::OnPaint()
 
 	dc.FillSolidRect(&rc, RGB(255,255,255));
 	
-	DrawPlayer(dc.GetSafeHdc(), MapPointToViewPoint(pClientCmdHandler->m_HostPlayer.m_ObjectPos.x), MapPointToViewPoint(pClientCmdHandler->m_HostPlayer.m_ObjectPos.z), pClientCmdHandler->m_HostPlayer.m_ObjectStatus.nDir, pClientCmdHandler->m_HostPlayer.m_szObjectName);
+	DrawPlayer(dc.GetSafeHdc(), /*MapPointToViewPoint(*/pClientCmdHandler->m_HostPlayer.m_ObjectPos.x/*)*/, /*MapPointToViewPoint(*/pClientCmdHandler->m_HostPlayer.m_ObjectPos.z/*)*/, pClientCmdHandler->m_HostPlayer.m_ObjectStatus.nDir, pClientCmdHandler->m_HostPlayer.m_szObjectName);
 
 	for(CPlayerObjectMgr::iterator itor = pClientCmdHandler->m_PlayerObjMgr.begin(); itor != pClientCmdHandler->m_PlayerObjMgr.end(); ++itor)
 	{
 		CPlayerObject *pObject = itor->second;
 
-		DrawPlayer(dc.GetSafeHdc(),  MapPointToViewPoint(pObject->m_ObjectPos.x), MapPointToViewPoint(pObject->m_ObjectPos.z),pObject->m_ObjectStatus.nDir, pObject->m_szObjectName);
+		DrawPlayer(dc.GetSafeHdc(),  /*MapPointToViewPoint(*/pObject->m_ObjectPos.x/*)*/, /*MapPointToViewPoint(*/pObject->m_ObjectPos.z/*)*/,pObject->m_ObjectStatus.nDir, pObject->m_szObjectName);
 
 		//DrawItem(dc.GetSafeHdc(), rand()%300,rand()%300);
 
@@ -75,12 +75,25 @@ void CDlgGame::OnSize(UINT nType, int cx, int cy)
 
 VOID CDlgGame::DrawPlayer( HDC hDC, int nX, int nY , int nDir, char *szName)
 {
+	int nTempX = nX;
+	int nTempY = nY;
+
+	nX = MapPointToViewPoint(nX);
+	nY = MapPointToViewPoint(nY);
+
 	RECT Rc;
 	Rc.left = nX - 40;
 	Rc.right = nX + 40;
 	Rc.top   = nY - 20;
 	Rc.bottom = nY+10;
-	DrawText(hDC, szName,strlen(szName), &Rc, DT_CENTER);
+	DrawText(hDC, szName, strlen(szName), &Rc, DT_CENTER);
+
+	Rc.top -= 15;
+	Rc.bottom -= 15;
+	char szValue[128];
+	sprintf(szValue, "(%d, %d)", nTempX, nTempY);
+	DrawText(hDC, szValue, strlen(szValue), &Rc, DT_CENTER);
+
 	Draw(hDC, nX, nY, nDir, RGB(255, 0 , 0), 5);
 	return ;
 }

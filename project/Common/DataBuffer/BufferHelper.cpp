@@ -190,5 +190,25 @@ UINT8* CBufferHelper::GetCurrentPoint()
 	return (UINT8*)(m_pDataBuffer->GetData() + m_dwCurPos);
 }
 
+UINT32 CBufferHelper::WriteCheckBufferCode()
+{
+	UINT32 dwCheckCode = 0x12345678;
+	Write(dwCheckCode);
+
+	return sizeof(dwCheckCode);
+}
+
+UINT32 CBufferHelper::ReadCheckBufferCode()
+{
+	UINT32 dwCheckCode = 0;
+	Read(dwCheckCode);
+	if(dwCheckCode != 0x12345678)
+	{
+		ASSERT_FAIELD;
+	}
+
+	return sizeof(dwCheckCode);
+}
+
 
 
