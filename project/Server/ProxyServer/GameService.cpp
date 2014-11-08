@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "GameService.h"
+#include "ObjectID.h"
 #include "CommandDef.h"
 #include "Utility/Log/Log.h"
 #include "Utility/CommonFunc.h"
@@ -9,7 +10,7 @@
 #include "DataBuffer/BufferHelper.h"
 #include "StaticPlayerMgr.h"
 #include "PacketDef/ClientPacket.h"
-#include "ObjectID.h"
+#include "Utility/Position.h"
 
 CGameService::CGameService(void)
 {
@@ -145,6 +146,30 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			pClientObj->SetSceneID(CharEnterGameAck.dwSceneID);
 
 			pClientObj->SetGameSvrConnID(u64ConnID);
+
+			RelayToClient(pClientObj, pBufferHelper->GetDataBuffer());
+		}
+		break;
+	case CMD_CHAR_UPDATE_MYSELF:
+		{
+			CStaticPlayer *pClientObj = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
+			if(pClientObj == NULL)
+			{
+				ASSERT_FAIELD;
+				break;
+			}
+			
+			UINT32 dwPacketIndex = 0;
+			pBufferHelper->Read(dwPacketIndex);
+			pBufferHelper->ReadCheckBufferCode();
+			UINT64 ObjectID = 0;
+			pBufferHelper->Read(ObjectID);
+			CPosition m_ObjectPos;
+			pBufferHelper->Read(m_ObjectPos);
+			CHAR  szCharName[256];
+			pBufferHelper->Read(szCharName);
+
+			CLog::GetInstancePtr()->AddLog("读出来的坐标为Name:%s-PacketIndex:%d-(x:%d, y:%d)", szCharName, dwPacketIndex, (int)m_ObjectPos.x, (int)m_ObjectPos.z);
 
 			RelayToClient(pClientObj, pBufferHelper->GetDataBuffer());
 		}

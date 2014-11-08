@@ -170,6 +170,8 @@ BOOL CClientCmdHandler::OnCmdEnterGameAck( UINT16 wCommandID, UINT64 u64ConnID, 
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
 
+	((CTestClientDlg*)AfxGetMainWnd())->SetWindowText((LPCTSTR)m_HostPlayer.m_szObjectName);
+
 	return TRUE;
 }
 
@@ -336,12 +338,14 @@ BOOL CClientCmdHandler::OnCmdDelCharAck( UINT16 wCommandID, UINT64 u64ConnID, CB
 
 BOOL CClientCmdHandler::OnCmdUpdateMyself( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
+	UINT32 dwPacketIndex = 0;
+	pBufferHelper->Read(dwPacketIndex);
 	pBufferHelper->ReadCheckBufferCode();
 	m_HostPlayer.ReadFromBuffer(pBufferHelper);
 	pBufferHelper->ReadCheckBufferCode();
 
 
-	printf("服务器返回坐标(%d, %d)\n", (int)m_HostPlayer.m_ObjectPos.x, (int)m_HostPlayer.m_ObjectPos.z);
+	printf("服务器返回坐标(%d, %d)--packetindex:%d\n", (int)m_HostPlayer.m_ObjectPos.x, (int)m_HostPlayer.m_ObjectPos.z, dwPacketIndex);
 
 	return TRUE;
 }

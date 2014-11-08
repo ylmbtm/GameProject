@@ -192,7 +192,7 @@ UINT8* CBufferHelper::GetCurrentPoint()
 
 UINT32 CBufferHelper::WriteCheckBufferCode()
 {
-	UINT32 dwCheckCode = 0x12345678;
+	UINT32 dwCheckCode = 0x11111111;
 	Write(dwCheckCode);
 
 	return sizeof(dwCheckCode);
@@ -202,7 +202,7 @@ UINT32 CBufferHelper::ReadCheckBufferCode()
 {
 	UINT32 dwCheckCode = 0;
 	Read(dwCheckCode);
-	if(dwCheckCode != 0x12345678)
+	if(dwCheckCode != 0x11111111)
 	{
 		ASSERT_FAIELD;
 	}

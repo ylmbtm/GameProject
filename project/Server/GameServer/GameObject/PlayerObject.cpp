@@ -4,7 +4,7 @@
 
 CPlayerObject::CPlayerObject()
 {
-
+	m_MovePacketIndex = 0;
 }
 
 CPlayerObject::~CPlayerObject()

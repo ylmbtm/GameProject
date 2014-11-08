@@ -28,6 +28,8 @@ public:
 	CPosition	m_ObjectPos;
 	UINT32		m_dwFeature;
 	UINT32      m_dwLevel;
+
+
 };
 
 

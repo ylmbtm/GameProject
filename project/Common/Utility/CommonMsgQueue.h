@@ -30,12 +30,8 @@ namespace CommonQueue
 
 			_Value = m_vtData[nReadPos];
 
-			nReadPos++;
-			if(nReadPos >= dwSize)
-			{
-				nReadPos = nReadPos%dwSize;
-			}
-
+			nReadPos = (nReadPos+1)%dwSize;
+			
 			m_CritSec.Unlock();
 			
 			return TRUE;
@@ -44,7 +40,7 @@ namespace CommonQueue
 		void Push(ELEM_T &_Value)
 		{
 			m_CritSec.Lock();
-			if((nWritePos + 1) == nReadPos)
+			if(((nWritePos + 1)%dwSize) == nReadPos)
 			{
 				m_CritSec.Unlock();
 				return ;
@@ -52,9 +48,7 @@ namespace CommonQueue
 
 			m_vtData[nWritePos] = _Value;
 
-			nWritePos++;
-
-			nWritePos = nWritePos%dwSize;
+			nWritePos = (nWritePos+1)%dwSize;
 
 			m_CritSec.Unlock();
 

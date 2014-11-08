@@ -569,18 +569,22 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 
 BOOL CScene::SendUpdateObjectToMyself( CWorldObject *pWorldObj )
 {
-	CLog::GetInstancePtr()->AddLog("SendUpdateObjectToMyself[%lld]——A, 坐标 x =%f, z=%f", pWorldObj->GetObjectID(), pWorldObj->m_ObjectPos.x, pWorldObj->m_ObjectPos.z);
+	CPlayerObject *pPlayerObject = (CPlayerObject *)pWorldObj;
+
 	//先把玩家的变化包组装好
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_CHAR_UPDATE_MYSELF, CMDH_OTHER, 0, 0);
+	WriteHelper.Write(pPlayerObject->m_MovePacketIndex);
 	WriteHelper.WriteCheckBufferCode();
 	pWorldObj->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CHANGE, UPDATE_DEST_MYSELF);
 	WriteHelper.WriteCheckBufferCode();
 	WriteHelper.EndWrite();
 
-	CPlayerObject *pPlayerObject = (CPlayerObject *)pWorldObj;
 
-	CLog::GetInstancePtr()->AddLog("SendUpdateObjectToMyself[%lld]——B, 坐标 x =%f, z=%f", pWorldObj->GetObjectID(), pWorldObj->m_ObjectPos.x, pWorldObj->m_ObjectPos.z);
+	CLog::GetInstancePtr()->AddLog("SendUpdateObjectToMyself[%s] 包索引;%d -- (x:%d, y:%d)",  pPlayerObject->GetObjectName(), pPlayerObject->m_MovePacketIndex, pWorldObj->m_ObjectPos.x, pWorldObj->m_ObjectPos.z);
+
+	pPlayerObject->m_MovePacketIndex++;
+	
 
 	CGameService::GetInstancePtr()->SendCmdToConnection(pPlayerObject->GetConnectID(), pPlayerObject->GetObjectID(), 0, &m_WriteBuffer);
 

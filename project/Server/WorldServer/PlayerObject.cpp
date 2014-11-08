@@ -24,6 +24,8 @@ BOOL CPlayerObject::Init()
 	m_dwFeature = 0;
 	m_dwLevel   = 0;
 
+	
+
 	return TRUE;
 }
 
