@@ -34,7 +34,6 @@ public:
 	UINT32			m_dwFeature;
 
 public:
-	UINT32			m_MovePacketIndex;
 };
 
 

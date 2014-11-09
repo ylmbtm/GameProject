@@ -163,10 +163,9 @@ BOOL ClientEngine::Render()
 
 	}
 
-	if(ReceiveData())
-	{
-		ProcessData();
-	}
+	ReceiveData();
+	
+	ProcessData();
 
 	return TRUE;
 

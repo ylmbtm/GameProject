@@ -159,8 +159,6 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 				break;
 			}
 			
-			UINT32 dwPacketIndex = 0;
-			pBufferHelper->Read(dwPacketIndex);
 			pBufferHelper->ReadCheckBufferCode();
 			UINT64 ObjectID = 0;
 			pBufferHelper->Read(ObjectID);
@@ -168,8 +166,6 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			pBufferHelper->Read(m_ObjectPos);
 			CHAR  szCharName[256];
 			pBufferHelper->Read(szCharName);
-
-			CLog::GetInstancePtr()->AddLog("读出来的坐标为Name:%s-PacketIndex:%d-(x:%d, y:%d)", szCharName, dwPacketIndex, (int)m_ObjectPos.x, (int)m_ObjectPos.z);
 
 			RelayToClient(pClientObj, pBufferHelper->GetDataBuffer());
 		}

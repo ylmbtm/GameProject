@@ -10,9 +10,9 @@ namespace CommonQueue
 	public:
 		CMessageQueue()
 		{
-			nReadPos = 0;
+			m_nReadPos = 0;
 
-			nWritePos = 0;
+			m_nWritePos = 0;
 		}
 
 		~CMessageQueue()
@@ -22,15 +22,15 @@ namespace CommonQueue
 		BOOL Pop(ELEM_T &_Value)
 		{
 			m_CritSec.Lock();
-			if(nReadPos == nWritePos)
+			if(m_nReadPos == m_nWritePos)
 			{
 				m_CritSec.Wait();
 				return FALSE;
 			}
 
-			_Value = m_vtData[nReadPos];
+			_Value = m_vtData[m_nReadPos];
 
-			nReadPos = (nReadPos+1)%dwSize;
+			m_nReadPos = (m_nReadPos+1)%dwSize;
 			
 			m_CritSec.Unlock();
 			
@@ -40,15 +40,15 @@ namespace CommonQueue
 		void Push(ELEM_T &_Value)
 		{
 			m_CritSec.Lock();
-			if(((nWritePos + 1)%dwSize) == nReadPos)
+			if(((m_nWritePos + 1)%dwSize) == m_nReadPos)
 			{
 				m_CritSec.Unlock();
 				return ;
 			}
 
-			m_vtData[nWritePos] = _Value;
+			m_vtData[m_nWritePos] = _Value;
 
-			nWritePos = (nWritePos+1)%dwSize;
+			m_nWritePos = (m_nWritePos+1)%dwSize;
 
 			m_CritSec.Unlock();
 
@@ -59,9 +59,9 @@ namespace CommonQueue
 
 		ELEM_T m_vtData[dwSize];
 
-		INT32 nWritePos;
+		INT32 m_nWritePos;
 		
-		INT32 nReadPos;
+		INT32 m_nReadPos;
 
 		CCritSecNotify m_CritSec;
 	};
