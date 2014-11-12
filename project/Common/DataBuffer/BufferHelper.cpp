@@ -2,6 +2,8 @@
 #include "BufferHelper.h"
 #include "DataBuffer.h"
 
+UINT32 g_PacketNo = 0;
+
 CBufferHelper::CBufferHelper(BOOL bWrite, IDataBuffer *pDataBuffer)
 {
 	m_bWriting = bWrite;
@@ -18,6 +20,7 @@ CBufferHelper::CBufferHelper(BOOL bWrite, UINT32 dwBuffSize)
 
 CBufferHelper::~CBufferHelper(void)
 {
+
 }
 
 BOOL CBufferHelper::BeginWrite(UINT16 wCommandID, UINT8 CmdHandleID, UINT16 dwSceneID, UINT64 u64CharID)
@@ -35,6 +38,7 @@ BOOL CBufferHelper::BeginWrite(UINT16 wCommandID, UINT8 CmdHandleID, UINT16 dwSc
 	pCommandHeader->dwSceneID  = dwSceneID;
 	pCommandHeader->CmdHandleID= CmdHandleID;
 	pCommandHeader->u64CharID  = u64CharID;
+	pCommandHeader->dwPacketNo = g_PacketNo++;
 
 	m_dwCurPos	  = sizeof(TransferHeader) + sizeof(CommandHeader);
 

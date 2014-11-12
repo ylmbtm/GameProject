@@ -3,39 +3,39 @@
 
 #include "stdafx.h"
 #include "TestClient.h"
-#include "DlgGame.h"
+#include "SceneView.h"
 #include "CommandHandler.h"
 
 
-// CDlgGame 对话框
+// CSceneView 对话框
 
-IMPLEMENT_DYNAMIC(CDlgGame, CDialog)
+IMPLEMENT_DYNAMIC(CSceneView, CDialog)
 
-CDlgGame::CDlgGame(CWnd* pParent /*=NULL*/)
-	: CDialog(CDlgGame::IDD, pParent)
+CSceneView::CSceneView(CWnd* pParent /*=NULL*/)
+	: CDialog(CSceneView::IDD, pParent)
 {
 
 }
 
-CDlgGame::~CDlgGame()
+CSceneView::~CSceneView()
 {
 }
 
-void CDlgGame::DoDataExchange(CDataExchange* pDX)
+void CSceneView::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 }
 
 
-BEGIN_MESSAGE_MAP(CDlgGame, CDialog)
+BEGIN_MESSAGE_MAP(CSceneView, CDialog)
 	ON_WM_PAINT()
 	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
-// CDlgGame 消息处理程序
+// CSceneView 消息处理程序
 
-void CDlgGame::OnPaint()
+void CSceneView::OnPaint()
 {
 	CPaintDC dc(this);
 
@@ -66,14 +66,14 @@ void CDlgGame::OnPaint()
 	return ;
 }
 
-void CDlgGame::OnSize(UINT nType, int cx, int cy)
+void CSceneView::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
 
 	// TODO: 在此处添加消息处理程序代码
 }
 
-VOID CDlgGame::DrawPlayer( HDC hDC, int nX, int nY , int nDir, char *szName)
+VOID CSceneView::DrawPlayer( HDC hDC, int nX, int nY , int nDir, char *szName)
 {
 	int nTempX = nX;
 	int nTempY = nY;
@@ -82,23 +82,23 @@ VOID CDlgGame::DrawPlayer( HDC hDC, int nX, int nY , int nDir, char *szName)
 	nY = MapPointToViewPoint(nY);
 
 	RECT Rc;
-	Rc.left = nX - 40;
-	Rc.right = nX + 40;
-	Rc.top   = nY - 20;
-	Rc.bottom = nY+10;
+	Rc.left		= nX - 40;
+	Rc.right	= nX + 40;
+	Rc.top		= nY - 20;
+	Rc.bottom	= nY+10;
 	DrawText(hDC, szName, strlen(szName), &Rc, DT_CENTER);
 
-	Rc.top -= 15;
-	Rc.bottom -= 15;
+	Rc.top		-= 15;
+	Rc.bottom	-= 15;
 	char szValue[128];
 	sprintf(szValue, "(%d, %d)", nTempX, nTempY);
 	DrawText(hDC, szValue, strlen(szValue), &Rc, DT_CENTER);
-
 	Draw(hDC, nX, nY, nDir, RGB(255, 0 , 0), 5);
+
 	return ;
 }
 
-VOID CDlgGame::DrawNpc( HDC hDC,int nX, int nY , char *szName)
+VOID CSceneView::DrawNpc( HDC hDC,int nX, int nY , char *szName)
 {
 	RECT Rc;
 	Rc.left = nX - 40;
@@ -110,13 +110,13 @@ VOID CDlgGame::DrawNpc( HDC hDC,int nX, int nY , char *szName)
 	return ;
 }
 
-VOID CDlgGame::DrawItem( HDC hDC,int nX, int nY )
+VOID CSceneView::DrawItem( HDC hDC,int nX, int nY )
 {
 	Draw(hDC, nX, nY, 0, RGB(0 ,  0, 255), 7);
 	return ;
 }
 
-VOID CDlgGame::Draw( HDC hDC,int nX, int nY, int nDir, COLORREF clr, int nRadius )
+VOID CSceneView::Draw( HDC hDC,int nX, int nY, int nDir, COLORREF clr, int nRadius )
 {
 	CPoint point;
 
@@ -139,7 +139,7 @@ VOID CDlgGame::Draw( HDC hDC,int nX, int nY, int nDir, COLORREF clr, int nRadius
 	DeleteObject(hNewBrush);
 }
 
-int CDlgGame::MapPointToViewPoint( FLOAT fMapPoint )
+int CSceneView::MapPointToViewPoint( FLOAT fMapPoint )
 {
 	return (fMapPoint+1000)/2;
 }

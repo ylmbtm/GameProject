@@ -109,14 +109,14 @@ BOOL CTestClientDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
-	m_DlgGame.Create(IDD_Dlg_Game, this);
+	m_SceneView.Create(IDD_Dlg_Game, this);
 
 	CRect rcClient;
 	GetClientRect(rcClient);
 	rcClient.left += 200;
 	rcClient.right  = rcClient.left + 1000;
 	rcClient.bottom = rcClient.top + 1000;
-	m_DlgGame.MoveWindow(rcClient);
+	m_SceneView.MoveWindow(rcClient);
 
 	SetTimer(1, 25, NULL);
 
@@ -128,6 +128,13 @@ BOOL CTestClientDlg::OnInitDialog()
 	ClientEngine::GetInstancePtr()->ConnectToServer("127.0.0.1", 7994);
 
 	MoveWindow(10,0, 1250, 900);
+
+	CDlgLogin DlgLogin;
+
+	if(IDOK != DlgLogin.DoModal())
+	{
+		EndDialog(0);
+	}
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -186,16 +193,16 @@ void CTestClientDlg::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
 
-	if(IsWindow(m_DlgGame.GetSafeHwnd()))
+	/*if(IsWindow(m_SceneView.GetSafeHwnd()))
 	{
 		CRect rcClient;
 		GetClientRect(rcClient);
 		rcClient.left += 200;
 		rcClient.right  = rcClient.left + 1000;
 		rcClient.bottom = rcClient.top + 1000;
-		m_DlgGame.MoveWindow(rcClient);
-		m_DlgGame.Invalidate();
-	}
+		m_SceneView.MoveWindow(rcClient);
+		m_SceneView.Invalidate();
+	}*/
 }
 
 void CTestClientDlg::OnLogin()

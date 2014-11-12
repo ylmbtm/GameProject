@@ -50,7 +50,6 @@ BOOL CLoginCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	NormalReport.dwReportID = SVR_REPROT_NORMAL;
 	NormalReport.dwSvrID    = CGameService::GetInstancePtr()->GetServerID();
 	NormalReport.dwSvrType  = CGameService::GetInstancePtr()->GetServerType();
-
 	sprintf(NormalReport.szLogContent, "---Log Message:[%d]----", wCommandID);
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
@@ -58,9 +57,6 @@ BOOL CLoginCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	WriteHelper.Write(NormalReport);
 	WriteHelper.EndWrite();
 	CGameService::GetInstancePtr()->SendCmdToStatConnection(&m_WriteBuffer);
-
-
-	
 
 	switch(wCommandID)
 	{
@@ -82,6 +78,8 @@ BOOL CLoginCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 		}
 		break;
 	}
+
+	
 
 	return TRUE;
 }

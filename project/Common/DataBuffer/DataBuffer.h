@@ -59,7 +59,7 @@ public:
 
 			m_pManager->m_pFreeList = this;
 
-			m_pPrev = this;
+			m_pPrev = NULL;
 		}
 
 		m_pManager->m_CritSec.Unlock();
@@ -133,6 +133,8 @@ class  CBufferManager
 public:
 	CBufferManager()
 	{
+		m_pUsedList = NULL;
+		m_pFreeList = NULL;
 	}
 
 	~CBufferManager()
@@ -155,6 +157,11 @@ public:
 			pDataBuffer = m_pFreeList;
 
 			m_pFreeList = pDataBuffer->m_pNext;
+
+			if(m_pFreeList != NULL)
+			{
+				m_pFreeList->m_pPrev = NULL;
+			}
 		}
 
 		pDataBuffer->m_pManager = this;
@@ -164,9 +171,14 @@ public:
 		//以下加到己用列表中
 		pDataBuffer->m_pNext = m_pUsedList;
 
-		pDataBuffer->m_pPrev = pDataBuffer;
+		if(m_pUsedList != NULL)
+		{
+			m_pUsedList->m_pPrev = pDataBuffer;
+		}
 
 		m_pUsedList = pDataBuffer;
+
+		m_pUsedList->m_pPrev = NULL;
 
 		m_CritSec.Unlock();
 

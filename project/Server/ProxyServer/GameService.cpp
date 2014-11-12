@@ -356,9 +356,7 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	}
 
 	StCharLeaveGameReq CharLeaveGameReq;
-
 	CharLeaveGameReq.dwLeaveReason = LGR_Disconnect;
-
 	IDataBuffer *pSendBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(1024);
 	if(pSendBuffer == NULL)
 	{
@@ -371,11 +369,10 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	WriteHelper.EndWrite();
 
 	SendCmdToConnection(pStaticPlayer->GetGameSvrConnID(), pSendBuffer);
-
-	pSendBuffer->Release();
+	SendCmdToConnection(m_dwWorldServerID, pSendBuffer);
+	//pSendBuffer->Release();
 	
 	CStaticPlayerMgr::GetInstancePtr()->RemoveByCharID(pStaticPlayer->GetCharID());
-
 	return TRUE;
 }
 

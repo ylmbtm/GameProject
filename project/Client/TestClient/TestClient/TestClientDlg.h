@@ -4,7 +4,7 @@
 
 #pragma once
 #include "DlgLogin.h"
-#include "DlgGame.h"
+#include "SceneView.h"
 #include "afxwin.h"
 
 // CTestClientDlg 对话框
@@ -35,7 +35,7 @@ protected:
 public:
 	CDlgLogin  m_DlgLogin;
 
-	CDlgGame   m_DlgGame;
+	CSceneView   m_SceneView;
 
 public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);

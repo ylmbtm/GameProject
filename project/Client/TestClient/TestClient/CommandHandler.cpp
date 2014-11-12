@@ -86,7 +86,7 @@ BOOL CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, CBu
 	printf("END---添加角色消息");
 
 
-	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
+	((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
 
 	return TRUE;
 }
@@ -115,7 +115,7 @@ BOOL CClientCmdHandler::OnCmdNearByUpdate( UINT16 wCommandID, UINT64 u64ConnID, 
 		}
 	}
 
-	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
+	((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
 
 	return TRUE;
 }
@@ -151,7 +151,7 @@ BOOL CClientCmdHandler::OnCmdNearByRemove( UINT16 wCommandID, UINT64 u64ConnID, 
 	printf("END---删除角色消息");
 
 
-	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
+	((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
 
 	return TRUE;
 }
@@ -168,7 +168,7 @@ BOOL CClientCmdHandler::OnCmdEnterGameAck( UINT16 wCommandID, UINT64 u64ConnID, 
 
 	printf("登录成功!");
 
-	((CTestClientDlg*)AfxGetMainWnd())->m_DlgGame.Invalidate();
+	((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
 
 	((CTestClientDlg*)AfxGetMainWnd())->SetWindowText((LPCTSTR)m_HostPlayer.m_szObjectName);
 

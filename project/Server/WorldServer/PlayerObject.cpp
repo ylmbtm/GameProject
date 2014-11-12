@@ -65,6 +65,11 @@ UINT32 CPlayerObject::SaveDataToPacket( CBufferHelper *pBufferHelper )
 	return dwSize;
 }
 
+UINT64 CPlayerObject::GetObjectID()
+{
+	return m_u64ObjectID;
+}
+
 
 CPlayerObject* CPlayerObjectMgr::GetPlayer( UINT64 u64CharID )
 {
@@ -76,7 +81,7 @@ CPlayerObject* CPlayerObjectMgr::CreatePlayerByID( UINT64 u64CharID )
 	return InsertAlloc(u64CharID);
 }
 
-BOOL CPlayerObjectMgr::ReleasePlayer( UINT32 u64CharID )
+BOOL CPlayerObjectMgr::ReleasePlayer( UINT64 u64CharID )
 {
 	return Delete(u64CharID);
 }

@@ -34,6 +34,8 @@ public:
 	UINT32	m_dwSceneID;
 
 	UINT64	m_GameSvrConnID;
+
+	UINT32  m_CharState;
 };
 
 class CStaticPlayerMgr : public AVLTree<UINT64, CStaticPlayer>

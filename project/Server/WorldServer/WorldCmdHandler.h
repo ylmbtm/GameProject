@@ -22,9 +22,10 @@ public:
 
 	//*********************消息处理定义开始******************************
 public:
-	BOOL OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper );
+	BOOL OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 	BOOL OnCmdDBLoadCharAck(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
-	BOOL OnCmdCreateSceneAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper );
+	BOOL OnCmdCreateSceneAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	BOOL OnCmdLeaveGameReq(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
 	//*********************消息处理定义结束******************************
 

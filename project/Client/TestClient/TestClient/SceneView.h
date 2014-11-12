@@ -1,15 +1,15 @@
 ﻿#pragma once
 
 
-// CDlgGame 对话框
+// CSceneView 对话框
 
-class CDlgGame : public CDialog
+class CSceneView : public CDialog
 {
-	DECLARE_DYNAMIC(CDlgGame)
+	DECLARE_DYNAMIC(CSceneView)
 
 public:
-	CDlgGame(CWnd* pParent = NULL);   // 标准构造函数
-	virtual ~CDlgGame();
+	CSceneView(CWnd* pParent = NULL);   // 标准构造函数
+	virtual ~CSceneView();
 
 // 对话框数据
 	enum { IDD = IDD_Dlg_Game };

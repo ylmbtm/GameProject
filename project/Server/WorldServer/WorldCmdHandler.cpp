@@ -54,6 +54,7 @@ BOOL CWorldCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 		PROCESS_COMMAND_ITEM(CMD_CHAR_ENTER_GAME_REQ,	OnCmdEnterGameReq);
 		PROCESS_COMMAND_ITEM(CMD_DB_LOAD_CHAR_ACK,		OnCmdDBLoadCharAck);
 		PROCESS_COMMAND_ITEM(CMD_SVR_CREATE_SCENE_ACK,	OnCmdCreateSceneAck);
+		PROCESS_COMMAND_ITEM(CMD_CHAR_LEAVE_GAME_REQ,	OnCmdLeaveGameReq);
 	default:
 		{
 
@@ -88,6 +89,34 @@ BOOL CWorldCmdHandler::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, C
 
 	return TRUE;
 }
+
+BOOL CWorldCmdHandler::OnCmdLeaveGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+{
+	StCharLeaveGameReq CharLeaveGameReq;
+
+	pBufferHelper->Read(CharLeaveGameReq);
+
+	if(CharLeaveGameReq.dwLeaveReason == LGR_Disconnect)
+	{
+
+	}
+	else if(CharLeaveGameReq.dwLeaveReason == LGR_Quit)
+	{
+
+	}
+
+	CPlayerObject *pPlayerObject = m_PlayerObjectMgr.GetPlayer(pBufferHelper->GetCommandHeader()->u64CharID);
+	if(pPlayerObject == NULL)
+	{
+		ASSERT_FAIELD;
+		return TRUE;
+	}
+
+	m_PlayerObjectMgr.ReleasePlayer(pPlayerObject->GetObjectID());
+
+	return TRUE;
+}
+
 
 BOOL CWorldCmdHandler::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {

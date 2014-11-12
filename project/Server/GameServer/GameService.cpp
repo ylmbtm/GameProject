@@ -151,7 +151,7 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 
 	m_ServerCmdHandler.AddMessage(DisConnectNotify.u64ConnID, pDataBuff);
 
-	pDataBuff->Release();
+	//pDataBuff->Release();
 
 
 

@@ -12,14 +12,17 @@ public:
 	~CPlayerObject();
 	
 	//  初始化玩家对象
-	BOOL	Init();
+	BOOL		Init();
 	//  反初始化玩家对家
-	BOOL	Uninit();
+	BOOL		Uninit();
 	
 	//从数据库包中读取对像数据
-	UINT32	LoadFromDBPacket(CBufferHelper *pBufferHelper);
+	UINT32		LoadFromDBPacket(CBufferHelper *pBufferHelper);
 
-	UINT32  SaveDataToPacket(CBufferHelper *pBufferHelper);
+	UINT32		SaveDataToPacket(CBufferHelper *pBufferHelper);
+
+public:
+	UINT64		GetObjectID();
 
 public:
 	UINT64		m_u64ObjectID;
@@ -51,7 +54,7 @@ public:
 
 	CPlayerObject*		CreatePlayerByID(UINT64 u64CharID);
 
-	BOOL			    ReleasePlayer(UINT32 u64CharID);
+	BOOL			    ReleasePlayer(UINT64 u64CharID);
 
 public:
 };

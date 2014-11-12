@@ -197,10 +197,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\DlgGame.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\DlgLogin.cpp"
 				>
 			</File>
@@ -218,6 +214,10 @@
 			</File>
 			<File
 				RelativePath=".\PlayerObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SceneView.cpp"
 				>
 			</File>
 			<File
@@ -267,10 +267,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\DlgGame.h"
-				>
-			</File>
-			<File
 				RelativePath=".\DlgLogin.h"
 				>
 			</File>
@@ -296,6 +292,10 @@
 			</File>
 			<File
 				RelativePath=".\Resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SceneView.h"
 				>
 			</File>
 			<File
