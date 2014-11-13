@@ -18,6 +18,7 @@ public:
 		m_pPrev			= NULL;
 		m_pNext			= NULL;
 		m_pManager		= NULL;
+		m_dwBufferNo	= 0;
 	}
 
 	virtual ~CDataBuffer(void)
@@ -34,32 +35,42 @@ public:
 
 	bool Release()
 	{
+		ASSERT(m_pManager != NULL);
 		m_pManager->m_CritSec.Lock();
 
 		m_dwRefCount--;
 
 		if(m_dwRefCount <= 0)
 		{
-			m_dwRefCount = 0;
-
 			//首先从己用中删除
 			if(m_pManager->m_pUsedList == this)
 			{
 				//自己是首结点
 				m_pManager->m_pUsedList = m_pNext;
+				if(m_pManager->m_pUsedList != NULL)
+				{
+					m_pManager->m_pUsedList->m_pPrev = NULL;
+				}
 			}
 			else
 			{
+				ASSERT(m_pPrev != NULL);
 				m_pPrev->m_pNext = m_pNext;
+				if(m_pNext != NULL)
+				{
+					m_pNext->m_pPrev = m_pPrev;
+				}
 			}
 
 			//再把自己加到己用中
-
 			m_pNext = m_pManager->m_pFreeList;
-
+			m_pPrev = NULL;
 			m_pManager->m_pFreeList = this;
 
-			m_pPrev = NULL;
+			if(m_pNext != NULL)
+			{
+				m_pNext->m_pPrev = this;
+			}
 		}
 
 		m_pManager->m_CritSec.Unlock();
@@ -117,6 +128,8 @@ public:
 
 	CBufferManager<SIZE> *m_pManager;
 
+	UINT32		m_dwBufferNo;
+
 private:
 	INT32		m_dwRefCount;
 
@@ -125,6 +138,8 @@ private:
 	CHAR		m_Buffer[SIZE];
 	
 	size_t		m_nDataLen;
+
+	
 };
 
 template <int SIZE>
@@ -151,45 +166,94 @@ public:
 		if(m_pFreeList == NULL)
 		{
 			pDataBuffer = new CDataBuffer<SIZE>();
+			m_dwBufferCount += 1;
+			pDataBuffer->m_dwBufferNo = m_dwBufferCount;
+			pDataBuffer->m_pManager = this;
 		}
 		else
 		{
 			pDataBuffer = m_pFreeList;
 
-			m_pFreeList = pDataBuffer->m_pNext;
+			m_pFreeList = m_pFreeList->m_pNext;
 
 			if(m_pFreeList != NULL)
 			{
 				m_pFreeList->m_pPrev = NULL;
 			}
-		}
 
-		pDataBuffer->m_pManager = this;
+			pDataBuffer->m_pNext = NULL;
+			pDataBuffer->m_pPrev = NULL;
+		}
 
 		pDataBuffer->AddRef();
 
-		//以下加到己用列表中
-		pDataBuffer->m_pNext = m_pUsedList;
-
-		if(m_pUsedList != NULL)
+		if(m_pUsedList == NULL)
 		{
-			m_pUsedList->m_pPrev = pDataBuffer;
+			m_pUsedList = pDataBuffer;
 		}
-
-		m_pUsedList = pDataBuffer;
-
-		m_pUsedList->m_pPrev = NULL;
+		else
+		{
+			pDataBuffer->m_pNext = m_pUsedList;
+			m_pUsedList->m_pPrev = pDataBuffer;
+			pDataBuffer->m_pPrev = NULL;
+			m_pUsedList = pDataBuffer;
+		}
 
 		m_CritSec.Unlock();
 
 		return pDataBuffer;
 	}
 
+	void PrintOutList(CDataBuffer<SIZE> *pList)
+	{
+		UINT32 dwCount = 0;
+		CDataBuffer<SIZE> *pBufferNode = pList;
+		if(pBufferNode == NULL)
+		{
+			printf("O---空列表---O\n");
+			return ;
+		}
+
+		printf("Begin");
+		BOOL bNext = TRUE;
+		while(pBufferNode)
+		{
+			if(bNext)
+			{
+				dwCount++;
+				ASSERT(dwCount<10);
+				printf("->%d", pBufferNode->m_dwBufferNo);
+				if(pBufferNode->m_pNext != NULL)
+				{
+					pBufferNode = pBufferNode->m_pNext;
+				}
+				else
+				{
+					bNext = FALSE;
+					pBufferNode = pBufferNode->m_pPrev;
+				}
+			}
+			else
+			{
+				dwCount++;
+				ASSERT(dwCount<10);
+				printf("<-%d", pBufferNode->m_dwBufferNo);
+				pBufferNode = pBufferNode->m_pPrev;
+			}	
+		}
+
+		printf("<-End\n");
+
+		return ;
+	}
+
 	CDataBuffer<SIZE> *m_pFreeList;
 
 	CDataBuffer<SIZE> *m_pUsedList;
 
-	CCritSec  m_CritSec;
+	CCritSec	m_CritSec;
+
+	UINT32		m_dwBufferCount;
 private:
 };
 

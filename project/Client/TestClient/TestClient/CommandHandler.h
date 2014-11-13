@@ -54,7 +54,9 @@ public:
 
 	CPlayerObjectMgr m_PlayerObjMgr;
 
-	CDlgSelect DlgSelect;
+	CDlgSelect m_DlgSelect;
+
+	BOOL	m_bLoginOK;
 };
 
 

@@ -66,3 +66,16 @@ void CDlgLogin::OnBnClickedBtnConnect()
 {
 	
 }
+
+BOOL CDlgLogin::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+
+	m_strAccountName = "test";
+	m_strPassword    = "test2";
+
+	UpdateData(FALSE);
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+	// 异常: OCX 属性页应返回 FALSE
+}

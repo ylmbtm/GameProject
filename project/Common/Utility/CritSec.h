@@ -8,7 +8,7 @@
 // wrapper for whatever critical section we have
 class CCritSec 
 {
-public:
+private:
     // make copy constructor and assignment operator inaccessible
 
     CCritSec(const CCritSec &refCritSec);

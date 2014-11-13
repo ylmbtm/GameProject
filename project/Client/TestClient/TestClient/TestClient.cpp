@@ -112,6 +112,11 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 			return CWinAppEx::PreTranslateMessage(pMsg);
 		}
 
+		if(!CClientCmdHandler::GetInstancePtr()->m_bLoginOK)
+		{
+			return CWinAppEx::PreTranslateMessage(pMsg);
+		}
+
 		((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
 
 		StCharMoveReq _MoveGs;

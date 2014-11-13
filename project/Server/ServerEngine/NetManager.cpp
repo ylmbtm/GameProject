@@ -339,6 +339,7 @@ BOOL    CNetManager::WorkThread_SendData()
 		int nRet = WSASend(hSocket, &DataBuf, 1, &dwSendBytes, 0, (LPOVERLAPPED)pOperatorData, NULL);
 		if(nRet == 0)
 		{
+			//if(dwSendBytes < DataBuf.len)
 			if(dwSendBytes == 0)
 			{
 				if(pConnection != NULL)
@@ -348,10 +349,12 @@ BOOL    CNetManager::WorkThread_SendData()
 					pConnection->Close(TRUE);
 
 					CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
-
-					pDataBuffer->Release();
 				}
+				
+				pDataBuffer->Release();
 			}
+
+			
 		}
 		else if( nRet == -1 )
 		{

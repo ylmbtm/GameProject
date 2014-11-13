@@ -14,6 +14,8 @@
 CClientCmdHandler::CClientCmdHandler(void)
 {
 	ClientEngine::GetInstancePtr()->RegisterMsgHandler((IMessageHandler*)this);
+
+	m_bLoginOK = FALSE;
 }
 
 CClientCmdHandler::~CClientCmdHandler(void)
@@ -168,6 +170,8 @@ BOOL CClientCmdHandler::OnCmdEnterGameAck( UINT16 wCommandID, UINT64 u64ConnID, 
 
 	printf("登录成功!");
 
+	m_bLoginOK = TRUE;
+
 	((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
 
 	((CTestClientDlg*)AfxGetMainWnd())->SetWindowText((LPCTSTR)m_HostPlayer.m_szObjectName);
@@ -215,14 +219,14 @@ BOOL CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	}
 	else
 	{
-		DlgSelect.m_dwAccountID = MsgLoginAck.dwAccountID;
-		DlgSelect.m_nCount = MsgLoginAck.nCount;
+		m_DlgSelect.m_dwAccountID = MsgLoginAck.dwAccountID;
+		m_DlgSelect.m_nCount = MsgLoginAck.nCount;
 		for(int i = 0; i < MsgLoginAck.nCount; i++)
 		{
-			DlgSelect.m_CharInfoList.push_back(MsgLoginAck.CharPickInfo[i]);
+			m_DlgSelect.m_CharInfoList.push_back(MsgLoginAck.CharPickInfo[i]);
 		}
 		
-		DlgSelect.DoModal();
+		m_DlgSelect.DoModal();
 	}
 
 	return TRUE;
@@ -294,9 +298,9 @@ BOOL CClientCmdHandler::OnCmdNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, CB
 	CHECK_PAYER_ID(CharNewCharAck.CharPickInfo.u64CharID);
 
 
-	DlgSelect.AddCharPickInfo(CharNewCharAck.CharPickInfo);
+	m_DlgSelect.AddCharPickInfo(CharNewCharAck.CharPickInfo);
 
-	DlgSelect.DoModal();
+	m_DlgSelect.DoModal();
 
 	return TRUE;
 }
@@ -328,10 +332,10 @@ BOOL CClientCmdHandler::OnCmdDelCharAck( UINT16 wCommandID, UINT64 u64ConnID, CB
 
 	if(CharDelCharAck.nRetCode == E_SUCCESSED)
 	{
-		DlgSelect.DelChar(CharDelCharAck.u64CharID);
+		m_DlgSelect.DelChar(CharDelCharAck.u64CharID);
 	}
 
-	DlgSelect.DoModal();
+	m_DlgSelect.DoModal();
 
 	return TRUE;
 }

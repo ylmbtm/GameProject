@@ -6,7 +6,7 @@
 // wrapper for whatever critical section we have
 class CCritSecNotify 
 {
-public:
+private:
     // make copy constructor and assignment operator inaccessible
 
     CCritSecNotify(const CCritSecNotify &refCritSec);

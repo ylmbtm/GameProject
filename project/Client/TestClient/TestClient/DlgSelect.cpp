@@ -117,6 +117,8 @@ BOOL CDlgSelect::RefreshListCtrl()
 		i++;
 	}
 
+	m_CharList.SetSelectionMark(0);
+
 	return TRUE;
 }
 
