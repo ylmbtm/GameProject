@@ -22,11 +22,10 @@ public:
 
 	BOOL		OnIdle();
 
-	BOOL		LoadScene();
+	BOOL		SetWorldServerID(UINT32 dwSvrID);
 
 public:
-
-
+	UINT32				m_dwWorldServerID;
 protected:
 	CSceneManager		m_SceneManager;
 

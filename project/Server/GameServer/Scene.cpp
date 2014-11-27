@@ -24,11 +24,11 @@ CScene::~CScene()
 
 }
 
-BOOL CScene::Init(UINT32 dwSceneID)
+BOOL CScene::Init(UINT32 dwSceneID, INT32 nLeft, INT32 nRight, INT32 nTop, INT32 nBottom)
 {
 	m_dwSceneID = dwSceneID;
 
-	m_GridManager.Init(-1000, 1000, -1000, 1000);
+	m_GridManager.Init(nLeft, nRight, nTop, nBottom);
 
 	return TRUE;
 }
@@ -446,10 +446,6 @@ BOOL CScene::OnUpdate( UINT32 dwTick )
 	return TRUE;
 }
 
-
-
-
-
 BOOL CScene::AddToUpdateList( CWorldObject *pWorldObject )
 {
 	return m_UpdateObjectMgr.AddUpdateObject(pWorldObject);
@@ -616,6 +612,11 @@ BOOL CScene::OnCmdCharEnterSceneReq( UINT16 wCommandID, UINT64 u64ConnID, CBuffe
 		return TRUE;
 	}
 
+	return TRUE;
+}
+
+BOOL CScene::SetSceneMapCoords( INT32 nLeft, INT32 nRight, INT32 nTop, INT32 nBottom )
+{
 	return TRUE;
 }
 

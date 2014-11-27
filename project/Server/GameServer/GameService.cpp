@@ -47,21 +47,22 @@ BOOL CGameService::StartRun()
 	{
 		ASSERT_FAIELD;
 		CLog::GetInstancePtr()->AddLog("启动服务失败!");
-
 		return FALSE;
 	}
 
-	if(!LoadScene())
+	if(!m_ServerCmdHandler.Init(0))
 	{
 		ASSERT_FAIELD;
-		CLog::GetInstancePtr()->AddLog("加载场景失败!");
-
+		CLog::GetInstancePtr()->AddLog("启动默认连接消息处理器失败!");
 		return FALSE;
 	}
 
-	m_ServerCmdHandler.Init(0);
-
-	m_SceneManager.Init(0);
+	if(!m_SceneManager.Init(0))
+	{
+		ASSERT_FAIELD;
+		CLog::GetInstancePtr()->AddLog("启动场景管理器失败!");
+		return FALSE;
+	}
 
 	OnIdle();
 
@@ -101,8 +102,6 @@ BOOL CGameService::OnIdle()
 
 #ifdef WIN32
 	SetConsoleCtrlHandler(HandlerCloseEvent, TRUE);
-
-
 #else
 	if(SIG_ERR == signal(SIGINT, &HandlerCloseEvent))
 	{
@@ -116,10 +115,7 @@ BOOL CGameService::OnIdle()
 	return TRUE;
 }
 
-BOOL CGameService::LoadScene()
-{
-	return m_SceneManager.CreateScene(12);
-}
+
 
 BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
@@ -154,6 +150,13 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	//pDataBuff->Release();
 
 
+
+	return TRUE;
+}
+
+BOOL CGameService::SetWorldServerID( UINT32 dwSvrID )
+{
+	m_dwWorldServerID = dwSvrID;
 
 	return TRUE;
 }

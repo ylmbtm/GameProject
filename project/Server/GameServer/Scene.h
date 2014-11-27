@@ -14,29 +14,33 @@ public:
 
 	~CScene();
 
-	BOOL OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	BOOL	OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
-	BOOL OnUpdate(UINT32 dwTick);
+	BOOL	OnUpdate(UINT32 dwTick);
 
-	BOOL Init(UINT32 dwSceneID);
+	BOOL	Init(UINT32 dwSceneID, INT32 nLeft, INT32 nRight, INT32 nTop, INT32 nBottom);
 
-	BOOL Uninit();
+	BOOL	Uninit();
 
-	BOOL AddToMap(CWorldObject *pWorldObject);
+	BOOL	AddToMap(CWorldObject *pWorldObject);
 
-	BOOL RemoveFromMap(CWorldObject *pWorldObject);
+	BOOL	RemoveFromMap(CWorldObject *pWorldObject);
 
-	BOOL AddToUpdateList(CWorldObject *pWorldObject);
+	BOOL	AddToUpdateList(CWorldObject *pWorldObject);
 
-	BOOL RemoveFromUpList(CWorldObject *pWorldObject);
+	BOOL	RemoveFromUpList(CWorldObject *pWorldObject);
 
-	BOOL HandleUpdateList();
+	BOOL	HandleUpdateList();
 
-	BOOL HandleUpdateObject(CWorldObject *pWorldObject);
-
+	BOOL	HandleUpdateObject(CWorldObject *pWorldObject);
+	
+	UINT32	GetSceneID(){ return m_dwSceneID; }
 
 public:
-	UINT32	GetSceneID(){ return m_dwSceneID; }
+	BOOL	SetSceneMapCoords( INT32 nLeft, INT32 nRight, INT32 nTop, INT32 nBottom );
+
+public:
+	
 
 protected:
 	UINT32							m_dwSceneID;

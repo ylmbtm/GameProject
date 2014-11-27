@@ -34,6 +34,12 @@ CSceneManager::~CSceneManager()
 
 BOOL CSceneManager::Init(UINT32 dwReserved)
 {
+	if(!LoadDefaultScene())
+	{
+		ASSERT_FAIELD;
+		return FALSE;
+	}
+
 	CCommonCmdHandler::Init(dwReserved);
 
 	return TRUE;
@@ -50,7 +56,7 @@ BOOL CSceneManager::CreateScene( UINT32 dwSceneID )
 {
 	CScene *pScene = new CScene;
 
-	if(!pScene->Init(dwSceneID))
+	if(!pScene->Init(dwSceneID, -1000, 1000, -1000, 1000))
 	{
 		ASSERT_FAIELD;
 
@@ -157,6 +163,30 @@ BOOL CSceneManager::OnCmdCreateSceneReq( UINT16 wCommandID, UINT64 u64ConnID, CB
 	WriteHelper.EndWrite();
 
 	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
+
+	return TRUE;
+}
+
+BOOL CSceneManager::LoadDefaultScene()
+{
+	if(!CreateScene(12))
+	{
+		ASSERT_FAIELD;
+
+		return FALSE;
+	}
+
+	/*StSvrCreateSceneAck CreateSceneAck;
+	CreateSceneAck.dwCreateParam = 0;
+	CreateSceneAck.dwSceneID = 12;
+	CreateSceneAck.dwServerID= CGameService::GetInstancePtr()->GetServerID();
+
+	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+	WriteHelper.BeginWrite(CMD_SVR_CREATE_SCENE_ACK, CMDH_OTHER, 0, 0);
+	WriteHelper.Write(CreateSceneAck);
+	WriteHelper.EndWrite();
+
+	CGameService::GetInstancePtr()->SendCmdToConnection(CGameService::GetInstancePtr()->m_dwWorldServerID, &m_WriteBuffer);*/
 
 	return TRUE;
 }

@@ -27,6 +27,8 @@ public:
 
 	CScene*		GetSceneByID(UINT32 dwSceneID);
 
+	BOOL		LoadDefaultScene();
+
 
 	//*********************消息处理定义开始******************************
 public:
