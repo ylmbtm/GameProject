@@ -1,6 +1,6 @@
 ﻿#pragma once
-#ifndef __CLIENT_ENGINE_H__
-#define __CLIENT_ENGINE_H__
+#ifndef __CLIENT_CONNECTOR_H__
+#define __CLIENT_CONNECTOR_H__
 #include "DataBuffer\DataBuffer.h"
 #include "GameDefine.h"
 
@@ -18,19 +18,17 @@ struct IMessageHandler
 	virtual BOOL OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper) = 0;
 };
 
-class ClientEngine : public ICommandHandler
+class CClientConnector : public ICommandHandler
 {
-private:
-	ClientEngine();
+public:
+	CClientConnector();
 
-	~ClientEngine();
+	~CClientConnector();
 
 public:
-	static ClientEngine* GetInstancePtr();
+	BOOL	InitConnector();
 
-	BOOL	InitEngine();
-
-	BOOL	CloseEngine();
+	BOOL	CloseConnector();
 
 	BOOL	SetClientID(UINT64 u64ClientID);  //一般是角色ID
 

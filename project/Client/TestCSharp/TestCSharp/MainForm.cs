@@ -13,7 +13,7 @@ namespace TestCSharp
 
     public partial class MainForm : Form
     {
-        ClientEngine m_ClientEngine = new ClientEngine();
+        ClientConnector m_ClientConnector = new ClientConnector();
 
         NetPacketHandler m_PacketHandler = new NetPacketHandler();
 
@@ -28,7 +28,7 @@ namespace TestCSharp
         {
             Debug.Print("NetPacketHandler::OnCommandHandle");
 
-            m_ClientEngine.RegisterMsgHandler(m_PacketHandler);
+            m_ClientConnector.RegisterMsgHandler(m_PacketHandler);
 
             procTimer .Tick += new EventHandler(procTimer_Tick);
 
@@ -36,12 +36,12 @@ namespace TestCSharp
 
             procTimer.Start();
 
-            m_ClientEngine.ConnectToServer("127.0.0.1", 7994);
+            m_ClientConnector.ConnectToServer("127.0.0.1", 7994);
         }
 
        public void procTimer_Tick(object sender, EventArgs e)
         {
-            m_ClientEngine.Render();
+            m_ClientConnector.Render();
         }
 
        private void Login_Click(object sender, EventArgs e)
@@ -54,7 +54,7 @@ namespace TestCSharp
            //m_ClientEngine.m_WriteHelper.EndWrite();
 
            //m_ClientEngine.SendData(m_ClientEngine.m_WriteHelper.GetData(), m_ClientEngine.m_WriteHelper.GetDataLen());
-           m_ClientEngine.Login("test", "test2");
+           m_ClientConnector.Login("test", "test2");
        }
     }
 

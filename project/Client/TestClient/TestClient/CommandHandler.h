@@ -5,7 +5,7 @@
 #include "CommandDef.h"
 #include "PlayerObject.h"
 #include "DlgSelect.h"
-#include "ClientEngine\ClientEngine.h"
+#include "ClientConnector\ClientConnector.h"
 
 class CClientCmdHandler : public IMessageHandler
 {
@@ -50,13 +50,15 @@ public:
 	
 	//*********************消息处理定义结束******************************
 
-	CPlayerObject m_HostPlayer;
+	CPlayerObject		m_HostPlayer;
 
-	CPlayerObjectMgr m_PlayerObjMgr;
+	CPlayerObjectMgr	m_PlayerObjMgr;
 
-	CDlgSelect m_DlgSelect;
+	CDlgSelect			m_DlgSelect;
 
-	BOOL	m_bLoginOK;
+	CClientConnector	m_ClientConnector;
+
+	BOOL				m_bLoginOK;
 };
 
 

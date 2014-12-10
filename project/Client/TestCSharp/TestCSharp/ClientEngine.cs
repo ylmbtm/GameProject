@@ -19,7 +19,7 @@ public abstract class MessageHandler
 } 
 
 
-public class ClientEngine
+public class ClientConnector
 {
     UInt32              m_dwServerTime;
     UInt64				m_u64ClientID;    //¿Í»§¶ËID
@@ -45,16 +45,16 @@ public class ClientEngine
 
     public WriteBufferHelper m_WriteHelper = new WriteBufferHelper();
 
-    private IList<MessageHandler> m_MsghandlerList = new List<MessageHandler>(); 
+    private IList<MessageHandler> m_MsghandlerList = new List<MessageHandler>();
 
-    public ClientEngine()
+    public ClientConnector()
     {
         
     }
 
-    public Boolean InitEngine() { return true; }
+    public Boolean InitConnector() { return true; }
 
-    public Boolean CloseEngine() { return true; }
+    public Boolean CloseConnector() { return true; }
 
     public Boolean SetClientID(UInt64 u64ClientID) 
     {

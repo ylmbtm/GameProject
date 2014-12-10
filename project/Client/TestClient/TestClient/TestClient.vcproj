@@ -366,14 +366,14 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="ClientEngine"
+			Name="ClientConnector"
 			>
 			<File
-				RelativePath="..\..\..\Common\ClientEngine\ClientEngine.cpp"
+				RelativePath="..\..\..\Common\ClientConnector\ClientConnector.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\Common\ClientEngine\ClientEngine.h"
+				RelativePath="..\..\..\Common\ClientConnector\ClientConnector.h"
 				>
 			</File>
 		</Filter>

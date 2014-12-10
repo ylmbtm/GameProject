@@ -13,9 +13,9 @@
 
 CClientCmdHandler::CClientCmdHandler(void)
 {
-	ClientEngine::GetInstancePtr()->RegisterMsgHandler((IMessageHandler*)this);
-
 	m_bLoginOK = FALSE;
+
+	m_ClientConnector.RegisterMsgHandler((IMessageHandler*)this);
 }
 
 CClientCmdHandler::~CClientCmdHandler(void)
@@ -192,7 +192,7 @@ BOOL CClientCmdHandler::SendNewAccountReq( LPCTSTR szAccountName, LPCTSTR szPass
 	strncpy(CharNewAccountReq.szAccountName, szAccountName, 32);
 	strncpy(CharNewAccountReq.szPassword, szPassword, 32);
 
-	CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
+	CBufferHelper WriteHelper(TRUE, m_ClientConnector.GetWriteBuffer());
 
 	WriteHelper.BeginWrite(CMD_CHAR_NEW_ACCOUNT_REQ, 0, 0, 0);
 
@@ -200,7 +200,7 @@ BOOL CClientCmdHandler::SendNewAccountReq( LPCTSTR szAccountName, LPCTSTR szPass
 
 	WriteHelper.EndWrite();
 
-	ClientEngine::GetInstancePtr()->SendData(ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetData(), ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetDataLenth());
+	m_ClientConnector.SendData(m_ClientConnector.GetWriteBuffer()->GetData(), m_ClientConnector.GetWriteBuffer()->GetDataLenth());
 
 	return TRUE;
 }
@@ -238,7 +238,7 @@ BOOL CClientCmdHandler::SendPickCharReq( UINT64 u64CharID )
 	StCharPickCharReq CharPickCharReq;
 	CharPickCharReq.u64CharID = u64CharID;
 
-	CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
+	CBufferHelper WriteHelper(TRUE, m_ClientConnector.GetWriteBuffer());
 
 	CHECK_PAYER_ID(u64CharID);
 
@@ -248,7 +248,7 @@ BOOL CClientCmdHandler::SendPickCharReq( UINT64 u64CharID )
 
 	WriteHelper.EndWrite();
 
-	ClientEngine::GetInstancePtr()->SendData(ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetData(), ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetDataLenth());
+	m_ClientConnector.SendData(m_ClientConnector.GetWriteBuffer()->GetData(), m_ClientConnector.GetWriteBuffer()->GetDataLenth());
 
 	return TRUE;
 }
@@ -276,7 +276,7 @@ BOOL CClientCmdHandler::SendNewCharReq( UINT32 dwAccountID , LPCTSTR szCharName,
 	CharNewCharReq.dwFeature = dwFeature;
 	CharNewCharReq.dwAccountID = dwAccountID;
 	strncpy(CharNewCharReq.szCharName, szCharName, 32);
-	CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
+	CBufferHelper WriteHelper(TRUE, m_ClientConnector.GetWriteBuffer());
 
 	WriteHelper.BeginWrite(CMD_CHAR_NEW_CHAR_REQ, 0, 0, 0);
 
@@ -284,7 +284,7 @@ BOOL CClientCmdHandler::SendNewCharReq( UINT32 dwAccountID , LPCTSTR szCharName,
 
 	WriteHelper.EndWrite();
 
-	ClientEngine::GetInstancePtr()->SendData(ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetData(), ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetDataLenth());
+	m_ClientConnector.SendData(m_ClientConnector.GetWriteBuffer()->GetData(), m_ClientConnector.GetWriteBuffer()->GetDataLenth());
 
 	return TRUE;
 }
@@ -310,7 +310,7 @@ BOOL CClientCmdHandler::SendDelCharReq( UINT32 dwAccountID,UINT64 dwCharID )
 	StCharDelCharReq CharDelCharReq;
 	CharDelCharReq.dwAccountID = dwAccountID;
 	CharDelCharReq.u64CharID    = dwCharID;
-	CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
+	CBufferHelper WriteHelper(TRUE, m_ClientConnector.GetWriteBuffer());
 
 	CHECK_PAYER_ID(dwCharID);
 
@@ -320,7 +320,7 @@ BOOL CClientCmdHandler::SendDelCharReq( UINT32 dwAccountID,UINT64 dwCharID )
 
 	WriteHelper.EndWrite();
 
-	ClientEngine::GetInstancePtr()->SendData(ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetData(), ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetDataLenth());
+	m_ClientConnector.SendData(m_ClientConnector.GetWriteBuffer()->GetData(), m_ClientConnector.GetWriteBuffer()->GetDataLenth());
 
 	return TRUE;
 }
@@ -355,7 +355,7 @@ BOOL CClientCmdHandler::SendLeaveGameReq( UINT64 u64CharID )
 
 	CharLeaveGameReq.dwLeaveReason = LGR_Quit;
 
-	CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
+	CBufferHelper WriteHelper(TRUE, m_ClientConnector.GetWriteBuffer());
 
 	WriteHelper.BeginWrite(CMD_CHAR_LEAVE_GAME_REQ, CMDH_SENCE, 0, u64CharID);
 
@@ -363,7 +363,7 @@ BOOL CClientCmdHandler::SendLeaveGameReq( UINT64 u64CharID )
 
 	WriteHelper.EndWrite();
 
-	ClientEngine::GetInstancePtr()->SendData(ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetData(), ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetDataLenth());
+	m_ClientConnector.SendData(m_ClientConnector.GetWriteBuffer()->GetData(), m_ClientConnector.GetWriteBuffer()->GetDataLenth());
 
 	return TRUE;
 }

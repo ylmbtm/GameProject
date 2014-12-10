@@ -124,7 +124,7 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 		_MoveGs.y = CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.y;
 		_MoveGs.z = CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.z;
 
-		CBufferHelper WriteHelper(TRUE, ClientEngine::GetInstancePtr()->GetWriteBuffer());
+		CBufferHelper WriteHelper(TRUE, CClientCmdHandler::GetInstancePtr()->m_ClientConnector.GetWriteBuffer());
 
 		WriteHelper.BeginWrite(CMD_CHAR_MOVE_REQ, CMDH_SENCE, 12, CClientCmdHandler::GetInstancePtr()->m_HostPlayer.GetObjectID());
 
@@ -134,7 +134,7 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 
 		CHECK_PAYER_ID(CClientCmdHandler::GetInstancePtr()->m_HostPlayer.GetObjectID());
 
-		ClientEngine::GetInstancePtr()->SendData(ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetData(), ClientEngine::GetInstancePtr()->GetWriteBuffer()->GetDataLenth());
+		CClientCmdHandler::GetInstancePtr()->m_ClientConnector.SendData(CClientCmdHandler::GetInstancePtr()->m_ClientConnector.GetWriteBuffer()->GetData(), CClientCmdHandler::GetInstancePtr()->m_ClientConnector.GetWriteBuffer()->GetDataLenth());
 
 		//CString strText;
 		//strText.Format("当前角色:%d, 坐标x = %f, z= %f", (UINT32)CClientCmdHandler::GetInstancePtr()->m_HostPlayer.GetObjectID(),

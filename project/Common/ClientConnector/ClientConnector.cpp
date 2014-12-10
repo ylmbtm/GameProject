@@ -1,5 +1,5 @@
 ﻿#include "StdAfx.h"
-#include "ClientEngine.h"
+#include "ClientConnector.h"
 #include "CommandDef.h"
 #include "DataBuffer\BufferHelper.h"
 #include "ConnectionType.h"
@@ -8,7 +8,7 @@
 #include "ObjectID.h"
 #include "Utility\CommonSocket.h"
 
-ClientEngine::ClientEngine(void)
+CClientConnector::CClientConnector(void)
 {
 	m_hSocket		= INVALID_SOCKET;
 
@@ -21,7 +21,7 @@ ClientEngine::ClientEngine(void)
 	CommonSocket::InitNetwork();
 }
 
-ClientEngine::~ClientEngine(void)
+CClientConnector::~CClientConnector(void)
 {
 	m_u64ClientID = 0;
 
@@ -35,27 +35,27 @@ ClientEngine::~ClientEngine(void)
 }
 
 
-BOOL ClientEngine::InitEngine()
+BOOL CClientConnector::InitConnector()
 {
 	
 
 	return TRUE;
 }
 
-BOOL ClientEngine::CloseEngine()
+BOOL CClientConnector::CloseConnector()
 {
 
 	return TRUE;
 }
 
-BOOL ClientEngine::SetClientID( UINT64 u64ClientID )
+BOOL CClientConnector::SetClientID( UINT64 u64ClientID )
 {
 	m_u64ClientID = u64ClientID;
 
 	return TRUE;
 }
 
-BOOL ClientEngine::SendData( char *pData, INT32 dwLen )
+BOOL CClientConnector::SendData( char *pData, INT32 dwLen )
 {
 	if((pData == NULL)||(dwLen == 0))
 	{
@@ -92,7 +92,7 @@ BOOL ClientEngine::SendData( char *pData, INT32 dwLen )
 	return TRUE;
 }
 
-BOOL ClientEngine::Login(const char *pszAccountName, const char *pszPassword)
+BOOL CClientConnector::Login(const char *pszAccountName, const char *pszPassword)
 {
 	if((pszPassword == NULL)||(pszAccountName == NULL))
 	{
@@ -116,7 +116,7 @@ BOOL ClientEngine::Login(const char *pszAccountName, const char *pszPassword)
 	return TRUE;
 }
 
-BOOL ClientEngine::RegisterMsgHandler(IMessageHandler *pMsgHandler)
+BOOL CClientConnector::RegisterMsgHandler(IMessageHandler *pMsgHandler)
 {
 	for(std::vector<IMessageHandler*>::iterator itor = m_vtMsgHandler.begin(); itor != m_vtMsgHandler.end(); itor++)
 	{
@@ -131,7 +131,7 @@ BOOL ClientEngine::RegisterMsgHandler(IMessageHandler *pMsgHandler)
 	return TRUE;
 }
 
-BOOL ClientEngine::UnregisterMsgHandler( IMessageHandler *pMsgHandler )
+BOOL CClientConnector::UnregisterMsgHandler( IMessageHandler *pMsgHandler )
 {
 	for(std::vector<IMessageHandler*>::iterator itor = m_vtMsgHandler.begin(); itor != m_vtMsgHandler.end(); itor++)
 	{
@@ -146,7 +146,7 @@ BOOL ClientEngine::UnregisterMsgHandler( IMessageHandler *pMsgHandler )
 	return FALSE;
 }
 
-BOOL ClientEngine::Render()
+BOOL CClientConnector::Render()
 {
 	if(m_ConnectState == Not_Connect)
 	{
@@ -171,7 +171,7 @@ BOOL ClientEngine::Render()
 
 }
 
-BOOL ClientEngine::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CClientConnector::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	switch(wCommandID)
 	{
@@ -200,7 +200,7 @@ BOOL ClientEngine::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CBuffer
 }
 
 
-BOOL ClientEngine::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+BOOL CClientConnector::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
 	StConnectNotify ConnectNotify;
 
@@ -250,19 +250,12 @@ BOOL ClientEngine::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, CBuff
 	return 0;
 }
 
-ClientEngine* ClientEngine::GetInstancePtr()
-{
-	static ClientEngine _Handler;
-
-	return &_Handler;
-}
-
-IDataBuffer* ClientEngine::GetWriteBuffer()
+IDataBuffer* CClientConnector::GetWriteBuffer()
 {
 	return &m_WriteBuffer;
 }
 
-BOOL ClientEngine::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CClientConnector::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharPickCharAck CharPickCharAck;
 	pBufferHelper->Read(CharPickCharAck);
@@ -280,7 +273,7 @@ BOOL ClientEngine::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CBuffe
 	return TRUE;
 }
 
-BOOL ClientEngine::ConnectToServer( std::string strIpAddr, UINT16 sPort )
+BOOL CClientConnector::ConnectToServer( std::string strIpAddr, UINT16 sPort )
 {
 	SetConnectState(Start_Connect);
 
@@ -313,7 +306,7 @@ BOOL ClientEngine::ConnectToServer( std::string strIpAddr, UINT16 sPort )
 	return TRUE;
 }
 
-BOOL ClientEngine::DisConnect()
+BOOL CClientConnector::DisConnect()
 {
 	CommonSocket::ShutDownRecv(m_hSocket);
 	CommonSocket::ShutDownSend(m_hSocket);
@@ -325,7 +318,7 @@ BOOL ClientEngine::DisConnect()
 }
 
 
-void ClientEngine::SetConnectState( ConnectState val )
+void CClientConnector::SetConnectState( ConnectState val )
 {
 	if(val == Not_Connect)
 	{
@@ -348,7 +341,7 @@ void ClientEngine::SetConnectState( ConnectState val )
 }
 
 
-BOOL ClientEngine::ReceiveData()
+BOOL CClientConnector::ReceiveData()
 {
 	int nReadLen = recv(m_hSocket, m_DataBuffer + m_nDataLen, CONST_BUFF_SIZE - m_nDataLen, 0);
 	if(nReadLen < 0)
@@ -384,7 +377,7 @@ BOOL ClientEngine::ReceiveData()
 }
 
 
-BOOL ClientEngine::ProcessData()
+BOOL CClientConnector::ProcessData()
 {
 	if(m_nDataLen < sizeof(TransferHeader))
 	{
@@ -423,14 +416,14 @@ BOOL ClientEngine::ProcessData()
 	return TRUE;
 }
 
-UINT32 ClientEngine::GetServerTime()
+UINT32 CClientConnector::GetServerTime()
 {
 	UINT32 dwTick = ::GetTickCount();
 
 	return m_dwServerTime + (m_dwServerTick - dwTick)/1000;
 }
 
-BOOL ClientEngine::OnCmdHearBeatAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CClientConnector::OnCmdHearBeatAck( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharHeartBeatAck CharHeartBeatAck;
 	pBufferHelper->Read(CharHeartBeatAck);
