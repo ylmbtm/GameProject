@@ -83,6 +83,8 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 			return FALSE;
 		}
 	}
+
+	ASSERT(pConnection->GetConnectionID() != 0);
 	
 	OnCommandHandle(pCommandHeader->wCommandID, pConnection->GetConnectionID(), &BufferReader);
 

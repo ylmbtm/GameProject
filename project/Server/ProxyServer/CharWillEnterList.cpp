@@ -39,4 +39,9 @@ BOOL CWillEnterNodeMgr::RemoveByCharID(UINT64 u64CharID)
 	return Delete(u64CharID);;
 }
 
+void CWillEnterNodeMgr::DoEnumNode( TNodeTypePtr pNode )
+{
+	printf("-->%lld", pNode->m_Key);
+}
+
 

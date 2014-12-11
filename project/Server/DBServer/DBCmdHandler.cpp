@@ -99,6 +99,8 @@ BOOL CDBCmdHandler::OnCmdDBNewAccountReq( UINT16 wCommandID, UINT64 u64ConnID, C
 	StDBNewAccountReq DBNewAccountReq;
 	pBufferHelper->Read(DBNewAccountReq);
 
+	ASSERT(DBNewAccountReq.u64ConnID != 0);
+
 	StDBNewAccountAck DBNewAccountAck;
 
 	if(m_DBProcManager.CreateAccount(DBNewAccountReq.CharNewAccountReq.szAccountName, DBNewAccountReq.CharNewAccountReq.szPassword))

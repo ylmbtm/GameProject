@@ -44,6 +44,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 	{
 	case CMD_CHAR_ENTER_GAME_REQ:
 		{
+			CLog::GetInstancePtr()->AddLog("---Receive Message:[%s]", "CMD_CHAR_ENTER_GAME_REQ");
 			CHECK_PAYER_ID(pBufferHelper->GetCommandHeader()->u64CharID);
 			CWillEnterNode *pWillEnterNode = m_WillEnterNodeMgr.GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
 			if(pWillEnterNode == NULL)
@@ -67,7 +68,6 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			}
 
 			m_WillEnterNodeMgr.RemoveByCharID(CharEnterGameReq.u64CharID);
-
 			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(CharEnterGameReq.u64CharID);
 			if(pStaticPlayer == NULL)
 			{
@@ -86,6 +86,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 		break;
 	case CMD_SVR_CHAR_WILL_ENTER:
 		{
+			CLog::GetInstancePtr()->AddLog("---Receive Message:[%s]", "CMD_SVR_CHAR_WILL_ENTER");
 			StCharWillEnterGame CharWillEnterGame;
 			pBufferHelper->Read(CharWillEnterGame);
 
@@ -101,6 +102,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 		break;
 	case CMD_CHAR_GAME_MANAGER:
 		{
+			CLog::GetInstancePtr()->AddLog("---Receive Message:[%s]----", "CMD_CHAR_GAME_MANAGER");
 			CConnection *pConn = GetConnectionByID(u64ConnID);
 			if(pConn == NULL)
 			{
@@ -132,6 +134,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 
 	case CMD_CHAR_ENTER_GAME_ACK:
 		{
+			CLog::GetInstancePtr()->AddLog("---Receive Message:[%s]----", "CMD_CHAR_ENTER_GAME_ACK");
 			CStaticPlayer *pClientObj = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
 			if(pClientObj == NULL)
 			{
@@ -152,6 +155,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 		break;
 	case CMD_CHAR_UPDATE_MYSELF:
 		{
+			CLog::GetInstancePtr()->AddLog("---Receive Message:[%s]----", "CMD_CHAR_UPDATE_MYSELF");
 			CStaticPlayer *pClientObj = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
 			if(pClientObj == NULL)
 			{
@@ -172,6 +176,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 		break;
 	default:
 		{
+			CLog::GetInstancePtr()->AddLog("---Receive Message:[%d]----", pBufferHelper->GetCommandHeader()->wCommandID);
 			CStaticPlayer *pClientObj = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
 			if(pClientObj == NULL)
 			{

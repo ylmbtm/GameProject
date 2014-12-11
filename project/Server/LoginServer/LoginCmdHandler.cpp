@@ -118,6 +118,8 @@ BOOL CLoginCmdHandler::OnCmdNewAccountReq( UINT16 wCommandID, UINT64 u64ConnID, 
 	StDBNewAccountReq DBNewAccountReq;
 	DBNewAccountReq.u64ConnID = u64ConnID;
 	DBNewAccountReq.CharNewAccountReq = CharNewAccountReq;
+
+	ASSERT(DBNewAccountReq.u64ConnID != 0);
 	
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_DB_NEW_ACCOUNT_REQ, CMDH_OTHER, 0, 0);
@@ -168,6 +170,8 @@ BOOL CLoginCmdHandler::OnCmdDBNewAccountAck( UINT16 wCommandID, UINT64 u64ConnID
 {
 	StDBNewAccountAck DBNewAccountAck;
 	pBufferHelper->Read(DBNewAccountAck);
+
+	ASSERT(DBNewAccountAck.u64ConnID != 0);
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_CHAR_NEW_ACCOUNT_ACK, CMDH_OTHER, 0, 0);

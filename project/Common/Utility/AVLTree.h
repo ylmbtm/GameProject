@@ -32,6 +32,8 @@ public:
 		m_pFreeHead = NULL;
 
 		AllocBufferNode();
+
+		m_nCount = 0;
 	}
 
 	~AVLTree()
@@ -88,12 +90,6 @@ int AVLTree<TKey, TValue>::GetCount()
 }
 
 template<typename TKey, typename TValue>
-void AVLTree<TKey, TValue>::DoEnumNode( TNodeTypePtr pNode )
-{
-
-}
-
-template<typename TKey, typename TValue>
 TValue* AVLTree<TKey, TValue>::InsertAlloc( TKey Key )
 {
 	TNodeTypePtr pNode = AllocNode();
@@ -108,6 +104,7 @@ TValue* AVLTree<TKey, TValue>::InsertAlloc( TKey Key )
 	if(m_pRoot == NULL)
 	{
 		m_pRoot = pNode;
+		m_nCount += 1;
 	}
 	else
 	{
@@ -128,6 +125,8 @@ bool AVLTree<TKey, TValue>::Insert( TNodeTypePtr pNode )
 	if(m_pRoot == NULL)
 	{
 		m_pRoot = pRootNode;
+
+		m_nCount += 1;
 
 		return true;
 	}
@@ -258,14 +257,14 @@ int AVLTree<TKey, TValue>::GetHeight(TNodeTypePtr pNode)
 template<typename TKey, typename TValue>
 void AVLTree<TKey, TValue>::SingRotateLeft(TNodeTypePtr &pNode)
 {
-    TNodeTypePtr k1;
-    k1 = pNode->m_pLeft;
-    pNode->m_pLeft  = k1->m_pRight;
-    k1->m_pRight = pNode;
+    TNodeTypePtr pTempNode;
+    pTempNode = pNode->m_pLeft;
+    pNode->m_pLeft  = pTempNode->m_pRight;
+    pTempNode->m_pRight = pNode;
 
     pNode->m_nHeight = Max(GetHeight(pNode->m_pLeft), GetHeight(pNode->m_pRight)) + 1;
-    k1->m_nHeight = Max(GetHeight(k1->m_pLeft), GetHeight(pNode)) + 1;
-	pNode = k1;
+    pTempNode->m_nHeight = Max(GetHeight(pTempNode->m_pLeft), GetHeight(pNode)) + 1;
+	pNode = pTempNode;
 }
 //右右情况下的旋转
 template<typename TKey, typename TValue>
@@ -278,6 +277,8 @@ void AVLTree<TKey, TValue>::SingRotateRight(TNodeTypePtr &pNode)
 
     pNode->m_nHeight=Max(GetHeight(pNode->m_pLeft), GetHeight(pNode->m_pRight))+1;
     pTempNode->m_nHeight=Max(GetHeight(pTempNode->m_pRight), GetHeight(pNode))+1;
+
+	pNode = pTempNode;
 }
 //左右情况的旋转
 template<typename TKey, typename TValue>
@@ -343,6 +344,7 @@ bool AVLTree<TKey, TValue>::InsertInner(TNodeTypePtr &pParentNode, TNodeTypePtr 
 		else
 		{
 			pParentNode->m_pLeft = pInsertNode;
+			m_nCount += 1;
 		}
 
         if((GetHeight(pParentNode->m_pLeft) - GetHeight(pParentNode->m_pRight)) >= 2)
@@ -370,6 +372,7 @@ bool AVLTree<TKey, TValue>::InsertInner(TNodeTypePtr &pParentNode, TNodeTypePtr 
 		else
 		{
 			pParentNode->m_pRight = pInsertNode;
+			m_nCount += 1;
 		}
 
         if((GetHeight(pParentNode->m_pRight) - GetHeight(pParentNode->m_pLeft)) >= 2)
@@ -514,6 +517,7 @@ bool AVLTree<TKey,TValue>::DeleteInner(TNodeTypePtr &pNode, TKey Key)
 			}
 
             FreeNode(pTempNode);
+			m_nCount--;
         }
     }
 
@@ -552,6 +556,12 @@ template<typename TKey, typename TValue>
 void AVLTree<TKey, TValue>::Traversal()
 {
     Insubtree(m_pRoot);
+}
+
+template<typename TKey, typename TValue>
+void AVLTree<TKey, TValue>::DoEnumNode( TNodeTypePtr pNode )
+{
+	
 }
 
 #endif

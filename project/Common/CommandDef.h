@@ -106,6 +106,7 @@ BOOL ClassName##::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHe
 		ASSERT_FAIELD; \
 		return FALSE; \
 	} \
+	ASSERT(u64ConnID != 0);\
 	switch(wCommandID) \
 	{ 
 

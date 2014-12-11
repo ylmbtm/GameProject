@@ -49,6 +49,8 @@ public:
 	IDataBuffer* GetWriteBuffer();
 
 	UINT32  GetServerTime();
+	
+	ConnectState GetConnectState(VOID);
 
 protected:
 	VOID	SetConnectState(ConnectState val);

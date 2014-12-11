@@ -275,6 +275,13 @@ BOOL CClientConnector::OnCmdPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, CB
 
 BOOL CClientConnector::ConnectToServer( std::string strIpAddr, UINT16 sPort )
 {
+	if(m_ConnectState != Not_Connect)
+	{
+		printf("连接服务器失败， 服务器己连接!\n");
+
+		return FALSE;
+	}
+
 	SetConnectState(Start_Connect);
 
 	m_hSocket = CommonSocket::CreateSocket(AF_INET, SOCK_STREAM, 0);
@@ -338,6 +345,11 @@ void CClientConnector::SetConnectState( ConnectState val )
 	}
 
 	m_ConnectState = val;
+}
+
+ConnectState CClientConnector::GetConnectState( VOID )
+{
+	return m_ConnectState;
 }
 
 
