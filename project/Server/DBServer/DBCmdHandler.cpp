@@ -144,6 +144,7 @@ BOOL CDBCmdHandler::OnCmdDBNewCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	WriteHelper.BeginWrite(CMD_DB_NEW_CHAR_ACK, 0, 0, 0);
 	WriteHelper.Write(DBCharNewCharAck);
 	WriteHelper.EndWrite();
+	ASSERT(m_WriteBuffer.GetDataLenth() >= (sizeof(DBCharNewCharAck)+22));
 	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 
 	return TRUE;
@@ -168,6 +169,7 @@ BOOL CDBCmdHandler::OnCmdDBPickCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 	WriteHelper.BeginWrite(CMD_DB_PICK_CHAR_ACK, 0, 0, 0);
 	WriteHelper.Write(DBCharPickCharAck);
 	WriteHelper.EndWrite();
+	ASSERT(m_WriteBuffer.GetDataLenth() >= (sizeof(DBCharPickCharAck)+22));
 	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 
 	return TRUE;

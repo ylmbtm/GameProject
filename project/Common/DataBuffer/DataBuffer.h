@@ -30,6 +30,11 @@ public:
 	{
 		m_dwRefCount++;
 
+		if(m_dwRefCount >= 2)
+		{
+			ASSERT_FAIELD;
+		}
+
 		return true;
 	}
 
@@ -39,6 +44,11 @@ public:
 		m_pManager->m_CritSec.Lock();
 
 		m_dwRefCount--;
+
+		if(m_dwRefCount < 0)
+		{
+			ASSERT_FAIELD;
+		}
 
 		if(m_dwRefCount <= 0)
 		{

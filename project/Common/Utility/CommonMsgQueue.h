@@ -37,13 +37,14 @@ namespace CommonQueue
 			return TRUE;
 		}
 
-		void Push(ELEM_T &_Value)
+		BOOL Push(ELEM_T &_Value)
 		{
 			m_CritSec.Lock();
 			if(((m_nWritePos + 1)%dwSize) == m_nReadPos)
 			{
 				m_CritSec.Unlock();
-				return ;
+				ASSERT_FAIELD;
+				return FALSE;
 			}
 
 			m_vtData[m_nWritePos] = _Value;
@@ -54,7 +55,7 @@ namespace CommonQueue
 
 			m_CritSec.Notify();
 
-			return ; 
+			return TRUE; 
 		}
 
 		ELEM_T m_vtData[dwSize];

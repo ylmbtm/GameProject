@@ -4,29 +4,23 @@
 #include "DataBuffer/BufferHelper.h"
 #include "ConnectionType.h"
 #include "PacketDef/ClientPacket.h"
-#include "resource.h"
-#include "TestClientDlg.h"
 #include "DataBuffer/BufferHelper.h"
-#include "DlgSelect.h"
 #include "Error.h"
 #include "ObjectID.h"
 
+int g_LoginReqCount = 0;
+int g_LoginCount = 0;
+int g_EnterCount = 0;
+
 CClientCmdHandler::CClientCmdHandler(void)
 {
-	m_bLoginOK = FALSE;
+	m_dwHostState = ST_NONE;
 
 	m_ClientConnector.RegisterMsgHandler((IMessageHandler*)this);
 }
 
 CClientCmdHandler::~CClientCmdHandler(void)
 {
-}
-
-CClientCmdHandler* CClientCmdHandler::GetInstancePtr()
-{
-	static CClientCmdHandler _Handler;
-
-	return &_Handler;
 }
 
 BOOL CClientCmdHandler::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
@@ -59,13 +53,9 @@ BOOL CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, CBu
 {
 	UINT32 dwCount = 0;
 	pBufferHelper->Read(dwCount);
-
-	printf("BEGIN---添加角色消息，添加人数:%d", dwCount);
 	
 	for(UINT32 i = 0; i < dwCount; i++)
 	{
-		CString strText;
-
 		UINT8 type = 0;
 
 		pBufferHelper->Read(type);
@@ -81,14 +71,9 @@ BOOL CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, CBu
 
 		m_PlayerObjMgr.insert(std::make_pair(pObject->GetObjectID(), pObject));
 
-		printf("添加角色:%d, 坐标x = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
-
+		/*printf("添加角色:%d, 坐标x = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);*/
 	}
 
-	printf("END---添加角色消息");
-
-
-	((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
 
 	return TRUE;
 }
@@ -109,15 +94,13 @@ BOOL CClientCmdHandler::OnCmdNearByUpdate( UINT16 wCommandID, UINT64 u64ConnID, 
 		{
 			pObject->ReadFromBuffer(pBufferHelper);
 
-			printf("更新角色:%d, 坐标x = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
+			//printf("更新角色:%d, 坐标x = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
 		}
 		else
 		{
 			ASSERT_FAIELD;
 		}
 	}
-
-	((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
 
 	return TRUE;
 }
@@ -127,7 +110,7 @@ BOOL CClientCmdHandler::OnCmdNearByRemove( UINT16 wCommandID, UINT64 u64ConnID, 
 	UINT32 dwCount = 0;
 	pBufferHelper->Read(dwCount);
 
-	printf("BEGIN---删除角色消息，预计删除人数:%d, 现在人数:%d", dwCount, m_PlayerObjMgr.size());
+	//printf("BEGIN---删除角色消息，预计删除人数:%d, 现在人数:%d", dwCount, m_PlayerObjMgr.size());
 
 	for(UINT32 i = 0; i < dwCount; i++)
 	{
@@ -146,14 +129,11 @@ BOOL CClientCmdHandler::OnCmdNearByRemove( UINT16 wCommandID, UINT64 u64ConnID, 
 
 		delete pObj;
 
-		printf("删除角色:%d成功", (UINT32)u64CharID);
+		//printf("删除角色:%d成功", (UINT32)u64CharID);
 
 	}
 
-	printf("END---删除角色消息");
-
-
-	((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
+	//printf("END---删除角色消息");
 
 	return TRUE;
 }
@@ -168,19 +148,53 @@ BOOL CClientCmdHandler::OnCmdEnterGameAck( UINT16 wCommandID, UINT64 u64ConnID, 
 
 	CHECK_PAYER_ID(m_HostPlayer.GetObjectID());
 
-	printf("登录成功!");
+	g_EnterCount++;
+	printf("%s己成功进入游戏服,总人数:%d\n",m_strRoleName.c_str(), g_EnterCount);
 
-	m_bLoginOK = TRUE;
-
-	((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
-
-	((CTestClientDlg*)AfxGetMainWnd())->SetWindowText((LPCTSTR)m_HostPlayer.m_szObjectName);
+	m_dwHostState = ST_Picked;
 
 	return TRUE;
 }
 
 BOOL CClientCmdHandler::OnUpdate( UINT32 dwTick )
 {
+	m_ClientConnector.Render();
+
+	if(m_ClientConnector.GetConnectState() == Not_Connect)
+	{
+		m_ClientConnector.SetClientID(0);
+
+		m_ClientConnector.ConnectToServer("127.0.0.1", 7994);
+	}
+
+	if(m_ClientConnector.GetConnectState() == Succ_Connect)
+	{
+		//SendNewAccountReq(m_strAccountName.c_str(), m_strPassword.c_str());
+
+		if(m_dwHostState == ST_NONE)
+		{
+			m_ClientConnector.Login(m_strAccountName.c_str(), m_strPassword.c_str());
+
+			m_dwHostState = ST_Logining;
+
+			g_LoginReqCount++;
+			printf("申请登录人数:%d\n", g_LoginReqCount);
+		}
+	}
+
+	if(m_dwHostState == ST_Logined)
+	{
+		UINT32 dwTick = GetTickCount();
+
+		SendPickCharReq(m_RoleIDList[0]);
+
+		m_dwHostState = ST_Picking;
+	}
+
+	if(m_dwHostState == ST_Picked)
+	{
+		MoveHost();
+	}
 
 	return TRUE;
 }
@@ -215,18 +229,34 @@ BOOL CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID, 
 
 	if(MsgLoginAck.nRetCode == E_FAILED)
 	{
-		MessageBox(NULL, "登录失败! 密码或账号不对!!","提示", MB_OK);
+		::MessageBox(NULL, "登录失败! 密码或账号不对!!","提示", MB_OK);
 	}
 	else
 	{
-		m_DlgSelect.m_dwAccountID = MsgLoginAck.dwAccountID;
+		/*m_DlgSelect.m_dwAccountID = MsgLoginAck.dwAccountID;
 		m_DlgSelect.m_nCount = MsgLoginAck.nCount;
 		for(int i = 0; i < MsgLoginAck.nCount; i++)
 		{
 			m_DlgSelect.m_CharInfoList.push_back(MsgLoginAck.CharPickInfo[i]);
 		}
 		
-		m_DlgSelect.DoModal();
+		m_DlgSelect.DoModal();*/
+
+		if(MsgLoginAck.nCount <= 0)
+		{
+			SendNewCharReq(MsgLoginAck.dwAccountID, m_strRoleName.c_str(), 123);
+		}
+		else 
+		{
+			for(int i = 0; i < MsgLoginAck.nCount; i++)
+			{
+				m_RoleIDList.push_back(MsgLoginAck.CharPickInfo[i].u64CharID);
+			}
+
+			m_dwHostState = ST_Logined;
+			g_LoginCount++;
+			printf("己登录人数:%d\n", g_LoginCount);
+		}
 	}
 
 	return TRUE;
@@ -235,6 +265,7 @@ BOOL CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID, 
 
 BOOL CClientCmdHandler::SendPickCharReq( UINT64 u64CharID )
 {
+	m_dwHostState = ST_Picking;
 	StCharPickCharReq CharPickCharReq;
 	CharPickCharReq.u64CharID = u64CharID;
 
@@ -297,11 +328,6 @@ BOOL CClientCmdHandler::OnCmdNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, CB
 
 	CHECK_PAYER_ID(CharNewCharAck.CharPickInfo.u64CharID);
 
-
-	m_DlgSelect.AddCharPickInfo(CharNewCharAck.CharPickInfo);
-
-	m_DlgSelect.DoModal();
-
 	return TRUE;
 }
 
@@ -329,13 +355,6 @@ BOOL CClientCmdHandler::OnCmdDelCharAck( UINT16 wCommandID, UINT64 u64ConnID, CB
 {
 	StCharDelCharAck CharDelCharAck;
 	pBufferHelper->Read(CharDelCharAck);
-
-	if(CharDelCharAck.nRetCode == E_SUCCESSED)
-	{
-		m_DlgSelect.DelChar(CharDelCharAck.u64CharID);
-	}
-
-	m_DlgSelect.DoModal();
 
 	return TRUE;
 }
@@ -388,6 +407,11 @@ BOOL CClientCmdHandler::SendMoveReq( FLOAT x, FLOAT y, FLOAT z )
 	m_ClientConnector.SendData(m_ClientConnector.GetWriteBuffer()->GetData(), m_ClientConnector.GetWriteBuffer()->GetDataLenth());
 
 	return TRUE;
+}
+
+VOID CClientCmdHandler::MoveHost()
+{
+	
 }
 
 

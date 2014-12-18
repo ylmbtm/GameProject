@@ -96,7 +96,7 @@ BOOL CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, 
 		m_WaitConSvrList.erase(ConnectNotify.u64ConnID);
 		if(m_WaitConSvrList.empty())
 		{
-			CLog::GetInstancePtr()->AddLog("************所有的服务器己全部连接完成************");
+			//CLog::GetInstancePtr()->AddLog("************所有的服务器己全部连接完成************");
 		}
 	}
 

@@ -67,7 +67,7 @@ BOOL CBufferHelper::BeginRead()
 
 	m_dwCurPos	  = sizeof(TransferHeader) + sizeof(CommandHeader);
 
-	m_pDataBuffer->SetDataLenth(m_pDataBuffer->GetDataLenth());
+	m_pDataBuffer->SetDataLenth(GetTransferHeader()->dwSize);
 
 	if(GetTransferHeader()->CheckCode != 0xff)
 	{

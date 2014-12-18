@@ -218,7 +218,7 @@ BOOL ServiceBase::SendCmdToDBConnection(IDataBuffer *pDataBuf)
 		return FALSE;
 	}
 
-	SendCmdToConnection(m_u64DBConnID, pDataBuf);
+	ASSERT(SendCmdToConnection(m_u64DBConnID, pDataBuf));
 
 	return TRUE;
 }
@@ -230,7 +230,7 @@ BOOL ServiceBase::SendCmdToStatConnection(IDataBuffer *pDataBuf)
 		return FALSE;
 	}
 
-	SendCmdToConnection(m_u64StatConnID, pDataBuf);
+	ASSERT(SendCmdToConnection(m_u64StatConnID, pDataBuf));
 
 	return TRUE;
 }

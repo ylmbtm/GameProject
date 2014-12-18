@@ -284,9 +284,11 @@ BOOL    CNetManager::WorkThread_SendData()
 		{
 			if(_SendNode.u64ConnID != 0)
 			{
+				ASSERT_FAIELD;
 				CLog::GetInstancePtr()->AddLog("发送线程:发送失败 ，一个空包!");
 			}
-
+		
+			CLog::GetInstancePtr()->AddLog("发送线程:遇到一个退出线程包!");
 			continue;
 		}
 
@@ -297,9 +299,11 @@ BOOL    CNetManager::WorkThread_SendData()
 			pConnection = CConnectionMgr::GetInstancePtr()->GetConnectionByConnID(_SendNode.u64ConnID);
 			if(pConnection == NULL)
 			{
-				CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 无效的连接ID!");
+				CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 无效的连接ID：%lld!", _SendNode.u64ConnID);
 
 				pDataBuffer->Release();
+
+				ASSERT_FAIELD;
 
 				continue;
 			}
@@ -317,6 +321,8 @@ BOOL    CNetManager::WorkThread_SendData()
 
 			pDataBuffer->Release();
 
+			ASSERT_FAIELD;
+
 			continue;
 		}
 
@@ -328,6 +334,7 @@ BOOL    CNetManager::WorkThread_SendData()
 		if(pOperatorData == NULL)
 		{
 			pDataBuffer->Release();
+			ASSERT_FAIELD;
 			continue;
 		}
 
@@ -337,7 +344,7 @@ BOOL    CNetManager::WorkThread_SendData()
 
 		DWORD dwSendBytes;
 		int nRet = WSASend(hSocket, &DataBuf, 1, &dwSendBytes, 0, (LPOVERLAPPED)pOperatorData, NULL);
-		if(nRet == 0)
+		if(nRet == 0) //发送成功
 		{
 			//if(dwSendBytes < DataBuf.len)
 			if(dwSendBytes == 0)
@@ -350,13 +357,15 @@ BOOL    CNetManager::WorkThread_SendData()
 
 					CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 				}
+				else
+				{
+					CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 未能发送出数据，连接为空!");
+				}
 				
 				pDataBuffer->Release();
 			}
-
-			
 		}
-		else if( nRet == -1 )
+		else if( nRet == -1 ) //发送出错
 		{
 			UINT32 errCode = CommonSocket::GetSocketLastError();
 			if(errCode != ERROR_IO_PENDING)
@@ -469,6 +478,7 @@ BOOL    CNetManager::WorkThread_SendData()
 
 				pDataBuffer->Release();
 
+				ASSERT_FAIELD;
 				continue;
 			}
 
@@ -485,6 +495,7 @@ BOOL    CNetManager::WorkThread_SendData()
 
 			pDataBuffer->Release();
 
+			ASSERT_FAIELD;
 			continue;
 		}
 
@@ -923,8 +934,10 @@ BOOL CNetManager::SendIdentifyInfo(SOCKET hSocket)
 
 BOOL	CNetManager::SendBufferByConnID(UINT64 u64ConID, IDataBuffer *pDataBuffer)
 {
-	if(pDataBuffer == NULL)
+	if((pDataBuffer == NULL)||(u64ConID == 0)||(u64ConID==14757395258967641292))
 	{
+		ASSERT_FAIELD;
+
 		return FALSE;
 	}
 
@@ -936,14 +949,12 @@ BOOL	CNetManager::SendBufferByConnID(UINT64 u64ConID, IDataBuffer *pDataBuffer)
 
 	_SendNode.pPtr			= pDataBuffer;
 
-	m_SendDataList.Push(_SendNode);
-
-	return TRUE;
+	return m_SendDataList.Push(_SendNode);
 }
 
 BOOL	CNetManager::SendBufferBySocket(SOCKET hSocket, IDataBuffer *pDataBuffer)
 {
-	if(pDataBuffer == NULL)
+	if((pDataBuffer == NULL)||(hSocket == INVALID_SOCKET)||(hSocket == 0))
 	{
 		ASSERT_FAIELD;
 
@@ -958,9 +969,7 @@ BOOL	CNetManager::SendBufferBySocket(SOCKET hSocket, IDataBuffer *pDataBuffer)
 
 	_SendNode.pPtr       = pDataBuffer;
 
-	m_SendDataList.Push(_SendNode);
-
-	return TRUE;
+	return m_SendDataList.Push(_SendNode);
 }
 
 BOOL CNetManager::CloseSendDataThread()

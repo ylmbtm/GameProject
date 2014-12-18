@@ -85,7 +85,11 @@ BOOL CWorldCmdHandler::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, C
 	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_REQ, CMDH_OTHER, 0, 0);
 	WriteHelper.Write(DBLoadCharInfoReq);
 	WriteHelper.EndWrite();
-	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
+	ASSERT(m_WriteBuffer.GetDataLenth() >= (sizeof(DBLoadCharInfoReq)+22));
+	if (!CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer))
+	{
+		ASSERT_FAIELD;
+	}
 
 	return TRUE;
 }

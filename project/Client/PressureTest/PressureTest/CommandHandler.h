@@ -4,31 +4,33 @@
 #include "IBufferHandler.h"
 #include "CommandDef.h"
 #include "PlayerObject.h"
-#include "DlgSelect.h"
 #include "ClientConnector\ClientConnector.h"
+
+#define ST_NONE		0
+#define ST_Logining 1
+#define ST_Logined  2
+#define ST_Picking  3
+#define ST_Picked   4
+
 
 class CClientCmdHandler : public IMessageHandler
 {
-private:
+public:
 	CClientCmdHandler(void);
 
 	~CClientCmdHandler(void);
 
-public:
-	static CClientCmdHandler* GetInstancePtr();
 
 	BOOL OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
 
 	BOOL OnUpdate(UINT32 dwTick);
-
 
 	BOOL SendNewAccountReq(LPCTSTR szAccountName, LPCTSTR szPassword);
 	BOOL SendNewCharReq(UINT32 dwAccountID,LPCTSTR szCharName, UINT32 dwFeature);
 	BOOL SendDelCharReq(UINT32 dwAccountID,UINT64 dwCharID);
 	BOOL SendPickCharReq(UINT64 u64CharID);
 	BOOL SendLeaveGameReq(UINT64 u64CharID);
-	BOOL SendMoveReq(FLOAT x, FLOAT y, FLOAT z);
-
+	BOOL SendMoveReq( FLOAT x, FLOAT y, FLOAT z );
 
 	//*********************消息处理定义开始******************************
 public:
@@ -51,15 +53,22 @@ public:
 	
 	//*********************消息处理定义结束******************************
 
+	std::vector<UINT64>	m_RoleIDList;
+
 	CPlayerObject		m_HostPlayer;
 
 	CPlayerObjectMgr	m_PlayerObjMgr;
 
-	CDlgSelect			m_DlgSelect;
-
 	CClientConnector	m_ClientConnector;
 
-	BOOL				m_bLoginOK;
+	UINT32				m_dwHostState;
+
+	std::string         m_strAccountName;
+	std::string			m_strPassword;
+	std::string			m_strRoleName;
+
+public:
+	VOID  MoveHost();
 };
 
 

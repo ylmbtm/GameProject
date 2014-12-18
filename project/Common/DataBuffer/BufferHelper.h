@@ -68,6 +68,8 @@ UINT32 CBufferHelper::Read( T &_value )
 {
 	if((m_dwCurPos+sizeof(T)) > m_pDataBuffer->GetDataLenth())
 	{
+		ASSERT_FAIELD;
+
 		return 0;
 	}
 

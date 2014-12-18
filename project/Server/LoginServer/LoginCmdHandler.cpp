@@ -105,6 +105,7 @@ BOOL CLoginCmdHandler::OnCmdLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBuff
 	WriteHelper.BeginWrite(CMD_DB_LOGIN_REQ, CMDH_OTHER, 0, 0);
 	WriteHelper.Write(DBCharLoginReq);
 	WriteHelper.EndWrite();
+	ASSERT(m_WriteBuffer.GetDataLenth() >= (sizeof(DBCharLoginReq)+22));
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 	
 	return TRUE;
@@ -125,6 +126,7 @@ BOOL CLoginCmdHandler::OnCmdNewAccountReq( UINT16 wCommandID, UINT64 u64ConnID, 
 	WriteHelper.BeginWrite(CMD_DB_NEW_ACCOUNT_REQ, CMDH_OTHER, 0, 0);
 	WriteHelper.Write(DBNewAccountReq);
 	WriteHelper.EndWrite();
+	ASSERT(m_WriteBuffer.GetDataLenth() >= (sizeof(DBNewAccountReq)+22));
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 
 	return TRUE;
@@ -143,6 +145,7 @@ BOOL CLoginCmdHandler::OnCmdNewCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 	WriteHelper.BeginWrite(CMD_DB_NEW_CHAR_REQ, CMDH_OTHER, 0, 0);
 	WriteHelper.Write(DBNewCharReq);
 	WriteHelper.EndWrite();
+	ASSERT(m_WriteBuffer.GetDataLenth() >= (sizeof(DBNewCharReq)+22));
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 
 	return TRUE;
@@ -161,6 +164,7 @@ BOOL CLoginCmdHandler::OnCmdPickCharReq( UINT16 wCommandID, UINT64 u64ConnID, CB
 	WriteHelper.BeginWrite(CMD_DB_PICK_CHAR_REQ, CMDH_OTHER, 0, 0);
 	WriteHelper.Write(DBPickCharReq);
 	WriteHelper.EndWrite();
+	ASSERT(m_WriteBuffer.GetDataLenth() >= (sizeof(DBPickCharReq)+22));
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 
 	return TRUE;
@@ -177,6 +181,7 @@ BOOL CLoginCmdHandler::OnCmdDBNewAccountAck( UINT16 wCommandID, UINT64 u64ConnID
 	WriteHelper.BeginWrite(CMD_CHAR_NEW_ACCOUNT_ACK, CMDH_OTHER, 0, 0);
 	WriteHelper.Write(DBNewAccountAck.CharNewAccountAck);
 	WriteHelper.EndWrite();
+	ASSERT(m_WriteBuffer.GetDataLenth() >= (sizeof(DBNewAccountAck.CharNewAccountAck)+22));
 	CGameService::GetInstancePtr()->SendCmdToConnection(DBNewAccountAck.u64ConnID, &m_WriteBuffer);
 
 	return TRUE;
@@ -191,6 +196,7 @@ BOOL CLoginCmdHandler::OnCmdDBNewCharAck( UINT16 wCommandID, UINT64 u64ConnID, C
 	WriteHelper.BeginWrite(CMD_CHAR_NEW_CHAR_ACK, CMDH_OTHER, 0, 0);
 	WriteHelper.Write(DBNewCharAck.CharNewCharAck);
 	WriteHelper.EndWrite();
+	ASSERT(m_WriteBuffer.GetDataLenth() >= (sizeof(DBNewCharAck.CharNewCharAck)+22));
 	CGameService::GetInstancePtr()->SendCmdToConnection(DBNewCharAck.u64ConnID, &m_WriteBuffer);
 	return TRUE;
 }
@@ -224,6 +230,7 @@ BOOL CLoginCmdHandler::OnCmdDBPickCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	WriteHelper.BeginWrite(CMD_CHAR_PICK_CHAR_ACK, CMDH_OTHER, 0, 0);
 	WriteHelper.Write(DBCharPickCharAck.CharPickCharAck);
 	WriteHelper.EndWrite();
+	ASSERT(m_WriteBuffer.GetDataLenth() >= (sizeof(DBCharPickCharAck.CharPickCharAck)+22));
 	CGameService::GetInstancePtr()->SendCmdToConnection(DBCharPickCharAck.u64ConnID, &m_WriteBuffer);
 
 	return TRUE;
@@ -238,6 +245,7 @@ BOOL CLoginCmdHandler::OnCmdDBLoginAck( UINT16 wCommandID, UINT64 u64ConnID, CBu
 	WriteHelper.BeginWrite(CMD_CHAR_LOGIN_ACK, CMDH_OTHER, 0, 0);
 	WriteHelper.Write(DBCharLoginAck.CharLoginAck);
 	WriteHelper.EndWrite();
+	ASSERT(m_WriteBuffer.GetDataLenth() >= (sizeof(DBCharLoginAck.CharLoginAck)+22));
 	CGameService::GetInstancePtr()->SendCmdToConnection(DBCharLoginAck.u64ConnID, &m_WriteBuffer);
 
 	return TRUE;
@@ -256,6 +264,7 @@ BOOL CLoginCmdHandler::OnCmdDelCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 	WriteHelper.BeginWrite(CMD_DB_DEL_CHAR_REQ, CMDH_OTHER, 0, 0);
 	WriteHelper.Write(DBDelCharReq);
 	WriteHelper.EndWrite();
+	ASSERT(m_WriteBuffer.GetDataLenth() >= (sizeof(DBDelCharReq)+22));
 	CGameService::GetInstancePtr()->SendCmdToDBConnection(&m_WriteBuffer);
 
 	return TRUE;
@@ -270,6 +279,7 @@ BOOL CLoginCmdHandler::OnCmdDBDelCharAck( UINT16 wCommandID, UINT64 u64ConnID, C
 	WriteHelper.BeginWrite(CMD_CHAR_DEL_CHAR_ACK, 0, 0, 0);
 	WriteHelper.Write(DBDelCharAck.CharDelCharAck);
 	WriteHelper.EndWrite();
+	ASSERT(m_WriteBuffer.GetDataLenth() >= (sizeof(DBDelCharAck.CharDelCharAck)+22));
 	CGameService::GetInstancePtr()->SendCmdToConnection(DBDelCharAck.u64ConnID, &m_WriteBuffer);
 
 	return TRUE;

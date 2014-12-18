@@ -65,8 +65,6 @@ BOOL CClientConnector::SendData( char *pData, INT32 dwLen )
 
 	if((m_ConnectState != Succ_Connect)&&(m_ConnectState != Raw_Connect))
 	{
-		printf("没有连接服务器!\n");
-
 		return FALSE;
 	}
 

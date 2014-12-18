@@ -46,7 +46,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 		{
 			CLog::GetInstancePtr()->AddLog("---Receive Message:[%s]", "CMD_CHAR_ENTER_GAME_REQ");
 			CHECK_PAYER_ID(pBufferHelper->GetCommandHeader()->u64CharID);
-			CWillEnterNode *pWillEnterNode = m_WillEnterNodeMgr.GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
+			/*CWillEnterNode *pWillEnterNode = m_WillEnterNodeMgr.GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
 			if(pWillEnterNode == NULL)
 			{
 				//非法的进入
@@ -61,13 +61,18 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 			
 			if(pWillEnterNode->m_dwIdentifyCode != CharEnterGameReq.dwIdentifyCode)
 			{
-				m_WillEnterNodeMgr.RemoveByCharID(CharEnterGameReq.u64CharID);
-				ASSERT_FAIELD;
 				//非法的进入
+				//m_WillEnterNodeMgr.RemoveByCharID(CharEnterGameReq.u64CharID);
+				ASSERT_FAIELD;
 				break;
 			}
 
-			m_WillEnterNodeMgr.RemoveByCharID(CharEnterGameReq.u64CharID);
+			//m_WillEnterNodeMgr.RemoveByCharID(CharEnterGameReq.u64CharID);
+			
+			*/
+			StCharEnterGameReq CharEnterGameReq;
+			pBufferHelper->Read(CharEnterGameReq);
+			CHECK_PAYER_ID(CharEnterGameReq.u64CharID);
 			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(CharEnterGameReq.u64CharID);
 			if(pStaticPlayer == NULL)
 			{
@@ -78,10 +83,19 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 					break;
 				}
 			}
+			else
+			{
+				ASSERT_FAIELD;
+				break;
+			}
+
 
 			//发向世界服
 
-			RelayToWorldServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
+			if(!RelayToWorldServer(pStaticPlayer, pBufferHelper->GetDataBuffer()))
+			{
+				ASSERT_FAIELD;
+			}
 		}
 		break;
 	case CMD_SVR_CHAR_WILL_ENTER:
@@ -176,7 +190,11 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 		break;
 	default:
 		{
-			CLog::GetInstancePtr()->AddLog("---Receive Message:[%d]----", pBufferHelper->GetCommandHeader()->wCommandID);
+			if(pBufferHelper->GetCommandHeader()->wCommandID != 22)
+			{
+				CLog::GetInstancePtr()->AddLog("---Receive Message:[%d]----", pBufferHelper->GetCommandHeader()->wCommandID);
+			}
+
 			CStaticPlayer *pClientObj = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
 			if(pClientObj == NULL)
 			{

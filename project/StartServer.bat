@@ -11,16 +11,19 @@ echo. ║     2.启动全部服务器(RELEASE)    ║
 echo. ║                                  ║
 echo. ║     3.关闭全部服务器             ║
 echo. ║                                  ║
-echo. ║     4.启动客户端(TestClient.exe) ║
+echo. ║     4.启动测试客户端             ║
 echo. ║                                  ║
 echo. ║     5.清除屏幕                   ║
 echo. ║                                  ║
-echo. ║     6.退出命令窗口               ║
+echo. ║     6.启动压力测试工具           ║
+echo. ║                                  ║
+echo. ║     7.退出命令窗口               ║
 echo. ╚═════════════════╝
 echo.             
 set DebugDir=%cd%\Server\Debug\
 set ReleaseDir=%cd%\Server\Release\
 set ClientDir=%cd%\Client\TestClient\Debug\
+set PressDir=%cd%\Client\\PressureTest\Debug\
 :cho
 set choice=
 set /p choice=          请选择:
@@ -30,8 +33,9 @@ if /i "%choice%"=="2" start /D %ReleaseDir% /MIN %ReleaseDir%CenterServer.exe & 
 if /i "%choice%"=="3" taskkill /im CenterServer.exe & taskkill /im LoginServer.exe & taskkill /im ProxyServer.exe & taskkill /im DBServer.exe & taskkill /im GameServer.exe & taskkill /im StatisticsServer.exe & taskkill /im WorldServer.exe & taskkill /im TestClient.exe
 if /i "%choice%"=="4" start /D %ClientDir% %ClientDir%TestClient.exe
 if /i "%choice%"=="5" cls & goto start
-if /i "%choice%"=="6" exit
-if /i "%choice%"=="7" type %DebugDir%GameServer.ini & type %DebugDir%LoginServer.ini & type %DebugDir%ProxyServer.ini & type %DebugDir%CenterServer.ini & type %DebugDir%DBServer.ini
+if /i "%choice%"=="6" start /D %PressDir% %PressDir%PressureTest.exe
+if /i "%choice%"=="7" exit
+if /i "%choice%"=="8" type %DebugDir%GameServer.ini & type %DebugDir%LoginServer.ini & type %DebugDir%ProxyServer.ini & type %DebugDir%CenterServer.ini & type %DebugDir%DBServer.ini
 echo.
 goto cho
 
