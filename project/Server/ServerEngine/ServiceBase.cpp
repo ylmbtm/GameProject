@@ -25,6 +25,7 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 	CBufferHelper BufferReader(FALSE, pDataBuffer);
 	if(!BufferReader.BeginRead())
 	{
+		ASSERT_FAIELD;
 		return FALSE;
 	}
 
@@ -80,6 +81,7 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 
 		if(!BufferReader.BeginRead())
 		{
+			ASSERT_FAIELD;
 			return FALSE;
 		}
 	}
@@ -88,7 +90,7 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 	
 	OnCommandHandle(pCommandHeader->wCommandID, pConnection->GetConnectionID(), &BufferReader);
 
-	return FALSE;
+	return TRUE;
 }
 
 BOOL ServiceBase::StartService()

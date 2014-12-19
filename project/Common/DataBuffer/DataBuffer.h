@@ -18,7 +18,6 @@ public:
 		m_pPrev			= NULL;
 		m_pNext			= NULL;
 		m_pManager		= NULL;
-		m_dwBufferNo	= 0;
 	}
 
 	virtual ~CDataBuffer(void)
@@ -138,8 +137,6 @@ public:
 
 	CBufferManager<SIZE> *m_pManager;
 
-	UINT32		m_dwBufferNo;
-
 private:
 	INT32		m_dwRefCount;
 
@@ -177,7 +174,6 @@ public:
 		{
 			pDataBuffer = new CDataBuffer<SIZE>();
 			m_dwBufferCount += 1;
-			pDataBuffer->m_dwBufferNo = m_dwBufferCount;
 			pDataBuffer->m_pManager = this;
 		}
 		else

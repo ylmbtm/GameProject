@@ -184,8 +184,6 @@ BOOL CNetManager::WorkThread_ProcessEvent()
 
 				if(CommonSocket::GetSocketLastError() == WAIT_TIMEOUT)
 				{
-					//CLog::GetInstancePtr()->AddLog("完成端口等待超时出错，严重!");
-					//return FALSE;
 					continue;
 				}
 			}
@@ -266,7 +264,6 @@ BOOL CNetManager::WorkThread_ProcessEvent()
 
 	return TRUE;
 }
-
 
 BOOL    CNetManager::WorkThread_SendData()
 {
@@ -932,9 +929,10 @@ BOOL CNetManager::SendIdentifyInfo(SOCKET hSocket)
 	return TRUE;
 }
 
+
 BOOL	CNetManager::SendBufferByConnID(UINT64 u64ConID, IDataBuffer *pDataBuffer)
 {
-	if((pDataBuffer == NULL)||(u64ConID == 0)||(u64ConID==14757395258967641292))
+	if((pDataBuffer == NULL)||(u64ConID == 0))
 	{
 		ASSERT_FAIELD;
 

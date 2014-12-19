@@ -131,6 +131,7 @@ BOOL CScene::OnCmdPlayerMove( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper
 	pPlayerObj->m_ObjectPos.x = CharMoveReq.x;
 	pPlayerObj->m_ObjectPos.y = CharMoveReq.y;
 	pPlayerObj->m_ObjectPos.z = CharMoveReq.z;
+	pPlayerObj->m_ObjectStatus.nDir = CharMoveReq.sDir;
 
 	pPlayerObj->SetUpdate(UT_Update);
 

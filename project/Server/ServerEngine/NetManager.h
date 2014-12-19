@@ -14,23 +14,15 @@ Th_RetName _NetSendBufferThread(void *pParam);
 
 struct SendDataNode
 {
-	UINT32		dwCheckCode0;
 	BOOL		bIsConnID;	//true is id ,flase if socket
-	UINT32		dwCheckCode1;
 	UINT64		u64ConnID;
-	UINT32		dwCheckCode2;
 	VOID		*pPtr;
-	UINT32		dwCheckCode3;
 
 	SendDataNode()
 	{
 		bIsConnID = false;
 		u64ConnID  = 0;
 		pPtr      = NULL;
-		dwCheckCode0 = 0xff;
-		dwCheckCode1 = 0xff;
-		dwCheckCode2 = 0xff;
-		dwCheckCode3 = 0xff;
 	}
 };
 
@@ -124,7 +116,7 @@ public:
 
 	CommonQueue::CMessageQueue<EventNode>	m_DispatchEventList;
 	
-	CommonQueue::CMessageQueue<SendDataNode> m_SendDataList;		//用于发送数据的线程
+	CommonQueue::CMessageQueue<SendDataNode, 1024> m_SendDataList;		//用于发送数据的线程
 
 
 

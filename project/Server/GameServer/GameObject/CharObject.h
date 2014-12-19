@@ -24,7 +24,6 @@ public:
 
 	void			SetObjectName(char *szName);
 
-protected:
 	char			m_szObjectName[MAX_NAME_LEN];
 
 	St_ObjectStatus m_ObjectStatus;//角色状态

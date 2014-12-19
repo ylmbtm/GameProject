@@ -91,11 +91,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 
 
 			//发向世界服
-
-			if(!RelayToWorldServer(pStaticPlayer, pBufferHelper->GetDataBuffer()))
-			{
-				ASSERT_FAIELD;
-			}
+			RelayToWorldServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
 		}
 		break;
 	case CMD_SVR_CHAR_WILL_ENTER:
@@ -190,15 +186,10 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 		break;
 	default:
 		{
-			if(pBufferHelper->GetCommandHeader()->wCommandID != 22)
-			{
-				CLog::GetInstancePtr()->AddLog("---Receive Message:[%d]----", pBufferHelper->GetCommandHeader()->wCommandID);
-			}
-
 			CStaticPlayer *pClientObj = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
 			if(pClientObj == NULL)
 			{
-				ASSERT_FAIELD;
+				//ASSERT_FAIELD;
 				break;
 			}
 
@@ -393,7 +384,7 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 
 	SendCmdToConnection(pStaticPlayer->GetGameSvrConnID(), pSendBuffer);
 	SendCmdToConnection(m_dwWorldServerID, pSendBuffer);
-	//pSendBuffer->Release();
+	pSendBuffer->Release();
 	
 	CStaticPlayerMgr::GetInstancePtr()->RemoveByCharID(pStaticPlayer->GetCharID());
 	return TRUE;

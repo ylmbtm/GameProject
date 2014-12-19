@@ -86,8 +86,8 @@ BOOL CConnection::DoReceive()
 			{
 				CLog::GetInstancePtr()->AddLog("buffer满了，需要再读一次!!");
 
-				ExtractBuffer();
-
+				while (ExtractBuffer());
+				
 				continue;
 			}
 
@@ -158,14 +158,13 @@ BOOL CConnection::ExtractBuffer()
 		}
 
 		pDataBuffer->SetDataLenth(pHeader->dwSize);
-	}
-
-	if(pDataBuffer != NULL)
-	{
+		
 		m_pDataHandler->OnDataHandle(pDataBuffer, this);
+		
+		return TRUE;
 	}
 
-	return TRUE;
+	return FALSE;
 }
 
 BOOL CConnection::Close(BOOL bNotify)
@@ -193,7 +192,7 @@ BOOL CConnection::HandleRecvEvent(UINT32 dwBytes)
 #ifdef WIN32
 	m_dwDataLen += dwBytes;
 
-	ExtractBuffer();
+	while (ExtractBuffer());
 
 	if (!DoReceive())
 	{
@@ -205,7 +204,7 @@ BOOL CConnection::HandleRecvEvent(UINT32 dwBytes)
 		return FALSE;
 	}
 
-	ExtractBuffer();
+	while (ExtractBuffer());
 #endif
 	return TRUE;
 }
