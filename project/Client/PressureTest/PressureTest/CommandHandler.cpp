@@ -7,6 +7,7 @@
 #include "DataBuffer/BufferHelper.h"
 #include "Error.h"
 #include "ObjectID.h"
+#include <complex>
 
 int g_LoginReqCount = 0;
 int g_LoginCount = 0;
@@ -147,6 +148,8 @@ BOOL CClientCmdHandler::OnCmdEnterGameAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	m_HostPlayer.ReadFromBuffer(pBufferHelper);
 
 	CHECK_PAYER_ID(m_HostPlayer.GetObjectID());
+
+	m_HostPlayer.m_ObjectStatus.nDir = rand()%4+1; 
 
 	g_EnterCount++;
 	printf("%s己成功进入游戏服,总人数:%d\n",m_strRoleName.c_str(), g_EnterCount);
@@ -387,12 +390,13 @@ BOOL CClientCmdHandler::SendLeaveGameReq( UINT64 u64CharID )
 	return TRUE;
 }
 
-BOOL CClientCmdHandler::SendMoveReq( FLOAT x, FLOAT y, FLOAT z )
+BOOL CClientCmdHandler::SendMoveReq( FLOAT x, FLOAT y, FLOAT z, UINT16 nDir)
 {
 	StCharMoveReq _MoveGs;
-	_MoveGs.x = m_HostPlayer.m_ObjectPos.x;
-	_MoveGs.y = m_HostPlayer.m_ObjectPos.y;
-	_MoveGs.z = m_HostPlayer.m_ObjectPos.z;
+	_MoveGs.x = x;
+	_MoveGs.y = y;
+	_MoveGs.z = z;
+	_MoveGs.sDir = nDir;
 
 	CBufferHelper WriteHelper(TRUE, m_ClientConnector.GetWriteBuffer());
 
@@ -411,6 +415,35 @@ BOOL CClientCmdHandler::SendMoveReq( FLOAT x, FLOAT y, FLOAT z )
 
 VOID CClientCmdHandler::MoveHost()
 {
+	static UINT32 dwLastTick = 0;
+
+	UINT32 dwCurTick = GetTickCount();
+
+	if((dwCurTick - dwLastTick) >1000)
+	{
+		dwLastTick = dwCurTick;
+
+		m_HostPlayer.m_ObjectPos.x += 1;
+
+		m_HostPlayer.m_ObjectPos.z += 1;
+
+		if((m_HostPlayer.m_ObjectPos.x>900)||(m_HostPlayer.m_ObjectPos.x<-900))
+		{
+			m_HostPlayer.m_ObjectPos.x = 0;
+
+			m_HostPlayer.m_ObjectStatus.nDir = rand()%4+1; 
+
+		}
+
+		if((m_HostPlayer.m_ObjectPos.z>900)||(m_HostPlayer.m_ObjectPos.z<-900))
+		{
+			m_HostPlayer.m_ObjectPos.z = 0;
+
+			m_HostPlayer.m_ObjectStatus.nDir = rand()%4+1; 
+		}
+
+		SendMoveReq(m_HostPlayer.m_ObjectPos.x, m_HostPlayer.m_ObjectPos.y, m_HostPlayer.m_ObjectPos.z, m_HostPlayer.m_ObjectStatus.nDir);
+	}
 	
 }
 

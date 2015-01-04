@@ -60,7 +60,7 @@ BOOL CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, CBu
 	UINT32 dwCount = 0;
 	pBufferHelper->Read(dwCount);
 
-	printf("BEGIN---添加角色消息，添加人数:%d", dwCount);
+	printf("BEGIN---添加角色消息，添加人数:%d\n", dwCount);
 	
 	for(UINT32 i = 0; i < dwCount; i++)
 	{
@@ -81,11 +81,11 @@ BOOL CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, CBu
 
 		m_PlayerObjMgr.insert(std::make_pair(pObject->GetObjectID(), pObject));
 
-		printf("添加角色:%d, 坐标x = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
+		printf("添加角色:%d, 坐标x = %f, z = %f\n", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
 
 	}
 
-	printf("END---添加角色消息");
+	printf("END---添加角色消息\n");
 
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
@@ -109,7 +109,7 @@ BOOL CClientCmdHandler::OnCmdNearByUpdate( UINT16 wCommandID, UINT64 u64ConnID, 
 		{
 			pObject->ReadFromBuffer(pBufferHelper);
 
-			printf("更新角色:%d, 坐标x = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
+			printf("更新角色:%d, 坐标x = %f, z = %f\n", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);
 		}
 		else
 		{
@@ -145,12 +145,9 @@ BOOL CClientCmdHandler::OnCmdNearByRemove( UINT16 wCommandID, UINT64 u64ConnID, 
 		m_PlayerObjMgr.RemovePlayer(u64CharID);
 
 		delete pObj;
-
-		printf("删除角色:%d成功", (UINT32)u64CharID);
-
 	}
 
-	printf("END---删除角色消息");
+	printf("END---删除角色消息\n");
 
 
 	((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
@@ -368,12 +365,13 @@ BOOL CClientCmdHandler::SendLeaveGameReq( UINT64 u64CharID )
 	return TRUE;
 }
 
-BOOL CClientCmdHandler::SendMoveReq( FLOAT x, FLOAT y, FLOAT z )
+BOOL CClientCmdHandler::SendMoveReq( FLOAT x, FLOAT y, FLOAT z, UINT16 nDir)
 {
 	StCharMoveReq _MoveGs;
 	_MoveGs.x = m_HostPlayer.m_ObjectPos.x;
 	_MoveGs.y = m_HostPlayer.m_ObjectPos.y;
 	_MoveGs.z = m_HostPlayer.m_ObjectPos.z;
+	_MoveGs.sDir = m_HostPlayer.m_ObjectStatus.nDir;
 
 	CBufferHelper WriteHelper(TRUE, m_ClientConnector.GetWriteBuffer());
 

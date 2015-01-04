@@ -200,7 +200,7 @@ BOOL CNetManager::WorkThread_ProcessEvent()
 					if(dwNumOfByte == 0)
 					{
 						//说明对方己经关闭
-						CLog::GetInstancePtr()->AddLog("完成端口收到数据为0, 对方己经关闭连接!");
+						CLog::GetInstancePtr()->AddLog("完成端口收到数据为0, 对方己经关闭连接:连接指针%x!", pConnection);
 						pConnection->Close(TRUE);
 						CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 					}
@@ -300,7 +300,7 @@ BOOL    CNetManager::WorkThread_SendData()
 
 				pDataBuffer->Release();
 
-				ASSERT_FAIELD;
+				//ASSERT_FAIELD;  这里可能是正常的情况，因为连接己经断开了，所以找不到链接的ID了。
 
 				continue;
 			}
@@ -348,7 +348,7 @@ BOOL    CNetManager::WorkThread_SendData()
 			{
 				if(pConnection != NULL)
 				{
-					CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 未能发送出数据，所以主动关闭连接!");
+					CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 所以主动关闭连接%lld!, 连接指针%x", pConnection->GetConnectionID(), pConnection);
 
 					pConnection->Close(TRUE);
 
@@ -507,6 +507,8 @@ BOOL    CNetManager::WorkThread_SendData()
 		{
 			if(pConnection != NULL)
 			{
+				CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 所以主动关闭连接%lld!, 连接指针%x", pConnection->GetConnectionID(), pConnection);
+
 				pConnection->Close(TRUE);
 
 				CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
@@ -566,6 +568,8 @@ BOOL CNetManager::DestroyCompletePort()
 
 BOOL CNetManager::CreateDispatchThread()
 {
+	m_bCloseDispath = FALSE;
+
 	m_hDispathThread = CommonThreadFunc::CreateThread(_NetEventDispatchThread,  (void*)NULL);
 	if(m_hDispathThread != (THANDLE)NULL)
 	{
@@ -581,7 +585,7 @@ BOOL CNetManager::WorkThread_DispathEvent()
 	struct epoll_event EpollEvent[20];
 	int nFd = 0;
 	EventNode _EventNode;
-	while(TRUE)
+	while(!m_bCloseDispath)
 	{
 		nFd = epoll_wait(m_hCompletePort, EpollEvent, 20, 1000);
 
@@ -780,6 +784,8 @@ BOOL CNetManager::UninitNetwork()
 BOOL CNetManager::Close()
 {
 	StopListen();
+
+	CloseDispatchThread();
 
 	CloseEventThread();
 	

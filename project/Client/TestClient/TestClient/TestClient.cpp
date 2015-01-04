@@ -94,18 +94,22 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 		if(pMsg->wParam == VK_LEFT)
 		{
 			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.x-=2;
+			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectStatus.nDir = 3;
 		}
 		else if(pMsg->wParam == VK_RIGHT)
 		{
 			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.x+=2;
+			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectStatus.nDir = 1;
 		}
 		else if(pMsg->wParam == VK_UP)
 		{
 			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.z-=2;
+			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectStatus.nDir = 4;
 		}
 		else if(pMsg->wParam == VK_DOWN)
 		{
 			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.z+=2;
+			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectStatus.nDir = 2;
 		}
 		else
 		{
@@ -119,7 +123,7 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 
 		((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
 
-		CClientCmdHandler::GetInstancePtr()->SendMoveReq(0,0,0);
+		CClientCmdHandler::GetInstancePtr()->SendMoveReq(0,0,0,0);
 
 		//CString strText;
 		//strText.Format("当前角色:%d, 坐标x = %f, z= %f", (UINT32)CClientCmdHandler::GetInstancePtr()->m_HostPlayer.GetObjectID(),

@@ -132,6 +132,31 @@ VOID CSceneView::Draw( HDC hDC,int nX, int nY, int nDir, COLORREF clr, int nRadi
 	LineTo(hDC, nX-75, nY+75);
 	LineTo(hDC, nX-75, nY-75);
 
+	MoveToEx(hDC, nX, nY, &point);
+	switch(nDir)
+	{
+	case 1:
+		{
+			LineTo(hDC, nX+10, nY);
+		}
+		break;
+	case 2:
+		{
+			LineTo(hDC, nX, nY+10);
+		}
+		break;
+	case 3:
+		{
+			LineTo(hDC, nX-10, nY);
+		}
+		break;
+	case 4:
+		{
+			LineTo(hDC, nX, nY-10);
+		}
+		break;
+	}
+
 	HBRUSH hNewBrush = CreateSolidBrush(clr);
 	HBRUSH hOldBrush = (HBRUSH)SelectObject(hDC, hNewBrush);
 	Ellipse(hDC, nX - nRadius, nY - nRadius, nX + nRadius, nY + nRadius);

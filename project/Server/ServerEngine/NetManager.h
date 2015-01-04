@@ -110,13 +110,15 @@ public:
 
 	BOOL				m_bCloseEvent;		//是否关闭事件处理线程
 
+	BOOL				m_bCloseDispath;	//是否关闭分发线程
+
 	IDataHandler		*m_pBufferHandler;
 
 public:
 
 	CommonQueue::CMessageQueue<EventNode>	m_DispatchEventList;
 	
-	CommonQueue::CMessageQueue<SendDataNode, 1024> m_SendDataList;		//用于发送数据的线程
+	CommonQueue::CMessageQueue<SendDataNode, 10240> m_SendDataList;		//用于发送数据的线程
 
 
 

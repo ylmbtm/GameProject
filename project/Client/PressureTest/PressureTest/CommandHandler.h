@@ -30,7 +30,7 @@ public:
 	BOOL SendDelCharReq(UINT32 dwAccountID,UINT64 dwCharID);
 	BOOL SendPickCharReq(UINT64 u64CharID);
 	BOOL SendLeaveGameReq(UINT64 u64CharID);
-	BOOL SendMoveReq( FLOAT x, FLOAT y, FLOAT z );
+	BOOL SendMoveReq( FLOAT x, FLOAT y, FLOAT z, UINT16 nDir );
 
 	//*********************消息处理定义开始******************************
 public:
@@ -66,6 +66,9 @@ public:
 	std::string         m_strAccountName;
 	std::string			m_strPassword;
 	std::string			m_strRoleName;
+
+	FLOAT               m_x;
+	FLOAT				m_y;
 
 public:
 	VOID  MoveHost();

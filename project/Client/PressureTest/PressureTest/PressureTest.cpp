@@ -28,9 +28,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		CClientCmdHandler *pClientSpaceObject = new CClientCmdHandler();
 
 		sprintf(szBuff, "test%d", i);
-
 		pClientSpaceObject->m_strAccountName = szBuff;
-		pClientSpaceObject->m_strPassword = "1234556";
+		pClientSpaceObject->m_strPassword = "123456";
 
 		sprintf(szBuff, "zhang%d", i);
 		pClientSpaceObject->m_strRoleName = szBuff;

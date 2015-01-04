@@ -15,6 +15,8 @@
 CGameService::CGameService(void)
 {
 	m_dwWorldServerID = 0;
+
+	CStaticPlayerMgr::GetInstancePtr();
 }
 
 CGameService::~CGameService(void)

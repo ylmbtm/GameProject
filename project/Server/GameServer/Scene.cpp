@@ -172,8 +172,8 @@ BOOL CScene::SendNewObjectToGrids(CWorldObject *pWorldObject, INT32 Grids[9])
 			{
 				if(pIterObj->GetObjectType() == OBJECT_PLAYER)
 				{
-					CLog::GetInstancePtr()->AddLog("自己[%lld]--Add--To--[%lld], 坐标 x = %f, z=%f", pWorldObject->GetObjectID(),
-						pIterObj->GetObjectID(), pWorldObject->m_ObjectPos.x, pWorldObject->m_ObjectPos.z);
+					/*CLog::GetInstancePtr()->AddLog("自己[%lld]--Add--To--[%lld], 坐标 x = %f, z=%f", pWorldObject->GetObjectID(),
+						pIterObj->GetObjectID(), pWorldObject->m_ObjectPos.x, pWorldObject->m_ObjectPos.z);*/
 
 					CGameService::GetInstancePtr()->SendCmdToConnection(((CPlayerObject*)pIterObj)->GetConnectID(),pIterObj->GetObjectID(), 0, &m_WriteBuffer);
 				}
@@ -220,8 +220,8 @@ BOOL CScene::SendNewGridsToObject( INT32 Grids[9], CPlayerObject *pPlayerObj )
 
 				pIterObj->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_DEST_OTHER);
 
-				CLog::GetInstancePtr()->AddLog("自己[%lld]--Add--From---[%lld], 坐标 x = %f, z=%f", 
-					pIterObj->GetObjectID(), pPlayerObj->GetObjectID(), pIterObj->m_ObjectPos.x, pIterObj->m_ObjectPos.z);
+				/*CLog::GetInstancePtr()->AddLog("自己[%lld]--Add--From---[%lld], 坐标 x = %f, z=%f", 
+					pIterObj->GetObjectID(), pPlayerObj->GetObjectID(), pIterObj->m_ObjectPos.x, pIterObj->m_ObjectPos.z);*/
 
 				(*pCount)++;
 			}
