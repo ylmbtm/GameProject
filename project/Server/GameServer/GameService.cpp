@@ -128,7 +128,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 		m_SceneManager.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
 	}
 
-	return 0;
+	return TRUE;
 }
 
 BOOL CGameService::OnDisconnect( CConnection *pConnection )
@@ -145,11 +145,20 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	WriteHelper.Write(DisConnectNotify);
 	WriteHelper.EndWrite();
 
+	IDataBuffer *pDataBuff2 = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pDataBuff->GetDataLenth());
+	if(pDataBuff2 == NULL)
+	{
+		ASSERT_FAIELD;
+		return FALSE;
+	}
+
+	pDataBuff2->CopyFrom(pDataBuff);
+
 	m_ServerCmdHandler.AddMessage(DisConnectNotify.u64ConnID, pDataBuff);
 
+	m_SceneManager.AddMessage(DisConnectNotify.u64ConnID, pDataBuff2);
+
 	//pDataBuff->Release();
-
-
 
 	return TRUE;
 }

@@ -3,7 +3,7 @@
 #include "ServiceBase.h"
 #include "ServerCmdHandler.h"
 #include "CharWillEnterList.h"
-class  CStaticPlayer;
+#include "ProxyCmdHandler.h"
 class  CConnection;
 
 class CGameService :
@@ -24,12 +24,6 @@ public:
 
 	BOOL		OnIdle();
 
-	BOOL		RelayToGameServer(CStaticPlayer *pClientObj, IDataBuffer *pBuffer);
-
-	BOOL		RelayToWorldServer(CStaticPlayer *pClientObj, IDataBuffer *pBuffer);
-
-	BOOL		RelayToClient(CStaticPlayer *pClientObj, IDataBuffer *pBuffer);
-
 	BOOL		SetWorldServerID(UINT32 dwSvrID);
 
 public:
@@ -41,6 +35,8 @@ public:
 public:
 	//处理普通的网络连接
 	CServerCmdHandler   m_ServerCmdHandler;
+
+	CProxyCmdHandler	m_ProxyCmdHandler;
 
 	CWillEnterNodeMgr   m_WillEnterNodeMgr;
 

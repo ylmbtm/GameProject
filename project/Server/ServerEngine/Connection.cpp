@@ -27,17 +27,32 @@ CConnection::CConnection(void)
 
 	m_u64ConnID			= 0;
 
-	m_pDataHandler	= NULL;
+	m_pDataHandler		= NULL;
 
 	m_dwDataLen			= 0;
 
 	m_bConnected		= FALSE;
 
 	m_byteType			= TYPE_UNKNOW;
+
+	m_dwMagicCode       = MAGIC_CODE;
 }
 
 CConnection::~CConnection(void)
 {
+	m_dwMagicCode		= 0;
+
+	m_hSocket			= INVALID_SOCKET;
+
+	m_pDataHandler		= NULL;
+
+	m_dwDataLen			= 0;
+
+	m_bConnected		= FALSE;
+
+	m_byteType			= TYPE_UNKNOW;
+
+	m_dwMagicCode       = MAGIC_CODE;
 }
 
 #ifdef WIN32
@@ -129,6 +144,11 @@ UINT64 CConnection::GetConnectionID()
 
 void CConnection::SetConnectionID( UINT64 u64ConnID )
 {
+	if((m_u64ConnID != 0)&&(u64ConnID == 0))
+	{
+		ASSERT_FAIELD;
+	}
+
 	m_u64ConnID = u64ConnID;
 
 	return ;
@@ -174,8 +194,6 @@ BOOL CConnection::Close(BOOL bNotify)
 		m_pDataHandler->OnDisconnect(this);
 	}
 
-	
-
 	CommonSocket::ShutDownSend(m_hSocket);
 	CommonSocket::ShutDownRecv(m_hSocket);
 	CommonSocket::CloseSocket(m_hSocket);
@@ -183,6 +201,7 @@ BOOL CConnection::Close(BOOL bNotify)
 	m_hSocket		= INVALID_SOCKET;
 	m_bConnected	= FALSE;
 	m_dwDataLen     = 0;
+	m_dwMagicCode   = 0;
 
 	return TRUE;
 }
@@ -238,6 +257,12 @@ BOOL CConnection::IsConnectionOK()
 {
 	if((m_hSocket == INVALID_SOCKET)||(m_hSocket == 0))
 	{
+		return FALSE;
+	}
+
+	if(m_dwMagicCode != MAGIC_CODE)
+	{
+		ASSERT_FAIELD;
 		return FALSE;
 	}
 
@@ -297,6 +322,11 @@ CConnection* CConnectionMgr::GetConnectionByConnID( UINT64 u64ConnID )
 	}
 	else 
 	{
+		if(m_VarieableConnList.size() <= 0)
+		{
+			return NULL;
+		}
+
 		stdext::hash_map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.find(u64ConnID);
 		if(itor != m_VarieableConnList.end())
 		{
@@ -336,6 +366,8 @@ BOOL CConnectionMgr::SetConnectionID(CConnection *pConnection, UINT64 u64ConnID)
 			m_dwNextConnID = SVR_CONN_ID+1;
 		}
 		
+		ASSERT(m_dwNextConnID != 0);
+
 		pConnection->SetConnectionID(m_dwNextConnID);
 
 		m_VarieableConnList.insert(std::make_pair(m_dwNextConnID, pConnection));

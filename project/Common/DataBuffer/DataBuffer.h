@@ -18,6 +18,7 @@ public:
 		m_pPrev			= NULL;
 		m_pNext			= NULL;
 		m_pManager		= NULL;
+		m_dwBufferNo	= 0;
 	}
 
 	virtual ~CDataBuffer(void)
@@ -131,6 +132,11 @@ public:
 		return m_nDataLen;
 	}
 
+	UINT32  GetBufferNo()
+	{
+		return m_dwBufferNo;
+	}
+
 	CDataBuffer<SIZE> *m_pPrev;
 
 	CDataBuffer<SIZE> *m_pNext;
@@ -146,6 +152,9 @@ private:
 	
 	size_t		m_nDataLen;
 
+public:
+
+	UINT32		m_dwBufferNo;
 	
 };
 
@@ -175,6 +184,7 @@ public:
 			pDataBuffer = new CDataBuffer<SIZE>();
 			m_dwBufferCount += 1;
 			pDataBuffer->m_pManager = this;
+			pDataBuffer->m_dwBufferNo = m_dwBufferCount;
 		}
 		else
 		{

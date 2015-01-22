@@ -186,6 +186,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ProxyCmdHandler.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ProxyServer.cpp"
 				>
 			</File>
@@ -229,6 +233,10 @@
 			</File>
 			<File
 				RelativePath=".\GameService.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ProxyCmdHandler.h"
 				>
 			</File>
 			<File

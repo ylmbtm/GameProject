@@ -90,6 +90,8 @@ UINT32 CBufferHelper::Write( T& _Value )
 
 	m_dwCurPos += sizeof(T);
 
+	ASSERT((m_dwCurPos+100) <= m_pDataBuffer->GetBufferSize());
+
 	return sizeof(T);
 }
 

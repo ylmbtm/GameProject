@@ -36,7 +36,7 @@ BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferH
 		m_LoginCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
 	}
 
-	return 0;
+	return TRUE;
 }
 
 BOOL CGameService::StartRun()
@@ -64,7 +64,13 @@ BOOL CGameService::StartRun()
 		return FALSE;
 	}
 
-	m_ServerCmdHandler.Init(0);
+	if(!m_ServerCmdHandler.Init(0))
+	{
+		ASSERT_FAIELD;
+		CLog::GetInstancePtr()->AddLog("启动默认连接消息处理器失败!");
+		return FALSE;
+	}
+
 	m_LoginCmdHandler.Init(0);
 
 	OnIdle();

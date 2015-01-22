@@ -4,10 +4,13 @@
 
 enum LineState
 {
+	LS_NONE,
 	LS_Online,
-	Ls_OffLine,
-	Ls_Unknow
-};
+	LS_OffLine,
+	LS_EnterGame,
+	LS_LeaveGame,
+	LS_Unknow
+}; 
 
 
 class  CStaticPlayer

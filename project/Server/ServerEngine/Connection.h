@@ -10,6 +10,8 @@
 
 #define  SVR_CONN_ID				1000
 
+#define  MAGIC_CODE					0x1234
+
 
 struct NetIoOperatorData
 {
@@ -75,6 +77,8 @@ public:
 	CHAR						m_pBuffer[CONST_BUFF_SIZE];
 
 	UINT32						m_dwIpAddr;
+
+	UINT32						m_dwMagicCode;
 };
 
 

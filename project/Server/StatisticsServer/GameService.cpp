@@ -84,7 +84,12 @@ BOOL CGameService::StartRun()
 		return FALSE;
 	}
 
-	m_ServerCmdHandler.Init(0);
+	if(!m_ServerCmdHandler.Init(0))
+	{
+		ASSERT_FAIELD;
+		CLog::GetInstancePtr()->AddLog("启动默认连接消息处理器失败!");
+		return FALSE;
+	}
 
 	m_StatCmdHandler.Init(0);
 

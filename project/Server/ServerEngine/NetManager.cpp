@@ -275,6 +275,8 @@ BOOL    CNetManager::WorkThread_SendData()
 		{
 			continue;
 		}
+
+		CLog::GetInstancePtr()->AddLog("发送队列长度%d", m_SendDataList.m_nWritePos-m_SendDataList.m_nReadPos);
 	
 		IDataBuffer *pDataBuffer = (IDataBuffer *)_SendNode.pPtr;
 		if(pDataBuffer == NULL)
@@ -297,7 +299,6 @@ BOOL    CNetManager::WorkThread_SendData()
 			if(pConnection == NULL)
 			{
 				CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 无效的连接ID：%lld!", _SendNode.u64ConnID);
-
 				pDataBuffer->Release();
 
 				//ASSERT_FAIELD;  这里可能是正常的情况，因为连接己经断开了，所以找不到链接的ID了。
@@ -305,7 +306,16 @@ BOOL    CNetManager::WorkThread_SendData()
 				continue;
 			}
 
-			hSocket = pConnection->GetSocket();
+			if(!pConnection->IsConnectionOK())
+			{
+				ASSERT_FAIELD;
+
+				hSocket = INVALID_SOCKET;
+			}
+			else
+			{
+				hSocket = pConnection->GetSocket();
+			}
 		}
 		else
 		{
@@ -339,28 +349,34 @@ BOOL    CNetManager::WorkThread_SendData()
 		pOperatorData->dwCmdType   = NET_CMD_SEND;
 		pOperatorData->pDataBuffer = pDataBuffer;
 
-		DWORD dwSendBytes;
+		DWORD dwSendBytes = 0;
 		int nRet = WSASend(hSocket, &DataBuf, 1, &dwSendBytes, 0, (LPOVERLAPPED)pOperatorData, NULL);
 		if(nRet == 0) //发送成功
 		{
-			//if(dwSendBytes < DataBuf.len)
-			if(dwSendBytes == 0)
+			if(dwSendBytes < DataBuf.len)
 			{
-				if(pConnection != NULL)
-				{
-					CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 所以主动关闭连接%lld!, 连接指针%x", pConnection->GetConnectionID(), pConnection);
-
-					pConnection->Close(TRUE);
-
-					CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
-				}
-				else
-				{
-					CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 未能发送出数据，连接为空!");
-				}
-				
-				pDataBuffer->Release();
+				CLog::GetInstancePtr()->AddLog("发送线程:直接发送功数据%d!", dwSendBytes);
 			}
+
+			//if(dwSendBytes == 0)
+			//{
+			//	if(pConnection != NULL)
+			//	{
+			//		CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 所以主动关闭连接%lld!, 连接指针%x", pConnection->GetConnectionID(), pConnection);
+////
+			//		pConnection->Close(TRUE);
+
+			//		//CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
+
+			//		ASSERT_FAIELD;
+			//	}
+			//	else
+			//	{
+			//		CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 未能发送出数据，连接为空!");
+			//	}
+			//	
+			//	pDataBuffer->Release();
+			//}
 		}
 		else if( nRet == -1 ) //发送出错
 		{
@@ -369,9 +385,9 @@ BOOL    CNetManager::WorkThread_SendData()
 			{
 				if(pConnection != NULL)
 				{
-					pConnection->Close(TRUE);
+					pConnection->Close(FALSE);
 
-					CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
+					//CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 				}
 
 				pDataBuffer->Release();
@@ -588,6 +604,10 @@ BOOL CNetManager::WorkThread_DispathEvent()
 	while(!m_bCloseDispath)
 	{
 		nFd = epoll_wait(m_hCompletePort, EpollEvent, 20, 1000);
+		if(nFd == -1)
+		{
+			continue;
+		}
 
 		for(int i = 0; i < nFd; ++i)
 		{

@@ -81,6 +81,11 @@ BOOL CSceneManager::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuffer
 			OnCmdCreateSceneReq(wCommandID, u64ConnID, pBufferHelper);
 		}
 		break;
+	case CMD_DISCONNECT_NOTIFY:
+		{
+
+		}
+		break;
 	default:
 		{
 			bHandled = FALSE;

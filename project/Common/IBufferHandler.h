@@ -24,6 +24,8 @@ public:
 
 	virtual size_t  CopyFrom(IDataBuffer *pSrcBuffer) = 0;
 
+	virtual UINT32  GetBufferNo() = 0;
+
 };
 
 struct IDataHandler

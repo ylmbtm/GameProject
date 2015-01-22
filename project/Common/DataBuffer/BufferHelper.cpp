@@ -73,7 +73,6 @@ BOOL CBufferHelper::BeginRead()
 	{
 		ASSERT_FAIELD;
 		return FALSE;
-
 	}
 
 	return TRUE;
@@ -148,6 +147,8 @@ UINT32 CBufferHelper::Write( BYTE *pData, UINT32 dwBytes )
 
 	m_dwCurPos += dwBytes;
 
+	ASSERT((m_dwCurPos+100) <= m_pDataBuffer->GetBufferSize());
+
 	return dwBytes;
 }
 
@@ -162,6 +163,8 @@ UINT32 CBufferHelper::Write( const CHAR *pszValue )
 	memcpy(m_pDataBuffer->GetData() + m_dwCurPos, pszValue,  wLen);
 
 	m_dwCurPos += wLen;
+
+	ASSERT((m_dwCurPos+100) <= m_pDataBuffer->GetBufferSize());
 
 	return wLen + sizeof(UINT16);
 }
@@ -180,6 +183,8 @@ UINT32 CBufferHelper::Write( CHAR *pszValue )
 	memcpy(m_pDataBuffer->GetData() + m_dwCurPos, pszValue,  wLen);
 
 	m_dwCurPos += wLen;
+
+	ASSERT((m_dwCurPos+100) <= m_pDataBuffer->GetBufferSize());
 
 	return wLen + sizeof(UINT16);
 }
