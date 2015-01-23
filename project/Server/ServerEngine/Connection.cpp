@@ -337,6 +337,24 @@ CConnection* CConnectionMgr::GetConnectionByConnID( UINT64 u64ConnID )
 	return NULL;
 }
 
+SOCKET CConnectionMgr::GetConnectionSocket( UINT64 dwConnID )
+{
+	CAutoLock Lock(&m_CritSec);
+	CConnection *pConnection = CConnectionMgr::GetInstancePtr()->GetConnectionByConnID(dwConnID);
+	if(pConnection == NULL)
+	{
+		return INVALID_SOCKET;
+	}
+
+	if(!pConnection->IsConnectionOK())
+	{
+		return INVALID_SOCKET;
+	}
+
+	return pConnection->GetSocket();
+}
+
+
 CConnectionMgr* CConnectionMgr::GetInstancePtr()
 {
 	static CConnectionMgr ConnectionMgr;
@@ -399,10 +417,9 @@ BOOL CConnectionMgr::SetConnectionID(CConnection *pConnection, UINT64 u64ConnID)
 
 VOID CConnectionMgr::DeleteConnection( CConnection *pConnection )
 {
+	CAutoLock Lock(&m_CritSec);
 	if(pConnection->GetConnectionID() == 0)
 	{
-		CAutoLock Lock(&m_CritSec);
-
 		std::set<CConnection*>::iterator itor = m_WaitConnList.find(pConnection);
 		if(itor != m_WaitConnList.end())
 		{
@@ -419,7 +436,6 @@ VOID CConnectionMgr::DeleteConnection( CConnection *pConnection )
 	}
 	else
 	{
-		CAutoLock Lock(&m_CritSec);
 #ifdef _DEBUG
 		stdext::hash_map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.find(pConnection->GetConnectionID());
 		if(itor != m_VarieableConnList.end())
@@ -499,4 +515,5 @@ BOOL CConnectionMgr::DestroyAllConnection()
 
 	 return TRUE;
 }
+
 

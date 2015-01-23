@@ -114,6 +114,8 @@ public:
 
 	IDataHandler		*m_pBufferHandler;
 
+	INT32				m_nMaxSendListLen;
+
 public:
 
 	CommonQueue::CMessageQueue<EventNode>	m_DispatchEventList;

@@ -12,8 +12,8 @@ CGrid::~CGrid(void)
 
 BOOL CGrid::AddObject( CWorldObject *pObject )
 {
-	assert(pObject->m_pGridNext == NULL);
-	assert(pObject->m_pGridPrev == NULL);
+	ASSERT(pObject->m_pGridNext == NULL);
+	ASSERT(pObject->m_pGridPrev == NULL);
 
 	if(m_pHead == NULL)
 	{
@@ -43,7 +43,7 @@ BOOL CGrid::RemoveObject(CWorldObject *pObject)
 	{
 		if(pObject->m_pGridNext != NULL)
 		{
-			assert(pObject->m_pGridNext->m_pGridPrev == pObject);
+			ASSERT(pObject->m_pGridNext->m_pGridPrev == pObject);
 		}
 
 		m_pHead = pObject->m_pGridNext;
@@ -61,9 +61,9 @@ BOOL CGrid::RemoveObject(CWorldObject *pObject)
 			pTest = pTest->m_pGridPrev;
 		}
 
-		assert(m_pHead == pTest);
+		ASSERT(m_pHead == pTest);
 
-		assert(pObject->m_pGridPrev->m_pGridNext == pObject);
+		ASSERT(pObject->m_pGridPrev->m_pGridNext == pObject);
 
 		pObject->m_pGridPrev->m_pGridNext = pObject->m_pGridNext;
 

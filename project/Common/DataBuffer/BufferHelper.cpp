@@ -49,6 +49,8 @@ BOOL CBufferHelper::BeginWrite(UINT16 wCommandID, UINT8 CmdHandleID, UINT16 dwSc
 
 BOOL CBufferHelper::EndWrite()
 {
+	WriteCheckBufferCode();
+
 	GetTransferHeader()->dwSize = m_dwCurPos;
 
 	m_pDataBuffer->SetDataLenth(m_dwCurPos);

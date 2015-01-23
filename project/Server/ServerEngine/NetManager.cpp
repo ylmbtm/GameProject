@@ -267,6 +267,8 @@ BOOL CNetManager::WorkThread_ProcessEvent()
 
 BOOL    CNetManager::WorkThread_SendData()
 {
+	m_nMaxSendListLen = 0;
+
 	while(!m_bCloseSend)
 	{
 		SendDataNode _SendNode;
@@ -276,8 +278,12 @@ BOOL    CNetManager::WorkThread_SendData()
 			continue;
 		}
 
-		CLog::GetInstancePtr()->AddLog("发送队列长度%d", m_SendDataList.m_nWritePos-m_SendDataList.m_nReadPos);
-	
+		if(m_nMaxSendListLen < (m_SendDataList.m_nWritePos-m_SendDataList.m_nReadPos))
+		{
+			m_nMaxSendListLen = m_SendDataList.m_nWritePos-m_SendDataList.m_nReadPos;
+			CLog::GetInstancePtr()->AddLog("发送队列长度%d", m_nMaxSendListLen);
+		}
+
 		IDataBuffer *pDataBuffer = (IDataBuffer *)_SendNode.pPtr;
 		if(pDataBuffer == NULL)
 		{
@@ -292,43 +298,20 @@ BOOL    CNetManager::WorkThread_SendData()
 		}
 
 		SOCKET hSocket = INVALID_SOCKET;
-		CConnection *pConnection = NULL;
 		if(_SendNode.bIsConnID)
 		{
-			pConnection = CConnectionMgr::GetInstancePtr()->GetConnectionByConnID(_SendNode.u64ConnID);
-			if(pConnection == NULL)
-			{
-				CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 无效的连接ID：%lld!", _SendNode.u64ConnID);
-				pDataBuffer->Release();
-
-				//ASSERT_FAIELD;  这里可能是正常的情况，因为连接己经断开了，所以找不到链接的ID了。
-
-				continue;
-			}
-
-			if(!pConnection->IsConnectionOK())
-			{
-				ASSERT_FAIELD;
-
-				hSocket = INVALID_SOCKET;
-			}
-			else
-			{
-				hSocket = pConnection->GetSocket();
-			}
+			hSocket = CConnectionMgr::GetInstancePtr()->GetConnectionSocket(_SendNode.u64ConnID);
 		}
 		else
 		{
 			hSocket = (SOCKET)_SendNode.u64ConnID;
+
+			ASSERT(hSocket != INVALID_SOCKET);
 		}
 
 		if(hSocket == INVALID_SOCKET)
 		{
-			CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 无效的套接字!");
-
 			pDataBuffer->Release();
-
-			ASSERT_FAIELD;
 
 			continue;
 		}
@@ -383,12 +366,14 @@ BOOL    CNetManager::WorkThread_SendData()
 			UINT32 errCode = CommonSocket::GetSocketLastError();
 			if(errCode != ERROR_IO_PENDING)
 			{
-				if(pConnection != NULL)
-				{
-					pConnection->Close(FALSE);
+				
+				//if(pConnection != NULL)
+				//{
+				//	pConnection->Close(FALSE);
 
-					//CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
-				}
+				//	//CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
+				//}
+				CommonSocket::CloseSocket(hSocket);
 
 				pDataBuffer->Release();
 
@@ -481,34 +466,21 @@ BOOL    CNetManager::WorkThread_SendData()
 		}
 
 		SOCKET hSocket = INVALID_SOCKET;
-		CConnection *pConnection = NULL;
 		if(_SendNode.bIsConnID)
 		{
-			pConnection = CConnectionMgr::GetInstancePtr()->GetConnectionByConnID(_SendNode.u64ConnID);
-			if(pConnection == NULL)
-			{
-				CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 无效的连接ID!");
-
-				pDataBuffer->Release();
-
-				ASSERT_FAIELD;
-				continue;
-			}
-
-			hSocket = pConnection->GetSocket();
+			hSocket = CConnectionMgr::GetInstancePtr()->GetConnectionSocket(_SendNode.u64ConnID);
 		}
 		else
 		{
-			hSocket = _SendNode.u64ConnID;
+			hSocket = (SOCKET)_SendNode.u64ConnID;
+
+			ASSERT(hSocket != INVALID_SOCKET);
 		}
 
 		if(hSocket == INVALID_SOCKET)
 		{
-			CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 无效的套接字!");
-
 			pDataBuffer->Release();
 
-			ASSERT_FAIELD;
 			continue;
 		}
 
@@ -521,14 +493,7 @@ BOOL    CNetManager::WorkThread_SendData()
 		}
 		else if(nRet < pDataBuffer->GetDataLenth())
 		{
-			if(pConnection != NULL)
-			{
-				CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 所以主动关闭连接%lld!, 连接指针%x", pConnection->GetConnectionID(), pConnection);
-
-				pConnection->Close(TRUE);
-
-				CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
-			}
+			CommonSocket::CloseSocket(hSocket);
 
 			CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 缓冲区满了!");
 		}

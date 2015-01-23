@@ -101,6 +101,8 @@ public:
 
 	BOOL		 SetConnectionID(CConnection *pConnection, UINT64 dwConnID);
 
+	SOCKET		 GetConnectionSocket(UINT64 dwConnID);
+
 	///////////////////////////////////////////
 	BOOL		 CloseAllConnection();
 
