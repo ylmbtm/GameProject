@@ -72,7 +72,7 @@ BOOL CDlgLogin::OnInitDialog()
 	CDialog::OnInitDialog();
 
 	m_strAccountName = "test0";
-	m_strPassword    = "1234556";
+	m_strPassword    = "123456";
 
 	UpdateData(FALSE);
 

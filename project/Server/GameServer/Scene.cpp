@@ -484,7 +484,7 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 		return TRUE;
 	}
 
-	if(pWorldObject->m_UpdateType == UT_Unknow)
+	if(pWorldObject->m_UpdateType == UT_None)
 	{
 		ASSERT_FAIELD;
 	}
@@ -503,7 +503,7 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 
 		pWorldObject->m_UpdateObjPos = pWorldObject->m_ObjectPos;
 
-		pWorldObject->m_UpdateType   = UT_Unknow;
+		pWorldObject->m_UpdateType   = UT_None;
 	}
 	else if(pWorldObject->m_UpdateType == UT_Delete)
 	{
@@ -554,7 +554,7 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 
 		pWorldObject->m_UpdateObjPos = pWorldObject->m_ObjectPos;
 
-		pWorldObject->m_UpdateType   = UT_Unknow;
+		pWorldObject->m_UpdateType   = UT_None;
 	}
 	
 	return TRUE;
@@ -589,6 +589,13 @@ BOOL CScene::OnCmdCharEnterSceneReq( UINT16 wCommandID, UINT64 u64ConnID, CBuffe
 	pPlayerObject->LoadFromDBPacket(pBufferHelper);
 
 	pPlayerObject->SetConnectID(SvrEnterSceneReq.dwProxySvrID);
+
+	CPlayerObject *pTestObject = m_PlayerObjectMgr.GetPlayer(pPlayerObject->GetObjectID());
+	if(pTestObject != NULL)
+	{
+		ASSERT_FAIELD;
+		return TRUE;
+	}
 
 	m_PlayerObjectMgr.AddPlayer(pPlayerObject);
 

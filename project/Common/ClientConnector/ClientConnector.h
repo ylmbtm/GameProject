@@ -75,10 +75,10 @@ protected:
 
 	ConnectState		m_ConnectState;
 
-	SOCKET	m_hSocket;
+	SOCKET				m_hSocket;
 
-	INT32   m_nDataLen;
-	CHAR	m_DataBuffer[CONST_BUFF_SIZE];
+	INT32				m_nDataLen;
+	CHAR				m_DataBuffer[CONST_BUFF_SIZE];
 
 	CDataBuffer<CONST_BUFF_SIZE>  m_ReadBuffer;
 

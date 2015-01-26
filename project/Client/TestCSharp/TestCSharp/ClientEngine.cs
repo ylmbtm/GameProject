@@ -190,11 +190,10 @@ public class ClientConnector
             return false;
         }
 
-        if (ReceiveData())
-        {
-            ProcessData();
-        }
-
+        ReceiveData();
+        
+        while(ProcessData());
+        
         return true;
     }
 
@@ -318,7 +317,7 @@ public class ClientConnector
 
     //以下都是内部网络实现
 
-    bool Valid()
+    bool IsSocketValid()
     {
         return ((m_ClientSocket != null) && (m_ClientSocket.Connected == true));
     }
@@ -351,7 +350,7 @@ public class ClientConnector
         return (m_ConnectState == ConnectState.Succ_Connect);
     }
 
-   void ProcessData()
+   bool ProcessData()
     {
         if (m_DataLen < PacketHeaderSize)
         {
@@ -362,7 +361,7 @@ public class ClientConnector
 
         if (m_DataLen < PacketHeaderSize)
        {
-           return ;
+           return false;
        }
 
        Byte CheckCode = m_DataBuffer[0];
@@ -380,35 +379,24 @@ public class ClientConnector
        }
        else
        {
-           return ;
+           return false;
        }
 
        if (!m_ReadHelper.BeginRead())
        {
-           return;
+           return false;
        }
 
        OnCommandHandle((Command_ID)m_ReadHelper.m_CommandHeader.wCommandID, 0, m_ReadHelper);
 
-       return;
+       return true;
     }
 
    bool ReceiveData()
     {
-        if (!Valid())
-        {
-            return false;
-        }
-
-        if (!m_ClientSocket.Poll(3, SelectMode.SelectRead))
-        {
-            return false;
-        }
-
-        if (!Valid())
+        if (!IsSocketValid())
         {
             Debug.Print("invalid socket!");
-
             return false;
         }
 

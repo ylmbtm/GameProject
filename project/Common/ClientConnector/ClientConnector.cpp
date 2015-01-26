@@ -163,7 +163,7 @@ BOOL CClientConnector::Render()
 
 	ReceiveData();
 	
-	ProcessData();
+	while(ProcessData());
 
 	return TRUE;
 
@@ -395,34 +395,74 @@ BOOL CClientConnector::ProcessData()
 	}
 
 	TransferHeader *pHeader = (TransferHeader *)m_DataBuffer;
-	if(pHeader->dwSize <= m_nDataLen)
+	if(pHeader->CheckCode != 0xff)
 	{
-		memcpy(m_ReadBuffer.GetData(), m_DataBuffer, pHeader->dwSize);
-
-		m_ReadBuffer.SetDataLenth(pHeader->dwSize);
-
-		m_nDataLen -= pHeader->dwSize;
-
-		if(m_nDataLen > 0)
-		{
-			memmove(m_DataBuffer, m_DataBuffer+pHeader->dwSize, m_nDataLen);
-		}
-
-		CBufferHelper BufferReader(FALSE, &m_ReadBuffer);
-		if(!BufferReader.BeginRead())
-		{
-			return FALSE;
-		}
-
-		CommandHeader *pCommandHeader = BufferReader.GetCommandHeader();
-		if(pCommandHeader == NULL)
-		{
-			return FALSE;
-		}
-
-		OnCommandHandle(pCommandHeader->wCommandID, 0, &BufferReader);
+		ASSERT_FAIELD;
+		return FALSE;
+	}
+	
+	if(pHeader->dwSize == 0)
+	{
+		ASSERT_FAIELD;
+		return FALSE;
 	}
 
+	if(pHeader->dwSize > m_nDataLen)
+	{
+		return FALSE;
+	}
+
+	UINT32 dwCheckCode = *(UINT32*)(m_DataBuffer+pHeader->dwSize-4);
+	if(dwCheckCode != 0x11111111)
+	{
+		ASSERT_FAIELD;
+	}
+
+	memcpy(m_ReadBuffer.GetData(), m_DataBuffer, pHeader->dwSize);
+
+	m_ReadBuffer.SetDataLenth(pHeader->dwSize);
+
+	m_nDataLen -= pHeader->dwSize;
+
+	if(m_nDataLen > 0)
+	{
+		memmove(m_DataBuffer, m_DataBuffer+pHeader->dwSize, m_nDataLen);
+	}
+	else if(m_nDataLen == 0)
+	{
+		printf("直接处理完了一缓冲数据!\n");
+	}
+	else
+	{
+		ASSERT_FAIELD;
+	}
+
+	CBufferHelper BufferReader(FALSE, &m_ReadBuffer);
+	if(!BufferReader.BeginRead())
+	{
+		return FALSE;
+	}
+
+	CommandHeader *pCommandHeader = BufferReader.GetCommandHeader();
+	if(pCommandHeader == NULL)
+	{
+		return FALSE;
+	}
+
+	if((pCommandHeader->wCommandID > CMD_BEGIN_TAG)&&(pCommandHeader->wCommandID < CMD_END_TAG))
+	{
+		OnCommandHandle(pCommandHeader->wCommandID, 0, &BufferReader);
+	}
+	else
+	{
+		ASSERT_FAIELD;
+		return FALSE;
+	}
+
+	
+
+	
+	
 	return TRUE;
 }
 

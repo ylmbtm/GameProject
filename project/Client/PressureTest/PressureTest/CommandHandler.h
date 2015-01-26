@@ -6,11 +6,12 @@
 #include "PlayerObject.h"
 #include "ClientConnector\ClientConnector.h"
 
-#define ST_NONE		0
-#define ST_Logining 1
-#define ST_Logined  2
-#define ST_Picking  3
-#define ST_Picked   4
+#define ST_NONE			0
+#define ST_Logining		1
+#define ST_Logined		2
+#define ST_Entering		3
+#define ST_EnterGame	4
+#define ST_Disconnected 5
 
 
 class CClientCmdHandler : public IMessageHandler

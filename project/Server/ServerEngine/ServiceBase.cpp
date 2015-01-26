@@ -75,6 +75,8 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[世界]-服务器【%lld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
 		}
 
+		ASSERT(pConnection->GetConnectionID() == 0);
+
 		pConnection->SetConnectionType(ConnectNotify.btConType);
 
 		CConnectionMgr::GetInstancePtr()->SetConnectionID(pConnection, ConnectNotify.u64ConnID);

@@ -24,8 +24,6 @@ BOOL CPlayerObjectMgr::AddPlayer( CPlayerObject *pObject )
 {
 	insert(std::make_pair(pObject->GetObjectID(), pObject));
 
-	printf("-------周围队列的人数:%d------AddPlayer---", size());
-
 	return TRUE;
 }
 
@@ -44,7 +42,7 @@ BOOL CPlayerObjectMgr::RemovePlayer( UINT64 ObjectID )
 {
 	erase(ObjectID);
 
-	printf("-------周围队列的人数:%d-----RemovePlayer----", size());
+	
 
 	return TRUE;
 }

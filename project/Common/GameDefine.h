@@ -20,7 +20,7 @@
 
 enum  UpdateTypeEnum
 {
-	UT_Unknow,
+	UT_None,
 	UT_Update,
 	UT_New,
 	UT_Delete

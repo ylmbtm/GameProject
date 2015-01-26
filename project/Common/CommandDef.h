@@ -11,6 +11,7 @@ enum CmdHandler_ID
 
 enum Command_ID
 {
+	CMD_BEGIN_TAG,
 	//服务器的连接通知
 	CMD_CONNECT_NOTIFY = 1,		//连接通知
 	CMD_DISCONNECT_NOTIFY,		//断开连接通知
@@ -90,7 +91,9 @@ enum Command_ID
 	//
 	CMD_SVR_CHAR_WILL_ENTER,	//通知代理服，玩家准备进入
 
-	CMD_CHAR_MOVE_REQ			//玩家移动请求
+	CMD_CHAR_MOVE_REQ,			//玩家移动请求
+
+	CMD_END_TAG
 };
 
 

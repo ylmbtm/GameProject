@@ -70,11 +70,12 @@ BOOL CClientCmdHandler::OnCmdNearByAdd( UINT16 wCommandID, UINT64 u64ConnID, CBu
 
 		pObject->ReadFromBuffer(pBufferHelper);
 
-		m_PlayerObjMgr.insert(std::make_pair(pObject->GetObjectID(), pObject));
+		m_PlayerObjMgr.AddPlayer(pObject);
 
 		/*printf("添加角色:%d, 坐标x = %f, z = %f", (UINT32)pObject->GetObjectID(), pObject->m_ObjectPos.x, pObject->m_ObjectPos.z);*/
 	}
 
+	printf("-------周围队列的人数:%d------OnCmdNearByAdd---\n", m_PlayerObjMgr.size());
 
 	return TRUE;
 }
@@ -99,7 +100,7 @@ BOOL CClientCmdHandler::OnCmdNearByUpdate( UINT16 wCommandID, UINT64 u64ConnID, 
 		}
 		else
 		{
-			ASSERT_FAIELD;
+			//ASSERT_FAIELD;
 		}
 	}
 
@@ -122,7 +123,7 @@ BOOL CClientCmdHandler::OnCmdNearByRemove( UINT16 wCommandID, UINT64 u64ConnID, 
 		CPlayerObject *pObj = m_PlayerObjMgr.GetPlayer(u64CharID);
 		if(pObj == NULL)
 		{
-			ASSERT_FAIELD;
+			//ASSERT_FAIELD;
 			return 0;
 		}
 
@@ -131,8 +132,9 @@ BOOL CClientCmdHandler::OnCmdNearByRemove( UINT16 wCommandID, UINT64 u64ConnID, 
 		delete pObj;
 
 		//printf("删除角色:%d成功", (UINT32)u64CharID);
-
 	}
+
+	printf("-------周围队列的人数:%d-----OnCmdNearByRemove----\n", m_PlayerObjMgr.size());
 
 	//printf("END---删除角色消息");
 
@@ -154,7 +156,7 @@ BOOL CClientCmdHandler::OnCmdEnterGameAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	g_EnterCount++;
 	printf("%s己成功进入游戏服,总人数:%d\n",m_strRoleName.c_str(), g_EnterCount);
 
-	m_dwHostState = ST_Picked;
+	m_dwHostState = ST_EnterGame;
 
 	return TRUE;
 }
@@ -163,18 +165,16 @@ BOOL CClientCmdHandler::OnUpdate( UINT32 dwTick )
 {
 	m_ClientConnector.Render();
 
-	if(m_ClientConnector.GetConnectState() == Not_Connect)
+	if(m_dwHostState == ST_NONE)
 	{
-		m_ClientConnector.SetClientID(0);
+		if(m_ClientConnector.GetConnectState() == Not_Connect)
+		{
+			m_ClientConnector.SetClientID(0);
 
-		m_ClientConnector.ConnectToServer("127.0.0.1", 7994);
-	}
+			m_ClientConnector.ConnectToServer("127.0.0.1", 7994);
+		}
 
-	if(m_ClientConnector.GetConnectState() == Succ_Connect)
-	{
-		//SendNewAccountReq(m_strAccountName.c_str(), m_strPassword.c_str());
-
-		if(m_dwHostState == ST_NONE)
+		if(m_ClientConnector.GetConnectState() == Succ_Connect)
 		{
 			m_ClientConnector.Login(m_strAccountName.c_str(), m_strPassword.c_str());
 
@@ -191,12 +191,31 @@ BOOL CClientCmdHandler::OnUpdate( UINT32 dwTick )
 
 		SendPickCharReq(m_RoleIDList[0]);
 
-		m_dwHostState = ST_Picking;
+		m_dwHostState = ST_Entering;
 	}
 
-	if(m_dwHostState == ST_Picked)
+	if(m_dwHostState == ST_EnterGame)
 	{
-		MoveHost();
+		int randValue = rand()%100;
+		if((randValue < 60)&&(randValue > 50))
+		{
+			m_ClientConnector.DisConnect();
+
+			m_dwHostState = ST_Disconnected;
+		}
+		else
+		{
+			MoveHost();
+		}
+	}
+
+	if(m_dwHostState == ST_Disconnected)
+	{
+		int randValue = rand()%100;
+		if((randValue < 80)&&(randValue > 70))
+		{
+			m_dwHostState = ST_NONE;
+		}
 	}
 
 	return TRUE;
@@ -268,7 +287,7 @@ BOOL CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID, 
 
 BOOL CClientCmdHandler::SendPickCharReq( UINT64 u64CharID )
 {
-	m_dwHostState = ST_Picking;
+	m_dwHostState = ST_Entering;
 	StCharPickCharReq CharPickCharReq;
 	CharPickCharReq.u64CharID = u64CharID;
 
