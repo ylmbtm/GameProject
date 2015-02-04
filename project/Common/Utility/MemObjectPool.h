@@ -88,6 +88,8 @@ bool MemObjectPool<T>::AllocNodeBuffer( int nSize /*= 1024*/ )
 		return false;
 	}
 
+	memset(pNode, 0, sizeof(MemObjectNode<T>) * nSize);
+
 	m_NodeBuff.push_back(pNode);
 
 	for(int i = 0; i < nSize; i++)

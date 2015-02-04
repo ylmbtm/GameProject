@@ -55,6 +55,8 @@ public:
 public:
 	BOOL			AddPlayer(CPlayerObject *pObject);
 
+	BOOL			RemovePlayer(UINT64 ObjectID);
+
 	CPlayerObject*	GetPlayer(UINT64 ObjectID);
 };
 

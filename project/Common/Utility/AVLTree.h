@@ -11,11 +11,23 @@ private:
 	}
 
 public:
+	TKey* GetKey()
+	{
+		return &m_Key;
+	}
+
+	TValue* GetValue()
+	{
+		return &m_Data;
+	}
+
+public:
     TValue m_Data;
 	TKey   m_Key;
     int	   m_nHeight;
 	TreeNode<TKey, TValue> *m_pLeft;
     TreeNode<TKey, TValue> *m_pRight;
+	TreeNode<TKey, TValue> *m_pParent;
 };
 
 //AVL树类的属性和方法声明
@@ -56,6 +68,9 @@ public:
 	void			FreeNode(TNodeTypePtr pNode);
 	void			DoEnumNode(TNodeTypePtr pNode);
 	int				GetCount();
+	bool			Delete(TNodeTypePtr pNode);
+	TNodeTypePtr    MoveFirst();
+	TNodeTypePtr    MoveNext(TNodeTypePtr pNode);
 
 
 private:
@@ -103,8 +118,9 @@ TValue* AVLTree<TKey, TValue>::InsertAlloc( TKey Key )
 
 	if(m_pRoot == NULL)
 	{
-		m_pRoot = pNode;
-		m_nCount += 1;
+		m_pRoot			= pNode;
+		m_nCount		+= 1;
+		pNode->m_pParent= NULL;
 	}
 	else
 	{
@@ -184,6 +200,70 @@ void AVLTree<TKey, TValue>::FreeNode(TNodeTypePtr pNode)
 }
 
 template<typename TKey, typename TValue>
+bool AVLTree<TKey, TValue>::Delete(TNodeTypePtr pNode)
+{
+	if((m_pRoot == NULL)||(pNode == NULL))
+	{
+		return false;
+	}
+
+	ASSERT(Find(*pNode->GetKey()) != NULL);
+
+	return Delete(*pNode->GetKey());
+}
+
+template<typename TKey, typename TValue>
+TreeNode<TKey, TValue>* AVLTree<TKey, TValue>::MoveFirst()
+{
+	if(m_pRoot == NULL)
+	{
+		return NULL;
+	}
+
+	TreeNode<TKey, TValue>*pTempNode = m_pRoot;
+	while(pTempNode->m_pLeft != NULL)
+	{
+		pTempNode = pTempNode->m_pLeft;
+	}
+
+	return pTempNode;
+}
+
+
+template<typename TKey, typename TValue>
+TreeNode<TKey, TValue>* AVLTree<TKey, TValue>::MoveNext(TNodeTypePtr pNode)
+{
+	if(pNode == NULL)
+	{
+		return NULL;
+	}
+
+	TreeNode<TKey, TValue> *pTempNode = NULL;
+
+	if (pNode->m_pRight != NULL)
+	{
+		pTempNode =(TreeNode<TKey, TValue>*) pNode->m_pRight;
+		while (pTempNode->m_pLeft != NULL)
+		{
+			pTempNode = (TreeNode<TKey, TValue>*)pTempNode->m_pLeft;
+		}
+
+		return pTempNode;
+	}
+
+	pTempNode = (TreeNode<TKey, TValue>*)pNode->m_pParent;
+	while (pTempNode != NULL && pNode == (TreeNode<TKey, TValue>*)pTempNode->m_pRight)
+	{
+		pNode = pTempNode;
+
+		pTempNode = (TreeNode<TKey, TValue>*)pTempNode->m_pParent;
+	}
+
+	return pTempNode;
+}
+
+
+template<typename TKey, typename TValue>
 bool AVLTree<TKey, TValue>::AllocBufferNode(int nSize)
 {
 	TNodeType *pNode = (TNodeType *)malloc(sizeof(TNodeType) * nSize);
@@ -192,6 +272,8 @@ bool AVLTree<TKey, TValue>::AllocBufferNode(int nSize)
 		ASSERT_FAIELD;
 		return false;
 	}
+
+	memset(pNode, 0, sizeof(TNodeType) * nSize);
 
 	m_NodeBuff.push_back(pNode);
 
@@ -257,28 +339,34 @@ int AVLTree<TKey, TValue>::GetHeight(TNodeTypePtr pNode)
 template<typename TKey, typename TValue>
 void AVLTree<TKey, TValue>::SingRotateLeft(TNodeTypePtr &pNode)
 {
+	TNodeTypePtr  pOrgParent = pNode->m_pParent;
     TNodeTypePtr pTempNode;
     pTempNode = pNode->m_pLeft;
     pNode->m_pLeft  = pTempNode->m_pRight;
     pTempNode->m_pRight = pNode;
+	pNode->m_pParent = pTempNode;
 
     pNode->m_nHeight = Max(GetHeight(pNode->m_pLeft), GetHeight(pNode->m_pRight)) + 1;
     pTempNode->m_nHeight = Max(GetHeight(pTempNode->m_pLeft), GetHeight(pNode)) + 1;
 	pNode = pTempNode;
+	pNode->m_pParent = pOrgParent;
 }
 //右右情况下的旋转
 template<typename TKey, typename TValue>
 void AVLTree<TKey, TValue>::SingRotateRight(TNodeTypePtr &pNode)
 {
+	TNodeTypePtr  pOrgParent = pNode->m_pParent;
     TNodeTypePtr pTempNode;
     pTempNode = pNode->m_pRight;
     pNode->m_pRight = pTempNode->m_pLeft;
     pTempNode->m_pLeft = pNode;
+	pNode->m_pParent = pTempNode;
 
     pNode->m_nHeight=Max(GetHeight(pNode->m_pLeft), GetHeight(pNode->m_pRight))+1;
     pTempNode->m_nHeight=Max(GetHeight(pTempNode->m_pRight), GetHeight(pNode))+1;
 
 	pNode = pTempNode;
+	pNode->m_pParent = pOrgParent;
 }
 //左右情况的旋转
 template<typename TKey, typename TValue>
@@ -314,6 +402,8 @@ bool AVLTree<TKey, TValue>::Insert(TKey Key, TValue Value)
 	if(m_pRoot == NULL)
 	{
 		m_pRoot = pNode;
+		m_nCount += 1;
+		pNode->m_pParent = NULL;
 
 		return true;
 	}
@@ -344,6 +434,7 @@ bool AVLTree<TKey, TValue>::InsertInner(TNodeTypePtr &pParentNode, TNodeTypePtr 
 		else
 		{
 			pParentNode->m_pLeft = pInsertNode;
+			pInsertNode->m_pParent = pParentNode;
 			m_nCount += 1;
 		}
 
@@ -372,6 +463,7 @@ bool AVLTree<TKey, TValue>::InsertInner(TNodeTypePtr &pParentNode, TNodeTypePtr 
 		else
 		{
 			pParentNode->m_pRight = pInsertNode;
+			pInsertNode->m_pParent = pParentNode;
 			m_nCount += 1;
 		}
 
@@ -505,6 +597,7 @@ bool AVLTree<TKey,TValue>::DeleteInner(TNodeTypePtr &pNode, TKey Key)
         }
         else//此节点有1个或0个儿子
         {
+			TNodeTypePtr pOrgParentNode = pNode->m_pParent;
             TNodeTypePtr pTempNode = pNode;
 
             if(pNode->m_pLeft == NULL)//有右儿子或者没有儿子
@@ -514,6 +607,11 @@ bool AVLTree<TKey,TValue>::DeleteInner(TNodeTypePtr &pNode, TKey Key)
             else if(pNode->m_pRight == NULL)//有左儿子
 			{
 				pNode = pNode->m_pLeft;
+			}
+
+			if(pNode != NULL)
+			{
+				pNode->m_pParent = pOrgParentNode;
 			}
 
             FreeNode(pTempNode);

@@ -112,6 +112,18 @@ CPlayerObject* CPlayerObjectMgr::GetPlayer( UINT64 ObjectID )
 	return NULL;
 }
 
+BOOL CPlayerObjectMgr::RemovePlayer( UINT64 ObjectID )
+{
+	if(GetPlayer(ObjectID) == NULL)
+	{
+		ASSERT_FAIELD;
+	}
+
+	erase(ObjectID);
+
+	return TRUE;
+}
+
 BOOL CUpdateObjectMgr::AddUpdateObject( CWorldObject *pObject )
 {
 	insert(pObject);

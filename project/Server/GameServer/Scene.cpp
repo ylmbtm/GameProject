@@ -405,7 +405,7 @@ BOOL CScene::OnCmdLeaveGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelp
 
 	RemoveFromMap(pPlayerObject);
 
-	m_PlayerObjectMgr.erase(pPlayerObject->GetObjectID());
+	m_PlayerObjectMgr.RemovePlayer(pPlayerObject->GetObjectID());
 
 	return TRUE;
 }
