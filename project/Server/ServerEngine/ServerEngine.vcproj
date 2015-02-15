@@ -220,10 +220,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Platform.h"
-				>
-			</File>
-			<File
 				RelativePath=".\ServerEngine.h"
 				>
 			</File>
@@ -367,6 +363,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Common\Utility\RandomValue.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Common\Utility\WindowsDump.h"
 				>
 			</File>
 		</Filter>

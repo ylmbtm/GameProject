@@ -223,3 +223,5 @@ pip-log.txt
 
 *.res
 *.ib_tag
+project/Lua/Debug/LuaProjectd.lib
+project/Lua/Release/LuaProject.lib
