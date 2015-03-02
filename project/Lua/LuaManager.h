@@ -20,6 +20,8 @@ public:
 
 	BOOL	GetStackParams(char *pStrParamSig, ...);
 
+	BOOL    RegisterFunction(const char *libname, const luaL_Reg *l);
+
 	//获取堆栈脚本变量
 	BOOL	GetStackValue_Ptr(INT32 nStackIndex, VOID* &ptrValue);
 	BOOL	GetStackValue_Int(INT32 nStackIndex, INT32 &intValue);
