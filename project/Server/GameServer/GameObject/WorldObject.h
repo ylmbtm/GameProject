@@ -62,6 +62,7 @@ public:
 public:
 	CPosition		m_UpdateObjPos;//己经同步出去的地址
 	UpdateTypeEnum	m_UpdateType;
+	UpdateTypeEnum  GetUpdateFlag();
 
 };
 
