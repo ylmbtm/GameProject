@@ -36,7 +36,7 @@ namespace TestCSharp
 
             procTimer.Start();
 
-            m_ClientConnector.ConnectToServer("127.0.0.1", 7994);
+            m_ClientConnector.SetLoginServerAddr("127.0.0.1", 7994);
         }
 
        public void procTimer_Tick(object sender, EventArgs e)
@@ -54,7 +54,7 @@ namespace TestCSharp
            //m_ClientEngine.m_WriteHelper.EndWrite();
 
            //m_ClientEngine.SendData(m_ClientEngine.m_WriteHelper.GetData(), m_ClientEngine.m_WriteHelper.GetDataLen());
-           m_ClientConnector.Login("test", "test2");
+           m_ClientConnector.Login("test0", "123456", true);
        }
     }
 

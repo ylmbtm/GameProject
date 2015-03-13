@@ -187,6 +187,8 @@ BOOL CDBCmdHandler::OnCmdDBLoginReq( UINT16 wCommandID, UINT64 u64ConnID, CBuffe
 	if(dwAccountID == 0)
 	{
 		DBCharLoginAck.CharLoginAck.nRetCode = E_FAILED;
+		DBCharLoginAck.CharLoginAck.dwAccountID = 0;
+		DBCharLoginAck.CharLoginAck.nCount = 0;
 	}
 	else
 	{

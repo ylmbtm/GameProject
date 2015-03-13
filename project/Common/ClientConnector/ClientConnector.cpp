@@ -114,18 +114,21 @@ BOOL CClientConnector::Login(const char *pszAccountName, const char *pszPassword
 		}
 	}
 
+	StConnectNotify ConnectNotify;
+	ConnectNotify.btConType = TYPE_CLT_PLAYER;
+	ConnectNotify.u64ConnID = 0;
+	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+	WriteHelper.BeginWrite(CMD_CONNECT_NOTIFY, CMDH_SVR_CON, 0, 0);
+	WriteHelper.Write(ConnectNotify);
+	WriteHelper.EndWrite();
+	SendData(m_WriteBuffer.GetData(), m_WriteBuffer.GetDataLenth());
+
 	StCharLoginReq CharLoginReq;
 	strncpy(CharLoginReq.szAccountName, pszAccountName, 32);
 	strncpy(CharLoginReq.szPassword, pszPassword, 32);
-
-	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-
 	WriteHelper.BeginWrite(CMD_CHAR_LOGIN_REQ, 0, 0, 0);
-
 	WriteHelper.Write(CharLoginReq);
-
 	WriteHelper.EndWrite();
-
 	SendData(m_WriteBuffer.GetData(), m_WriteBuffer.GetDataLenth());
 
 	return TRUE;
@@ -223,22 +226,23 @@ BOOL CClientConnector::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, C
 
 	UINT32 ConType = ConnectNotify.btConType;
 
-	ConnectNotify.btConType =  TYPE_CLT_PLAYER;
-
-	ConnectNotify.u64ConnID = m_u64ClientID;
-
-	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-
-	WriteHelper.BeginWrite(CMD_CONNECT_NOTIFY, CMDH_SVR_CON, 0, 0);
-
-	WriteHelper.Write(ConnectNotify);
-
-	WriteHelper.EndWrite();
-
-	SendData(m_WriteBuffer.GetData(), m_WriteBuffer.GetDataLenth());
-
 	if(ConType == TYPE_SVR_PROXY)
 	{
+		ConnectNotify.btConType =  TYPE_CLT_PLAYER;
+
+		ConnectNotify.u64ConnID = m_u64ClientID;
+
+		CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+
+		WriteHelper.BeginWrite(CMD_CONNECT_NOTIFY, CMDH_SVR_CON, 0, 0);
+
+		WriteHelper.Write(ConnectNotify);
+
+		WriteHelper.EndWrite();
+
+		SendData(m_WriteBuffer.GetData(), m_WriteBuffer.GetDataLenth());
+
+
 		StCharEnterGameReq CharEnterGameReq;
 
 		CharEnterGameReq.u64CharID = m_u64ClientID;
@@ -246,8 +250,6 @@ BOOL CClientConnector::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, C
 		CharEnterGameReq.dwIdentifyCode = m_dwIdentifyCode;
 
 		CHECK_PAYER_ID(m_u64ClientID);
-
-		CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 
 		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_REQ, CMDH_SENCE, 0, CharEnterGameReq.u64CharID);
 

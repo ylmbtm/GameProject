@@ -16,7 +16,7 @@ struct CommandHeader
 	UINT16   wCommandID;
 	UINT32   dwSceneID;
 	UINT64   u64CharID;		//角色ID
-	UINT32   dwPacketNo;		//包序号
+	UINT32   dwPacketNo;	//包序号
 };
 
 #pragma  pack(pop)

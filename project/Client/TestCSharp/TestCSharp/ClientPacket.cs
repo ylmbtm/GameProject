@@ -217,8 +217,9 @@ public class StCharLoginAck
 		nRetCode = bh.ReadUint16();
 		dwAccountID = bh.ReadUint32();
 		nCount = bh.ReadUint8();
-		for(int i = 0; i < 4; i++)
+        for (int i = 0; i < nCount; i++)
 		{
+            CharPickInfo[i] = new StCharPickInfo();
 			CharPickInfo[i].Read(bh);
 		}
 		return ;
@@ -228,7 +229,7 @@ public class StCharLoginAck
 		bh.WriteUint16(nRetCode);
 		bh.WriteUint32(dwAccountID);
 		bh.WriteUint8(nCount);
-		for(int i = 0; i < 4; i++)
+        for (int i = 0; i < nCount; i++)
 		{
 			CharPickInfo[i].Write(bh);
 		}
@@ -254,15 +255,15 @@ public class StCharPickCharAck
 	public UInt16 nRetCode;
 	public UInt64 u64CharID;
 	public UInt32 dwIdentifyCode;
-	public UInt16 sPort;
-	public string szIpAddr;
+	public UInt16 nProxyPort;
+	public string szProxyIpAddr;
 	public void Read(ReadBufferHelper bh)
 	{
 		nRetCode = bh.ReadUint16();
 		u64CharID = bh.ReadUint64();
 		dwIdentifyCode = bh.ReadUint32();
-		sPort = bh.ReadUint16();
-		szIpAddr = bh.ReadFixString(32);
+		nProxyPort = bh.ReadUint16();
+		szProxyIpAddr = bh.ReadFixString(32);
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
@@ -270,8 +271,8 @@ public class StCharPickCharAck
 		bh.WriteUint16(nRetCode);
 		bh.WriteUint64(u64CharID);
 		bh.WriteUint32(dwIdentifyCode);
-		bh.WriteUint16(sPort);
-		bh.WriteFixString(szIpAddr,32);
+		bh.WriteUint16(nProxyPort);
+		bh.WriteFixString(szProxyIpAddr,32);
 		return ;
 	}
 };
@@ -294,17 +295,14 @@ public class StCharEnterGameReq
 };
 public class StCharEnterGameAck
 {
-	public UInt32 dwIdentifyCode;
 	public UInt32 dwSceneID;
 	public void Read(ReadBufferHelper bh)
 	{
-		dwIdentifyCode = bh.ReadUint32();
 		dwSceneID = bh.ReadUint32();
 		return ;
 	}
 	public void Write(WriteBufferHelper bh)
 	{
-		bh.WriteUint32(dwIdentifyCode);
 		bh.WriteUint32(dwSceneID);
 		return ;
 	}
