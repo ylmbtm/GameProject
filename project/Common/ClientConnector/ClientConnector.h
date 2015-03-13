@@ -32,13 +32,15 @@ public:
 
 	BOOL	SetClientID(UINT64 u64ClientID);  //一般是角色ID
 
+	BOOL	SetLoginServerAddr(std::string strIpAddr, UINT16 sPort);
+
 	BOOL	ConnectToServer(std::string strIpAddr, UINT16 sPort);
 
 	BOOL	DisConnect();
 
 	BOOL	SendData(char *pData, INT32 dwLen);
 	
-	BOOL	Login(const char *pszAccountName, const char *pszPassword);
+	BOOL	Login(const char *pszAccountName, const char *pszPassword, BOOL bConnect = FALSE);
 
 	BOOL	RegisterMsgHandler(IMessageHandler *pMsgHandler);
 
@@ -89,6 +91,9 @@ protected:
 
 	UINT32				m_dwServerTime;
 	UINT32				m_dwServerTick;
+
+	std::string			m_strLoginIp;
+	UINT16				m_sLoginPort;
 
 };
 

@@ -90,11 +90,28 @@ BOOL CClientConnector::SendData( char *pData, INT32 dwLen )
 	return TRUE;
 }
 
-BOOL CClientConnector::Login(const char *pszAccountName, const char *pszPassword)
+BOOL CClientConnector::Login(const char *pszAccountName, const char *pszPassword, BOOL bConnect)
 {
 	if((pszPassword == NULL)||(pszAccountName == NULL))
 	{
 		return FALSE;
+	}
+
+	if(bConnect)
+	{
+		if(m_strLoginIp.empty())
+		{
+			ASSERT_FAIELD;
+			return FALSE;
+		}
+
+		DisConnect();
+
+		if(ConnectToServer(m_strLoginIp, m_sLoginPort))
+		{
+			ASSERT_FAIELD;
+			return FALSE;
+		}
 	}
 
 	StCharLoginReq CharLoginReq;
@@ -482,6 +499,14 @@ BOOL CClientConnector::OnCmdHearBeatAck( UINT16 wCommandID, UINT64 u64ConnID, CB
 
 	m_dwServerTime = CharHeartBeatAck.dwServerTime + (dwTick - CharHeartBeatAck.dwReqTimestamp) /1000;
 	m_dwServerTick = dwTick;
+
+	return TRUE;
+}
+
+BOOL CClientConnector::SetLoginServerAddr( std::string strIpAddr, UINT16 sPort )
+{
+	m_strLoginIp = strIpAddr;
+	m_sLoginPort = sPort;
 
 	return TRUE;
 }

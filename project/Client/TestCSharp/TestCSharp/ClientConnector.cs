@@ -22,16 +22,18 @@ public abstract class MessageHandler
 public class ClientConnector
 {
     UInt32              m_dwServerTime;
-    UInt64				m_u64ClientID;    //¿Í»§¶ËID
-    UInt32              m_dwIdentifyCode; //µÇÂ¼Ê¶±ğÂë
+    UInt64				m_u64ClientID;    
+    UInt32              m_dwIdentifyCode; 
 
-    // Socket¿Í»§¶Ë¶ÔÏó
+    public string m_strLoginIp = "";
+	public UInt16 m_sLoginPort = 0;
+
+    // Socketå®¢æˆ·ç«¯å¯¹è±¡
     private Socket m_ClientSocket = null;
     public ConnectState m_ConnectState;
 
     public Int32 mTimeOut = 500;
     private int PacketHeaderSize = 18;
-
 
     public const int BUFFER_MAX = 8096;
     private int m_RecvLen = 0;
@@ -58,12 +60,37 @@ public class ClientConnector
 
     public Boolean SetClientID(UInt64 u64ClientID) 
     {
-        m_u64ClientID = u64ClientID; //Ò»°ãÊÇ½ÇÉ«ID
+        m_u64ClientID = u64ClientID; //é”Ÿæˆ’ç«´é‘¸î„æ§¸ç‘™æ•å£ŠID
 
         m_WriteHelper.m_u64ClientID = u64ClientID;
 
         return true; 
     }
+
+    //public Boolean ConnectToServer(string strIpAddr, UInt16 sPort)
+    //{
+    //    IPAddress ipAddress = IPAddress.Parse(strIpAddr);
+
+    //    IPEndPoint ipEndpoint = new IPEndPoint(ipAddress, sPort);
+
+    //    m_ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+    //    m_ClientSocket.SendTimeout = mTimeOut;
+
+    //    try
+    //    {
+    //        // æ©æ¬æ§¸æ¶“â‚¬æ¶“î„ç´“å§ãƒ§æ®‘å¯¤è™¹ç›æ©ç‚´å¸´é”›å±½ç¶‹æ©ç‚´å¸´å¯¤è™¹ç›é´æ„¬å§›éƒæƒ°çšŸé¢â•ŸonnectCallbacké‚è§„ç¡¶
+    //        m_ClientSocket.BeginConnect(ipEndpoint, new AsyncCallback(ConnectCallBack), m_ClientSocket);
+    //    }
+    //    catch (System.Exception ex)
+    //    {
+    //        Debug.Print("Connect Exception: " + ex.Message);
+    //    }
+
+    //    SetConnectState(ConnectState.Start_Connect);
+
+    //    return true;
+    //}
 
     public Boolean ConnectToServer(string strIpAddr, UInt16 sPort)
     {
@@ -77,15 +104,17 @@ public class ClientConnector
 
         try
         {
-            // ÕâÊÇÒ»¸öÒì²½µÄ½¨Á¢Á¬½Ó£¬µ±Á¬½Ó½¨Á¢³É¹¦Ê±µ÷ÓÃconnectCallback·½·¨
-            m_ClientSocket.BeginConnect(ipEndpoint, new AsyncCallback(ConnectCallBack), m_ClientSocket);
+            // æ©æ¬æ§¸æ¶“â‚¬æ¶“î„ç´“å§ãƒ§æ®‘å¯¤è™¹ç›æ©ç‚´å¸´é”›å±½ç¶‹æ©ç‚´å¸´å¯¤è™¹ç›é´æ„¬å§›éƒæƒ°çšŸé¢â•ŸonnectCallbacké‚è§„ç¡¶
+            m_ClientSocket.Connect(ipEndpoint);
         }
         catch (System.Exception ex)
         {
             Debug.Print("Connect Exception: " + ex.Message);
+
+            return false;
         }
 
-        SetConnectState(ConnectState.Start_Connect);
+        SetConnectState(ConnectState.Raw_Connect);
 
         return true;
     }
@@ -134,8 +163,18 @@ public class ClientConnector
         return true;
     }
 
-    public Boolean Login(string strAccountName, string strPassword)
+    public Boolean Login(string strAccountName, string strPassword, bool bConnect = false)
     {
+        if (bConnect)
+        {
+             DisConnect();
+
+            if(!ConnectToServer(m_strLoginIp, m_sLoginPort))
+            {
+                return false;
+            }
+        }
+
         m_WriteHelper.BeginWrite((UInt16)Command_ID.CMD_CHAR_LOGIN_REQ, 0);
 
         m_WriteHelper.WriteFixString(strAccountName, 32);
@@ -202,7 +241,7 @@ public class ClientConnector
         return m_dwServerTime;
     }
 
-	//ÒÔÏÂÊÇÄÚ²¿µÄÏûÏ¢´¦Àí
+	//æµ ãƒ¤ç¬…é„îˆšå”´é–®ã„§æ®‘å¨‘å Ÿä¼…æ¾¶å‹­æ‚Š
     public Boolean OnCommandHandle(Command_ID wCommandID, UInt64 u64ConnID, ReadBufferHelper ReadHelper) 
     {
         Boolean bHandled = false;
@@ -315,7 +354,7 @@ public class ClientConnector
         return true;
     }
 
-    //ÒÔÏÂ¶¼ÊÇÄÚ²¿ÍøÂçÊµÏÖ
+    //æµ ãƒ¤ç¬…é–®èŠ¥æ§¸éå‘´å„´ç¼ƒæˆ ç²¶ç€¹ç‚µå¹‡
 
     bool IsSocketValid()
     {
@@ -334,7 +373,7 @@ public class ClientConnector
         {
             ClientSocket.EndConnect(asyncConnect);
 
-            // Óësocket½¨Á¢Á¬½Ó³É¹¦£¬¿ªÆôÏß³Ì½ÓÊÜ·şÎñ¶ËÊı¾İ
+            // æ¶“å·—ocketå¯¤è™¹ç›æ©ç‚´å¸´é´æ„¬å§›é”›å±½ç´‘éšîˆœåšç»‹å¬«å¸´é™æ¥æ¹‡é”ï¼„î¬éç‰ˆåµ
             SetConnectState(ConnectState.Raw_Connect);
 
             Debug.Print("SocketObject Connect Success.");
@@ -370,7 +409,7 @@ public class ClientConnector
 
        if(nPacketSize <= m_DataLen)
        {
-           //ËµÃ÷Ò»¸ö°üµÄÊı¾İÊÇ×ã¹»ÁË
+           //ç’‡å­˜æ§‘æ¶“â‚¬æ¶“î„å¯˜é¨å‹¬æšŸé¹î†½æ§¸ç“’å†²î™„?
            Array.Copy(m_DataBuffer, 0, m_ReadHelper.GetData(), 0, nPacketSize);
 
            Array.Copy(m_DataBuffer, nPacketSize, m_DataBuffer, 0, m_DataLen - nPacketSize);
