@@ -5,6 +5,7 @@
 #include "TestClient.h"
 #include "DlgSelect.h"
 #include "CommandHandler.h"
+#include "DlgCreate.h"
 
 
 // CDlgSelect 对话框
@@ -13,7 +14,6 @@ IMPLEMENT_DYNAMIC(CDlgSelect, CDialog)
 
 CDlgSelect::CDlgSelect(CWnd* pParent /*=NULL*/)
 	: CDialog(CDlgSelect::IDD, pParent)
-	, m_strNewName(_T(""))
 {
 
 }
@@ -26,7 +26,6 @@ void CDlgSelect::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_CharList);
-	DDX_Text(pDX, IDC_EDT_NAME, m_strNewName);
 }
 
 
@@ -73,15 +72,11 @@ void CDlgSelect::OnBnClickedOk()
 
 void CDlgSelect::OnBnClickedBtnNewChar()
 {
-	UpdateData(TRUE);
+	
 
-	if(m_strNewName.IsEmpty())
-	{
-		MessageBox("name can not be empty!");
-		return ;
-	}
+	CDlgCreate DlgCreate;
 
-	CClientCmdHandler::GetInstancePtr()->SendNewCharReq(m_dwAccountID, (LPCTSTR)m_strNewName , 123);
+	DlgCreate.DoModal();
 
 	OnOK();
 }
@@ -142,7 +137,7 @@ void CDlgSelect::OnNMRClickList1(NMHDR *pNMHDR, LRESULT *pResult)
 	{
 		StCharPickInfo &Info = m_CharInfoList[pNMItemActivate->iItem];
 
-		CClientCmdHandler::GetInstancePtr()->SendDelCharReq(m_dwAccountID, Info.u64CharID);
+		CClientCmdHandler::GetInstancePtr()->SendDelCharReq(CClientCmdHandler::GetInstancePtr()->m_dwAccountID, Info.u64CharID);
 		
 		OnOK();
 	}

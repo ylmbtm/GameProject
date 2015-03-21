@@ -36,10 +36,8 @@ public:
 
 	UINT32			m_nCount;
 	std::vector<StCharPickInfo>  m_CharInfoList;
-	UINT32			m_dwAccountID;
 
 	CListCtrl m_CharList;
 	
 	afx_msg void OnNMRClickList1(NMHDR *pNMHDR, LRESULT *pResult);
-	CString m_strNewName;
 };

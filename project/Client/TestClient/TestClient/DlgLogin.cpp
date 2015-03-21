@@ -56,7 +56,7 @@ void CDlgLogin::OnBnClickedOk()
 {
 	UpdateData(TRUE);
 
-	CClientCmdHandler::GetInstancePtr()->m_ClientConnector.Login((LPCTSTR)m_strAccountName, (LPCTSTR)m_strPassword);
+	CClientCmdHandler::GetInstancePtr()->m_ClientConnector.Login((LPCTSTR)m_strAccountName, (LPCTSTR)m_strPassword, TRUE);
 
 	OnOK();
 } 

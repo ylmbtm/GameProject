@@ -125,7 +125,7 @@ BOOL CTestClientDlg::OnInitDialog()
 	freopen("CONOUT$","w+t",stdout);   
 
 	CClientCmdHandler::GetInstancePtr()->m_ClientConnector.SetClientID(0);
-	CClientCmdHandler::GetInstancePtr()->m_ClientConnector.ConnectToServer("127.0.0.1", 7994);
+	CClientCmdHandler::GetInstancePtr()->m_ClientConnector.SetLoginServerAddr("127.0.0.1", 7994);
 
 	MoveWindow(10,0, 1250, 900);
 

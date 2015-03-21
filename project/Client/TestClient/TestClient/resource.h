@@ -12,6 +12,7 @@
 #define IDR_MAINMENU                    131
 #define IDD_DLG_SELECT                  132
 #define IDD_DLG_REGISTER                133
+#define IDD_DLG_CREATE                  134
 #define IDC_EDIT1                       1000
 #define IDC_EDT_ACCOUNT                 1000
 #define IDC_EDT_ACCOUNTNAME             1000
@@ -27,7 +28,13 @@
 #define IDC_BUTTON1                     1005
 #define IDC_BTN_CONNECT                 1005
 #define IDC_BTN_NEW_CHAR                1005
+#define IDC_BTN_ZHAN                    1005
 #define IDC_LIST1                       1006
+#define IDC_BTN_FA                      1007
+#define IDC_BTN_DAO                     1008
+#define IDC_RADIO1                      1009
+#define IDC_RADIO2                      1010
+#define IDC_CHECK2                      1012
 #define ID_32771                        32771
 #define ID_Login                        32772
 #define ID_32773                        32773
@@ -43,9 +50,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        134
+#define _APS_NEXT_RESOURCE_VALUE        135
 #define _APS_NEXT_COMMAND_VALUE         32781
-#define _APS_NEXT_CONTROL_VALUE         1007
+#define _APS_NEXT_CONTROL_VALUE         1012
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

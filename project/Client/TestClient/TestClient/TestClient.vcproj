@@ -197,6 +197,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DlgCreate.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DlgLogin.cpp"
 				>
 			</File>
@@ -264,6 +268,10 @@
 			</File>
 			<File
 				RelativePath=".\CommandHandler.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DlgCreate.h"
 				>
 			</File>
 			<File

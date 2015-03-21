@@ -60,6 +60,8 @@ public:
 	CClientConnector	m_ClientConnector;
 
 	BOOL				m_bLoginOK;
+
+	UINT32				m_dwAccountID;
 };
 
 

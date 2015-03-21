@@ -15,6 +15,8 @@ CClientCmdHandler::CClientCmdHandler(void)
 {
 	m_bLoginOK = FALSE;
 
+	m_dwAccountID = 0;
+
 	m_ClientConnector.RegisterMsgHandler((IMessageHandler*)this);
 }
 
@@ -216,7 +218,7 @@ BOOL CClientCmdHandler::OnCmdLoginGameAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	}
 	else
 	{
-		m_DlgSelect.m_dwAccountID = MsgLoginAck.dwAccountID;
+		m_dwAccountID = MsgLoginAck.dwAccountID;
 		m_DlgSelect.m_nCount = MsgLoginAck.nCount;
 		for(int i = 0; i < MsgLoginAck.nCount; i++)
 		{
