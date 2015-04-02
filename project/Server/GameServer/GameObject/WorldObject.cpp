@@ -54,13 +54,13 @@ BOOL CWorldObject::ClearChangeFlag()
 	return TRUE;
 }
 
-BOOL CWorldObject::SetUpdate(UpdateTypeEnum UpdateType)
+BOOL CWorldObject::SetUpdate(UpdateStatusEnum UpdateStatus)
 {
 	if(m_pOwnerScene != NULL)
 	{
-		if(UpdateType > m_UpdateType)
+		if(UpdateStatus > m_UpdateStatus)
 		{
-			m_UpdateType = UpdateType;
+			m_UpdateStatus = UpdateStatus;
 		}
 
 		m_pOwnerScene->AddToUpdateList(this);
@@ -85,11 +85,11 @@ UINT32 CWorldObject::WriteToBuffer( CBufferHelper *pBufHelper, UINT32 dwChangeFl
 	return dwSize;
 }
 
-UINT32 CWorldObject::ReadFromBuffer( CBufferHelper *pBufHelper )
+UINT32 CWorldObject::ReadFromBuffer( CBufferHelper *pBufHelper, UINT32 dwChangeFlag )
 {
 	UINT32 dwSize = 0;	
 	
-	dwSize += CObject::ReadFromBuffer(pBufHelper);
+	dwSize += CObject::ReadFromBuffer(pBufHelper, dwChangeFlag);
 
 	dwSize += pBufHelper->Read(m_ObjectPos);
 

@@ -41,7 +41,7 @@ BOOL CObject::ClearChangeFlag()
 	return TRUE;
 }
 
-BOOL CObject::SetUpdate(UpdateTypeEnum UpdateType)
+BOOL CObject::SetUpdate(UpdateStatusEnum UpdateStatus)
 {
 
 	return TRUE;
@@ -56,7 +56,7 @@ UINT32 CObject::WriteToBuffer(CBufferHelper *pBufHelper,  UINT32 dwChangeFlag, U
 	return dwSize;
 }
 
-UINT32 CObject::ReadFromBuffer(CBufferHelper *pBufHelper)
+UINT32 CObject::ReadFromBuffer(CBufferHelper *pBufHelper, UINT32 dwChangeFlag)
 {
 	UINT32 dwSize = 0;
 	dwSize += pBufHelper->Read(m_u64ObjectID);

@@ -333,11 +333,35 @@
 			Name="SubSystem"
 			>
 			<File
+				RelativePath=".\BagSystem.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BagSystem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\EquipmentSystem.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EquipmentSystem.h"
+				>
+			</File>
+			<File
 				RelativePath=".\PropertyMgr.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\PropertyMgr.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SkillSystem.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SkillSystem.h"
 				>
 			</File>
 		</Filter>

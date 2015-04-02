@@ -58,17 +58,32 @@ UINT32 CPlayerObject::WriteToBuffer( CBufferHelper *pBufHelper, UINT32 dwChangeF
 {
 	UINT32 dwSize = 0;
 	dwSize += CCharObject::WriteToBuffer(pBufHelper, dwChangeFlag, dwDest);
-
-
-
+	
+	if(dwChangeFlag == UPDATE_FLAG_CHANGE)
+	{
+		
+	}
+	else if(dwChangeFlag == UPDATE_FLAG_CREATE)
+	{
+		dwSize += pBufHelper->Write(m_dwFeature);
+	}
 
 	return dwSize;
 }
 
-UINT32 CPlayerObject::ReadFromBuffer( CBufferHelper *pBufHelper )
+UINT32 CPlayerObject::ReadFromBuffer( CBufferHelper *pBufHelper, UINT32 dwChangeFlag)
 {
 	UINT32 dwSize = 0;
-	dwSize += CCharObject::ReadFromBuffer(pBufHelper);
+	dwSize += CCharObject::ReadFromBuffer(pBufHelper, dwChangeFlag);
+
+	if(dwChangeFlag == UPDATE_FLAG_CHANGE)
+	{
+
+	}
+	else if(dwChangeFlag == UPDATE_FLAG_CREATE)
+	{
+		dwSize += pBufHelper->Read(m_dwFeature);
+	}
 
 
 	return dwSize;

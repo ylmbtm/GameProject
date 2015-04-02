@@ -32,9 +32,9 @@
 #define IDC_LIST1                       1006
 #define IDC_BTN_FA                      1007
 #define IDC_BTN_DAO                     1008
-#define IDC_RADIO1                      1009
-#define IDC_RADIO2                      1010
-#define IDC_CHECK2                      1012
+#define IDC_RD_MALE                     1009
+#define IDC_RD                          1010
+#define IDC_RD_FEMALE                   1010
 #define ID_32771                        32771
 #define ID_Login                        32772
 #define ID_32773                        32773

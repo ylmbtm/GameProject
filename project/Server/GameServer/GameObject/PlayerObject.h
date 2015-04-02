@@ -15,7 +15,7 @@ public:
 
 	virtual UINT32	WriteToBuffer(CBufferHelper *pBufHelper, UINT32 dwChangeFlag, UINT32 dwDest);
 
-	virtual UINT32  ReadFromBuffer(CBufferHelper *pBufHelper);
+	virtual UINT32  ReadFromBuffer(CBufferHelper *pBufHelper, UINT32 dwChangeFlag);
 
 public:
 	BOOL			OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
@@ -30,10 +30,10 @@ public:
 	UINT32			LoadFromDBPacket(CBufferHelper *pBufferHelper);
 
 public:
-	UINT64			m_u64ConnID;
-	UINT32			m_dwFeature;
+	UINT32			m_dwFeature; //玩家特征属性
 
 public:
+	UINT64			m_u64ConnID; //对应的连接ID
 };
 
 

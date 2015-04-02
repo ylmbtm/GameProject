@@ -28,7 +28,7 @@ std::string CommonFunc::GetCurrentDir()
 	return std::string(szPath);
 }
 
-UINT32 CommonFunc::GetTime()
+UINT32 CommonFunc::GetCurrTime()
 {
 	time_t t;    
 
@@ -36,6 +36,20 @@ UINT32 CommonFunc::GetTime()
 
 	return (UINT32)t;
 }
+
+UINT32 CommonFunc::GetCurrDate()
+{
+	time_t t = time(0);
+
+	struct tm *pTm = localtime(&t);
+
+	pTm->tm_year += 1900;
+
+	UINT32 dwCurDate = (pTm->tm_year<<16)|(pTm->tm_mon<<8)|(pTm->tm_mday);
+
+	return dwCurDate;
+}
+
 
 
 UINT32 CommonFunc::GetTickCount()
@@ -130,4 +144,5 @@ UINT32 CommonFunc::GetFreePhysMemory()
 
 	return dwFreeSize;
 }
+
 

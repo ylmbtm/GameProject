@@ -21,7 +21,7 @@ UINT32 CPropertyMgr::WriteToBuffer( CBufferHelper *pBufHelper, UINT32 dwChangeFl
 	return 0;
 }
 
-UINT32 CPropertyMgr::ReadFromBuffer( CBufferHelper *pBufHelper )
+UINT32 CPropertyMgr::ReadFromBuffer( CBufferHelper *pBufHelper, UINT32 dwChangeFlag )
 {
 	return 0;
 }

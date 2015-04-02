@@ -15,6 +15,21 @@ typedef struct St_ObjectStatus
 	};
 }St_ObjectStatus;
 
+typedef struct St_CharFeature
+{
+	union
+	{
+		UINT32  dwValues;
+		struct
+		{
+			UINT32	Career:3;		// 职业
+			UINT32	Sex:1;			// 性别
+			UINT32  SkinColor:3;	// 肤色
+			UINT32  HeadColor:3;	// 发色
+		};
+	};
+}St_CharFeature;
+
 
 ////////////////////////////////////////////
 

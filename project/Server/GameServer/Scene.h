@@ -24,6 +24,8 @@ public:
 
 	BOOL	AddToMap(CWorldObject *pWorldObject);
 
+	BOOL	AddToMapPos(CWorldObject *pWorldObject, FLOAT x, FLOAT z);
+
 	BOOL	RemoveFromMap(CWorldObject *pWorldObject);
 
 	BOOL	AddToUpdateList(CWorldObject *pWorldObject);

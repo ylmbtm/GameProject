@@ -5,6 +5,8 @@
 #include "TestClient.h"
 #include "DlgCreate.h"
 #include "CommandHandler.h"
+#include "GameDefine.h"
+#include "GameStruct.h"
 
 
 // CDlgCreate ¶Ô»°¿ò
@@ -60,7 +62,19 @@ void CDlgCreate::OnBnClickedOk()
 {
 	UpdateData(TRUE);
 
-	CClientCmdHandler::GetInstancePtr()->SendNewCharReq(CClientCmdHandler::GetInstancePtr()->m_dwAccountID, (LPCTSTR)m_strCharName , 123);
+	St_CharFeature charFeature;
+	charFeature.Career = m_nCareer;
+	CButton *pCheck = (CButton *)GetDlgItem(IDC_RD_MALE);
+	if(pCheck->GetCheck())
+	{
+		m_nSex = 1;
+	}
+	else
+	{
+		m_nSex = 0;
+	}
+
+	CClientCmdHandler::GetInstancePtr()->SendNewCharReq(CClientCmdHandler::GetInstancePtr()->m_dwAccountID, (LPCTSTR)m_strCharName , charFeature.dwValues);
 
 	OnOK();
 }

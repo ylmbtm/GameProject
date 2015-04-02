@@ -179,7 +179,7 @@ BOOL CGameService::OnCmdHeartBeatReq( UINT16 wCommandID, UINT64 u64ConnID, CBuff
 
 	StCharHeartBeatAck CharHeartBeatAck;
 	CharHeartBeatAck.dwReqTimestamp = CharHeartBeatReq.dwReqTimestamp;
-	CharHeartBeatAck.dwServerTime   = CommonFunc::GetTime();
+	CharHeartBeatAck.dwServerTime   = CommonFunc::GetCurrTime();
 
 	return TRUE;
 }

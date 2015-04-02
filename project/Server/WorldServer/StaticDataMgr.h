@@ -47,7 +47,7 @@ public:
 	END_LOAD_DATA
 
 public:
-	//Àı×Ó
+	//ä¾‹å­
 	//BOOL	LoadAccountData(CppSQLite3Query &QueryData);
 
 

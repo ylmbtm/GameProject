@@ -95,6 +95,15 @@ BOOL CScene::AddToMap(CWorldObject *pWorldObject)
 	return TRUE;
 }
 
+BOOL CScene::AddToMapPos( CWorldObject *pWorldObject, FLOAT x, FLOAT z )
+{
+	pWorldObject->m_ObjectPos.x = x;
+	pWorldObject->m_ObjectPos.z = z;
+
+	return AddToMap(pWorldObject);
+}
+
+
 BOOL CScene::OnCmdPlayerMove( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
 	StCharMoveReq CharMoveReq;
@@ -149,7 +158,7 @@ BOOL CScene::SendNewObjectToGrids(CWorldObject *pWorldObject, INT32 Grids[9])
 	UINT32 dwCount = 1;
 	WriteHelper.Write(dwCount);
 	WriteHelper.Write(objType);
-	pWorldObject->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_DEST_OTHER);
+	pWorldObject->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_TO_OTHERS);
 	WriteHelper.EndWrite();
 	//变化包组装完成
 	
@@ -215,7 +224,7 @@ BOOL CScene::SendNewGridsToObject( INT32 Grids[9], CPlayerObject *pPlayerObj )
 
 				WriteHelper.Write(objType);
 
-				pIterObj->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_DEST_OTHER);
+				pIterObj->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_TO_OTHERS);
 
 				(*pCount)++;
 			}
@@ -246,7 +255,7 @@ BOOL CScene::SendUpdateObjectToGrids(CWorldObject *pWorldObj, INT32 Grids[9] )
 	UINT32 dwCount = 1;
 	WriteHelper.Write(dwCount);
 	WriteHelper.Write(pWorldObj->GetObjectID());
-	pWorldObj->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CHANGE, UPDATE_DEST_OTHER);
+	pWorldObj->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CHANGE, UPDATE_TO_OTHERS);
 	WriteHelper.EndWrite();
 	//变化包组装完成
 
@@ -484,11 +493,11 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 		return TRUE;
 	}
 
-	if(pWorldObject->m_UpdateType == UT_None)
+	if(pWorldObject->m_UpdateStatus == UT_None)
 	{
 		ASSERT_FAIELD;
 	}
-	else if(pWorldObject->m_UpdateType == UT_New)
+	else if(pWorldObject->m_UpdateStatus == UT_New)
 	{
 		INT32 Grids[10];
 
@@ -503,9 +512,9 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 
 		pWorldObject->m_UpdateObjPos = pWorldObject->m_ObjectPos;
 
-		pWorldObject->m_UpdateType   = UT_None;
+		pWorldObject->m_UpdateStatus   = UT_None;
 	}
-	else if(pWorldObject->m_UpdateType == UT_Delete)
+	else if(pWorldObject->m_UpdateStatus == UT_Delete)
 	{
 		INT32 Grids[10];
 
@@ -518,7 +527,7 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 			delete (CPlayerObject*)pWorldObject;
 		}
 	}
-	else if(pWorldObject->m_UpdateType == UT_Update)
+	else if(pWorldObject->m_UpdateStatus == UT_Update)
 	{
 		INT32 nSrcIndex  = m_GridManager.GetIndexByPos(pWorldObject->m_UpdateObjPos.x, pWorldObject->m_UpdateObjPos.z);
 
@@ -554,7 +563,7 @@ BOOL CScene::HandleUpdateObject(CWorldObject *pWorldObject)
 
 		pWorldObject->m_UpdateObjPos = pWorldObject->m_ObjectPos;
 
-		pWorldObject->m_UpdateType   = UT_None;
+		pWorldObject->m_UpdateStatus   = UT_None;
 	}
 	
 	return TRUE;
@@ -568,7 +577,7 @@ BOOL CScene::SendUpdateObjectToMyself( CWorldObject *pWorldObj )
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 	WriteHelper.BeginWrite(CMD_CHAR_UPDATE_MYSELF, CMDH_OTHER, 0, 0);
 	WriteHelper.WriteCheckBufferCode();
-	pWorldObj->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CHANGE, UPDATE_DEST_MYSELF);
+	pWorldObj->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CHANGE, UPDATE_TO_MYSELF);
 	WriteHelper.WriteCheckBufferCode();
 	WriteHelper.EndWrite();
 
@@ -606,7 +615,7 @@ BOOL CScene::OnCmdCharEnterSceneReq( UINT16 wCommandID, UINT64 u64ConnID, CBuffe
 		CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_ACK, CMDH_SENCE, 0,  pPlayerObject->GetObjectID());
 		WriteHelper.Write(CharEnterGameAck);
-		pPlayerObject->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_DEST_MYSELF);
+		pPlayerObject->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_TO_MYSELF);
 		WriteHelper.EndWrite();
 		CGameService::GetInstancePtr()->SendCmdToConnection(SvrEnterSceneReq.dwProxySvrID, &m_WriteBuffer);
 	}
@@ -623,6 +632,7 @@ BOOL CScene::SetSceneMapCoords( INT32 nLeft, INT32 nRight, INT32 nTop, INT32 nBo
 {
 	return TRUE;
 }
+
 
 
 

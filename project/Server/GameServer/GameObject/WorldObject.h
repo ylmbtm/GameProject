@@ -33,11 +33,11 @@ public:
 
 	virtual BOOL	ClearChangeFlag();
 
-	virtual BOOL    SetUpdate(UpdateTypeEnum UpdateType);
+	virtual BOOL    SetUpdate(UpdateStatusEnum UpdateStatus);
 
 	virtual UINT32	WriteToBuffer(CBufferHelper *pBufHelper, UINT32 dwChangeFlag, UINT32 dwDest);
 
-	virtual UINT32  ReadFromBuffer(CBufferHelper *pBufHelper);
+	virtual UINT32  ReadFromBuffer(CBufferHelper *pBufHelper, UINT32 dwChangeFlag);
 
 public:
 	CPosition&	GetPosition();
@@ -60,9 +60,9 @@ public:
 	CScene		*m_pOwnerScene;		
 
 public:
-	CPosition		m_UpdateObjPos;//己经同步出去的地址
-	UpdateTypeEnum	m_UpdateType;
-	UpdateTypeEnum  GetUpdateFlag();
+	CPosition			m_UpdateObjPos;//己经同步出去的地址
+	UpdateStatusEnum	m_UpdateStatus;
+	UpdateStatusEnum	GetUpdateStatus();
 
 };
 

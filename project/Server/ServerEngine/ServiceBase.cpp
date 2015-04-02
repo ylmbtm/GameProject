@@ -75,7 +75,14 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 			CLog::GetInstancePtr()->AddLog("收到身份验证包:来自-[世界]-服务器【%lld】, 服务器类型:%d",  ConnectNotify.u64ConnID, ConnectNotify.btConType);
 		}
 
-		ASSERT(pConnection->GetConnectionID() == 0);
+		if(pConnection->GetConnectionID() != 0)
+		{
+			ASSERT_FAIELD;
+			pConnection->Close(TRUE);
+			CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
+			
+			return FALSE;
+		}
 
 		pConnection->SetConnectionType(ConnectNotify.btConType);
 
@@ -84,6 +91,8 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 		if(!BufferReader.BeginRead())
 		{
 			ASSERT_FAIELD;
+			pConnection->Close(TRUE);
+			CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 			return FALSE;
 		}
 	}
@@ -91,6 +100,8 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 	if(pConnection->GetConnectionID() == 0)
 	{
 		ASSERT_FAIELD;
+		pConnection->Close(FALSE);
+		CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 		return FALSE;
 	}
 	

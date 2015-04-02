@@ -106,8 +106,22 @@ BOOL CDlgSelect::RefreshListCtrl()
 		sprintf(szValue, "%d", itor->dwLevel);
 		m_CharList.InsertItem(i, itor->szCharName);
 		m_CharList.SetItemText(i, 1, szValue);
-		m_CharList.SetItemText(i, 2, "男");
-		m_CharList.SetItemText(i, 3,"法师");
+		St_CharFeature stCharFeature;
+		stCharFeature.dwValues = itor->dwFeature;
+		m_CharList.SetItemText(i, 2, stCharFeature.Sex == 1 ?"男" :"女");
+		if(stCharFeature.Career == 1)
+		{
+			m_CharList.SetItemText(i, 3,"战士");
+		}
+		else if(stCharFeature.Career == 1)
+		{
+			m_CharList.SetItemText(i, 3,"法师");
+		}
+		else if(stCharFeature.Career == 1)
+		{
+			m_CharList.SetItemText(i, 3,"道士");
+		}
+
 		m_CharList.SetItemData(i, i);
 		i++;
 	}

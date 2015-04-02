@@ -390,10 +390,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Common\PacketHeader.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Common\TypeDef.h"
 				>
 			</File>

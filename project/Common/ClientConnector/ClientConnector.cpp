@@ -107,7 +107,7 @@ BOOL CClientConnector::Login(const char *pszAccountName, const char *pszPassword
 
 		DisConnect();
 
-		if(ConnectToServer(m_strLoginIp, m_sLoginPort))
+		if(!ConnectToServer(m_strLoginIp, m_sLoginPort))
 		{
 			ASSERT_FAIELD;
 			return FALSE;

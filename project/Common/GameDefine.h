@@ -11,14 +11,14 @@
 #define UPDATE_FLAG_CHANGE			0
 #define UPDATE_FLAG_CREATE			1
 
-#define UPDATE_DEST_OTHER			1
-#define UPDATE_DEST_SERVER			2
-#define UPDATE_DEST_MYSELF			3
+#define UPDATE_TO_OTHERS			1
+#define UPDATE_TO_SERVER			2
+#define UPDATE_TO_MYSELF			3
 
 //以下是服务器
 #define INVALIDE_SERVERID			(0xffffffff)
 
-enum  UpdateTypeEnum
+enum  UpdateStatusEnum
 {
 	UT_None,
 	UT_Update,

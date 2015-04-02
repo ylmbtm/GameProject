@@ -13,7 +13,9 @@ namespace CommonFunc
 
 	BOOL			CreateDir(std::string &strDir);
 
-	UINT32			GetTime();
+	UINT32			GetCurrTime();
+
+	UINT32			GetCurrDate();
 
 	UINT32			GetTickCount();
 

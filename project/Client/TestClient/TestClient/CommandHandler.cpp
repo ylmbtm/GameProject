@@ -370,10 +370,10 @@ BOOL CClientCmdHandler::SendLeaveGameReq( UINT64 u64CharID )
 BOOL CClientCmdHandler::SendMoveReq( FLOAT x, FLOAT y, FLOAT z, UINT16 nDir)
 {
 	StCharMoveReq _MoveGs;
-	_MoveGs.x = m_HostPlayer.m_ObjectPos.x;
-	_MoveGs.y = m_HostPlayer.m_ObjectPos.y;
-	_MoveGs.z = m_HostPlayer.m_ObjectPos.z;
-	_MoveGs.sDir = m_HostPlayer.m_ObjectStatus.nDir;
+	_MoveGs.x = x;
+	_MoveGs.y = y;
+	_MoveGs.z = z;
+	_MoveGs.sDir = nDir;
 
 	CBufferHelper WriteHelper(TRUE, m_ClientConnector.GetWriteBuffer());
 
