@@ -7,7 +7,8 @@ MY_INCLUDE=-I$(PWD) \
 		-I../../Common/Utility \
 		-I../../Common/PacketDef \
 		-I../../Common/DataBuff \
-		-I../../Common/CmdHandler
+		-I../../Common/CmdHandler \
+		-I../../Common/Mysql
 					 
 CC_LIB=-L/usr/lib \
 	-L/lib \

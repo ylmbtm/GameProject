@@ -1,5 +1,5 @@
-﻿#ifndef __GAME_SVR_MGR_
-#define __GAME_SVR_MGR_
+#ifndef __GAME_SVR_MGR__
+#define __GAME_SVR_MGR__
 
 #include "PacketDef/ServerPacket.h"
 #include "DataBuffer/DataBuffer.h"
@@ -30,7 +30,6 @@ public:
 
 public:
 	CDataBuffer<CONST_BUFF_SIZE>	m_WriteBuffer;			//固定的写buffer
-
 };
 
 #endif

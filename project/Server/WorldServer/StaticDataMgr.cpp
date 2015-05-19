@@ -12,10 +12,15 @@ CStaticDataMgr::~CStaticDataMgr(void)
 
 BOOL CStaticDataMgr::ProcessDBFile( std::string strDbFile )
 {
-	if(!m_DBConnection.open(strDbFile.c_str()))
+	try
 	{
-		return FALSE;
+		m_DBConnection.open(strDbFile.c_str());
 	}
+	catch(CppSQLite3Exception& e)  
+	{  
+		printf("%s",e.errorMessage());  
+		return FALSE;
+	}  
 
 	CppSQLite3Query TableNames = m_DBConnection.execQuery("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
 	while(!TableNames.eof())
