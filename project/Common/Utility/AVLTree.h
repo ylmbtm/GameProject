@@ -140,14 +140,14 @@ bool AVLTree<TKey, TValue>::Insert( TNodeTypePtr pNode )
 {
 	if(m_pRoot == NULL)
 	{
-		m_pRoot = pRootNode;
+		m_pRoot = pNode;
 
 		m_nCount += 1;
 
 		return true;
 	}
 
-	return InsertInner(m_pRoot, pRootNode);
+	return InsertInner(m_pRoot, pNode);
 }
 
 template<typename TKey, typename TValue>

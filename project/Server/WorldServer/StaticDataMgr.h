@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "Sqlite\CppSQLite3.h"
+#include "Sqlite/CppSQLite3.h"
 #include <vector>
 
 #define BEGIN_LOAD_DATA \

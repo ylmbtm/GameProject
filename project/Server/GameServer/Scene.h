@@ -1,7 +1,7 @@
 ﻿#ifndef _SCENE_H_
 #define _SCENE_H_
 #include "CmdHandler/CommonWorkThread.h"
-#include "GameObject/Playerobject.h"
+#include "GameObject/PlayerObject.h"
 #include "GameObject/WorldObject.h"
 #include "GridManager.h"
 #include "DataBuffer/DataBuffer.h"

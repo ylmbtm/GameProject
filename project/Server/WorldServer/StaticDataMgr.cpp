@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+#include "stdafx.h"
 #include "StaticDataMgr.h"
 
 CStaticDataMgr::CStaticDataMgr(void)
