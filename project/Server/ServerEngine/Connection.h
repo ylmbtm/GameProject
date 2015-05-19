@@ -12,6 +12,7 @@
 
 #define  MAGIC_CODE					0x1234
 
+#define Hash_Map					std::map
 
 struct NetIoOperatorData
 {
@@ -118,7 +119,7 @@ public:
 
 	CConnection*					m_StableConnList[SVR_CONN_ID];		//主要存放服务器连接，ID固定，ID范围1-999， 用数据速度快，而且也可以免加锁
 
-	stdext::hash_map<UINT64, CConnection*> m_VarieableConnList;			//主要针对无固定ID的连接
+	Hash_Map<UINT64, CConnection*> m_VarieableConnList;			//主要针对无固定ID的连接
 };
 
 #endif

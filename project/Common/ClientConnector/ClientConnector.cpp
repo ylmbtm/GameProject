@@ -459,12 +459,14 @@ BOOL CClientConnector::ProcessData()
 	CBufferHelper BufferReader(FALSE, &m_ReadBuffer);
 	if(!BufferReader.BeginRead())
 	{
+		ASSERT_FAIELD;
 		return FALSE;
 	}
 
 	CommandHeader *pCommandHeader = BufferReader.GetCommandHeader();
 	if(pCommandHeader == NULL)
 	{
+		ASSERT_FAIELD;
 		return FALSE;
 	}
 

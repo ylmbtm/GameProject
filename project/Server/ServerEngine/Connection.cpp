@@ -327,7 +327,7 @@ CConnection* CConnectionMgr::GetConnectionByConnID( UINT64 u64ConnID )
 			return NULL;
 		}
 
-		stdext::hash_map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.find(u64ConnID);
+		Hash_Map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.find(u64ConnID);
 		if(itor != m_VarieableConnList.end())
 		{
 			return itor->second;
@@ -437,7 +437,7 @@ VOID CConnectionMgr::DeleteConnection( CConnection *pConnection )
 	else
 	{
 #ifdef _DEBUG
-		stdext::hash_map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.find(pConnection->GetConnectionID());
+		Hash_Map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.find(pConnection->GetConnectionID());
 		if(itor != m_VarieableConnList.end())
 		{
 			m_VarieableConnList.erase(pConnection->GetConnectionID());
@@ -477,7 +477,7 @@ BOOL CConnectionMgr::CloseAllConnection()
 		}
 	}
 
-	for(stdext::hash_map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.begin(); itor != m_VarieableConnList.end(); ++itor)
+	for(Hash_Map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.begin(); itor != m_VarieableConnList.end(); ++itor)
 	{
 		pConn = itor->second;
 		if(pConn != NULL)
@@ -506,7 +506,7 @@ BOOL CConnectionMgr::DestroyAllConnection()
 		delete pConn;
 	}
 
-	for(stdext::hash_map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.begin(); itor != m_VarieableConnList.end(); ++itor)
+	for(Hash_Map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.begin(); itor != m_VarieableConnList.end(); ++itor)
 	{
 		pConn = itor->second;
 

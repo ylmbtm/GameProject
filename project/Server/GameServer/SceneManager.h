@@ -5,7 +5,7 @@
 #include "CmdHandler/CommonCmdHandler.h"
 
 //typedef AVLTree<UINT32, CScene*> SceneMap;
-typedef stdext::hash_map<UINT32, CScene*>  SceneMap;
+typedef Hash_Map<UINT32, CScene*>  SceneMap;
 
 class CSceneManager : public CCommonCmdHandler
 {
