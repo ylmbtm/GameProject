@@ -2,7 +2,7 @@ CC=g++
 CC_INCLUDE=-I/usr/include
 	 
 MY_INCLUDE=-I$(PWD) \
-		-I../ServerEngine \
+-		-I../ServerEngine \
 		-I../../Common \
 		-I../../Common/Utility \
 		-I../../Common/PacketDef \
@@ -14,9 +14,9 @@ CC_LIB=-L/usr/lib \
 	-lpthread
 			 
 MY_LIB=-L../Debug \
-	-lServerEngine
+	-lServerEngine.a
 
-TARGET=../Linux/ProxyServer
+TARGET=../Lunix/ProxyServer
 
 SRCS=$(wildcard *.cpp)
 

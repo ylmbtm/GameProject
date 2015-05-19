@@ -159,7 +159,7 @@ BOOL CGameService::OnIdle()
 	while(TRUE)
 	{
 		char sz[100];
-		gets_s(sz, 100);
+		gets(sz);
 
 		if(strcmp(sz,"exit") == 0)
 		{

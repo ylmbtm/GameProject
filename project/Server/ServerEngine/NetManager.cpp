@@ -552,7 +552,7 @@ BOOL CNetManager::CreateDispatchThread()
 	m_bCloseDispath = FALSE;
 
 	m_hDispathThread = CommonThreadFunc::CreateThread(_NetEventDispatchThread,  (void*)NULL);
-	if(m_hDispathThread != (THANDLE)NULL)
+	if(m_hDispathThread == (THANDLE)NULL)
 	{
 		ASSERT_FAIELD;
 		return TRUE;
