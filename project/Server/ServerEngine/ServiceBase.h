@@ -13,9 +13,9 @@ public:
 
 	virtual ~ServiceBase(void);
 	
-	BOOL			StartService();
+    BOOL            StartNetwork();
 
-	BOOL			StopService();
+    BOOL            StopNetwork();
 
 	BOOL			OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnection);
 
@@ -33,6 +33,7 @@ public:
 
 	CConnection*    GetConnectionByID(UINT64 u64ConnID);
 
+    BOOL            SetMaxConnection(UINT32  nMaxCon);
 	UINT32			GetServerID();
 	UINT32			GetServerType();
 

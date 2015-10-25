@@ -12,14 +12,18 @@ MY_INCLUDE=-I$(PWD) \
 					 
 CC_LIB=-L/usr/lib \
 	-L/lib \
+	-L/usr/lib/mysql \
 	-lpthread
 			 
 MY_LIB=-L../Debug \
-	-lServerEngine
+	-lmysqlclient \
+	-lServerEngine \
+	-lsqlite3
 
 TARGET=../Linux/DBServer
 
 SRCS=$(wildcard *.cpp)
+SRCS:=$(SRCS) $(wildcard ../../Common/Sqlite/*.cpp)
 
 OBJS=$(SRCS:.cpp=.o)
 

@@ -344,7 +344,7 @@ BOOL CClientCmdHandler::OnCmdUpdateMyself( UINT16 wCommandID, UINT64 u64ConnID, 
 	pBufferHelper->ReadCheckBufferCode();
 	m_HostPlayer.ReadFromBuffer(pBufferHelper);
 	pBufferHelper->ReadCheckBufferCode();
-
+	((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
 	return TRUE;
 }
 

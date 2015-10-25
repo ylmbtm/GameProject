@@ -60,12 +60,19 @@ BOOL CGameService::StartRun()
 		return FALSE;
 	}
 
-	if(!StartService())
-	{
-		CLog::GetInstancePtr()->AddLog("启动服务失败!");
-		ASSERT_FAIELD;
-		return FALSE;
-	}
+    if(!SetMaxConnection(6000))
+    {
+        ASSERT_FAIELD;
+        CLog::GetInstancePtr()->AddLog("设置服务器的最大连接数!");
+        return FALSE;
+    }
+
+    if(!StartNetwork())
+    {
+        CLog::GetInstancePtr()->AddLog("启动服务失败!");
+        ASSERT_FAIELD;
+        return FALSE;
+    }
 
 	if(!m_ServerCmdHandler.Init(0))
 	{
@@ -89,9 +96,9 @@ CCommonEvent ComEvent;
 #ifdef WIN32
 BOOL WINAPI HandlerCloseEvent(DWORD dwCtrlType)
 {
-	if(dwCtrlType == CTRL_CLOSE_EVENT)
-	{
-		CGameService::GetInstancePtr()->StopService();
+    if(dwCtrlType == CTRL_CLOSE_EVENT)
+    {
+        CGameService::GetInstancePtr()->StopNetwork();
 
 		ComEvent.SetEvent();
 	}
@@ -101,7 +108,7 @@ BOOL WINAPI HandlerCloseEvent(DWORD dwCtrlType)
 #else
 void  HandlerCloseEvent(int nSignalNum)
 {
-	CGameService::GetInstancePtr()->StopService();
+    CGameService::GetInstancePtr()->StopNetwork();
 
 	exit(0);
 

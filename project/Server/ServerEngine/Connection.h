@@ -8,11 +8,7 @@
 #define  NET_CMD_SEND				2
 #define  NET_CMD_CONNECT			3
 
-#define  SVR_CONN_ID				1000
-
-#define  MAGIC_CODE					0x1234
-
-#define Hash_Map					std::map
+#define Hash_Map                    std::map
 
 struct NetIoOperatorData
 {
@@ -38,9 +34,9 @@ public:
 
 	VOID	SendDisconnectNotify();
 
-	UINT64	GetConnectionID();
+    UINT32    GetConnectionID();
 
-	VOID	SetConnectionID(UINT64 dwConnID);
+    VOID    SetConnectionID(UINT32 dwConnID);
 
 	UINT8	GetConnectionType();
 
@@ -62,6 +58,8 @@ public:
 
 	BOOL	SetConnectionOK(BOOL bOk);
 
+    BOOL    ReInit();
+
 public:
 	SOCKET						m_hSocket;
 
@@ -69,8 +67,8 @@ public:
 
 	NetIoOperatorData			m_IoOverlapRecv;
 
-	UINT64						m_u64ConnID;
-	UINT8						m_byteType;
+    UINT32                      m_dwConnID;
+    UINT8                       m_byteType;
 
 	IDataHandler				*m_pDataHandler;
 
@@ -79,7 +77,7 @@ public:
 
 	UINT32						m_dwIpAddr;
 
-	UINT32						m_dwMagicCode;
+    CConnection                *m_pNext;
 };
 
 
@@ -94,15 +92,15 @@ public:
 	static CConnectionMgr* GetInstancePtr();
 
 public:
-	CConnection* CreateConnection();
+    BOOL            InitConnectionList(UINT32 nMaxCons);
+
+    CConnection*    CreateConnection();
 
 	VOID		 DeleteConnection(CConnection *pConnection);
 
-	CConnection* GetConnectionByConnID(UINT64 dwConnID);
+    CConnection*    GetConnectionByConnID(UINT32 dwConnID);
 
-	BOOL		 SetConnectionID(CConnection *pConnection, UINT64 dwConnID);
-
-	SOCKET		 GetConnectionSocket(UINT64 dwConnID);
+    SOCKET          GetConnectionSocket(UINT32 dwConnID);
 
 	///////////////////////////////////////////
 	BOOL		 CloseAllConnection();
@@ -110,16 +108,9 @@ public:
 	BOOL		 DestroyAllConnection();
 
 public:
-	CCritSec	m_CritSec;
-
-	UINT32      m_dwNextConnID;
-
-public:
-	std::set<CConnection*>			m_WaitConnList;						//存放只是连接成功的连接
-
-	CConnection*					m_StableConnList[SVR_CONN_ID];		//主要存放服务器连接，ID固定，ID范围1-999， 用数据速度快，而且也可以免加锁
-
-	Hash_Map<UINT64, CConnection*> m_VarieableConnList;			//主要针对无固定ID的连接
+    CCritSec        m_CritSec;
+    CConnection     *m_pFreeConnRoot;
+    std::vector<CConnection> m_vtConnList;            //连接列表
 };
 
 #endif

@@ -86,16 +86,14 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 
 		pConnection->SetConnectionType(ConnectNotify.btConType);
 
-		CConnectionMgr::GetInstancePtr()->SetConnectionID(pConnection, ConnectNotify.u64ConnID);
-
-		if(!BufferReader.BeginRead())
-		{
-			ASSERT_FAIELD;
-			pConnection->Close(TRUE);
-			CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
-			return FALSE;
-		}
-	}
+        if(!BufferReader.BeginRead())
+        {
+            ASSERT_FAIELD;
+            pConnection->Close(TRUE);
+            CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
+            return FALSE;
+        }
+    }
 
 	if(pConnection->GetConnectionID() == 0)
 	{
@@ -110,7 +108,7 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 	return TRUE;
 }
 
-BOOL ServiceBase::StartService()
+BOOL ServiceBase::StartNetwork()
 {
 	CLog::GetInstancePtr()->AddLog("*******服务器信息***********");
 	CLog::GetInstancePtr()->AddLog("服务器地址:%s 监听端口:%d", CGlobalConfig::GetInstancePtr()->m_strIpAddr.c_str(), CGlobalConfig::GetInstancePtr()->m_sPort);
@@ -130,7 +128,7 @@ BOOL ServiceBase::StartService()
 	return TRUE;
 }
 
-BOOL ServiceBase::StopService()
+BOOL ServiceBase::StopNetwork()
 {
 	CLog::GetInstancePtr()->AddLog("==========服务器开始关闭=======================");
 
@@ -264,6 +262,10 @@ UINT32 ServiceBase::GetServerType()
 	return CGlobalConfig::GetInstancePtr()->m_dwServerType;
 }
 
+BOOL ServiceBase::SetMaxConnection( UINT32 nMaxCon )
+{
+    return CConnectionMgr::GetInstancePtr()->InitConnectionList(nMaxCon);
+}
 
 
 

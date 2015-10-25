@@ -25,7 +25,7 @@ CConnection::CConnection(void)
 {
 	m_hSocket			= INVALID_SOCKET;
 
-	m_u64ConnID			= 0;
+    m_dwConnID            = 0;
 
 	m_pDataHandler		= NULL;
 
@@ -35,14 +35,12 @@ CConnection::CConnection(void)
 
 	m_byteType			= TYPE_UNKNOW;
 
-	m_dwMagicCode       = MAGIC_CODE;
+    m_pNext = NULL;
 }
 
 CConnection::~CConnection(void)
 {
-	m_dwMagicCode		= 0;
-
-	m_hSocket			= INVALID_SOCKET;
+    m_hSocket            = INVALID_SOCKET;
 
 	m_pDataHandler		= NULL;
 
@@ -52,7 +50,7 @@ CConnection::~CConnection(void)
 
 	m_byteType			= TYPE_UNKNOW;
 
-	m_dwMagicCode       = MAGIC_CODE;
+    m_pNext = NULL;
 }
 
 #ifdef WIN32
@@ -123,33 +121,36 @@ BOOL CConnection::DoReceive()
 			{
 				CLog::GetInstancePtr()->AddLog("读失败， 可能连接己断开 原因:%s!!", CommonSocket::GetLastErrorStr(nErr).c_str());
 
-				return FALSE;
-			}
-		}
-		else
-		{
-			m_dwDataLen += nBytes;
-		}
-	}
+                return FALSE;
+            }
+        }
+        else
+        {
+            m_dwDataLen += nBytes;
+
+            while (ExtractBuffer());
+
+            continue;
+        }
+    }
 
 	return TRUE;
 }
 
 #endif
 
-UINT64 CConnection::GetConnectionID()
+UINT32 CConnection::GetConnectionID()
 {
-	return m_u64ConnID;
+    return m_dwConnID;
 }
 
-void CConnection::SetConnectionID( UINT64 u64ConnID )
+void CConnection::SetConnectionID( UINT32 dwConnID )
 {
-	if((m_u64ConnID != 0)&&(u64ConnID == 0))
-	{
-		ASSERT_FAIELD;
-	}
+    ASSERT(m_dwConnID == 0);
+    ASSERT(dwConnID != 0);
+    ASSERT(!m_bConnected);
 
-	m_u64ConnID = u64ConnID;
+    m_dwConnID = dwConnID;
 
 	return ;
 }
@@ -161,12 +162,13 @@ BOOL CConnection::ExtractBuffer()
 		return FALSE;
 	}
 
-	IDataBuffer *pDataBuffer = NULL;
+    TransferHeader *pHeader = (TransferHeader *)m_pBuffer;
+    if(pHeader->dwSize > m_dwDataLen)
+    {
+        return FALSE;
+    }
 
-	TransferHeader *pHeader = (TransferHeader *)m_pBuffer;
-	if(pHeader->dwSize <= m_dwDataLen)
-	{
-		pDataBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pHeader->dwSize);
+    IDataBuffer *pDataBuffer =  CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pHeader->dwSize);
 
 		memcpy(pDataBuffer->GetData(), m_pBuffer, pHeader->dwSize);
 
@@ -177,31 +179,27 @@ BOOL CConnection::ExtractBuffer()
 			memmove(m_pBuffer, m_pBuffer+pHeader->dwSize, m_dwDataLen);
 		}
 
-		pDataBuffer->SetDataLenth(pHeader->dwSize);
-		
-		m_pDataHandler->OnDataHandle(pDataBuffer, this);
-		
-		return TRUE;
-	}
+    pDataBuffer->SetDataLenth(pHeader->dwSize);
 
-	return FALSE;
+    m_pDataHandler->OnDataHandle(pDataBuffer, this);
+
+    return TRUE;
 }
 
 BOOL CConnection::Close(BOOL bNotify)
 {
-	if((m_bConnected)&&(m_u64ConnID != 0)&&bNotify)
-	{
-		m_pDataHandler->OnDisconnect(this);
-	}
+    if((m_bConnected)&&bNotify)
+    {
+        m_pDataHandler->OnDisconnect(this);
+    }
 
 	CommonSocket::ShutDownSend(m_hSocket);
 	CommonSocket::ShutDownRecv(m_hSocket);
 	CommonSocket::CloseSocket(m_hSocket);
 
-	m_hSocket		= INVALID_SOCKET;
-	m_bConnected	= FALSE;
-	m_dwDataLen     = 0;
-	m_dwMagicCode   = 0;
+    m_hSocket           = INVALID_SOCKET;
+    m_bConnected       = FALSE;
+    m_dwDataLen     = 0;
 
 	return TRUE;
 }
@@ -260,13 +258,7 @@ BOOL CConnection::IsConnectionOK()
 		return FALSE;
 	}
 
-	if(m_dwMagicCode != MAGIC_CODE)
-	{
-		ASSERT_FAIELD;
-		return FALSE;
-	}
-
-	return m_bConnected;
+    return m_bConnected;
 }
 
 BOOL CConnection::SetConnectionOK( BOOL bOk )
@@ -288,14 +280,26 @@ VOID CConnection::SetConnectionType( UINT8 byteType )
 	return ;
 }
 
+BOOL CConnection::ReInit()
+{
+     m_hSocket = INVALID_SOCKET;
+
+    m_bConnected = FALSE;
+
+     m_byteType  = TYPE_UNKNOW;
+
+    m_pDataHandler = NULL;
+
+    m_dwDataLen = 0;
+
+    m_dwIpAddr  = 0;
+
+    return TRUE;
+}
+
 CConnectionMgr::CConnectionMgr()
 {
-	m_dwNextConnID = SVR_CONN_ID;
-
-	for(int i = 0; i < SVR_CONN_ID; ++i)
-	{
-		m_StableConnList[i] = NULL;
-	}
+    m_pFreeConnRoot = NULL;
 }
 
 CConnectionMgr::~CConnectionMgr()
@@ -305,46 +309,46 @@ CConnectionMgr::~CConnectionMgr()
 
 CConnection* CConnectionMgr::CreateConnection() 
 {
-	CConnection *pConnection = new CConnection();
+    CAutoLock Lock(&m_CritSec);
 
-	CAutoLock Lock(&m_CritSec);
+    if(m_pFreeConnRoot == NULL)
+    {
+        ASSERT_FAIELD;
+        return NULL;
+    }
 
-	m_WaitConnList.insert(pConnection);
+    CConnection* pTemp = m_pFreeConnRoot;
 
-	return pConnection;
+    m_pFreeConnRoot = pTemp->m_pNext;
+
+    if(pTemp->GetConnectionID() == 0)
+    {
+        ASSERT_FAIELD;
+        return NULL;
+    }
+
+    return pTemp;
 }
 
-CConnection* CConnectionMgr::GetConnectionByConnID( UINT64 u64ConnID )
+CConnection* CConnectionMgr::GetConnectionByConnID( UINT32 dwConnID )
 {
-	if(u64ConnID < SVR_CONN_ID)
-	{
-		return m_StableConnList[u64ConnID];
-	}
-	else 
-	{
-		if(m_VarieableConnList.size() <= 0)
-		{
-			return NULL;
-		}
+    if(dwConnID >= m_vtConnList.size())
+    {
+        ASSERT_FAIELD;
+        return NULL;
+    }
 
-		Hash_Map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.find(u64ConnID);
-		if(itor != m_VarieableConnList.end())
-		{
-			return itor->second;
-		}
-	}
-
-	return NULL;
+    return &m_vtConnList.at(dwConnID);
 }
 
-SOCKET CConnectionMgr::GetConnectionSocket( UINT64 dwConnID )
+SOCKET CConnectionMgr::GetConnectionSocket( UINT32 dwConnID )
 {
-	CAutoLock Lock(&m_CritSec);
-	CConnection *pConnection = CConnectionMgr::GetInstancePtr()->GetConnectionByConnID(dwConnID);
-	if(pConnection == NULL)
-	{
-		return INVALID_SOCKET;
-	}
+    CAutoLock Lock(&m_CritSec);
+    CConnection *pConnection = GetConnectionByConnID(dwConnID);
+    if(pConnection == NULL)
+    {
+        return INVALID_SOCKET;
+    }
 
 	if(!pConnection->IsConnectionOK())
 	{
@@ -362,156 +366,67 @@ CConnectionMgr* CConnectionMgr::GetInstancePtr()
 	return &ConnectionMgr;
 }
 
-BOOL CConnectionMgr::SetConnectionID(CConnection *pConnection, UINT64 u64ConnID)
-{
-	CAutoLock Lock(&m_CritSec);
-
-	std::set<CConnection*>::iterator itor = m_WaitConnList.find(pConnection);
-	if(itor != m_WaitConnList.end())
-	{
-		m_WaitConnList.erase(itor);
-	}
-	else
-	{
-		ASSERT_FAIELD;
-	}
-
-	if(u64ConnID == 0)
-	{
-		m_dwNextConnID++;
-		if(m_dwNextConnID < SVR_CONN_ID)
-		{
-			m_dwNextConnID = SVR_CONN_ID+1;
-		}
-		
-		ASSERT(m_dwNextConnID != 0);
-
-		pConnection->SetConnectionID(m_dwNextConnID);
-
-		m_VarieableConnList.insert(std::make_pair(m_dwNextConnID, pConnection));
-		
-		return TRUE;
-	}
-
-
-	if(u64ConnID < SVR_CONN_ID)
-	{
-		ASSERT(m_StableConnList[u64ConnID] == NULL);
-		pConnection->SetConnectionID(u64ConnID);
-		m_StableConnList[u64ConnID] = pConnection;
-
-		return TRUE;
-	}
-
-	if(u64ConnID > SVR_CONN_ID)
-	{
-		pConnection->SetConnectionID(u64ConnID);
-
-		m_VarieableConnList.insert(std::make_pair(u64ConnID, pConnection));
-
-		return TRUE;
-	}
-
-	return TRUE;
-}
 
 VOID CConnectionMgr::DeleteConnection( CConnection *pConnection )
 {
-	CAutoLock Lock(&m_CritSec);
-	if(pConnection->GetConnectionID() == 0)
-	{
-		std::set<CConnection*>::iterator itor = m_WaitConnList.find(pConnection);
-		if(itor != m_WaitConnList.end())
-		{
-			m_WaitConnList.erase(itor);
-		}
-		else
-		{
-			ASSERT_FAIELD;
-		}
-	}
-	else if(pConnection->GetConnectionID() < SVR_CONN_ID)
-	{
-		m_StableConnList[pConnection->GetConnectionID()] = NULL;
-	}
-	else
-	{
-#ifdef _DEBUG
-		Hash_Map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.find(pConnection->GetConnectionID());
-		if(itor != m_VarieableConnList.end())
-		{
-			m_VarieableConnList.erase(pConnection->GetConnectionID());
-		}
-		else
-		{
-			ASSERT_FAIELD;
-		}
-#else
-		m_VarieableConnList.erase(pConnection->GetConnectionID());
-#endif
-	}
-	
-	delete pConnection;
+    CAutoLock Lock(&m_CritSec);
+    
+    if(pConnection == NULL)
+    {
+        ASSERT_FAIELD;
+        return ;
+    }
+
+    pConnection->m_pNext = m_pFreeConnRoot;
+
+    m_pFreeConnRoot = pConnection;
 
 	return ;
 }
 
 BOOL CConnectionMgr::CloseAllConnection()
 {
-	CConnection *pConn = NULL;
-	for(int i = 0; i < SVR_CONN_ID; i++)
-	{
-		pConn = m_StableConnList[i];
-		if(pConn != NULL)
-		{
-			pConn->Close(FALSE);
-		}
-	}
+    CConnection *pConn = NULL;
+    for(size_t i = 0; i < m_vtConnList.size(); i++)
+    {
+            CConnection &Conn = m_vtConnList.at(i);
+            Conn.Close(FALSE);
+    }
 
-	for(std::set<CConnection*>::iterator itor = m_WaitConnList.begin(); itor != m_WaitConnList.end(); ++itor)
-	{
-		pConn = *itor;
-		if(pConn != NULL)
-		{
-			pConn->Close(FALSE);
-		}
-	}
-
-	for(Hash_Map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.begin(); itor != m_VarieableConnList.end(); ++itor)
-	{
-		pConn = itor->second;
-		if(pConn != NULL)
-		{
-			pConn->Close(FALSE);
-		}
-	}
-
-	return TRUE;
+    return TRUE;
 }
 
 BOOL CConnectionMgr::DestroyAllConnection()
 {
-	CConnection *pConn = NULL;
-	for(int i = 0; i < SVR_CONN_ID; i++)
-	{
-		delete m_StableConnList[i];
+    m_vtConnList.clear();
 
-		m_StableConnList[i] = NULL;
-	}
+	return TRUE;
+}
 
-	for(std::set<CConnection*>::iterator itor = m_WaitConnList.begin(); itor != m_WaitConnList.end(); ++itor)
-	{
-		pConn = *itor;
+BOOL CConnectionMgr::InitConnectionList(UINT32 nMaxCons)
+{
+    ASSERT(m_pFreeConnRoot == NULL);
 
-		delete pConn;
-	}
+    CConnection *pTemp = NULL;
 
-	for(Hash_Map<UINT64, CConnection*>::iterator itor = m_VarieableConnList.begin(); itor != m_VarieableConnList.end(); ++itor)
-	{
-		pConn = itor->second;
+    m_vtConnList.assign(nMaxCons+1, CConnection());
+    for(UINT32 i = 1; i < nMaxCons+1; i++)
+    {
+        CConnection &conn = m_vtConnList.at(i);
 
-		delete pConn;
-	}
+        conn.SetConnectionID(i) ;
+
+        if (m_pFreeConnRoot = NULL)
+        {
+            m_pFreeConnRoot = &conn;
+            pTemp = m_pFreeConnRoot;
+        }
+        else
+        {
+            pTemp->m_pNext = &conn;
+            pTemp = pTemp->m_pNext;
+        }
+    }
 
 	 return TRUE;
 }

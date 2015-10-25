@@ -7,6 +7,9 @@
 
 #include <stdio.h>
 
+#define HAVE_RINT 1
+#define MAX_SQL_LEN   260
+
 #include "CheckMacroDefine.h"
 #include "ServerEngine.h"
 

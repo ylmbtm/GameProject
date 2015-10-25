@@ -2,6 +2,7 @@
 #include <errmsg.h>
 #include "DBConnection.h"
 #include "DBStoredProc.h"
+#include "Utility/CommonThreadFunc.h"
 
 CDBConnection::CDBConnection( void )
     : m_pMySql( NULL ),
@@ -390,7 +391,7 @@ bool CDBConnection::ProcError( char const *op_/* = NULL*/, char const *func_/* =
                 {
                     m_nErrno = mysql_errno( m_pMySql );
                     m_strError = mysql_error( m_pMySql );
-					::Sleep( ERROR_SLEEP_TIME );
+                    CommonThreadFunc::Sleep( ERROR_SLEEP_TIME );
                     _ret = ProcError( op_, __FUNCTION__ );
                 }
             }
@@ -411,7 +412,7 @@ bool CDBConnection::ProcError( char const *op_/* = NULL*/, char const *func_/* =
                 {
                     m_nErrno = mysql_errno( m_pMySql );
                     m_strError = mysql_error( m_pMySql );
-                    Sleep( ERROR_SLEEP_TIME );
+                    CommonThreadFunc::Sleep( ERROR_SLEEP_TIME );
                     _ret = ProcError( op_, __FUNCTION__ );
                 }
             }
@@ -432,7 +433,7 @@ bool CDBConnection::ProcError( char const *op_/* = NULL*/, char const *func_/* =
                 {
                     m_nErrno = mysql_errno( m_pMySql );
                     m_strError = mysql_error( m_pMySql );
-                    Sleep( ERROR_SLEEP_TIME );
+                    CommonThreadFunc::Sleep( ERROR_SLEEP_TIME );
                     _ret = ProcError( op_, __FUNCTION__ );
                 }
             }
@@ -453,7 +454,7 @@ bool CDBConnection::ProcError( char const *op_/* = NULL*/, char const *func_/* =
                 {
                     m_nErrno = mysql_errno( m_pMySql );
                     m_strError = mysql_error( m_pMySql );
-                    Sleep( ERROR_SLEEP_TIME );
+                    CommonThreadFunc::Sleep( ERROR_SLEEP_TIME );
                     _ret = ProcError( op_, __FUNCTION__ );
                 }
             }

@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "Object.h"
-#include "DataBuffer\BufferHelper.h"
+#include "DataBuffer/BufferHelper.h"
 
 
 CObject::CObject()

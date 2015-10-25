@@ -114,7 +114,7 @@ public:
 
 	IDataHandler		*m_pBufferHandler;
 
-	INT32				m_nMaxSendListLen;
+    UINT32                m_nMaxSendListLen;  //等待发送队列的最大长度
 
 public:
 

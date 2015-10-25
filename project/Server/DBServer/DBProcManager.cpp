@@ -37,7 +37,7 @@ BOOL CDBProcManager::CreateAccount( char *szAccount, char *szPassword )
 		return FALSE;
 	}
 
-	CHAR szSql[MAX_PATH];
+    CHAR szSql[MAX_SQL_LEN];
 
 	sprintf(szSql, "insert into t_accountinfo(F_AccountName, F_Password) values('%s', '%s')", szAccount, szPassword);
 
@@ -52,7 +52,7 @@ BOOL CDBProcManager::CreateAccount( char *szAccount, char *szPassword )
 
 BOOL CDBProcManager::LoadAccountCharInfo( UINT32 dwAccountID, StCharLoginAck &Ack )
 {
-	CHAR szSql[MAX_PATH];
+    CHAR szSql[MAX_SQL_LEN];
 
 	sprintf(szSql, "select * from t_charinfo where F_AccountID = '%d'", dwAccountID);
 
@@ -77,7 +77,7 @@ BOOL CDBProcManager::LoadAccountCharInfo( UINT32 dwAccountID, StCharLoginAck &Ac
 
 UINT32 CDBProcManager::VerifyAccount( char *szAccount, char *szPassword )
 {
-	CHAR szSql[MAX_PATH];
+    CHAR szSql[MAX_SQL_LEN];
 
 	sprintf(szSql, "select * from t_accountinfo where F_AccountName ='%s' AND F_Password='%s'", szAccount, szPassword);
 
@@ -100,7 +100,7 @@ BOOL CDBProcManager::CreateNewChar(StCharNewCharReq &Req,  StCharNewCharAck &Ack
 
 	UINT64 u64NewCharID = GenarateCharID(Req.dwAccountID);
 
-	CHAR szSql[MAX_PATH];
+    CHAR szSql[MAX_SQL_LEN];
 
 	sprintf(szSql, "insert into t_charinfo(F_CharID, F_AccountID, F_Name, F_Feature) values('%lld','%d', '%s','%d')",u64NewCharID, Req.dwAccountID, Req.szCharName, Req.dwFeature);
 
@@ -134,7 +134,7 @@ UINT32 CDBProcManager::GetMaxAccountID()
 
 UINT64 CDBProcManager::GetCharID( char *szCharName )
 {
-	CHAR szSql[MAX_PATH];
+    CHAR szSql[MAX_SQL_LEN];
 
 	sprintf(szSql, "select * from t_charinfo where F_Name ='%s'", szCharName);
 
@@ -150,7 +150,7 @@ UINT64 CDBProcManager::GetCharID( char *szCharName )
 
 UINT32 CDBProcManager::GetAccountID( char *szAccount )
 {
-	CHAR szSql[MAX_PATH];
+    CHAR szSql[MAX_SQL_LEN];
 
 	sprintf(szSql, "select * from t_accountinfo where F_AccountName ='%s'", szAccount);
 
@@ -166,7 +166,7 @@ UINT32 CDBProcManager::GetAccountID( char *szAccount )
 
 BOOL CDBProcManager::DelChar( StCharDelCharReq &Req)
 {
-	CHAR szSql[MAX_PATH];
+    CHAR szSql[MAX_SQL_LEN];
 
 	sprintf(szSql, "delete from t_charinfo where F_CharID='%lld'", Req.u64CharID);
 
@@ -180,7 +180,7 @@ BOOL CDBProcManager::DelChar( StCharDelCharReq &Req)
 
 UINT64 CDBProcManager::GenarateCharID( UINT32 dwAccountID )
 {
-	CHAR szSql[MAX_PATH];
+    CHAR szSql[MAX_SQL_LEN];
 
 	sprintf(szSql, "select max(F_CharID) as F_CharID from t_charinfo where F_AccountID ='%d'", dwAccountID);
 

@@ -18,7 +18,8 @@ MY_LIB=-L../Debug \
 
 TARGET=../Linux/GameServer
 
-SRCS=$(wildcard *.cpp)
+SRCS=$(wildcard ./*.cpp)
+SRCS:=$(SRCS) $(wildcard ./GameObject/*.cpp)
 
 OBJS=$(SRCS:.cpp=.o)
 

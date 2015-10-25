@@ -143,19 +143,16 @@ BOOL CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID, 
 			continue;
 		}
 
-		CConnection *pConn = CGameService::GetInstancePtr()->GetConnectionByID(RegisterToCenterSvr.dwSvrID);
-		if(pConn == NULL)
-		{
-			CGameService::GetInstancePtr()->ConnectToOtherSvr(RegisterToCenterSvr.szIpAddr,RegisterToCenterSvr.sPort);
-		}
-		else
-		{
-			ASSERT_FAIELD;
-		}
+        std::map<UINT64, StSvrServerInfo>::iterator itor = m_vtActiveSvrList.find(RegisterToCenterSvr.dwSvrID);
+        if(itor != m_vtActiveSvrList.end())
+        {
+            ASSERT_FAIELD;
+            return FALSE;
+        }
 
-
-		m_vtActiveSvrList.insert(std::make_pair(u64ConnID,RegisterToCenterSvr));
-	}
+        CGameService::GetInstancePtr()->ConnectToOtherSvr(RegisterToCenterSvr.szIpAddr,RegisterToCenterSvr.sPort);
+        m_vtActiveSvrList.insert(std::make_pair(RegisterToCenterSvr.dwSvrID,RegisterToCenterSvr));
+    }
 
 	return TRUE;
 }

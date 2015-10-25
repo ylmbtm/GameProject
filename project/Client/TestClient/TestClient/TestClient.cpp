@@ -91,27 +91,28 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 	{
 		DWORD dwTick = GetTickCount();
 
-		
+		CPosition ObjectPos  = CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos;
+		int nDir = CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectStatus.nDir;
 
 		if(pMsg->wParam == VK_LEFT)
 		{
-			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.x-=2;
-			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectStatus.nDir = 3;
+			ObjectPos.x-=2;
+			nDir = 3;
 		}
 		else if(pMsg->wParam == VK_RIGHT)
 		{
-			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.x+=2;
-			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectStatus.nDir = 1;
+			ObjectPos.x+=2;
+			nDir = 1;
 		}
 		else if(pMsg->wParam == VK_UP)
 		{
-			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.z-=2;
-			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectStatus.nDir = 4;
+			ObjectPos.z-=2;
+			nDir = 4;
 		}
 		else if(pMsg->wParam == VK_DOWN)
 		{
-			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos.z+=2;
-			CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectStatus.nDir = 2;
+			ObjectPos.z+=2;
+			nDir = 2;
 		}
 		else
 		{
@@ -123,11 +124,7 @@ BOOL CTestClientApp::PreTranslateMessage(MSG* pMsg)
 			return CWinAppEx::PreTranslateMessage(pMsg);
 		}
 
-		((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
-
-		CPosition &ObjectPos  = CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectPos;
-
-		int nDir = CClientCmdHandler::GetInstancePtr()->m_HostPlayer.m_ObjectStatus.nDir;
+		//((CTestClientDlg*)AfxGetMainWnd())->m_SceneView.Invalidate();
 
 		CClientCmdHandler::GetInstancePtr()->SendMoveReq(ObjectPos.x, ObjectPos.y, ObjectPos.z, nDir);
 	}

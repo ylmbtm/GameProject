@@ -9,12 +9,12 @@ template <typename TContainer, typename TElem>
 class CNodeLink
 {
 public:
-	CNodeLink()
-	{
-		m_pNext = NULL;
-		m_pPrev = NULL;
-		m_pGrid = NULL;
-	}
+    CNodeLink()
+    {
+        m_pNext = NULL;
+        m_pPrev = NULL;
+        m_pContainer = NULL;
+    }
 
 	TElem		*m_pNext;
 	TElem		*m_pPrev;

@@ -261,8 +261,8 @@ BOOL CDBCmdHandler::OnCmdDBLoadCharReq( UINT16 wCommandID, UINT64 u64ConnID, CBu
 
 		pDBPlayer->m_u64ObjectID = DBLoadCharInfoReq.u64CharID;
 
-		CHAR szSql[MAX_PATH];
-		sprintf(szSql, "select * from t_charinfo where F_CharID = '%lld'", DBLoadCharInfoReq.u64CharID);
+        CHAR szSql[MAX_SQL_LEN];
+        sprintf(szSql, "select * from t_charinfo where F_CharID = '%lld'", DBLoadCharInfoReq.u64CharID);
 
 		CppSQLite3Query QueryRes = m_DBProcManager.m_DBConnection.execQuery(szSql);
 
