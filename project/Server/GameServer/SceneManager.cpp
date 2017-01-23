@@ -98,14 +98,14 @@ BOOL CSceneManager::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuffer
 		return TRUE;
 	}
 
-	CommandHeader *pHeader = pBufferHelper->GetCommandHeader();
-	if(pHeader == NULL)
+	PacketHeader *pPacketHeader = pBufferHelper->GetPacketHeader();
+	if(pPacketHeader == NULL)
 	{
 		ASSERT_FAIELD;
 		return FALSE;
 	}
 
-	CScene *pScene = GetSceneByID(pHeader->dwSceneID);
+	CScene *pScene = GetSceneByID(pPacketHeader->dwSceneID);
 	if(pScene == NULL)
 	{
 		ASSERT_FAIELD;

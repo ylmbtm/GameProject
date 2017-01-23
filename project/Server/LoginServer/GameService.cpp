@@ -27,7 +27,7 @@ CGameService* CGameService::GetInstancePtr()
 
 BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
-	if(pBufferHelper->GetCommandHeader()->CmdHandleID == CMDH_SVR_CON)
+	if(pBufferHelper->GetPacketHeader()->CmdHandleID == CMDH_SVR_CON)
 	{
 		m_ServerCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
 	}

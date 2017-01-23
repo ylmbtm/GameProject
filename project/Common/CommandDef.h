@@ -103,7 +103,7 @@ enum Command_ID
 #define BEGIN_PROCESS_COMMAND(ClassName) \
 BOOL ClassName##::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper) \
 { \
-	CommandHeader *pCmdHeader = pBufferHelper->GetCommandHeader(); \
+	CommandHeader *pCmdHeader = pBufferHelper->GetPacketHeader(); \
 	if(pCmdHeader == NULL) \
 	{ \
 		ASSERT_FAIELD; \

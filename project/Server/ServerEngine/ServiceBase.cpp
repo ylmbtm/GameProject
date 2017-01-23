@@ -29,14 +29,14 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 		return FALSE;
 	}
 
-	CommandHeader *pCommandHeader = BufferReader.GetCommandHeader();
-	if(pCommandHeader == NULL)
+	PacketHeader *pPacketHeader = BufferReader.GetPacketHeader();
+	if(pPacketHeader == NULL)
 	{
 		ASSERT_FAIELD;
 		return FALSE;
 	}
 
-	if(pCommandHeader->wCommandID == CMD_CONNECT_NOTIFY)
+	if(pPacketHeader->wCommandID == CMD_CONNECT_NOTIFY)
 	{
 		StConnectNotify ConnectNotify;
 		
@@ -103,7 +103,7 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 		return FALSE;
 	}
 	
-	OnCommandHandle(pCommandHeader->wCommandID, pConnection->GetConnectionID(), &BufferReader);
+	OnCommandHandle(pPacketHeader->wCommandID, pConnection->GetConnectionID(), &BufferReader);
 
 	return TRUE;
 }
@@ -179,13 +179,13 @@ BOOL ServiceBase::SendCmdToConnection( UINT64 u64ConnID, UINT64 u64CharID, UINT3
 
 	pSendBuffer->CopyFrom(pSrcBuffer);
 
-	CommandHeader *pCommandHeader = (CommandHeader *)(pSendBuffer->GetBuffer()+sizeof(TransferHeader));
+	PacketHeader *pPacketHeader = (PacketHeader *)(pSendBuffer->GetBuffer());
 
-	pCommandHeader->u64CharID	= u64CharID;
-	pCommandHeader->dwSceneID	= dwSceneID;
+	pPacketHeader->u64CharID	= u64CharID;
+	pPacketHeader->dwSceneID	= dwSceneID;
 
-	ASSERT(pCommandHeader->u64CharID  != 0);
-	ASSERT(pCommandHeader->wCommandID != 0);
+	ASSERT(pPacketHeader->u64CharID  != 0);
+	ASSERT(pPacketHeader->wCommandID != 0);
 
 
 	return CNetManager::GetInstancePtr()->SendBufferByConnID(u64ConnID, pSendBuffer);

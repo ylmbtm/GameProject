@@ -46,8 +46,8 @@ BOOL CProxyCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	case CMD_CHAR_ENTER_GAME_REQ:
 		{
 			CLog::GetInstancePtr()->AddLog("---Receive Message:[%s]", "CMD_CHAR_ENTER_GAME_REQ");
-			CHECK_PAYER_ID(pBufferHelper->GetCommandHeader()->u64CharID);
-			/*CWillEnterNode *pWillEnterNode = m_WillEnterNodeMgr.GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
+			CHECK_PAYER_ID(pBufferHelper->GetPacketHeader()->u64CharID);
+			/*CWillEnterNode *pWillEnterNode = m_WillEnterNodeMgr.GetByCharID(pBufferHelper->GetPacketHeader()->u64CharID);
 			if(pWillEnterNode == NULL)
 			{
 				//非法的进入
@@ -77,7 +77,7 @@ BOOL CProxyCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(CharEnterGameReq.u64CharID);
 			if(pStaticPlayer == NULL)
 			{
-				pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->CreateStaicPlayer(pBufferHelper->GetCommandHeader()->u64CharID);
+				pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->CreateStaicPlayer(pBufferHelper->GetPacketHeader()->u64CharID);
 				if(pStaticPlayer == NULL)
 				{
 					ASSERT_FAIELD;
@@ -139,7 +139,7 @@ BOOL CProxyCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	
 			/*if(!OnCmdGMCommand(CMD_CHAR_GAME_MANAGER, u64ConnID, pBufferHelper))
 			{
-				CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
+				CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetPacketHeader()->u64CharID);
 				if(pStaticPlayer == NULL)
 				{
 					ASSERT_FAIELD;
@@ -156,7 +156,7 @@ BOOL CProxyCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	case CMD_CHAR_ENTER_GAME_ACK:
 		{
 			CLog::GetInstancePtr()->AddLog("---Receive Message:[%s]----", "CMD_CHAR_ENTER_GAME_ACK");
-			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
+			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetPacketHeader()->u64CharID);
 			if(pStaticPlayer == NULL)
 			{
 				ASSERT_FAIELD;
@@ -179,7 +179,7 @@ BOOL CProxyCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	case CMD_CHAR_UPDATE_MYSELF:
 		{
 			CLog::GetInstancePtr()->AddLog("---Receive Message:[%s]----", "CMD_CHAR_UPDATE_MYSELF");
-			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
+			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetPacketHeader()->u64CharID);
 			if(pStaticPlayer == NULL)
 			{
 				ASSERT_FAIELD;
@@ -202,7 +202,7 @@ BOOL CProxyCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 
 	default:
 		{
-			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetCommandHeader()->u64CharID);
+			CStaticPlayer *pStaticPlayer = CStaticPlayerMgr::GetInstancePtr()->GetByCharID(pBufferHelper->GetPacketHeader()->u64CharID);
 			if(pStaticPlayer == NULL)
 			{
 				ASSERT_FAIELD;
@@ -222,7 +222,7 @@ BOOL CProxyCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 			}
 			else
 			{
-				pBufferHelper->GetCommandHeader()->dwSceneID = pStaticPlayer->GetSceneID();
+				pBufferHelper->GetPacketHeader()->dwSceneID = pStaticPlayer->GetSceneID();
 
 				RelayToGameServer(pStaticPlayer, pBufferHelper->GetDataBuffer());
 			}

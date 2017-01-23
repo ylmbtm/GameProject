@@ -31,7 +31,7 @@ CGameService* CGameService::GetInstancePtr()
 BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
 	//从底层传过来的内存，在这个地方是不释放的, 由处理者去释放
-	if(pBufferHelper->GetCommandHeader()->CmdHandleID == CMDH_SVR_CON)
+	if(pBufferHelper->GetPacketHeader()->CmdHandleID == CMDH_SVR_CON)
 	{
 		m_ServerCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
 	}

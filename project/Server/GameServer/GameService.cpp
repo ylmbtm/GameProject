@@ -43,7 +43,7 @@ BOOL CGameService::StartRun()
 		return FALSE;
 	}
 
-    if(!SetMaxConnection(100))
+    if(!SetMaxConnection(CGlobalConfig::GetInstancePtr()->m_nMaxConnNum))
     {
         ASSERT_FAIELD;
         CLog::GetInstancePtr()->AddLog("设置服务器的最大连接数!");
@@ -126,7 +126,7 @@ BOOL CGameService::OnIdle()
 
 BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
-	if(pBufferHelper->GetCommandHeader()->CmdHandleID == CMDH_SVR_CON)
+	if(pBufferHelper->GetPacketHeader()->CmdHandleID == CMDH_SVR_CON)
 	{
 		m_ServerCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
 	}

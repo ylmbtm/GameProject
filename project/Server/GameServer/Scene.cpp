@@ -40,8 +40,8 @@ BOOL CScene::Uninit()
 
 BOOL CScene::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
-	CommandHeader *pCmdHeader = pBufferHelper->GetCommandHeader();
-	if(pCmdHeader == NULL)
+	PacketHeader *pPacketHeader = pBufferHelper->GetPacketHeader();
+	if(pPacketHeader == NULL)
 	{
 		ASSERT_FAIELD;
 		return FALSE;
@@ -54,7 +54,7 @@ BOOL CScene::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper 
 		PROCESS_COMMAND_ITEM(CMD_SVR_ENTER_SCENE_REQ,   OnCmdCharEnterSceneReq);
 		default:
 		{
-			CPlayerObject *pPlayerObject = m_PlayerObjectMgr.GetPlayer(pCmdHeader->u64CharID);
+			CPlayerObject *pPlayerObject = m_PlayerObjectMgr.GetPlayer(pPacketHeader->u64CharID);
 			if(pPlayerObject != NULL)
 			{
 				pPlayerObject->OnCommandHandle(wCommandID, u64ConnID, pBufferHelper);
@@ -109,7 +109,7 @@ BOOL CScene::OnCmdPlayerMove( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper
 	StCharMoveReq CharMoveReq;
 	pBufferHelper->Read(CharMoveReq);
 
-	CPlayerObject *pPlayerObj = m_PlayerObjectMgr.GetPlayer(pBufferHelper->GetCommandHeader()->u64CharID);
+	CPlayerObject *pPlayerObj = m_PlayerObjectMgr.GetPlayer(pBufferHelper->GetPacketHeader()->u64CharID);
 	if(pPlayerObj == NULL)
 	{
 		ASSERT_FAIELD;
@@ -405,7 +405,7 @@ BOOL CScene::OnCmdLeaveGameReq( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelp
 
 	}
 
-	CPlayerObject *pPlayerObject = m_PlayerObjectMgr.GetPlayer(pBufferHelper->GetCommandHeader()->u64CharID);
+	CPlayerObject *pPlayerObject = m_PlayerObjectMgr.GetPlayer(pBufferHelper->GetPacketHeader()->u64CharID);
 	if(pPlayerObject == NULL)
 	{
 		ASSERT_FAIELD;

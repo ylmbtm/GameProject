@@ -4,14 +4,10 @@
 #pragma  pack(push)
 #pragma  pack(1)
 
-struct TransferHeader
+struct PacketHeader
 {
-	UINT8	CheckCode;
-	UINT16  dwSize;
-};
-
-struct CommandHeader
-{
+	UINT8	 CheckCode;
+	UINT16   dwSize;
 	UINT8    CmdHandleID;
 	UINT16   wCommandID;
 	UINT32   dwSceneID;

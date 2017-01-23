@@ -18,6 +18,7 @@ BOOL CGlobalConfig::InitVariant()
 	m_dwServerType	= m_IniFile.GetIntValue("ServerType");
 	m_strCenterSvrIp = m_IniFile.GetStringValue("CenterSvrIP");
 	m_sCenterSvrPort = m_IniFile.GetIntValue("CenterSvrPort");
+	m_nMaxConnNum      = m_IniFile.GetIntValue("MaxConnNum");
 	return TRUE;
 }
 

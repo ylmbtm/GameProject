@@ -60,6 +60,8 @@ public:
 
     BOOL    ReInit();
 
+	BOOL CheckPacketHeader();
+
 public:
 	SOCKET						m_hSocket;
 

@@ -225,3 +225,11 @@ pip-log.txt
 *.ib_tag
 project/Lua/Debug/LuaProjectd.lib
 project/Lua/Release/LuaProject.lib
+*.tlog
+project/Server/ServerEngine/Debug/ServerEngine.lastbuildstate
+*.lib
+*.lib
+*.vcxproj
+*.filters
+*.lastbuildstate
+*.rc

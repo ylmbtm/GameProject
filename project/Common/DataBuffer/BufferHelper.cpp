@@ -31,16 +31,15 @@ BOOL CBufferHelper::BeginWrite(UINT16 wCommandID, UINT8 CmdHandleID, UINT16 dwSc
 		return FALSE;
 	}
 
-	GetTransferHeader()->CheckCode = 0xff;
-	CommandHeader *pCommandHeader = GetCommandHeader();
+	PacketHeader *pPacketHeader = GetPacketHeader();
+	pPacketHeader->CheckCode  = 0xff;
+	pPacketHeader->wCommandID = wCommandID;
+	pPacketHeader->dwSceneID  = dwSceneID;
+	pPacketHeader->CmdHandleID= CmdHandleID;
+	pPacketHeader->u64CharID  = u64CharID;
+	pPacketHeader->dwPacketNo = g_PacketNo++;
 
-	pCommandHeader->wCommandID = wCommandID;
-	pCommandHeader->dwSceneID  = dwSceneID;
-	pCommandHeader->CmdHandleID= CmdHandleID;
-	pCommandHeader->u64CharID  = u64CharID;
-	pCommandHeader->dwPacketNo = g_PacketNo++;
-
-	m_dwCurPos	  = sizeof(TransferHeader) + sizeof(CommandHeader);
+	m_dwCurPos	  = sizeof(PacketHeader);
 
 	m_pDataBuffer->SetDataLenth(m_dwCurPos);
 
@@ -51,7 +50,7 @@ BOOL CBufferHelper::EndWrite()
 {
 	WriteCheckBufferCode();
 
-	GetTransferHeader()->dwSize = m_dwCurPos;
+	GetPacketHeader()->dwSize = m_dwCurPos;
 
 	m_pDataBuffer->SetDataLenth(m_dwCurPos);
 
@@ -67,11 +66,11 @@ BOOL CBufferHelper::BeginRead()
 		return FALSE;
 	}
 
-	m_dwCurPos	  = sizeof(TransferHeader) + sizeof(CommandHeader);
+	m_dwCurPos	  = sizeof(PacketHeader);
 
-	m_pDataBuffer->SetDataLenth(GetTransferHeader()->dwSize);
+	m_pDataBuffer->SetDataLenth(GetPacketHeader()->dwSize);
 
-	if(GetTransferHeader()->CheckCode != 0xff)
+	if(GetPacketHeader()->CheckCode != 0xff)
 	{
 		ASSERT_FAIELD;
 		return FALSE;
@@ -85,15 +84,11 @@ BOOL CBufferHelper::IsWriting()
 	return m_bWriting;
 }
 
-CommandHeader* CBufferHelper::GetCommandHeader()
+PacketHeader* CBufferHelper::GetPacketHeader()
 {
-	return (CommandHeader*)m_pDataBuffer->GetBufferPos(sizeof(TransferHeader));
+	return (PacketHeader*)m_pDataBuffer->GetBufferPos(0);
 }
 
-TransferHeader* CBufferHelper::GetTransferHeader()
-{
-	return (TransferHeader*)m_pDataBuffer->GetBuffer();
-}
 
 UINT32 CBufferHelper::Read( CHAR *pszValue )
 {

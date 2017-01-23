@@ -109,7 +109,7 @@ BOOL CWorldCmdHandler::OnCmdLeaveGameReq( UINT16 wCommandID, UINT64 u64ConnID, C
 
 	}
 
-	CPlayerObject *pPlayerObject = m_PlayerObjectMgr.GetPlayer(pBufferHelper->GetCommandHeader()->u64CharID);
+	CPlayerObject *pPlayerObject = m_PlayerObjectMgr.GetPlayer(pBufferHelper->GetPacketHeader()->u64CharID);
 	if(pPlayerObject == NULL)
 	{
 		ASSERT_FAIELD;

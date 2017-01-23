@@ -98,9 +98,9 @@ BOOL CCommonWorkThread::ProcessMessage()
 
 		ASSERT(msg.u64ConnID != 0);
 
-		CommandHeader *pCommandHeader = (CommandHeader *)(msg.pDataBuffer->GetData()+sizeof(TransferHeader));
+		PacketHeader *pPacketHeader = (PacketHeader *)(msg.pDataBuffer->GetData());
 
-		m_pCommandHandler->OnCommandHandle(pCommandHeader->wCommandID, msg.u64ConnID, &BufferReader);
+		m_pCommandHandler->OnCommandHandle(pPacketHeader->wCommandID, msg.u64ConnID, &BufferReader);
 
 		msg.pDataBuffer->Release();
 	}

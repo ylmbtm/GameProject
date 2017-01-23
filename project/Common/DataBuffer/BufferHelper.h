@@ -21,9 +21,7 @@ public:
 
 	BOOL		IsWriting();
 
-	CommandHeader*	GetCommandHeader();
-
-	TransferHeader* GetTransferHeader();
+	PacketHeader* GetPacketHeader();
 
 	IDataBuffer*    GetDataBuffer();
 

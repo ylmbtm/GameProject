@@ -17,13 +17,14 @@ public:
 
 
 
-	UINT16  m_sPort;
-	UINT32	m_dwServerID;
-	UINT32  m_dwServerType;
+	UINT16		m_sPort;
+	UINT32		m_dwServerID;
+	UINT32		m_dwServerType;
 	std::string m_strIpAddr;
 
 	std::string m_strCenterSvrIp;
-	UINT16  m_sCenterSvrPort;
+	UINT16		m_sCenterSvrPort;
+	UINT32      m_nMaxConnNum;       //服务器支持的最大连接数
 
 
 private:

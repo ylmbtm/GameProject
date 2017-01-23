@@ -157,12 +157,14 @@ void CConnection::SetConnectionID( UINT32 dwConnID )
 
 BOOL CConnection::ExtractBuffer()
 {
-	if(m_dwDataLen < sizeof(TransferHeader))
+	if(m_dwDataLen < sizeof(PacketHeader))
 	{
 		return FALSE;
 	}
 
-    TransferHeader *pHeader = (TransferHeader *)m_pBuffer;
+	CheckPacketHeader();
+
+    PacketHeader *pHeader = (PacketHeader *)m_pBuffer;
     if(pHeader->dwSize > m_dwDataLen)
     {
         return FALSE;
@@ -170,14 +172,14 @@ BOOL CConnection::ExtractBuffer()
 
     IDataBuffer *pDataBuffer =  CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pHeader->dwSize);
 
-		memcpy(pDataBuffer->GetData(), m_pBuffer, pHeader->dwSize);
+	memcpy(pDataBuffer->GetData(), m_pBuffer, pHeader->dwSize);
 
-		m_dwDataLen -= pHeader->dwSize;
+	m_dwDataLen -= pHeader->dwSize;
 
-		if(m_dwDataLen > 0)
-		{
-			memmove(m_pBuffer, m_pBuffer+pHeader->dwSize, m_dwDataLen);
-		}
+	if(m_dwDataLen > 0)
+	{
+		memmove(m_pBuffer, m_pBuffer+pHeader->dwSize, m_dwDataLen);
+	}
 
     pDataBuffer->SetDataLenth(pHeader->dwSize);
 
@@ -295,6 +297,12 @@ BOOL CConnection::ReInit()
     m_dwIpAddr  = 0;
 
     return TRUE;
+}
+
+BOOL CConnection::CheckPacketHeader()
+{
+
+	return TRUE;
 }
 
 CConnectionMgr::CConnectionMgr()

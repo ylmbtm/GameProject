@@ -1,42 +1,21 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServerEngine", "ServerEngine\ServerEngine.vcproj", "{639FA6BE-9921-4385-9210-BD6CAC868D58}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServerEngine", "ServerEngine\ServerEngine.vcxproj", "{639FA6BE-9921-4385-9210-BD6CAC868D58}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameServer", "GameServer\GameServer.vcproj", "{E3CDD8B0-B811-476B-91FF-44911DB7A3B6}"
-	ProjectSection(ProjectDependencies) = postProject
-		{639FA6BE-9921-4385-9210-BD6CAC868D58} = {639FA6BE-9921-4385-9210-BD6CAC868D58}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameServer", "GameServer\GameServer.vcxproj", "{E3CDD8B0-B811-476B-91FF-44911DB7A3B6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProxyServer", "ProxyServer\ProxyServer.vcproj", "{95964317-9DD8-439B-A03A-DBBF2AE6E5BD}"
-	ProjectSection(ProjectDependencies) = postProject
-		{639FA6BE-9921-4385-9210-BD6CAC868D58} = {639FA6BE-9921-4385-9210-BD6CAC868D58}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProxyServer", "ProxyServer\ProxyServer.vcxproj", "{95964317-9DD8-439B-A03A-DBBF2AE6E5BD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LoginServer", "LoginServer\LoginServer.vcproj", "{95964317-9DD8-439B-A03A-DBBF2AE6E51D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{639FA6BE-9921-4385-9210-BD6CAC868D58} = {639FA6BE-9921-4385-9210-BD6CAC868D58}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LoginServer", "LoginServer\LoginServer.vcxproj", "{95964317-9DD8-439B-A03A-DBBF2AE6E51D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CenterServer", "CenterServer\CenterServer.vcproj", "{95964317-9DD8-439B-A03A-DBBF2AE6E512}"
-	ProjectSection(ProjectDependencies) = postProject
-		{639FA6BE-9921-4385-9210-BD6CAC868D58} = {639FA6BE-9921-4385-9210-BD6CAC868D58}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CenterServer", "CenterServer\CenterServer.vcxproj", "{95964317-9DD8-439B-A03A-DBBF2AE6E512}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBServer", "DBServer\DBServer.vcproj", "{95964317-9DD8-439B-A03A-DBBF2AE6E53D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{639FA6BE-9921-4385-9210-BD6CAC868D58} = {639FA6BE-9921-4385-9210-BD6CAC868D58}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBServer", "DBServer\DBServer.vcxproj", "{95964317-9DD8-439B-A03A-DBBF2AE6E53D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StatisticsServer", "StatisticsServer\StatisticsServer.vcproj", "{1F76D2BD-B853-4797-AFE5-58C380269602}"
-	ProjectSection(ProjectDependencies) = postProject
-		{639FA6BE-9921-4385-9210-BD6CAC868D58} = {639FA6BE-9921-4385-9210-BD6CAC868D58}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StatisticsServer", "StatisticsServer\StatisticsServer.vcxproj", "{1F76D2BD-B853-4797-AFE5-58C380269602}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WorldServer", "WorldServer\WorldServer.vcproj", "{1EB19A2A-049A-45AD-A592-E94703018D85}"
-	ProjectSection(ProjectDependencies) = postProject
-		{639FA6BE-9921-4385-9210-BD6CAC868D58} = {639FA6BE-9921-4385-9210-BD6CAC868D58}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WorldServer", "WorldServer\WorldServer.vcxproj", "{1EB19A2A-049A-45AD-A592-E94703018D85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
