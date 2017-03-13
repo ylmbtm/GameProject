@@ -64,11 +64,7 @@ BOOL CLog::StartLog(std::string strPrefix, std::string strLogDir)
 	SetConsoleTitle(strPrefix.c_str());
 #endif
 
-	std::string strPath = CommonFunc::GetCurrentDir();
-
-	strPath += ("/Log");
-
-	if(!CommonFunc::CreateDir(strPath))
+	if(!CommonFunc::CreateDir(strLogDir))
 	{
 		return FALSE;
 	}
@@ -82,7 +78,7 @@ BOOL CLog::StartLog(std::string strPrefix, std::string strLogDir)
 
 	CHAR szFileName[256];
 
-	sprintf(szFileName,"%s/%s-%02d%02d%02d-%02d%02d%02d.log",  strPath.c_str(),strPrefix.c_str(), pTime->tm_year, pTime->tm_mon, pTime->tm_mday, pTime->tm_hour, pTime->tm_min, pTime->tm_sec);
+	sprintf(szFileName,"%s/%s-%02d%02d%02d-%02d%02d%02d.log",  strLogDir.c_str(),strPrefix.c_str(), pTime->tm_year, pTime->tm_mon, pTime->tm_mday, pTime->tm_hour, pTime->tm_min, pTime->tm_sec);
 
 	m_pLogFile = fopen(szFileName, "w+");
 

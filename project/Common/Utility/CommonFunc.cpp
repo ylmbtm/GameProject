@@ -28,6 +28,38 @@ std::string CommonFunc::GetCurrentDir()
 	return std::string(szPath);
 }
 
+std::string CommonFunc::GetCurrentExeDir()
+{
+	char szPath[MAX_PATH_LEN];
+
+#ifdef WIN32
+	ZeroMemory(szPath, MAX_PATH_LEN);
+	GetModuleFileName(NULL, szPath, MAX_PATH_LEN);
+	char *p = strrchr(szPath, '\\');
+	*p = 0;
+#else
+	
+#endif
+	return std::string(szPath);
+}
+
+
+BOOL CommonFunc::SetCurrentWorkPath(std::string strPath)
+{
+	if (strPath.empty())
+	{
+		strPath = GetCurrentExeDir();
+	}
+
+#ifdef WIN32
+	SetCurrentDirectory(strPath.c_str());
+#else
+
+#endif
+
+	return TRUE;
+}
+
 UINT32 CommonFunc::GetCurrTime()
 {
 	time_t t;    

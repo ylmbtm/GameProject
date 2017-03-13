@@ -154,7 +154,7 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	WriteHelper.Write(DisConnectNotify);
 	WriteHelper.EndWrite();
 
-	IDataBuffer *pDataBuff2 = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pDataBuff->GetDataLenth());
+	IDataBuffer *pDataBuff2 = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pDataBuff->GetTotalLenth());
 	if(pDataBuff2 == NULL)
 	{
 		ASSERT_FAIELD;

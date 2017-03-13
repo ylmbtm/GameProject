@@ -148,7 +148,7 @@ BOOL ServiceBase::SendCmdToConnection(UINT64 u64ConnID, IDataBuffer *pSrcBuffer 
 		return FALSE;
 	}
 
-	IDataBuffer *pSendBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pSrcBuffer->GetDataLenth());
+	IDataBuffer *pSendBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pSrcBuffer->GetTotalLenth());
 	if(pSendBuffer == NULL)
 	{
 		ASSERT_FAIELD;
@@ -169,7 +169,7 @@ BOOL ServiceBase::SendCmdToConnection( UINT64 u64ConnID, UINT64 u64CharID, UINT3
 		return FALSE;
 	}
 
-	IDataBuffer *pSendBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pSrcBuffer->GetDataLenth());
+	IDataBuffer *pSendBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pSrcBuffer->GetTotalLenth());
 	if(pSendBuffer == NULL)
 	{
 		ASSERT_FAIELD;

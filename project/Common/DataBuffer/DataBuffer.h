@@ -18,7 +18,6 @@ public:
 		m_pPrev			= NULL;
 		m_pNext			= NULL;
 		m_pManager		= NULL;
-		m_dwBufferNo	= 0;
 	}
 
 	virtual ~CDataBuffer(void)
@@ -90,15 +89,20 @@ public:
 
 	CHAR* GetData()
 	{
-		return m_Buffer;
+		return m_Buffer + 21;
 	}
 
-	size_t GetDataLenth()
+	UINT32 GetTotalLenth()
 	{
 		return m_nDataLen;
 	}
 
-	VOID SetDataLenth(size_t nPos)
+	UINT32 GetBodyLenth()
+	{
+		return m_nDataLen-21;
+	}
+
+	VOID SetTotalLenth(UINT32 nPos)
 	{
 		m_nDataLen = nPos;
 	}
@@ -108,7 +112,7 @@ public:
 		return m_Buffer;
 	}
 
-	size_t GetBufferSize()
+	UINT32 GetBufferSize()
 	{
 		return m_nBufSize;
 	}
@@ -123,18 +127,26 @@ public:
 		return m_Buffer+nPos;
 	}
 
-	size_t  CopyFrom(IDataBuffer *pSrcBuffer)
+	UINT32  CopyFrom(IDataBuffer *pSrcBuffer)
 	{
-		memcpy(m_Buffer, pSrcBuffer->GetBuffer(), pSrcBuffer->GetDataLenth());
+		memcpy(m_Buffer, pSrcBuffer->GetBuffer(), pSrcBuffer->GetTotalLenth());
 
-		m_nDataLen = pSrcBuffer->GetDataLenth();
+		m_nDataLen = pSrcBuffer->GetTotalLenth();
 
 		return m_nDataLen;
 	}
 
-	UINT32  GetBufferNo()
+	UINT32  CopyTo(CHAR *pDestBuf, UINT32 dwDestLen)
 	{
-		return m_dwBufferNo;
+		if(dwDestLen < GetTotalLenth())
+		{
+			ASSERT_FAIELD;
+			return 0;
+		}
+
+		memcpy(pDestBuf, GetBuffer(), GetTotalLenth());
+
+		return dwDestLen;
 	}
 
 	CDataBuffer<SIZE> *m_pPrev;
@@ -146,16 +158,11 @@ public:
 private:
 	INT32		m_dwRefCount;
 
-	size_t		m_nBufSize;
+	UINT32		m_nBufSize;
 
 	CHAR		m_Buffer[SIZE];
 	
-	size_t		m_nDataLen;
-
-public:
-
-	UINT32		m_dwBufferNo;
-	
+	UINT32		m_nDataLen;
 };
 
 template <int SIZE>
@@ -184,7 +191,6 @@ public:
 			pDataBuffer = new CDataBuffer<SIZE>();
 			m_dwBufferCount += 1;
 			pDataBuffer->m_pManager = this;
-			pDataBuffer->m_dwBufferNo = m_dwBufferCount;
 		}
 		else
 		{
@@ -283,10 +289,16 @@ public:
 public:
 	IDataBuffer* AllocDataBuff(int nSize);
 
-	CBufferManager<1024>  g_BufferManager1K;		//管理1k的内存池，需要分配1k以下的内存从这里分配
-	CBufferManager<2048>  g_BufferManager2K;		//管理2k的内存池，需要分配2k以下的内存从这里分配
-	CBufferManager<4096>  g_BufferManager4K;		//管理4k的内存池，需要分配4k以下的内存从这里分配
-	CBufferManager<8192>  g_BufferManager8K;		//管理8k的内存池，需要分配8k以下的内存从这里分配
+	CBufferManager<128>    g_BufferManager128B;		//管理1k的内存池，需要分配1k以下的内存从这里分配
+	CBufferManager<256>    g_BufferManager256B;		//管理1k的内存池，需要分配1k以下的内存从这里分配
+	CBufferManager<512>    g_BufferManager512B;		//管理1k的内存池，需要分配1k以下的内存从这里分配
+	CBufferManager<1024>   g_BufferManager1K;		//管理1k的内存池，需要分配1k以下的内存从这里分配
+	CBufferManager<2048>   g_BufferManager2K;		//管理2k的内存池，需要分配2k以下的内存从这里分配
+	CBufferManager<4096>   g_BufferManager4K;		//管理4k的内存池，需要分配4k以下的内存从这里分配
+	CBufferManager<8192>   g_BufferManager8K;		//管理8k的内存池，需要分配8k以下的内存从这里分配
+	CBufferManager<16384>  g_BufferManager16K;		//管理16k的内存池，需要分配8k以下的内存从这里分配
+	CBufferManager<32768>  g_BufferManager32K;		//管理32k的内存池，需要分配8k以下的内存从这里分配
+	CBufferManager<65536>  g_BufferManager64K;		//管理64k的内存池，需要分配8k以下的内存从这里分配
 };
 
 #endif

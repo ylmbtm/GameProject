@@ -172,7 +172,7 @@ BOOL CConnection::ExtractBuffer()
 
     IDataBuffer *pDataBuffer =  CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pHeader->dwSize);
 
-	memcpy(pDataBuffer->GetData(), m_pBuffer, pHeader->dwSize);
+	memcpy(pDataBuffer->GetBuffer(), m_pBuffer, pHeader->dwSize);
 
 	m_dwDataLen -= pHeader->dwSize;
 
@@ -181,7 +181,7 @@ BOOL CConnection::ExtractBuffer()
 		memmove(m_pBuffer, m_pBuffer+pHeader->dwSize, m_dwDataLen);
 	}
 
-    pDataBuffer->SetDataLenth(pHeader->dwSize);
+    pDataBuffer->SetTotalLenth(pHeader->dwSize);
 
     m_pDataHandler->OnDataHandle(pDataBuffer, this);
 

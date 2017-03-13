@@ -64,14 +64,14 @@ private:
 template<typename T>
 UINT32 CBufferHelper::Read( T &_value )
 {
-	if((m_dwCurPos+sizeof(T)) > m_pDataBuffer->GetDataLenth())
+	if((m_dwCurPos+sizeof(T)) > m_pDataBuffer->GetTotalLenth())
 	{
 		ASSERT_FAIELD;
 
 		return 0;
 	}
 
-	_value = *(T*)(m_pDataBuffer->GetData() + m_dwCurPos);
+	_value = *(T*)(m_pDataBuffer->GetBuffer() + m_dwCurPos);
 
 	m_dwCurPos   += sizeof(T);
 

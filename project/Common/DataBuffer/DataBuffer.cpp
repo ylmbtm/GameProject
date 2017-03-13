@@ -37,6 +37,18 @@ IDataBuffer* CBufferManagerAll::AllocDataBuff( int nSize )
 	{
 		return g_BufferManager8K.AllocDataBuff();
 	}
+	else if(nSize < 16384)
+	{
+		return g_BufferManager16K.AllocDataBuff();
+	}
+	else if(nSize < 32768)
+	{
+		return g_BufferManager32K.AllocDataBuff();
+	}
+	else if(nSize < 65536)
+	{
+		return g_BufferManager64K.AllocDataBuff();
+	}
 
 	return NULL;
 }

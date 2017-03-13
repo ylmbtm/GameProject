@@ -98,7 +98,7 @@ BOOL CCommonWorkThread::ProcessMessage()
 
 		ASSERT(msg.u64ConnID != 0);
 
-		PacketHeader *pPacketHeader = (PacketHeader *)(msg.pDataBuffer->GetData());
+		PacketHeader *pPacketHeader = (PacketHeader *)(msg.pDataBuffer->GetBuffer());
 
 		m_pCommandHandler->OnCommandHandle(pPacketHeader->wCommandID, msg.u64ConnID, &BufferReader);
 
@@ -113,7 +113,7 @@ BOOL CCommonWorkThread::AddMessage(UINT64 u64ConnID, IDataBuffer *pDataBuffer)
 	ASSERT(u64ConnID != 0);
 	IDataBuffer *pRecvBuffer = pDataBuffer;
 	/*
-	IDataBuffer *pRecvBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pDataBuffer->GetDataLenth());
+	IDataBuffer *pRecvBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pDataBuffer->GetTotalLenth());
 	if(pRecvBuffer == NULL)
 	{
 		ASSERT_FAIELD;

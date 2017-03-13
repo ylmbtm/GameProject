@@ -11,6 +11,10 @@ namespace CommonFunc
 
 	std::string		GetCurrentDir();
 
+	std::string		GetCurrentExeDir();
+
+	BOOL			SetCurrentWorkPath(std::string strPath);
+
 	BOOL			CreateDir(std::string &strDir);
 
 	UINT32			GetCurrTime();

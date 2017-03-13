@@ -317,10 +317,10 @@ BOOL    CNetManager::WorkThread_SendData()
 		}
 
 		WSABUF  DataBuf;
-		DataBuf.len = pDataBuffer->GetDataLenth();
-		DataBuf.buf = pDataBuffer->GetData();
+		DataBuf.len = pDataBuffer->GetTotalLenth();
+		DataBuf.buf = pDataBuffer->GetBuffer();
 
-		NetIoOperatorData *pOperatorData = (NetIoOperatorData *)pDataBuffer->GetBufferPos(pDataBuffer->GetDataLenth()+1);
+		NetIoOperatorData *pOperatorData = (NetIoOperatorData *)pDataBuffer->GetBufferPos(pDataBuffer->GetTotalLenth()+1);
 		if(pOperatorData == NULL)
 		{
 			pDataBuffer->Release();
@@ -484,14 +484,14 @@ BOOL    CNetManager::WorkThread_SendData()
 			continue;
 		}
 
-		INT32 nRet = send(hSocket, pDataBuffer->GetData(),pDataBuffer->GetDataLenth(), 0);
+		INT32 nRet = send(hSocket, pDataBuffer->GetBuffer(),pDataBuffer->GetTotalLenth(), 0);
 		if(nRet < 0)
 		{
 			int nErr = CommonSocket::GetSocketLastError();
 
 			CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 原因:%s!", CommonSocket::GetLastErrorStr(nErr).c_str());
 		}
-		else if(nRet < pDataBuffer->GetDataLenth())
+		else if(nRet < pDataBuffer->GetTotalLenth())
 		{
 			CommonSocket::CloseSocket(hSocket);
 

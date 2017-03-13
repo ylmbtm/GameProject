@@ -12,20 +12,21 @@ public:
 
 	virtual CHAR*	GetData() = 0;
 
-	virtual size_t	GetDataLenth() = 0;
+	virtual UINT32	GetTotalLenth() = 0;
 
-	virtual VOID	SetDataLenth(size_t nPos) = 0;
+	virtual VOID	SetTotalLenth(UINT32 nPos) = 0;
+
+	virtual UINT32  GetBodyLenth() = 0;
 
 	virtual CHAR*	GetBuffer() = 0;
 
-	virtual size_t	GetBufferSize() = 0;
+	virtual UINT32	GetBufferSize() = 0;
 
 	virtual CHAR*	GetBufferPos(size_t nIndex) = 0;
 
-	virtual size_t  CopyFrom(IDataBuffer *pSrcBuffer) = 0;
+	virtual UINT32  CopyFrom(IDataBuffer *pSrcBuffer) = 0;
 
-	virtual UINT32  GetBufferNo() = 0;
-
+	virtual UINT32  CopyTo(CHAR *pDestBuf, UINT32 dwDestLen) = 0;
 };
 
 struct IDataHandler
