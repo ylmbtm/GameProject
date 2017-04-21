@@ -10,22 +10,6 @@ Th_RetName _NetListenThread( void *pParam );
 
 Th_RetName _NetEventDispatchThread(void *pParam ); //only for linux
 
-Th_RetName _NetSendBufferThread(void *pParam);
-
-struct SendDataNode
-{
-	BOOL		bIsConnID;	//true is id ,flase if socket
-	UINT64		u64ConnID;
-	VOID		*pPtr;
-
-	SendDataNode()
-	{
-		bIsConnID = false;
-		u64ConnID  = 0;
-		pPtr      = NULL;
-	}
-};
-
 ////以下为linux专有//////////////////////////////
 #define EVENT_READ  1
 #define EVENT_WRITE 2
@@ -51,20 +35,17 @@ public:
 		return &NetManager;
 	}
 public:
-	BOOL	Start(IDataHandler *pBufferHandler);
+	BOOL	Start(UINT16 nPortNum,  UINT32 nMaxConn, IDataHandler *pBufferHandler);
 
 	BOOL	Close();
 
-	BOOL	SendBufferByConnID(UINT64 u64ConnID, IDataBuffer *pDataBuffer);
-
-	BOOL	SendBufferBySocket(SOCKET hSocket, IDataBuffer *pDataBuffer);
-
+	BOOL	SendBufferByConnID(UINT32 dwConnID, IDataBuffer *pDataBuffer);
 public:
 	BOOL	InitNetwork();
 
 	BOOL	UninitNetwork();
 
-	BOOL	StartListen();
+	BOOL	StartListen(UINT16 nPortNum);
 
 	BOOL	StopListen();
 
@@ -72,7 +53,11 @@ public:
 public:
 	BOOL	CreateCompletePort();
 
-	CConnection* AssociateCompletePort(SOCKET hSocket);
+	CConnection*	AssociateCompletePort(SOCKET hSocket);
+
+	CConnection*	ConnectToOtherSvr(std::string strIpAddr, UINT16 sPort);
+
+	CConnection*	ConnectToOtherSvrEx(std::string strIpAddr, UINT16 sPort);
 
 	BOOL	DestroyCompletePort();
 
@@ -84,23 +69,11 @@ public:
 
 	BOOL    CloseEventThread();
 	
-	BOOL	CreateSendDataThread();
-
-	BOOL	CloseSendDataThread();
-
 	BOOL	WorkThread_DispathEvent();
 
 	BOOL	WorkThread_ProcessEvent();
 
 	BOOL	WorkThread_Listen();
-
-	BOOL    WorkThread_SendData();
-
-	BOOL	ConnectToOtherSvr(std::string strIpAddr, UINT16 sPort);
-
-	BOOL	ConnectToOtherSvrEx(std::string strIpAddr, UINT16 sPort);
-
-	BOOL	SendIdentifyInfo(SOCKET hSocket);
 
 	SOCKET				m_hListenSocket;
 
@@ -113,20 +86,11 @@ public:
 	BOOL				m_bCloseDispath;	//是否关闭分发线程
 
 	IDataHandler		*m_pBufferHandler;
-
-    UINT32                m_nMaxSendListLen;  //等待发送队列的最大长度
-
 public:
-
 	CommonQueue::CMessageQueue<EventNode>	m_DispatchEventList;
 	
-	CommonQueue::CMessageQueue<SendDataNode, 10240> m_SendDataList;		//用于发送数据的线程
-
-
-
-	THANDLE				m_hListenThread;
-	THANDLE				m_hSendThread;
-	THANDLE				m_hDispathThread;
+	THANDLE				 m_hListenThread;
+	THANDLE				 m_hDispathThread;
 	std::vector<THANDLE> m_vtEventThread;
 
 #ifndef WIN32

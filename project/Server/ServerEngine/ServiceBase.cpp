@@ -14,11 +14,20 @@
 
 ServiceBase::ServiceBase(void)
 {
+	m_pPacketDispatcher = NULL;
 }
 
 ServiceBase::~ServiceBase(void)
 {
 }
+
+ServiceBase* ServiceBase::GetInstancePtr()
+{
+	static ServiceBase _ServiceBase;
+
+	return &_ServiceBase;
+}
+
 
 BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnection)
 {
@@ -78,7 +87,7 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 		if(pConnection->GetConnectionID() != 0)
 		{
 			ASSERT_FAIELD;
-			pConnection->Close(TRUE);
+			pConnection->Close();
 			CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 			
 			return FALSE;
@@ -89,7 +98,7 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
         if(!BufferReader.BeginRead())
         {
             ASSERT_FAIELD;
-            pConnection->Close(TRUE);
+            pConnection->Close();
             CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
             return FALSE;
         }
@@ -98,28 +107,35 @@ BOOL ServiceBase::OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnecti
 	if(pConnection->GetConnectionID() == 0)
 	{
 		ASSERT_FAIELD;
-		pConnection->Close(FALSE);
+		pConnection->Close();
 		CConnectionMgr::GetInstancePtr()->DeleteConnection(pConnection);
 		return FALSE;
 	}
-	
-	OnCommandHandle(pPacketHeader->wCommandID, pConnection->GetConnectionID(), &BufferReader);
 
+	NetPacket item;
+	item.m_pDataBuffer = NULL;
+	item.m_pConnect = pConnection;
+	m_pPacketDispatcher->OnNewConnect(pConnection);
+	
+
+	m_pPacketDispatcher->DispatchPacket(&item);
+	
 	return TRUE;
 }
 
-BOOL ServiceBase::StartNetwork()
+BOOL ServiceBase::StartNetwork(UINT16 nPortNum, UINT32 nMaxConn, IPacketDispatcher *pDispather)
 {
-	CLog::GetInstancePtr()->AddLog("*******服务器信息***********");
-	CLog::GetInstancePtr()->AddLog("服务器地址:%s 监听端口:%d", CGlobalConfig::GetInstancePtr()->m_strIpAddr.c_str(), CGlobalConfig::GetInstancePtr()->m_sPort);
-	CLog::GetInstancePtr()->AddLog("服务器类型:%d 服务器ID:%d", GetServerType(), GetServerID());
-	CLog::GetInstancePtr()->AddLog("********服务器信息***********");
-	CLog::GetInstancePtr()->AddLog("");
-	CLog::GetInstancePtr()->AddLog("");
-
-	if(!CNetManager::GetInstancePtr()->Start(this))
+	if (pDispather == NULL)
 	{
-		CLog::GetInstancePtr()->AddLog("启动网络层失败");
+		ASSERT_FAIELD;
+		return FALSE;
+	}
+
+	m_pPacketDispatcher = pDispather;
+
+	if (!CNetManager::GetInstancePtr()->Start(nPortNum, nMaxConn, this))
+	{
+		CLog::GetInstancePtr()->AddLog("启动网络层失败!");
 		return FALSE;
 	}
 
@@ -139,70 +155,80 @@ BOOL ServiceBase::StopNetwork()
 	return TRUE;
 }
 
-
-BOOL ServiceBase::SendCmdToConnection(UINT64 u64ConnID, IDataBuffer *pSrcBuffer )
+template<typename T>
+BOOL ServiceBase::SendCmdToConnection(UINT16 uCmdID, T &Data, UINT32 dwConnID, UINT64 uCharID,UINT32 dwSceneID)
 {
-	if(u64ConnID == 0)
-	{
-		ASSERT_FAIELD;
-		return FALSE;
-	}
-
-	IDataBuffer *pSendBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pSrcBuffer->GetTotalLenth());
-	if(pSendBuffer == NULL)
+	if(dwConnID == 0)
 	{
 		ASSERT_FAIELD;
 
 		return FALSE;
 	}
 
-	pSendBuffer->CopyFrom(pSrcBuffer);
+	CBufferHelper WriteHelper(TRUE, sizeof(T));
+	WriteHelper.BeginWrite(uCmdID, dwSceneID, uCharID);
+	WriteHelper.Write(Data);
+	WriteHelper.EndWrite();
 
-	return CNetManager::GetInstancePtr()->SendBufferByConnID(u64ConnID, pSendBuffer);
+	return CNetManager::GetInstancePtr()->SendBufferByConnID(dwConnID, WriteHelper.GetDataBuffer());
 }
 
-BOOL ServiceBase::SendCmdToConnection( UINT64 u64ConnID, UINT64 u64CharID, UINT32 dwSceneID, IDataBuffer *pSrcBuffer )
+
+BOOL ServiceBase::SendCmdToConnection(UINT32 dwConnID, IDataBuffer *pSrcBuffer )
 {
-	if(u64ConnID == 0)
+	if(dwConnID == 0)
 	{
 		ASSERT_FAIELD;
+
 		return FALSE;
 	}
 
 	IDataBuffer *pSendBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pSrcBuffer->GetTotalLenth());
 	if(pSendBuffer == NULL)
 	{
-		ASSERT_FAIELD;
-		
 		return FALSE;
 	}
-
 	pSendBuffer->CopyFrom(pSrcBuffer);
 
-	PacketHeader *pPacketHeader = (PacketHeader *)(pSendBuffer->GetBuffer());
+	return CNetManager::GetInstancePtr()->SendBufferByConnID(dwConnID, pSrcBuffer);
+}
+
+ BOOL ServiceBase::SendCmdToConnection( UINT32 dwConnID, UINT64 u64CharID, UINT32 dwSceneID, IDataBuffer *pSrcBuffer )
+{
+	if(dwConnID == 0)
+	{
+		ASSERT_FAIELD;
+ 		return FALSE;
+ 	}
+ 
+ 	IDataBuffer *pSendBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(pSrcBuffer->GetTotalLenth());
+ 	if(pSendBuffer == NULL)
+ 	{
+ 		ASSERT_FAIELD;
+ 		
+ 		return FALSE;
+ 	}
+ 
+ 	pSendBuffer->CopyFrom(pSrcBuffer);
+ 
+ 	PacketHeader *pPacketHeader = (PacketHeader *)(pSendBuffer->GetBuffer());
 
 	pPacketHeader->u64CharID	= u64CharID;
-	pPacketHeader->dwSceneID	= dwSceneID;
+ 	pPacketHeader->dwSceneID	= dwSceneID;
 
 	ASSERT(pPacketHeader->u64CharID  != 0);
 	ASSERT(pPacketHeader->wCommandID != 0);
 
+	return CNetManager::GetInstancePtr()->SendBufferByConnID(dwConnID, pSendBuffer);
+ }
 
-	return CNetManager::GetInstancePtr()->SendBufferByConnID(u64ConnID, pSendBuffer);
-}
 
-
-BOOL ServiceBase::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
-{	
-	return TRUE;
-}
-
-BOOL ServiceBase::ConnectToOtherSvr( std::string strIpAddr, UINT16 sPort )
+CConnection* ServiceBase::ConnectToOtherSvr( std::string strIpAddr, UINT16 sPort )
 {
 	return CNetManager::GetInstancePtr()->ConnectToOtherSvrEx(strIpAddr, sPort);
 }
 
-BOOL ServiceBase::OnDisconnect( CConnection *pConnection )
+BOOL ServiceBase::OnCloseConnect( CConnection *pConnection )
 {
 	if(pConnection->GetConnectionID() == 0)
 	{
@@ -213,58 +239,20 @@ BOOL ServiceBase::OnDisconnect( CConnection *pConnection )
 	return TRUE;
 }
 
-BOOL ServiceBase::OnUpdate( UINT32 dwTick )
+BOOL ServiceBase::OnNewConnect( CConnection *pConnection )
 {
-	ASSERT_FAIELD;
-
-	//不要处理这个方法， 基本不需要调动。
-
-	return TRUE;
-}
-
-CConnection* ServiceBase::GetConnectionByID( UINT64 u64ConnID )
-{
-	return CConnectionMgr::GetInstancePtr()->GetConnectionByConnID(u64ConnID);
-}
-
-BOOL ServiceBase::SendCmdToDBConnection(IDataBuffer *pDataBuf)
-{
-	if(m_u64DBConnID == 0)
+	if(pConnection->GetConnectionID() == 0)
 	{
 		ASSERT_FAIELD;
 		return FALSE;
 	}
 
-	ASSERT(SendCmdToConnection(m_u64DBConnID, pDataBuf));
-
 	return TRUE;
 }
 
-BOOL ServiceBase::SendCmdToStatConnection(IDataBuffer *pDataBuf)
+CConnection* ServiceBase::GetConnectionByID( UINT32 dwConnID )
 {
-	if(m_u64StatConnID == 0)
-	{
-		return FALSE;
-	}
-
-	ASSERT(SendCmdToConnection(m_u64StatConnID, pDataBuf));
-
-	return TRUE;
-}
-
-UINT32 ServiceBase::GetServerID()
-{
-	return CGlobalConfig::GetInstancePtr()->m_dwServerID;
-}
-
-UINT32 ServiceBase::GetServerType()
-{
-	return CGlobalConfig::GetInstancePtr()->m_dwServerType;
-}
-
-BOOL ServiceBase::SetMaxConnection( UINT32 nMaxCon )
-{
-    return CConnectionMgr::GetInstancePtr()->InitConnectionList(nMaxCon);
+	return CConnectionMgr::GetInstancePtr()->GetConnectionByConnID(dwConnID);
 }
 
 

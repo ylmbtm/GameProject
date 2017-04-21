@@ -1,18 +1,28 @@
 ﻿#include "stdafx.h"
-#include "IniFile.h"
+#include "ConfigFile.h"
 
 
-CIniFile::CIniFile( void )
+CConfigFile::CConfigFile( void )
 {
 
 }
 
-CIniFile::~CIniFile( void )
+CConfigFile::~CConfigFile( void )
 {
 
 }
 
-BOOL CIniFile::Load( std::string strFileName )
+inline static BOOL StringTrim(std::string& text)  
+{  
+	if(!text.empty())  
+	{  
+		text.erase(0, text.find_first_not_of((" \n\r\t")));  
+		text.erase(text.find_last_not_of((" \n\r\t")) + 1);  
+	}  
+	return TRUE;  
+}  
+
+BOOL CConfigFile::Load( std::string strFileName )
 {
 	FILE *pFile = fopen(strFileName.c_str(),"r+");
 
@@ -43,7 +53,8 @@ BOOL CIniFile::Load( std::string strFileName )
 		strName.assign(szBuff,pChar-szBuff);
 		std::string strValue = pChar+1;
 
-		strValue = strValue.substr(0,strValue.find_last_not_of(" \n\r\t")+1); 
+		StringTrim(strName);
+		StringTrim(strValue);
 
 		m_Values.insert(std::make_pair(strName, strValue));
 
@@ -54,3 +65,13 @@ BOOL CIniFile::Load( std::string strFileName )
 
 	return TRUE;
 }
+
+
+CConfigFile* CConfigFile::GetInstancePtr()
+{
+	static CConfigFile ConfigFile;
+
+	return &ConfigFile;
+}
+
+

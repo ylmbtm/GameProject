@@ -30,6 +30,9 @@ struct StCharNewAccountReq
 {
 	CHAR szAccountName[32];		//账号名
 	CHAR szPassword[32];		//密码
+	BOOL bFromThird;            //是否从第三方平台
+	CHAR szChannel[32];
+	CHAR szVersion[32];
 };
 
 struct StCharNewAccountAck

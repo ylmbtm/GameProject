@@ -1,52 +1,59 @@
 ﻿#ifndef __SERVICE_BASE_H__
 #define __SERVICE_BASE_H__
 
-#include "GlobalConfig.h"
 #include "IBufferHandler.h"
 #include "Connection.h"
+#include "EventFuncManager.h"
+#include "Utility/IniFile/ConfigFile.h"
 
-class ServiceBase : public IDataHandler, 
-					public ICommandHandler
+struct NetPacket
 {
-public:
-	ServiceBase(void);
+	NetPacket( CConnection *pConnect = NULL, IDataBuffer *pBuffer = NULL, UINT32 dwCmdID = 0 )
+	{
+		m_pConnect = pConnect;
 
+		m_pDataBuffer = pBuffer;
+
+		m_dwCmdID = dwCmdID;
+	}
+
+	CConnection *m_pConnect;
+
+	IDataBuffer *m_pDataBuffer;
+
+	UINT32       m_dwCmdID;
+};
+
+class ServiceBase : public IDataHandler//, public CEventFuncManager
+{
+protected:
+	ServiceBase(void);
 	virtual ~ServiceBase(void);
+public:
+	static ServiceBase* GetInstancePtr();
 	
-    BOOL            StartNetwork();
+    BOOL            StartNetwork(UINT16 nPortNum, UINT32 nMaxConn, IPacketDispatcher *pDispather);
 
     BOOL            StopNetwork();
 
 	BOOL			OnDataHandle(IDataBuffer *pDataBuffer , CConnection *pConnection);
 
-	BOOL			OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	BOOL			OnCloseConnect(CConnection *pConnection);
 
-	BOOL			OnUpdate(UINT32 dwTick);
+	BOOL			OnNewConnect(CConnection *pConnection);
 
-	BOOL			OnDisconnect(CConnection *pConnection);
-public:
-	BOOL			ConnectToOtherSvr(std::string strIpAddr, UINT16 sPort);
+	CConnection*	ConnectToOtherSvr(std::string strIpAddr, UINT16 sPort);
 
-	BOOL			SendCmdToConnection(UINT64 u64ConnID, IDataBuffer *pSrcBuffer);
+	BOOL			SendCmdToConnection(UINT32 dwConnID, IDataBuffer *pSrcBuffer);
 
-	BOOL			SendCmdToConnection(UINT64 u64ConnID, UINT64 u64CharID, UINT32 dwSceneID, IDataBuffer *pSrcBuffer );
+	BOOL			SendCmdToConnection(UINT32 dwConnID, UINT64 u64CharID, UINT32 dwSceneID, IDataBuffer *pSrcBuffer );
 
-	CConnection*    GetConnectionByID(UINT64 u64ConnID);
+	template<typename T>
+	BOOL			SendCmdToConnection(UINT16 uCmdID, T &Data, UINT32 dwConnID, UINT64 uCharID = 0,UINT32 dwSceneID = 0);
 
-    BOOL            SetMaxConnection(UINT32  nMaxCon);
-	UINT32			GetServerID();
-	UINT32			GetServerType();
-
-public:
-	void			SetStatConnID(UINT64 ConnID){m_u64StatConnID = ConnID;}
-	BOOL			SendCmdToStatConnection(IDataBuffer *pDataBuf);
-
-	void			SetDBConnID(UINT64 ConnID){m_u64DBConnID = ConnID;}
-	BOOL			SendCmdToDBConnection(IDataBuffer *pDataBuf);
-
+	CConnection* GetConnectionByID(UINT32 dwConnID);
 protected:
-	UINT64			m_u64DBConnID;
-	UINT64			m_u64StatConnID;
+	IPacketDispatcher				  *m_pPacketDispatcher;
 };
 
 

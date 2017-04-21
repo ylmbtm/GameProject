@@ -55,6 +55,18 @@ BOOL CClientConnector::SetClientID( UINT64 u64ClientID )
 	return TRUE;
 }
 
+template <typename T>
+BOOL CClientConnector::SendData(UINT16 dwMsgID, T &msgData, UINT32 dwSceneID, UINT64 u64CharID)
+{
+	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
+	WriteHelper.BeginWrite(dwMsgID, dwSceneID, u64CharID);
+	WriteHelper.Write(msgData);
+	WriteHelper.EndWrite();
+
+	SendData(m_WriteBuffer.GetBuffer(), m_WriteBuffer.GetTotalLenth());
+	return TRUE;
+}
+
 BOOL CClientConnector::SendData( char *pData, INT32 dwLen )
 {
 	if((pData == NULL)||(dwLen == 0))
@@ -408,12 +420,12 @@ BOOL CClientConnector::ReceiveData()
 
 BOOL CClientConnector::ProcessData()
 {
-	if(m_nDataLen < sizeof(TransferHeader))
+	if(m_nDataLen < sizeof(PacketHeader))
 	{
 		return FALSE;
 	}
 
-	TransferHeader *pHeader = (TransferHeader *)m_DataBuffer;
+	PacketHeader *pHeader = (PacketHeader *)m_DataBuffer;
 	if(pHeader->CheckCode != 0xff)
 	{
 		ASSERT_FAIELD;
@@ -437,9 +449,9 @@ BOOL CClientConnector::ProcessData()
 		ASSERT_FAIELD;
 	}
 
-	memcpy(m_ReadBuffer.GetData(), m_DataBuffer, pHeader->dwSize);
+	memcpy(m_ReadBuffer.GetBuffer(), m_DataBuffer, pHeader->dwSize);
 
-	m_ReadBuffer.SetDataLenth(pHeader->dwSize);
+	m_ReadBuffer.SetTotalLenth(pHeader->dwSize);
 
 	m_nDataLen -= pHeader->dwSize;
 
@@ -463,16 +475,9 @@ BOOL CClientConnector::ProcessData()
 		return FALSE;
 	}
 
-	CommandHeader *pCommandHeader = BufferReader.GetCommandHeader();
-	if(pCommandHeader == NULL)
+	if((pHeader->wCommandID > CMD_BEGIN_TAG)&&(pHeader->wCommandID < CMD_END_TAG))
 	{
-		ASSERT_FAIELD;
-		return FALSE;
-	}
-
-	if((pCommandHeader->wCommandID > CMD_BEGIN_TAG)&&(pCommandHeader->wCommandID < CMD_END_TAG))
-	{
-		OnCommandHandle(pCommandHeader->wCommandID, 0, &BufferReader);
+		OnCommandHandle(pHeader->wCommandID, 0, &BufferReader);
 	}
 	else
 	{

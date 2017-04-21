@@ -22,7 +22,7 @@ private:
 public:
 	static CLog* GetInstancePtr();
 
-	BOOL StartLog(std::string strPrefix, std::string strLogDir = "");
+	BOOL StartLog(std::string strPrefix, std::string strLogDir = "log");
 
 	BOOL CloseLog();
 

@@ -13,7 +13,7 @@ public:
 	~CBufferHelper(void);
 
 public:
-	BOOL		BeginWrite(UINT16 wCommandID, UINT8 CmdHandleID, UINT16 dwSceneID, UINT64 u64CharID);
+	BOOL		BeginWrite(UINT16 wCommandID, UINT16 dwSceneID, UINT64 u64CharID);
 	
 	BOOL		BeginRead();
 
@@ -23,9 +23,9 @@ public:
 
 	PacketHeader* GetPacketHeader();
 
-	IDataBuffer*    GetDataBuffer();
+	IDataBuffer*  GetDataBuffer();
 
-	UINT8*			GetCurrentPoint();
+	UINT8*	      GetCurrentPoint();
 
 	template <typename T>
 	UINT32		Write(T& _Value);

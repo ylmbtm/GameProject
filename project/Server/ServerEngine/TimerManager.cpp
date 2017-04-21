@@ -3,22 +3,14 @@
 #include "../../Common/Utility/CommonFunc.h"
 
 
-TimeEvent::TimeEvent()
-{
-	dwStartTime = 0;
-	dwEndTime   = 0;
-	dwTimerID   = 0;
-	wParam      = 0;
-	lParam		= 0;
-
-	m_pNext     = NULL;
-}
 
 TimerManager::TimerManager()
 {
 	m_pHead = NULL;
 
 	m_pFree = NULL;
+
+	m_dwInitTime = CommonFunc::GetCurrTime();
 }
 
 TimerManager::~TimerManager()
@@ -26,141 +18,126 @@ TimerManager::~TimerManager()
 
 }
 
-BOOL TimerManager::AddTimer( UINT32 dwTimerID, UINT32 wParam, UINT32 lParam )
-{
-	TimeEvent *pNewEvent = NULL;
-	if(m_pFree == NULL)
-	{
-		pNewEvent = new TimeEvent;
-	}
-	else
-	{
-		pNewEvent = m_pFree;
+ TimerManager* TimerManager::GetInstancePtr()
+ {
+ 	static TimerManager _TimerManager;
+ 
+ 	return &_TimerManager;
+ }
 
-		m_pFree = m_pFree->m_pNext;
-	}
-
-	pNewEvent->dwTimerID = dwTimerID = dwTimerID;
-
-	pNewEvent->wParam = wParam;
-
-	pNewEvent->lParam = lParam;
-
-	if(m_pFree == NULL)
-	{
-		m_pFree = pNewEvent;
-
-		return TRUE;
-	}
-
-	if(pNewEvent->dwEndTime <= m_pFree->dwEndTime)
-	{
-		pNewEvent->m_pNext = m_pFree;
-
-		m_pFree = pNewEvent;
-
-		return TRUE;
-	}
-
-	TimeEvent *pInserPos = m_pFree;
-
-	while(pInserPos != NULL)
-	{
-		if(pNewEvent->dwEndTime >= pInserPos->dwEndTime)
-		{
-			if(pInserPos->m_pNext == NULL)
-			{
-				pInserPos->m_pNext = pNewEvent;
-
-				return TRUE;
-			}
-
-			if(pNewEvent->dwEndTime >= pInserPos->m_pNext->dwEndTime)
-			{
-				pInserPos = pInserPos->m_pNext;
-				continue;
-			}
-
-			pNewEvent->m_pNext = pInserPos->m_pNext;
-
-			pInserPos->m_pNext = pNewEvent;
-
-			return TRUE;
-		}
-	}
-
-	return TRUE;
-}
-
-BOOL TimerManager::DelTimer( UINT32 dwTimerID )
+BOOL TimerManager::DelTimer(UINT32 dwSec, UINT32 dwData)
 {
 	if(m_pHead == NULL)
 	{
 		return TRUE;
 	}
 
-	if(m_pHead->dwTimerID == dwTimerID)
+	TimeEvent *pDelEvent = m_pHead;
+	while(pDelEvent != NULL)
 	{
-		TimeEvent *pEvent = m_pHead;
-
-		m_pHead = m_pHead->m_pNext;
-
-		pEvent->m_pNext = m_pFree->m_pNext;
-
-		m_pFree = pEvent;
-
-		return TRUE;
-	}
-
-
-	TimeEvent *pEvent = m_pHead;
-
-	while(pEvent->m_pNext != NULL)
-	{
-		if(pEvent->m_pNext->dwTimerID == dwTimerID)
+		if((pDelEvent->m_dwSec == dwSec)&&(pDelEvent->m_dwData == dwData))
 		{
-			TimeEvent *pDelEvent = pEvent->m_pNext;
-
-			pEvent->m_pNext = pEvent->m_pNext->m_pNext;
-
-			pDelEvent->m_pNext = m_pFree->m_pNext;
-
-			m_pFree = pDelEvent;
-
-			return TRUE;
+			break;
 		}
 
-
-		pEvent = pEvent->m_pNext;
+		pDelEvent = pDelEvent->m_pNext;
 	}
+
+
+	if(pDelEvent == m_pHead)
+	{
+		m_pHead = m_pHead->m_pNext;
+		if(m_pHead != NULL)
+		{
+			m_pHead->m_pPrev = NULL;
+		}
+	}
+	else
+	{
+		pDelEvent->m_pPrev->m_pNext = pDelEvent->m_pNext;
+		if(pDelEvent->m_pNext != NULL)
+		{
+			pDelEvent->m_pNext->m_pPrev = pDelEvent->m_pPrev;
+		}
+	}
+
+	pDelEvent->m_pNext = m_pFree;
+	pDelEvent->m_pPrev = NULL;
+	
+	if(m_pFree != NULL)
+	{
+		m_pFree->m_pPrev = pDelEvent;
+	}
+
+	m_pFree = pDelEvent;
+
+	pDelEvent->Reset();
 
 	return FALSE;
 }
 
 VOID TimerManager::UpdateTimer()
 {
-	UINT32 dwCurTick = CommonFunc::GetTickCount();
-
-	while(m_pHead != NULL)
+	m_dwCurTime = CommonFunc::GetCurrTime();
+	TimeEvent *pCurEvent = m_pHead;
+	while(pCurEvent != NULL)
 	{
-		if(dwCurTick >= m_pHead->dwEndTime)
+		if(m_dwCurTime >= pCurEvent->m_dwFireTime)
 		{
-			OnTimerEvent(m_pHead);
+			//避免每次启动服务器，之前的定时器都执行一遍
+			if(m_dwInitTime <= pCurEvent->m_dwFireTime)
+			{
+				OnTimerEvent(pCurEvent);
+			}
 
-			TimeEvent *pEvent = m_pHead;
+			pCurEvent->m_dwRepeateTimes -= 1;
 
-			m_pHead = m_pHead->m_pNext;
-
-			pEvent->m_pNext = m_pFree;
-
-			m_pFree = pEvent;
+			if(pCurEvent->m_dwType == 1)
+			{
+				pCurEvent->m_dwFireTime = pCurEvent->m_dwFireTime + 86400;
+			}
+			else
+			{
+				pCurEvent->m_dwFireTime = pCurEvent->m_dwFireTime + pCurEvent->m_dwSec;
+			}
 		}
+
+		if(pCurEvent->m_dwRepeateTimes <= 0)
+		{
+			
+		}
+
+
+		pCurEvent = pCurEvent->m_pNext;
 	}
 }
 
-
-VOID TimerManager::OnBlood( UINT32 dwStartTime, UINT32 dwEndTime, UINT32 wParam, UINT32 lParam )
+VOID TimerManager::OnTimerEvent(TimeEvent *pEvent)
 {
+	if(pEvent == NULL)
+	{
+		return ;
+	}
+	
+	(*pEvent->m_pTimerFuncSlot)(pEvent->m_dwData);
 
 	return ;
+}
+
+BOOL TimerManager::InitTimer()
+{
+	m_dwInitTime = CommonFunc::GetCurrTime();
+	return TRUE;
+}
+
+BOOL TimerManager::Clear()
+{
+	while(m_pHead != NULL)
+	{
+		TimeEvent *pCurEvent = m_pHead;
+		m_pHead = pCurEvent->m_pNext;
+		delete pCurEvent;
+	}
+
+	return TRUE;
 }

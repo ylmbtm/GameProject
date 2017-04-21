@@ -69,11 +69,12 @@
 #define WSAEDQUOT 			EDQUOT                 
 #define WSAESTALE 			ESTALE                 
 #define WSAEREMOTE 			EREMOTE                
-
 #endif
 
-
-
-
+#ifdef SERVER_ENGINE
+#define EngineClass _declspec(dllexport)
+#else
+#define EngineClass _declspec(dllimport)
+#endif
 
 #endif /* __PLATFORM_H__ */

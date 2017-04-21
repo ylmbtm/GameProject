@@ -2,7 +2,6 @@
 #include "CommonCmdHandler.h"
 #include "Utility/CommonFunc.h"
 #include "Utility/CommonEvent.h"
-#include "ConnectionType.h"
 
 CCommonCmdHandler::CCommonCmdHandler()
 {

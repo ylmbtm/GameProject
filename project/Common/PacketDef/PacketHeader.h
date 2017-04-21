@@ -4,15 +4,17 @@
 #pragma  pack(push)
 #pragma  pack(1)
 
+#define CLIENT_CODE 0x88
+#define SERVER_CODE 0x99
+
 struct PacketHeader
 {
 	UINT8	 CheckCode;
-	UINT16   dwSize;
-	UINT8    CmdHandleID;
 	UINT16   wCommandID;
+	UINT32   dwSize;
+	UINT32   dwPacketNo;	//生成序号 = wCommandID^dwSize+index(每个包自动增长索引); 还原序号 = pHeader->dwPacketNo - pHeader->wCommandID^pHeader->dwSize;
 	UINT32   dwSceneID;
-	UINT64   u64CharID;		//角色ID
-	UINT32   dwPacketNo;	//包序号
+	UINT64   u64CharID;
 };
 
 #pragma  pack(pop)

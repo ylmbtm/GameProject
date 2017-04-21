@@ -117,16 +117,6 @@ public:
 		return m_nBufSize;
 	}
 
-	CHAR*	GetBufferPos(size_t nPos)
-	{
-		if(nPos >= m_nBufSize)
-		{
-			return NULL;
-		}
-
-		return m_Buffer+nPos;
-	}
-
 	UINT32  CopyFrom(IDataBuffer *pSrcBuffer)
 	{
 		memcpy(m_Buffer, pSrcBuffer->GetBuffer(), pSrcBuffer->GetTotalLenth());

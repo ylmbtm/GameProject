@@ -1,12 +1,14 @@
-﻿#ifndef _INI_FILE_H_
-#define _INI_FILE_H_
+﻿#ifndef _CONFIG_FILE_H_
+#define _CONFIG_FILE_H_
 
-class CIniFile
+class CConfigFile
 {
-public:
-	CIniFile(void);
+private:
+	CConfigFile(void);
+	~CConfigFile(void);
 
-	~CIniFile(void);
+public:
+	static CConfigFile* GetInstancePtr();
 
 public:
 	BOOL Load(std::string strFileName);
@@ -37,12 +39,8 @@ public:
 		return atof(GetStringValue(VarName).c_str());
 	}
 
-
-
-
 private:
 	std::map<std::string,std::string> m_Values;
-
 };
 
 #endif

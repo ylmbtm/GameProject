@@ -18,7 +18,7 @@ struct IMessageHandler
 	virtual BOOL OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper) = 0;
 };
 
-class CClientConnector : public ICommandHandler
+class CClientConnector : public IMessageHandler
 {
 public:
 	CClientConnector();
@@ -39,6 +39,9 @@ public:
 	BOOL	DisConnect();
 
 	BOOL	SendData(char *pData, INT32 dwLen);
+
+	template <typename T>
+	BOOL	SendData(UINT16 wMsgID, T &msgData, UINT32 dwSceneID, UINT64 u64CharID);
 	
 	BOOL	Login(const char *pszAccountName, const char *pszPassword, BOOL bConnect = FALSE);
 
@@ -96,5 +99,7 @@ protected:
 	UINT16				m_sLoginPort;
 
 };
+
+
 
 #endif

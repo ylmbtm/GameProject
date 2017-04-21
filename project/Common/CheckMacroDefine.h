@@ -2,7 +2,6 @@
 #define __CHECK_MACRO_DEFINE_H__
 
 #include <assert.h>
-
 #define ASSERT_FAIELD (assert(false))
 #define ASSERT(x)     (assert(x))
 

@@ -2,6 +2,7 @@
 #define __IBUFFER_HANDLER_H__
 class CConnection;
 class CBufferHelper;
+struct NetPacket;
 
 class IDataBuffer
 {
@@ -22,8 +23,6 @@ public:
 
 	virtual UINT32	GetBufferSize() = 0;
 
-	virtual CHAR*	GetBufferPos(size_t nIndex) = 0;
-
 	virtual UINT32  CopyFrom(IDataBuffer *pSrcBuffer) = 0;
 
 	virtual UINT32  CopyTo(CHAR *pDestBuf, UINT32 dwDestLen) = 0;
@@ -32,13 +31,15 @@ public:
 struct IDataHandler
 {
 	virtual BOOL OnDataHandle( IDataBuffer *pDataBuffer, CConnection *pConnection) = 0;
-	virtual BOOL OnDisconnect(CConnection *pConnection) = 0;
+	virtual BOOL OnCloseConnect(CConnection *pConnection) = 0;
+	virtual BOOL OnNewConnect(CConnection *pConnection) = 0;
 };
 
-struct ICommandHandler
+struct IPacketDispatcher
 {
-	virtual BOOL OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper) = 0;
-	virtual BOOL OnUpdate(UINT32 dwTick) = 0;
+	virtual BOOL DispatchPacket( NetPacket *pNetPacket) = 0;
+	virtual BOOL OnCloseConnect(CConnection *pConnection) = 0;
+	virtual BOOL OnNewConnect(CConnection *pConnection) = 0;
 };
 
 struct  IThreadCommandHandler

@@ -9,6 +9,11 @@ CBufferHelper::CBufferHelper(BOOL bWrite, IDataBuffer *pDataBuffer)
 	m_bWriting = bWrite;
 
 	m_pDataBuffer = pDataBuffer;
+
+	if(!bWrite)
+	{
+		BeginRead();
+	}
 }
 
 CBufferHelper::CBufferHelper(BOOL bWrite, UINT32 dwBuffSize)
@@ -23,7 +28,7 @@ CBufferHelper::~CBufferHelper(void)
 
 }
 
-BOOL CBufferHelper::BeginWrite(UINT16 wCommandID, UINT8 CmdHandleID, UINT16 dwSceneID, UINT64 u64CharID)
+BOOL CBufferHelper::BeginWrite(UINT16 wCommandID, UINT16 dwSceneID, UINT64 u64CharID)
 {
 	if(m_pDataBuffer == NULL)
 	{
@@ -35,7 +40,6 @@ BOOL CBufferHelper::BeginWrite(UINT16 wCommandID, UINT8 CmdHandleID, UINT16 dwSc
 	pPacketHeader->CheckCode  = 0xff;
 	pPacketHeader->wCommandID = wCommandID;
 	pPacketHeader->dwSceneID  = dwSceneID;
-	pPacketHeader->CmdHandleID= CmdHandleID;
 	pPacketHeader->u64CharID  = u64CharID;
 	pPacketHeader->dwPacketNo = g_PacketNo++;
 
@@ -86,7 +90,7 @@ BOOL CBufferHelper::IsWriting()
 
 PacketHeader* CBufferHelper::GetPacketHeader()
 {
-	return (PacketHeader*)m_pDataBuffer->GetBufferPos(0);
+	return (PacketHeader*)m_pDataBuffer->GetBuffer();
 }
 
 

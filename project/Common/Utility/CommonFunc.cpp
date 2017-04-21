@@ -69,6 +69,18 @@ UINT32 CommonFunc::GetCurrTime()
 	return (UINT32)t;
 }
 
+UINT32 CommonFunc::GetDayTime()
+{
+	time_t t;    
+	t=time(0);
+	tm* t_tm = localtime(&t);
+	t_tm->tm_hour = 0;
+	t_tm->tm_min = 0;
+	t_tm->tm_sec = 0;
+	t = mktime(t_tm);
+	return (UINT32)t;
+}
+
 UINT32 CommonFunc::GetCurrDate()
 {
 	time_t t = time(0);
@@ -178,3 +190,43 @@ UINT32 CommonFunc::GetFreePhysMemory()
 }
 
 
+INT32 CommonFunc::FloatToInt(FLOAT value)
+{
+	return 0;
+}
+
+UINT32 CommonFunc::GetRandNum(INT32 nType)
+{
+	if(nType >= 100||nType <0)
+	{
+		return 0;
+	}
+
+	static int nRandIndex[100] = {0};
+	static UINT32 vtGlobalRankValue[10000];
+	static bool bInit = false;
+
+	if(bInit == false)
+	{
+		bInit = true;
+		int nTempIndex;
+		UINT32 nTemp;
+		for(int j = 0; j < 10000; j++ )
+		{
+			vtGlobalRankValue[j] = j + 1;
+		}
+
+		for(int i = 0; i < 10000; i++ )
+		{
+			nTempIndex = rand() % (i + 1);
+			if (nTempIndex != i)
+			{
+				nTemp = vtGlobalRankValue[i];
+				vtGlobalRankValue[i] = vtGlobalRankValue[nTempIndex];
+				vtGlobalRankValue[nTempIndex] = nTemp;
+			}
+		}
+	}
+
+	return  vtGlobalRankValue[nRandIndex[nType]++];
+}

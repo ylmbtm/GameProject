@@ -15,7 +15,6 @@ struct NetIoOperatorData
 #ifdef WIN32
 	OVERLAPPED		Overlap;
 #endif
-
 	UINT32			dwCmdType;
 
 	IDataBuffer		*pDataBuffer;
@@ -26,23 +25,21 @@ struct NetIoOperatorData
 class CConnection
 {
 public:
-	CConnection(void);
-	virtual ~CConnection(void);
+	CConnection();
+	virtual ~CConnection();
 
 public:
 	BOOL	HandleRecvEvent(UINT32 dwBytes); 
 
-	VOID	SendDisconnectNotify();
+    UINT32  GetConnectionID();
 
-    UINT32    GetConnectionID();
+	UINT32  GetConnectionType();
 
     VOID    SetConnectionID(UINT32 dwConnID);
 
-	UINT8	GetConnectionType();
+	VOID    SetConnectionType(UINT32 dwType);
 
-	VOID	SetConnectionType(UINT8 byteType);
-
-	BOOL	Close(BOOL bNotify);
+	BOOL	Close();
 
 	BOOL	SetSocket(SOCKET hSocket);
 
@@ -58,9 +55,11 @@ public:
 
 	BOOL	SetConnectionOK(BOOL bOk);
 
-    BOOL    ReInit();
+    BOOL    Clear();
 
-	BOOL CheckPacketHeader();
+	BOOL    SendBuffer(IDataBuffer	*pBuff);
+
+	BOOL    DoSend();
 
 public:
 	SOCKET						m_hSocket;
@@ -69,15 +68,26 @@ public:
 
 	NetIoOperatorData			m_IoOverlapRecv;
 
+	NetIoOperatorData			m_IoOverlapSend;
+
     UINT32                      m_dwConnID;
-    UINT8                       m_byteType;
+	UINT32                      m_dwConnType;
 
 	IDataHandler				*m_pDataHandler;
 
-	UINT32						m_dwDataLen;
-	CHAR						m_pBuffer[CONST_BUFF_SIZE];
-
 	UINT32						m_dwIpAddr;
+
+	UINT32						m_dwDataLen;
+	CHAR						m_pRecvBuf[CONST_BUFF_SIZE];
+	CHAR						*m_pBufPos;
+
+	IDataBuffer					*m_pCurRecvBuffer;
+	UINT32						m_pCurBufferSize;
+	UINT32						m_nCheckNo;
+
+	std::vector<IDataBuffer*>   m_SendBuffList;
+	BOOL						m_IsSending;
+	CCritSec				    m_CritSecSendList;
 
     CConnection                *m_pNext;
 };
@@ -98,21 +108,20 @@ public:
 
     CConnection*    CreateConnection();
 
-	VOID		 DeleteConnection(CConnection *pConnection);
+	VOID		    DeleteConnection(CConnection *pConnection);
 
     CConnection*    GetConnectionByConnID(UINT32 dwConnID);
 
-    SOCKET          GetConnectionSocket(UINT32 dwConnID);
-
 	///////////////////////////////////////////
-	BOOL		 CloseAllConnection();
+	BOOL		    CloseAllConnection();
 
-	BOOL		 DestroyAllConnection();
+	BOOL		    DestroyAllConnection();
 
 public:
-    CCritSec        m_CritSec;
-    CConnection     *m_pFreeConnRoot;
-    std::vector<CConnection> m_vtConnList;            //连接列表
+    
+    CConnection				*m_pFreeConnRoot;
+    std::vector<CConnection*> m_vtConnList;            //连接列表
+	CCritSec				 m_CritSecConnList;
 };
 
 #endif
