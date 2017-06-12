@@ -3,10 +3,8 @@
 #include "ServiceBase.h"
 #include "ServerCmdHandler.h"
 #include "LoginCmdHandler.h"
-class CConnection;
 
-class CGameService :
-	public ServiceBase
+class CGameService  : public IPacketDispatcher
 {
 private:
 	CGameService(void);
@@ -17,17 +15,51 @@ public:
 
 public:
 
-	BOOL		OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper);
+	BOOL		Init();
 
-	BOOL		OnDisconnect(CConnection *pConnection);
+	BOOL		Uninit();
 
-	BOOL		StartRun();
+	BOOL		Run();
 
-	BOOL		OnIdle();
+	BOOL		OnNewConnect(CConnection *pConn);
+
+	BOOL		OnCloseConnect(CConnection *pConn);
+
+	BOOL		DispatchPacket( NetPacket *pNetPacket);
 
 public:
 	CServerCmdHandler   m_ServerCmdHandler;
 	CLoginCmdHandler	m_LoginCmdHandler;
+
+public:
+	//本服务器的信息
+	UINT32              m_dwServerID;
+	UINT32				m_dwServerType;
+	std::string         m_strIpAddr;
+	UINT16              m_sPort;
+	std::string			m_strCenterSvrIp;
+	UINT16				m_sCenterSvrPort;
+
+	std::string		GetCenterSvrIp() const { return m_strCenterSvrIp; }
+	UINT16			GetCenterSvrPort() const { return m_sCenterSvrPort; }
+
+	UINT32			GetServerID(){return m_dwServerID;}
+	UINT32			GetServerType(){	return m_dwServerType;}
+
+
+public:
+	void			SetStatConnID(UINT32 ConnID){m_dwStatConnID = ConnID;}
+	BOOL			SendCmdToStatConnection(IDataBuffer *pDataBuf);
+
+	void			SetDBConnID(UINT32 ConnID){m_dwDBConnID = ConnID;}
+	BOOL			SendCmdToDBConnection(IDataBuffer *pDataBuf);
+
+	void			SetWorldConnID( UINT32 ConnID ){m_dwWorldConnID = ConnID;}
+	UINT32			GetWorldConnID() {return m_dwWorldConnID;}
+protected:
+	UINT32			m_dwDBConnID;
+	UINT32			m_dwStatConnID;
+	UINT32			m_dwWorldConnID;
 };
 
 #endif

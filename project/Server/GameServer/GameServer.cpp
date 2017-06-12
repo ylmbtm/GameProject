@@ -8,7 +8,11 @@
 
 int main(int argc, char* argv[])
 {
-	CGameService::GetInstancePtr()->StartRun();
+	CGameService::GetInstancePtr()->Init();
+
+	CGameService::GetInstancePtr()->Run();
+
+	CGameService::GetInstancePtr()->Uninit();
 
 	return 0;
 }

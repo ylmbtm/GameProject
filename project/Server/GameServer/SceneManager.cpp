@@ -163,11 +163,11 @@ BOOL CSceneManager::OnCmdCreateSceneReq( UINT16 wCommandID, UINT64 u64ConnID, CB
 	}
 	
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_SVR_CREATE_SCENE_ACK, CMDH_OTHER, 0, 0);
+	WriteHelper.BeginWrite(CMD_SVR_CREATE_SCENE_ACK, 0, 0);
 	WriteHelper.Write(CreateSceneAck);
 	WriteHelper.EndWrite();
 
-	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
+	ServiceBase::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 
 	return TRUE;
 }
@@ -191,7 +191,7 @@ BOOL CSceneManager::LoadDefaultScene()
 	WriteHelper.Write(CreateSceneAck);
 	WriteHelper.EndWrite();
 
-	CGameService::GetInstancePtr()->SendCmdToConnection(CGameService::GetInstancePtr()->m_dwWorldServerID, &m_WriteBuffer);*/
+	ServiceBase::GetInstancePtr()->SendCmdToConnection(CGameService::GetInstancePtr()->m_dwWorldServerID, &m_WriteBuffer);*/
 
 	return TRUE;
 }

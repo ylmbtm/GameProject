@@ -90,6 +90,8 @@ public:
 	CCritSec				    m_CritSecSendList;
 
     CConnection                *m_pNext;
+
+	UINT32						m_LastRecvTick;
 };
 
 

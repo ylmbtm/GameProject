@@ -153,7 +153,7 @@ BOOL CScene::SendNewObjectToGrids(CWorldObject *pWorldObject, INT32 Grids[9])
 {
 	//先把玩家的完整包组装好
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_ADD, CMDH_OTHER, 0, 0);
+	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_ADD, 0, 0);
 	UINT8 objType = pWorldObject->GetObjectType();
 	UINT32 dwCount = 1;
 	WriteHelper.Write(dwCount);
@@ -181,7 +181,7 @@ BOOL CScene::SendNewObjectToGrids(CWorldObject *pWorldObject, INT32 Grids[9])
 			{
 				if(pIterObj->GetObjectType() == OBJECT_PLAYER)
 				{
-					CGameService::GetInstancePtr()->SendCmdToConnection(((CPlayerObject*)pIterObj)->GetConnectID(),pIterObj->GetObjectID(), 0, &m_WriteBuffer);
+					ServiceBase::GetInstancePtr()->SendCmdToConnection(((CPlayerObject*)pIterObj)->GetConnectID(),pIterObj->GetObjectID(), 0, &m_WriteBuffer);
 				}
 			}
 
@@ -198,7 +198,7 @@ BOOL CScene::SendNewGridsToObject( INT32 Grids[9], CPlayerObject *pPlayerObj )
 {
 	//先把玩家的完整包组装好
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_ADD, CMDH_OTHER, 0, pPlayerObj->GetObjectID());
+	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_ADD, 0, pPlayerObj->GetObjectID());
 
 	UINT32 *pCount = (UINT32*)WriteHelper.GetCurrentPoint();
 	*pCount = 0;
@@ -242,7 +242,7 @@ BOOL CScene::SendNewGridsToObject( INT32 Grids[9], CPlayerObject *pPlayerObj )
 		return TRUE;
 	}
 
-	CGameService::GetInstancePtr()->SendCmdToConnection(pPlayerObj->GetConnectID(), pPlayerObj->GetObjectID(), 0,  &m_WriteBuffer);
+	ServiceBase::GetInstancePtr()->SendCmdToConnection(pPlayerObj->GetConnectID(), pPlayerObj->GetObjectID(), 0,  &m_WriteBuffer);
 
 	return TRUE;
 }
@@ -251,7 +251,7 @@ BOOL CScene::SendUpdateObjectToGrids(CWorldObject *pWorldObj, INT32 Grids[9] )
 {
 	//先把玩家的变化包组装好
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_UPDATE, CMDH_OTHER, 0, 0);
+	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_UPDATE, 0, 0);
 	UINT32 dwCount = 1;
 	WriteHelper.Write(dwCount);
 	WriteHelper.Write(pWorldObj->GetObjectID());
@@ -279,7 +279,7 @@ BOOL CScene::SendUpdateObjectToGrids(CWorldObject *pWorldObj, INT32 Grids[9] )
 				if(pIterObj->GetObjectType() == OBJECT_PLAYER)
 				{
 					CPlayerObject *pIterPlayer = (CPlayerObject*)pIterObj;
-					CGameService::GetInstancePtr()->SendCmdToConnection(pIterPlayer->GetConnectID(), pIterPlayer->GetObjectID(), 0, &m_WriteBuffer);
+					ServiceBase::GetInstancePtr()->SendCmdToConnection(pIterPlayer->GetConnectID(), pIterPlayer->GetObjectID(), 0, &m_WriteBuffer);
 				}
 			}
 
@@ -296,7 +296,7 @@ BOOL CScene::SendRemoveObjectToGrids( UINT64 u64CharID, INT32 Grids[9] )
 {
 	//先把玩家的变化包组装好
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_REMOVE, CMDH_OTHER, 0, 0);
+	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_REMOVE,  0, 0);
 	UINT32 dwCount = 1;
 	WriteHelper.Write(dwCount);
 	WriteHelper.Write(u64CharID);
@@ -326,7 +326,7 @@ BOOL CScene::SendRemoveObjectToGrids( UINT64 u64CharID, INT32 Grids[9] )
 
 			CLog::GetInstancePtr()->AddLog("自己[%lld]--Remove--From---[%lld], ",  u64CharID, pIterObj->GetObjectID());
 
-			CGameService::GetInstancePtr()->SendCmdToConnection(pIterPlayer->GetConnectID(), pIterPlayer->GetObjectID(), 0, &m_WriteBuffer);
+			ServiceBase::GetInstancePtr()->SendCmdToConnection(pIterPlayer->GetConnectID(), pIterPlayer->GetObjectID(), 0, &m_WriteBuffer);
 
 			pIterObj = pIterObj->m_pGridNext;
 		}
@@ -341,7 +341,7 @@ BOOL CScene::SendRemoveObjectToGrids( UINT64 u64CharID, INT32 Grids[9] )
 BOOL CScene::SendRemoveGridsToPlayer( INT32 Grids[9], CPlayerObject *pPlayerObj)
 {
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_REMOVE, CMDH_OTHER, 0, 0);
+	WriteHelper.BeginWrite(CMD_CHAR_NEARBY_REMOVE, 0, 0);
 	
 	UINT32 *pCount = (UINT32*)WriteHelper.GetCurrentPoint();
 	UINT32 Value = 0;
@@ -385,7 +385,7 @@ BOOL CScene::SendRemoveGridsToPlayer( INT32 Grids[9], CPlayerObject *pPlayerObj)
 		return TRUE;
 	}
 
-	CGameService::GetInstancePtr()->SendCmdToConnection(pPlayerObj->GetConnectID(), pPlayerObj->GetObjectID(), 0, &m_WriteBuffer);
+	ServiceBase::GetInstancePtr()->SendCmdToConnection(pPlayerObj->GetConnectID(), pPlayerObj->GetObjectID(), 0, &m_WriteBuffer);
 
 	return TRUE;
 }
@@ -575,13 +575,13 @@ BOOL CScene::SendUpdateObjectToMyself( CWorldObject *pWorldObj )
 
 	//先把玩家的变化包组装好
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_UPDATE_MYSELF, CMDH_OTHER, 0, 0);
+	WriteHelper.BeginWrite(CMD_CHAR_UPDATE_MYSELF, 0, 0);
 	WriteHelper.WriteCheckBufferCode();
 	pWorldObj->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CHANGE, UPDATE_TO_MYSELF);
 	WriteHelper.WriteCheckBufferCode();
 	WriteHelper.EndWrite();
 
-	CGameService::GetInstancePtr()->SendCmdToConnection(pPlayerObject->GetConnectID(), pPlayerObject->GetObjectID(), 0, &m_WriteBuffer);
+	ServiceBase::GetInstancePtr()->SendCmdToConnection(pPlayerObject->GetConnectID(), pPlayerObject->GetObjectID(), 0, &m_WriteBuffer);
 
 	return TRUE;
 }
@@ -613,11 +613,11 @@ BOOL CScene::OnCmdCharEnterSceneReq( UINT16 wCommandID, UINT64 u64ConnID, CBuffe
 		StCharEnterGameAck CharEnterGameAck;
 		CharEnterGameAck.dwSceneID       = GetSceneID();
 		CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_ACK, CMDH_SENCE, 0,  pPlayerObject->GetObjectID());
+		WriteHelper.BeginWrite(CMD_CHAR_ENTER_GAME_ACK, 0,  pPlayerObject->GetObjectID());
 		WriteHelper.Write(CharEnterGameAck);
 		pPlayerObject->WriteToBuffer(&WriteHelper, UPDATE_FLAG_CREATE, UPDATE_TO_MYSELF);
 		WriteHelper.EndWrite();
-		CGameService::GetInstancePtr()->SendCmdToConnection(SvrEnterSceneReq.dwProxySvrID, &m_WriteBuffer);
+		ServiceBase::GetInstancePtr()->SendCmdToConnection(SvrEnterSceneReq.dwProxySvrID, &m_WriteBuffer);
 	}
 	else
 	{

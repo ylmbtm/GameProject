@@ -26,9 +26,11 @@ CGameService* CGameService::GetInstancePtr()
 }
 
 
-BOOL CGameService::StartRun()
+BOOL CGameService::Init()
 {
-	if(!CLog::GetInstancePtr()->StartLog("GameServer"))
+	CommonFunc::SetCurrentWorkPath("");
+
+	if(!CLog::GetInstancePtr()->StartLog("GameServer", "log"))
 	{
 		ASSERT_FAIELD;
 		return FALSE;
@@ -36,26 +38,21 @@ BOOL CGameService::StartRun()
 
 	CLog::GetInstancePtr()->AddLog("---------服务器开始启动-----------");
 
-	if(!CGlobalConfig::GetInstancePtr()->Load("GameServer.ini"))
+	if(!CConfigFile::GetInstancePtr()->Load("GameServer.ini"))
 	{
 		ASSERT_FAIELD;
 		CLog::GetInstancePtr()->AddLog("配制文件加载失败!");
 		return FALSE;
 	}
 
-    if(!SetMaxConnection(CGlobalConfig::GetInstancePtr()->m_nMaxConnNum))
-    {
-        ASSERT_FAIELD;
-        CLog::GetInstancePtr()->AddLog("设置服务器的最大连接数!");
-        return FALSE;
-    }
-
-    if(!StartNetwork())
-    {
-        ASSERT_FAIELD;
-        CLog::GetInstancePtr()->AddLog("启动服务失败!");
-        return FALSE;
-    }
+	UINT16 nPort = CConfigFile::GetInstancePtr()->GetIntValue("game_svr_port");
+	INT32  nMaxConn = CConfigFile::GetInstancePtr()->GetIntValue("game_svr_max_con");
+	if(!ServiceBase::GetInstancePtr()->StartNetwork(nPort, nMaxConn,this))
+	{
+		ASSERT_FAIELD;
+		CLog::GetInstancePtr()->AddLog("启动服务失败!");
+		return FALSE;
+	}
 
 	if(!m_ServerCmdHandler.Init(0))
 	{
@@ -71,8 +68,6 @@ BOOL CGameService::StartRun()
 		return FALSE;
 	}
 
-	OnIdle();
-
 	return TRUE;
 }
 
@@ -83,8 +78,6 @@ BOOL WINAPI HandlerCloseEvent(DWORD dwCtrlType)
 {
     if(dwCtrlType == CTRL_CLOSE_EVENT)
     {
-        CGameService::GetInstancePtr()->StopNetwork();
-
 		ComEvent.SetEvent();
 	}
 
@@ -103,7 +96,7 @@ void  HandlerCloseEvent(int nSignalNum)
 #endif
 
 
-BOOL CGameService::OnIdle()
+BOOL CGameService::Run()
 {
 	ComEvent.InitEvent(FALSE, FALSE);
 
@@ -124,21 +117,21 @@ BOOL CGameService::OnIdle()
 
 
 
-BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+BOOL CGameService::DispatchPacket(NetPacket *pNetPacket)
 {
-	if(pBufferHelper->GetPacketHeader()->CmdHandleID == CMDH_SVR_CON)
-	{
-		m_ServerCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
-	}
-	else
-	{
-		m_SceneManager.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
-	}
+// 	if(pBufferHelper->GetPacketHeader()->CmdHandleID == CMDH_SVR_CON)
+// 	{
+// 		m_ServerCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
+// 	}
+// 	else
+// 	{
+// 		m_SceneManager.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
+// 	}
 
 	return TRUE;
 }
 
-BOOL CGameService::OnDisconnect( CConnection *pConnection )
+BOOL CGameService::OnCloseConnect( CConnection *pConnection )
 {
 	CLog::GetInstancePtr()->AddLog("收到连接断开的事件!!!!!!");
 
@@ -148,7 +141,7 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	DisConnectNotify.btConType = pConnection->GetConnectionType();
 	IDataBuffer *pDataBuff = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(500);
 	CBufferHelper WriteHelper(TRUE, pDataBuff);
-	WriteHelper.BeginWrite(CMD_DISCONNECT_NOTIFY, CMDH_SVR_CON, 0,  0);
+	WriteHelper.BeginWrite(CMD_DISCONNECT_NOTIFY, 0,  0);
 	WriteHelper.Write(DisConnectNotify);
 	WriteHelper.EndWrite();
 
@@ -170,12 +163,41 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	return TRUE;
 }
 
-BOOL CGameService::SetWorldServerID( UINT32 dwSvrID )
+BOOL CGameService::Uninit()
 {
-	m_dwWorldServerID = dwSvrID;
+	ServiceBase::GetInstancePtr()->StopNetwork();
 
 	return TRUE;
 }
 
+BOOL CGameService::OnNewConnect(CConnection *pConn)
+{
+	CLog::GetInstancePtr()->AddLog("新连接来到!");
+	return TRUE;
+}
 
 
+BOOL CGameService::SendCmdToDBConnection(IDataBuffer *pDataBuf)
+{
+	if(m_dwDBConnID == 0)
+	{
+		ASSERT_FAIELD;
+		return FALSE;
+	}
+
+	ASSERT(ServiceBase::GetInstancePtr()->SendCmdToConnection(m_dwDBConnID, pDataBuf));
+
+	return TRUE;
+}
+
+BOOL CGameService::SendCmdToStatConnection(IDataBuffer *pDataBuf)
+{
+	if(m_dwStatConnID == 0)
+	{
+		return FALSE;
+	}
+
+	ASSERT(ServiceBase::GetInstancePtr()->SendCmdToConnection(m_dwStatConnID, pDataBuf));
+
+	return TRUE;
+}

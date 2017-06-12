@@ -13,7 +13,7 @@
 
 CGameService::CGameService(void)
 {
-	m_dwWorldServerID = 0;
+	m_dwWorldConnID = 0;
 }
 
 CGameService::~CGameService(void)
@@ -28,24 +28,11 @@ CGameService* CGameService::GetInstancePtr()
 }
 
 
-BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+BOOL CGameService::Init()
 {
-	//从底层传过来的内存，在这个地方是不释放的, 由处理者去释放
-	if(pBufferHelper->GetPacketHeader()->CmdHandleID == CMDH_SVR_CON)
-	{
-		m_ServerCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
-	}
-	else
-	{
-		m_ProxyCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
-	}
+	CommonFunc::SetCurrentWorkPath("");
 
-	return TRUE;
-}
-
-BOOL CGameService::StartRun()
-{
-	if(!CLog::GetInstancePtr()->StartLog("ProxyServer"))
+	if(!CLog::GetInstancePtr()->StartLog("ProxyServer","log"))
 	{
 		ASSERT_FAIELD;
 		return FALSE;
@@ -53,26 +40,21 @@ BOOL CGameService::StartRun()
 
 	CLog::GetInstancePtr()->AddLog("---------服务器开始启动-----------");
 
-	if(!CGlobalConfig::GetInstancePtr()->Load("ProxyServer.ini"))
+	if(!CConfigFile::GetInstancePtr()->Load("ProxyServer.ini"))
 	{
-		CLog::GetInstancePtr()->AddLog("配制文件加载失败!");
 		ASSERT_FAIELD;
+		CLog::GetInstancePtr()->AddLog("配制文件加载失败!");
 		return FALSE;
 	}
 
-    if(!SetMaxConnection(6000))
-    {
-        ASSERT_FAIELD;
-        CLog::GetInstancePtr()->AddLog("设置服务器的最大连接数!");
-        return FALSE;
-    }
-
-    if(!StartNetwork())
-    {
-        CLog::GetInstancePtr()->AddLog("启动服务失败!");
-        ASSERT_FAIELD;
-        return FALSE;
-    }
+	UINT16 nPort = CConfigFile::GetInstancePtr()->GetIntValue("proxy_svr_port");
+	INT32  nMaxConn = CConfigFile::GetInstancePtr()->GetIntValue("proxy_svr_max_con");
+	if(!ServiceBase::GetInstancePtr()->StartNetwork(nPort, nMaxConn,this))
+	{
+		ASSERT_FAIELD;
+		CLog::GetInstancePtr()->AddLog("启动服务失败!");
+		return FALSE;
+	}
 
 	if(!m_ServerCmdHandler.Init(0))
 	{
@@ -86,8 +68,6 @@ BOOL CGameService::StartRun()
 		return FALSE;
 	}
 
-	OnIdle();
-
 	return TRUE;
 }
 
@@ -98,8 +78,6 @@ BOOL WINAPI HandlerCloseEvent(DWORD dwCtrlType)
 {
     if(dwCtrlType == CTRL_CLOSE_EVENT)
     {
-        CGameService::GetInstancePtr()->StopNetwork();
-
 		ComEvent.SetEvent();
 	}
 
@@ -108,8 +86,6 @@ BOOL WINAPI HandlerCloseEvent(DWORD dwCtrlType)
 #else
 void  HandlerCloseEvent(int nSignalNum)
 {
-    CGameService::GetInstancePtr()->StopNetwork();
-
 	exit(0);
 
 	return ;
@@ -118,7 +94,7 @@ void  HandlerCloseEvent(int nSignalNum)
 #endif
 
 
-BOOL CGameService::OnIdle()
+BOOL CGameService::Run()
 {
 	ComEvent.InitEvent(FALSE, FALSE);
 
@@ -140,7 +116,13 @@ BOOL CGameService::OnIdle()
 }
 
 
-BOOL CGameService::OnDisconnect( CConnection *pConnection )
+BOOL CGameService::OnNewConnect(CConnection *pConn)
+{
+	CLog::GetInstancePtr()->AddLog("新连接来到!");
+	return TRUE;
+}
+
+BOOL CGameService::OnCloseConnect(CConnection *pConnection)
 {
 	CLog::GetInstancePtr()->AddLog("收到连接断开的事件!!!!!!");
 
@@ -150,7 +132,7 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	DisConnectNotify.btConType = pConnection->GetConnectionType();
 	IDataBuffer *pDataBuff = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(500);
 	CBufferHelper WriteHelper(TRUE, pDataBuff);
-	WriteHelper.BeginWrite(CMD_DISCONNECT_NOTIFY, CMDH_SVR_CON, 0,  0);
+	WriteHelper.BeginWrite(CMD_DISCONNECT_NOTIFY, 0,  0);
 	WriteHelper.Write(DisConnectNotify);
 	WriteHelper.EndWrite();
 
@@ -164,11 +146,34 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	pDataBuff2->CopyFrom(pDataBuff);
 
 	m_ServerCmdHandler.AddMessage(DisConnectNotify.u64ConnID, pDataBuff);
-
 	m_ProxyCmdHandler.AddMessage(DisConnectNotify.u64ConnID, pDataBuff2);
 
 	return TRUE;
 }
+
+BOOL CGameService::DispatchPacket(NetPacket *pNetPacket)
+{
+	switch(pNetPacket->m_dwCmdID)
+	{
+	default:
+		{
+
+		}
+		break;
+	}
+
+	return TRUE;
+}
+
+BOOL CGameService::Uninit()
+{
+	ServiceBase::GetInstancePtr()->StopNetwork();
+
+	return TRUE;
+}
+
+
+
 
 BOOL CGameService::OnCmdGMCommand( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
 {
@@ -191,9 +196,29 @@ BOOL CGameService::OnCmdHeartBeatReq( UINT16 wCommandID, UINT64 u64ConnID, CBuff
 	return TRUE;
 }
 
-BOOL CGameService::SetWorldServerID( UINT32 dwSvrID )
+
+
+BOOL CGameService::SendCmdToDBConnection(IDataBuffer *pDataBuf)
 {
-	m_dwWorldServerID = dwSvrID;
+	if(m_dwDBConnID == 0)
+	{
+		ASSERT_FAIELD;
+		return FALSE;
+	}
+
+	ASSERT(ServiceBase::GetInstancePtr()->SendCmdToConnection(m_dwDBConnID, pDataBuf));
+
+	return TRUE;
+}
+
+BOOL CGameService::SendCmdToStatConnection(IDataBuffer *pDataBuf)
+{
+	if(m_dwStatConnID == 0)
+	{
+		return FALSE;
+	}
+
+	ASSERT(ServiceBase::GetInstancePtr()->SendCmdToConnection(m_dwStatConnID, pDataBuf));
 
 	return TRUE;
 }

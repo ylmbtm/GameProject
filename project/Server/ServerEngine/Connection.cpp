@@ -104,7 +104,7 @@ BOOL CConnection::DoReceive()
 {
 	while(TRUE)
 	{
-		int nBytes = recv(m_hSocket, m_pBuffer+m_dwDataLen, CONST_BUFF_SIZE - m_dwDataLen, 0);
+		int nBytes = recv(m_hSocket, m_pRecvBuf+m_dwDataLen, CONST_BUFF_SIZE - m_dwDataLen, 0);
 		if(nBytes == 0)
 		{
 			if(m_dwDataLen == CONST_BUFF_SIZE)
@@ -344,6 +344,7 @@ BOOL CConnection::HandleRecvEvent(UINT32 dwBytes)
 		return FALSE;
 	}
 #endif
+	m_LastRecvTick = CommonFunc::GetTickCount();
 	return TRUE;
 }
 
@@ -385,6 +386,8 @@ BOOL CConnection::IsConnectionOK()
 BOOL CConnection::SetConnectionOK( BOOL bOk )
 {
 	m_bConnected = bOk;
+
+	m_LastRecvTick = CommonFunc::GetTickCount();
 
 	return TRUE;
 }
@@ -570,16 +573,16 @@ BOOL CConnection::DoSend()
 	m_IoOverlapSend.dwCmdType   = NET_CMD_SEND;
 	m_IoOverlapSend.pDataBuffer = pSendBuffer;
 
-	INT32 nRet = send(hSocket, pSendBuffer->GetBuffer(),pSendBuffer->GetTotalLenth(), 0);
+	INT32 nRet = send(m_hSocket, pSendBuffer->GetBuffer(),pSendBuffer->GetTotalLenth(), 0);
 	if(nRet < 0)
 	{
 		int nErr = CommonSocket::GetSocketLastError();
 
 		CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 原因:%s!", CommonSocket::GetLastErrorStr(nErr).c_str());
 	}
-	else if(nRet < pDataBuffer->GetTotalLenth())
+	else if(nRet < pSendBuffer->GetTotalLenth())
 	{
-		CommonSocket::CloseSocket(hSocket);
+		CommonSocket::CloseSocket(m_hSocket);
 
 		CLog::GetInstancePtr()->AddLog("发送线程:发送失败, 缓冲区满了!");
 	}

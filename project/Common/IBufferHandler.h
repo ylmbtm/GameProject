@@ -42,6 +42,12 @@ struct IPacketDispatcher
 	virtual BOOL OnNewConnect(CConnection *pConnection) = 0;
 };
 
+struct ICommandHandler
+{
+	virtual BOOL OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper) = 0;
+	virtual BOOL OnUpdate(UINT32 dwTick) = 0;
+};
+
 struct  IThreadCommandHandler
 {
 	virtual BOOL OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper) = 0;

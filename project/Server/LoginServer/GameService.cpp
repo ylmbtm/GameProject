@@ -25,23 +25,25 @@ CGameService* CGameService::GetInstancePtr()
 }
 
 
-BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+BOOL CGameService::DispatchPacket(NetPacket *pNetPacket)
 {
-	if(pBufferHelper->GetPacketHeader()->CmdHandleID == CMDH_SVR_CON)
-	{
-		m_ServerCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
-	}
-	else
-	{
-		m_LoginCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
-	}
+	//if(pBufferHelper->GetPacketHeader()->CmdHandleID == CMDH_SVR_CON)
+	//{
+	//	m_ServerCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
+	//}
+	//else
+	//{
+	///	m_LoginCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
+	//}
 
 	return TRUE;
 }
 
-BOOL CGameService::StartRun()
+BOOL CGameService::Init()
 {
-	if(!CLog::GetInstancePtr()->StartLog("LoginServer"))
+	CommonFunc::SetCurrentWorkPath("");
+
+	if(!CLog::GetInstancePtr()->StartLog("LoginServer","log"))
 	{
 		ASSERT_FAIELD;
 		return FALSE;
@@ -49,27 +51,23 @@ BOOL CGameService::StartRun()
 
 	CLog::GetInstancePtr()->AddLog("---------服务器开始启动-----------");
 
-	if(!CGlobalConfig::GetInstancePtr()->Load("LoginServer.ini"))
+	if(!CConfigFile::GetInstancePtr()->Load("LoginServer.ini"))
 	{
 		ASSERT_FAIELD;
 		CLog::GetInstancePtr()->AddLog("配制文件加载失败!");
 		return FALSE;
 	}
 
-    if(!SetMaxConnection(5000))
-    {
-        ASSERT_FAIELD;
-        CLog::GetInstancePtr()->AddLog("设置服务器的最大连接数!");
-        return FALSE;
-    }
-
-    if(!StartNetwork())
+	UINT16 nPort = CConfigFile::GetInstancePtr()->GetIntValue("login_svr_port");
+	INT32  nMaxConn = CConfigFile::GetInstancePtr()->GetIntValue("login_svr_max_con");
+    if(!ServiceBase::GetInstancePtr()->StartNetwork(nPort, nMaxConn,this))
     {
         ASSERT_FAIELD;
         CLog::GetInstancePtr()->AddLog("启动服务失败!");
 
 		return FALSE;
 	}
+
 
 	if(!m_ServerCmdHandler.Init(0))
 	{
@@ -80,7 +78,6 @@ BOOL CGameService::StartRun()
 
 	m_LoginCmdHandler.Init(0);
 
-	OnIdle();
 
 	return TRUE;
 }
@@ -92,8 +89,6 @@ BOOL WINAPI HandlerCloseEvent(DWORD dwCtrlType)
 {
     if(dwCtrlType == CTRL_CLOSE_EVENT)
     {
-        CGameService::GetInstancePtr()->StopNetwork();
-
 		ComEvent.SetEvent();
 	}
 
@@ -102,8 +97,6 @@ BOOL WINAPI HandlerCloseEvent(DWORD dwCtrlType)
 #else
 void  HandlerCloseEvent(int nSignalNum)
 {
-    CGameService::GetInstancePtr()->StopNetwork();
-
 	exit(0);
 
 	return ;
@@ -112,7 +105,7 @@ void  HandlerCloseEvent(int nSignalNum)
 #endif
 
 
-BOOL CGameService::OnIdle()
+BOOL CGameService::Run()
 {
 	ComEvent.InitEvent(FALSE, FALSE);
 
@@ -133,7 +126,14 @@ BOOL CGameService::OnIdle()
 	return TRUE;
 }
 
-BOOL CGameService::OnDisconnect( CConnection *pConnection )
+
+BOOL CGameService::OnNewConnect(CConnection *pConn)
+{
+	CLog::GetInstancePtr()->AddLog("新连接来到!");
+	return TRUE;
+}
+
+BOOL CGameService::OnCloseConnect( CConnection *pConnection )
 {
 	//以下是向各个系统投递连接断开的消息
 	StDisConnectNotify DisConnectNotify;
@@ -141,13 +141,45 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	DisConnectNotify.btConType = pConnection->GetConnectionType();
 	IDataBuffer *pDataBuff = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(500);
 	CBufferHelper WriteHelper(TRUE, pDataBuff);
-	WriteHelper.BeginWrite(CMD_DISCONNECT_NOTIFY, CMDH_SVR_CON, 0,  0);
+	WriteHelper.BeginWrite(CMD_DISCONNECT_NOTIFY, 0,  0);
 	WriteHelper.Write(DisConnectNotify);
 	WriteHelper.EndWrite();
 
 	m_ServerCmdHandler.AddMessage(DisConnectNotify.u64ConnID, pDataBuff);
 
 	//pDataBuff->Release();
+
+	return TRUE;
+}
+
+BOOL CGameService::Uninit()
+{
+	ServiceBase::GetInstancePtr()->StopNetwork();
+	return TRUE;
+}
+
+
+BOOL CGameService::SendCmdToDBConnection(IDataBuffer *pDataBuf)
+{
+	if(m_dwDBConnID == 0)
+	{
+		ASSERT_FAIELD;
+		return FALSE;
+	}
+
+	ASSERT(ServiceBase::GetInstancePtr()->SendCmdToConnection(m_dwDBConnID, pDataBuf));
+
+	return TRUE;
+}
+
+BOOL CGameService::SendCmdToStatConnection(IDataBuffer *pDataBuf)
+{
+	if(m_dwStatConnID == 0)
+	{
+		return FALSE;
+	}
+
+	ASSERT(ServiceBase::GetInstancePtr()->SendCmdToConnection(m_dwStatConnID, pDataBuf));
 
 	return TRUE;
 }

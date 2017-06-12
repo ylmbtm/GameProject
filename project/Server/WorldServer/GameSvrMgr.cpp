@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "GameSvrMgr.h"
 #include "CommandDef.h"
 #include "DataBuffer/BufferHelper.h"
@@ -51,10 +51,10 @@ BOOL CGameSvrMgr::SendCreateSceneCmd( UINT32 dwServerID, UINT32 dwSceneID, UINT3
 	SvrCreateSceneReq.CreateParam	= CreateParam;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_SVR_CREATE_SCENE_REQ, CMDH_OTHER, 0, 0);
+	WriteHelper.BeginWrite(CMD_SVR_CREATE_SCENE_REQ, 0, 0);
 	WriteHelper.Write(SvrCreateSceneReq);
 	WriteHelper.EndWrite();
-	CGameService::GetInstancePtr()->SendCmdToConnection(dwServerID, &m_WriteBuffer);
+	ServiceBase::GetInstancePtr()->SendCmdToConnection(dwServerID, &m_WriteBuffer);
 	
 	return TRUE;
 }

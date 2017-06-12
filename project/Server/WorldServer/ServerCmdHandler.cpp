@@ -72,18 +72,18 @@ BOOL CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, 
 
 		RegisterToCenterSvr.dwSvrID = CGameService::GetInstancePtr()->GetServerID();
 		RegisterToCenterSvr.dwType = CGameService::GetInstancePtr()->GetServerType();
-		strncpy(RegisterToCenterSvr.szIpAddr, CGlobalConfig::GetInstancePtr()->m_strIpAddr.c_str(), 32);
-		RegisterToCenterSvr.sPort = CGlobalConfig::GetInstancePtr()->m_sPort;
+		strncpy(RegisterToCenterSvr.szIpAddr, CGameService::GetInstancePtr()->m_strIpAddr.c_str(), 32);
+		RegisterToCenterSvr.sPort = CGameService::GetInstancePtr()->m_sPort;
 
 		CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 
-		WriteHelper.BeginWrite(CMD_SVR_REGISTER_TO_CENTER, CMDH_SVR_CON, 0, 0);
+		WriteHelper.BeginWrite(CMD_SVR_REGISTER_TO_CENTER, 0, 0);
 
 		WriteHelper.Write(RegisterToCenterSvr);
 
 		WriteHelper.EndWrite();
 
-		CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID,  &m_WriteBuffer);
+		ServiceBase::GetInstancePtr()->SendCmdToConnection(u64ConnID,  &m_WriteBuffer);
 	}
 	else if(ConnectNotify.btConType == TYPE_SVR_DATABASE)
 	{
@@ -133,7 +133,7 @@ BOOL CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID, 
             return FALSE;
         }
   
-        CGameService::GetInstancePtr()->ConnectToOtherSvr(RegisterToCenterSvr.szIpAddr,RegisterToCenterSvr.sPort);
+        ServiceBase::GetInstancePtr()->ConnectToOtherSvr(RegisterToCenterSvr.szIpAddr,RegisterToCenterSvr.sPort);
         m_WaitConSvrList.insert(std::make_pair(RegisterToCenterSvr.dwSvrID,RegisterToCenterSvr));
     }
 
@@ -148,7 +148,7 @@ BOOL CServerCmdHandler::OnUpdate( UINT32 dwTick )
 
 		if(!m_bConnectToCenter)
 		{
-			CGameService::GetInstancePtr()->ConnectToOtherSvr(CGlobalConfig::GetInstancePtr()->m_strCenterSvrIp, CGlobalConfig::GetInstancePtr()->m_sCenterSvrPort);
+			ServiceBase::GetInstancePtr()->ConnectToOtherSvr(CGameService::GetInstancePtr()->GetCenterSvrIp(), CGameService::GetInstancePtr()->GetCenterSvrPort());
 		}
 	}
 

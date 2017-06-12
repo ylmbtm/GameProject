@@ -82,7 +82,7 @@ BOOL CWorldCmdHandler::OnCmdEnterGameReq( UINT16 wCommandID, UINT64 u64ConnID, C
 	DBLoadCharInfoReq.dwProxySvrID	= (UINT32)u64ConnID;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_REQ, CMDH_OTHER, 0, 0);
+	WriteHelper.BeginWrite(CMD_DB_LOAD_CHAR_REQ, 0, 0);
 	WriteHelper.Write(DBLoadCharInfoReq);
 	WriteHelper.EndWrite();
 	ASSERT(m_WriteBuffer.GetTotalLenth() >= (sizeof(DBLoadCharInfoReq)+22));
@@ -151,13 +151,13 @@ BOOL CWorldCmdHandler::OnCmdDBLoadCharAck( UINT16 wCommandID, UINT64 u64ConnID, 
 	SvrEnterSceneReq.u64CharID    = DBLoadCharInfoAck.u64CharID;
 
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_SVR_ENTER_SCENE_REQ, CMDH_OTHER, SvrEnterSceneReq.dwSceneID, DBLoadCharInfoAck.u64CharID);
+	WriteHelper.BeginWrite(CMD_SVR_ENTER_SCENE_REQ, SvrEnterSceneReq.dwSceneID, DBLoadCharInfoAck.u64CharID);
 	WriteHelper.Write(SvrEnterSceneReq);
 
 	pPlayerObject->SaveDataToPacket(&WriteHelper);
 
 	WriteHelper.EndWrite();
-	CGameService::GetInstancePtr()->SendCmdToConnection(SvrEnterSceneReq.dwGameSvrID, &m_WriteBuffer);
+	ServiceBase::GetInstancePtr()->SendCmdToConnection(SvrEnterSceneReq.dwGameSvrID, &m_WriteBuffer);
 
 	return TRUE;
 }

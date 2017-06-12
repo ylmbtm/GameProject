@@ -1,6 +1,7 @@
 CC=g++
 CCLIB=ar
 CC_INCLUDE=-I/usr/include
+DEFS = -DSERVER_ENGINE
 	 
 MY_INCLUDE=-I$(PWD) \
 		-I../../Common \

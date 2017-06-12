@@ -71,10 +71,14 @@
 #define WSAEREMOTE 			EREMOTE                
 #endif
 
+#ifdef WIN32
 #ifdef SERVER_ENGINE
 #define EngineClass _declspec(dllexport)
 #else
 #define EngineClass _declspec(dllimport)
+#endif
+#else
+#define EngineClass 
 #endif
 
 #endif /* __PLATFORM_H__ */

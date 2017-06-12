@@ -122,7 +122,7 @@ BOOL CProxyCmdHandler::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBuf
 	case CMD_CHAR_GAME_MANAGER:
 		{
 			CLog::GetInstancePtr()->AddLog("---Receive Message:[%s]----", "CMD_CHAR_GAME_MANAGER");
-			CConnection *pConn = CGameService::GetInstancePtr()->GetConnectionByID(u64ConnID);
+			CConnection *pConn = ServiceBase::GetInstancePtr()->GetConnectionByID(u64ConnID);
 			if(pConn == NULL)
 			{
 				break;
@@ -253,7 +253,7 @@ BOOL CProxyCmdHandler::RelayToGameServer( CStaticPlayer *pClientObj, IDataBuffer
 		return FALSE;
 	}
 
-	if(!CGameService::GetInstancePtr()->SendCmdToConnection(pClientObj->GetGameSvrConnID(), pBuffer))
+	if(!ServiceBase::GetInstancePtr()->SendCmdToConnection(pClientObj->GetGameSvrConnID(), pBuffer))
 	{
 		ASSERT_FAIELD;
 
@@ -279,14 +279,14 @@ BOOL CProxyCmdHandler::RelayToWorldServer( CStaticPlayer *pClientObj, IDataBuffe
 		return FALSE;
 	}
 
-	if(CGameService::GetInstancePtr()->m_dwWorldServerID == 0)
+	if(CGameService::GetInstancePtr()->GetWorldConnID() == 0)
 	{
 		ASSERT_FAIELD;
 
 		return FALSE;
 	}
 
-	if(!CGameService::GetInstancePtr()->SendCmdToConnection(CGameService::GetInstancePtr()->m_dwWorldServerID, pBuffer))
+	if(!ServiceBase::GetInstancePtr()->SendCmdToConnection(CGameService::GetInstancePtr()->GetWorldConnID(), pBuffer))
 	{
 		ASSERT_FAIELD;
 
@@ -305,7 +305,7 @@ BOOL CProxyCmdHandler::RelayToClient( CStaticPlayer *pStaticPlayer, IDataBuffer 
 		return FALSE;
 	}
 
-	if(!CGameService::GetInstancePtr()->SendCmdToConnection(pStaticPlayer->GetCharID(), pBuffer))
+	if(!ServiceBase::GetInstancePtr()->SendCmdToConnection(pStaticPlayer->GetCharID(), pBuffer))
 	{
 		ASSERT_FAIELD;
 
@@ -344,12 +344,12 @@ BOOL CProxyCmdHandler::OnCmdDisConnectNotify( UINT16 wCommandID, UINT64 u64ConnI
 	}
 
 	CBufferHelper WriteHelper(TRUE, pSendBuffer);
-	WriteHelper.BeginWrite(CMD_CHAR_LEAVE_GAME_REQ, CMDH_SENCE, pStaticPlayer->GetSceneID(), pStaticPlayer->GetCharID());
+	WriteHelper.BeginWrite(CMD_CHAR_LEAVE_GAME_REQ, pStaticPlayer->GetSceneID(), pStaticPlayer->GetCharID());
 	WriteHelper.Write(CharLeaveGameReq);
 	WriteHelper.EndWrite();
 
-	CGameService::GetInstancePtr()->SendCmdToConnection(pStaticPlayer->GetGameSvrConnID(), pSendBuffer);
-	CGameService::GetInstancePtr()->SendCmdToConnection(CGameService::GetInstancePtr()->m_dwWorldServerID, pSendBuffer);
+	ServiceBase::GetInstancePtr()->SendCmdToConnection(pStaticPlayer->GetGameSvrConnID(), pSendBuffer);
+	ServiceBase::GetInstancePtr()->SendCmdToConnection(CGameService::GetInstancePtr()->GetWorldConnID(), pSendBuffer);
 	pStaticPlayer->SetGameSvrConnID(0);
 	pStaticPlayer->m_CharState = LS_OffLine;
 	pSendBuffer->Release();

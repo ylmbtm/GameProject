@@ -27,24 +27,26 @@ CGameService* CGameService::GetInstancePtr()
 }
 
 
-BOOL CGameService::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
+BOOL CGameService::DispatchPacket(NetPacket *pNetPacket)
 {
-	if(pBufferHelper->GetPacketHeader()->CmdHandleID == CMDH_SVR_CON)
-	{
-		m_ServerCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
-	}
-	else
-	{
-		//如果需要开启很多的线程时， 按账号划分玩家的线程 
-		m_DBCmdHandler[0].AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
-	}
+// 	if(pBufferHelper->GetPacketHeader()->CmdHandleID == CMDH_SVR_CON)
+// 	{
+// 		m_ServerCmdHandler.AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
+// 	}
+// 	else
+// 	{
+// 		//如果需要开启很多的线程时， 按账号划分玩家的线程 
+// 		m_DBCmdHandler[0].AddMessage(u64ConnID, pBufferHelper->GetDataBuffer());
+// 	}
 
 	return TRUE;
 }
 
-BOOL CGameService::StartRun()
+BOOL CGameService::Init()
 {
-	if(!CLog::GetInstancePtr()->StartLog("DBServer"))
+	CommonFunc::SetCurrentWorkPath("");
+
+	if(!CLog::GetInstancePtr()->StartLog("DBServer", "log"))
 	{
 		ASSERT_FAIELD;
 		return FALSE;
@@ -52,27 +54,22 @@ BOOL CGameService::StartRun()
 
 	CLog::GetInstancePtr()->AddLog("---------服务器开始启动-----------");
 
-	if(!CGlobalConfig::GetInstancePtr()->Load("DBServer.ini"))
+	if(!CConfigFile::GetInstancePtr()->Load("DBServer.ini"))
 	{
 		ASSERT_FAIELD;
 		CLog::GetInstancePtr()->AddLog("配制文件加载失败!");
 		return FALSE;
 	}
 
-    if(!SetMaxConnection(100))
-    {
-        ASSERT_FAIELD;
-        CLog::GetInstancePtr()->AddLog("设置服务器的最大连接数!");
-        return FALSE;
-    }
-
-    if(!StartNetwork())
-    {
-        ASSERT_FAIELD;
-        CLog::GetInstancePtr()->AddLog("启动服务失败!");
-
+	UINT16 nPort = CConfigFile::GetInstancePtr()->GetIntValue("db_svr_port");
+	INT32  nMaxConn = CConfigFile::GetInstancePtr()->GetIntValue("db_svr_max_con");
+	if(!ServiceBase::GetInstancePtr()->StartNetwork(nPort, nMaxConn,this))
+	{
+		ASSERT_FAIELD;
+		CLog::GetInstancePtr()->AddLog("启动服务失败!");
 		return FALSE;
 	}
+
 
 	if(!m_ServerCmdHandler.Init(0))
 	{
@@ -86,8 +83,6 @@ BOOL CGameService::StartRun()
 		m_DBCmdHandler[i].Init(0);
 	}
 
-	OnIdle();
-
 	return TRUE;
 }
 
@@ -98,8 +93,6 @@ BOOL WINAPI HandlerCloseEvent(DWORD dwCtrlType)
 {
     if(dwCtrlType == CTRL_CLOSE_EVENT)
     {
-        CGameService::GetInstancePtr()->StopNetwork();
-
 		ComEvent.SetEvent();
 	}
 
@@ -118,7 +111,7 @@ void  HandlerCloseEvent(int nSignalNum)
 #endif
 
 
-BOOL CGameService::OnIdle()
+BOOL CGameService::Run()
 {
 	ComEvent.InitEvent(FALSE, FALSE);
 
@@ -139,7 +132,7 @@ BOOL CGameService::OnIdle()
 	return TRUE;
 }
 
-BOOL CGameService::OnDisconnect( CConnection *pConnection )
+BOOL CGameService::OnCloseConnect( CConnection *pConnection )
 {
 	//以下是向各个系统投递连接断开的消息
 	StDisConnectNotify DisConnectNotify;
@@ -147,7 +140,7 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	DisConnectNotify.btConType = pConnection->GetConnectionType();
 	IDataBuffer *pDataBuff = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(500);
 	CBufferHelper WriteHelper(TRUE, pDataBuff);
-	WriteHelper.BeginWrite(CMD_DISCONNECT_NOTIFY, CMDH_SVR_CON, 0,  0);
+	WriteHelper.BeginWrite(CMD_DISCONNECT_NOTIFY, 0,  0);
 	WriteHelper.Write(DisConnectNotify);
 	WriteHelper.EndWrite();
 
@@ -156,5 +149,19 @@ BOOL CGameService::OnDisconnect( CConnection *pConnection )
 	//pDataBuff->Release();
 
 
+	return TRUE;
+}
+
+
+BOOL CGameService::Uninit()
+{
+	ServiceBase::GetInstancePtr()->StopNetwork();
+
+	return TRUE;
+}
+
+BOOL CGameService::OnNewConnect(CConnection *pConn)
+{
+	CLog::GetInstancePtr()->AddLog("新连接来到!");
 	return TRUE;
 }

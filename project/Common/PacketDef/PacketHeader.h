@@ -9,8 +9,8 @@
 
 struct PacketHeader
 {
-	UINT8	 CheckCode;
-	UINT16   wCommandID;
+	UINT32	 CheckCode;
+	UINT32   wCommandID;
 	UINT32   dwSize;
 	UINT32   dwPacketNo;	//生成序号 = wCommandID^dwSize+index(每个包自动增长索引); 还原序号 = pHeader->dwPacketNo - pHeader->wCommandID^pHeader->dwSize;
 	UINT32   dwSceneID;

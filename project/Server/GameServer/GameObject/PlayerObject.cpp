@@ -11,7 +11,7 @@ CPlayerObject::~CPlayerObject()
 
 }
 
-BOOL CPlayerObject::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper )
+BOOL CPlayerObject::OnCommandHandle(UINT16 wCommandID, UINT64 u64ConnID, CBufferHelper *pBufferHelper)
 {
 	switch(wCommandID)
 	{
@@ -30,14 +30,14 @@ BOOL CPlayerObject::OnCommandHandle( UINT16 wCommandID, UINT64 u64ConnID, CBuffe
 	return TRUE;
 }
 
-UINT64 CPlayerObject::GetConnectID()
+UINT32 CPlayerObject::GetConnectID()
 {
-	return m_u64ConnID;
+	return m_dwConnID;
 }
 
-VOID CPlayerObject::SetConnectID( UINT64 u64ConnID )
+VOID CPlayerObject::SetConnectID( UINT32 dwConnID )
 {
-	m_u64ConnID = u64ConnID;
+	m_dwConnID = dwConnID;
 
 	return ;
 }

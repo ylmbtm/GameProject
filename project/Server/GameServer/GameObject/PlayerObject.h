@@ -2,7 +2,7 @@
 #define _PLAYER_OBJECT_H_
 #include "CharObject.h"
 
-class CPlayerObject : public CCharObject, public ICommandHandler
+class CPlayerObject : public CCharObject, ICommandHandler
 {
 public:
 	CPlayerObject();
@@ -22,10 +22,9 @@ public:
 
 	BOOL			OnUpdate(UINT32 dwTick);
 
-	UINT64			GetConnectID();
+	UINT32			GetConnectID();
 
-	VOID			SetConnectID(UINT64 u64ConnID);
-
+	VOID			SetConnectID(UINT32 dwConnID);
 public:
 	UINT32			LoadFromDBPacket(CBufferHelper *pBufferHelper);
 
@@ -33,7 +32,7 @@ public:
 	UINT32			m_dwFeature; //玩家特征属性
 
 public:
-	UINT64			m_u64ConnID; //对应的连接ID
+	UINT64			m_dwConnID; //对应的连接ID
 };
 
 

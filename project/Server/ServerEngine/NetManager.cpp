@@ -99,7 +99,6 @@ BOOL CNetManager::StartListen(UINT16 nPortNum)
 	SvrAddr.sin_family		= AF_INET;
 	SvrAddr.sin_port		= htons(nPortNum);
 	SvrAddr.sin_addr.s_addr	= htonl(INADDR_ANY);		//支持多IP地址监听
-	//inet_pton(AF_INET, CGlobalConfig::GetInstancePtr()->m_strIpAddr.c_str(), &SvrAddr.sin_addr);
 
 	m_hListenSocket = CommonSocket::CreateSocket(AF_INET, SOCK_STREAM, 0);
 	if(m_hListenSocket == INVALID_SOCKET)
@@ -701,37 +700,6 @@ CConnection* CNetManager::ConnectToOtherSvrEx( std::string strIpAddr, UINT16 sPo
 
 	return pConnection;
 }
-
-
-// BOOL CNetManager::SendIdentifyInfo(SOCKET hSocket)
-// {
-// 	StConnectNotify ConnectNotify;
-// 
-// 	IDataBuffer *pDataBuffer = CBufferManagerAll::GetInstancePtr()->AllocDataBuff(1024);
-// 	if(pDataBuffer == NULL)
-// 	{
-// 		ASSERT_FAIELD;
-// 		CLog::GetInstancePtr()->AddLog("申请内存块失败!!");
-// 		return FALSE;
-// 	}
-// 
-// 	CBufferHelper BufferWriter(TRUE, pDataBuffer);
-// 
-// 	BufferWriter.BeginWrite(CMD_CONNECT_NOTIFY, 0, 0);
-// 
-// 	ConnectNotify.u64ConnID = CGlobalConfig::GetInstancePtr()->m_dwServerID;
-// 
-// 	ConnectNotify.btConType = CGlobalConfig::GetInstancePtr()->m_dwServerType;
-// 
-// 	BufferWriter.Write(ConnectNotify);
-// 
-// 	BufferWriter.EndWrite();
-// 
-// 	SendBufferBySocket(hSocket, pDataBuffer);
-// 
-// 	return TRUE;
-//}
-
 
 BOOL CNetManager::SendBufferByConnID(UINT32 dwConnID, IDataBuffer *pDataBuffer)
 {

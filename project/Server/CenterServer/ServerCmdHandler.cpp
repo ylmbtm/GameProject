@@ -75,18 +75,18 @@ BOOL CServerCmdHandler::OnCmdConnectNotify(UINT16 wCommandID, UINT64 u64ConnID, 
 		StSvrServerInfo RegisterToCenterSvr;
 		RegisterToCenterSvr.dwSvrID = CGameService::GetInstancePtr()->GetServerID();
 		RegisterToCenterSvr.dwType = CGameService::GetInstancePtr()->GetServerType();
-		strncpy(RegisterToCenterSvr.szIpAddr, CGlobalConfig::GetInstancePtr()->m_strIpAddr.c_str(), 32);
-		RegisterToCenterSvr.sPort = CGlobalConfig::GetInstancePtr()->m_sPort;
+		strncpy(RegisterToCenterSvr.szIpAddr, CGameService::GetInstancePtr()->m_strIpAddr.c_str(), 32);
+		RegisterToCenterSvr.sPort = CGameService::GetInstancePtr()->m_sPort;
 
 		CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
 
-		WriteHelper.BeginWrite(CMD_SVR_REGISTER_TO_CENTER, CMDH_SVR_CON, 0, 0);
+		WriteHelper.BeginWrite(CMD_SVR_REGISTER_TO_CENTER, 0, 0);
 
 		WriteHelper.Write(RegisterToCenterSvr);
 
 		WriteHelper.EndWrite();
 
-		CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
+		ServiceBase::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 	}
 	else if(ConnectNotify.btConType == TYPE_SVR_STATISTICS)
 	{
@@ -100,7 +100,7 @@ BOOL CServerCmdHandler::OnCmdRegisterToCenter(UINT16 wCommandID, UINT64 u64ConnI
 {
 	///先将其它的服务器地址发给注册来的服务器
 	CBufferHelper WriteHelper(TRUE, &m_WriteBuffer);
-	WriteHelper.BeginWrite(CMD_SVR_ACTIVE_SERVER_LIST, CMDH_SVR_CON, 0, 0);
+	WriteHelper.BeginWrite(CMD_SVR_ACTIVE_SERVER_LIST, 0, 0);
 
 	int nCount = m_vtActiveSvrList.size();
 
@@ -114,7 +114,7 @@ BOOL CServerCmdHandler::OnCmdRegisterToCenter(UINT16 wCommandID, UINT64 u64ConnI
 	WriteHelper.EndWrite();
 	
 	//收下注册服务器的信息
-	CGameService::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
+	ServiceBase::GetInstancePtr()->SendCmdToConnection(u64ConnID, &m_WriteBuffer);
 
 	StSvrServerInfo RegisterToCenterSvr; 
 
@@ -150,7 +150,7 @@ BOOL CServerCmdHandler::OnCmdActiveSvrList(UINT16 wCommandID, UINT64 u64ConnID, 
             return FALSE;
         }
 
-        CGameService::GetInstancePtr()->ConnectToOtherSvr(RegisterToCenterSvr.szIpAddr,RegisterToCenterSvr.sPort);
+        ServiceBase::GetInstancePtr()->ConnectToOtherSvr(RegisterToCenterSvr.szIpAddr,RegisterToCenterSvr.sPort);
         m_vtActiveSvrList.insert(std::make_pair(RegisterToCenterSvr.dwSvrID,RegisterToCenterSvr));
     }
 
